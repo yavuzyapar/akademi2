@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mavelania Reel</title>
+<style>
+@font-face{font-family:"Cormorant";src:url(fonts/CormorantGaramond.woff2) format("woff2");font-weight:300 700;font-style:normal}
+@font-face{font-family:"Cormorant";src:url(fonts/CormorantGaramond-Italic.woff2) format("woff2");font-weight:300 700;font-style:italic}
+@font-face{font-family:"Jost";src:url(fonts/Jost.woff2) format("woff2");font-weight:100 900}
+:root{--cream:#FCFAF6;--ink:#15110f;--bordeaux:#5a1a22;--tan:#b98a5e}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#000;width:1080px;height:1920px;overflow:hidden}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--ink);font-family:"Jost",sans-serif;color:var(--cream)}
+.scene{position:absolute;inset:0;overflow:hidden;visibility:hidden;background:var(--ink)}
+.bg{position:absolute;inset:0;background-size:cover;background-position:center;will-change:transform}
+.shade{position:absolute;inset:0}
+.serif{font-family:"Cormorant",serif;font-weight:400}
+.it{font-style:italic}
+.caps{font-family:"Jost";text-transform:uppercase;letter-spacing:.42em;font-weight:400}
+.line{display:block;overflow:hidden;padding:.08em .06em .16em;margin:-.08em -.06em -.16em}
+.line>span{display:inline-block;will-change:transform}
+.abs{position:absolute}
+.center{left:0;right:0;text-align:center}
+
+/* s1 hook */
+#s1 h1{position:absolute;left:84px;right:84px;top:1010px;font-size:178px;line-height:.98;letter-spacing:-.01em}
+#s1 .tag{position:absolute;left:90px;top:940px;font-size:26px}
+/* s2 */
+#s2 h1{position:absolute;left:0;right:0;top:300px;text-align:center;font-size:132px;line-height:1.02}
+#s2 .tag{top:1460px;font-size:27px}
+/* brand bar */
+#brand{position:absolute;left:0;right:0;top:196px;text-align:center;font-size:25px;letter-spacing:.62em;padding-left:.62em;z-index:50;opacity:0;mix-blend-mode:difference;color:#fff}
+/* s3 bags */
+#s3 .title{position:absolute;left:0;right:0;top:268px;text-align:center;font-size:250px;line-height:1}
+.card{position:absolute;left:140px;top:560px;width:800px;height:960px;border-radius:6px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.55);visibility:hidden;background:#222}
+.card .bg{inset:-4%}
+.card .cap{position:absolute;left:0;right:0;bottom:0;padding:120px 44px 40px;background:linear-gradient(transparent,rgba(10,6,5,.78));display:flex;justify-content:space-between;align-items:flex-end}
+.card .cap b{font-family:"Cormorant";font-weight:400;font-style:italic;font-size:84px;line-height:1}
+.card .cap i{font-style:normal;font-size:23px;letter-spacing:.3em;text-transform:uppercase;padding-bottom:10px}
+/* s3b spotlight */
+#s3b{background:var(--cream);color:var(--ink)}
+#s3b .ring{position:absolute;left:90px;top:420px;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,#efe6d8 0%,#f6efe4 60%,var(--cream) 72%)}
+#s3b .prod{position:absolute;left:40px;top:330px;width:1000px;height:1000px;background-size:contain;background-repeat:no-repeat;background-position:center;mix-blend-mode:multiply;visibility:hidden}
+#s3b .pname{position:absolute;left:0;right:0;top:1310px;text-align:center;font-size:170px;line-height:1;visibility:hidden}
+#s3b .psub{position:absolute;left:0;right:0;top:1500px;text-align:center;font-size:25px}
+#s3b .big{position:absolute;left:-40px;top:250px;font-size:400px;line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(90,26,34,.22);white-space:nowrap}
+/* label blocks */
+.label{position:absolute;left:84px;bottom:470px}
+.label .n{font-size:25px;margin-bottom:18px;display:block}
+.label .t{font-size:200px;line-height:.95;display:block}
+.label .s{font-size:27px;margin-top:26px;display:block}
+/* badge */
+#badge{position:absolute;right:120px;top:330px;width:300px;height:300px;visibility:hidden}
+#badge svg{width:100%;height:100%}
+/* s6 */
+#s6 .top,#s6 .bot{position:absolute;left:0;width:1080px;overflow:hidden}
+#s6 .top{top:0;height:1040px}#s6 .bot{top:1056px;height:864px}
+/* s7 */
+#s7{background:var(--cream);color:var(--ink)}
+#s7 .title{position:absolute;left:0;right:0;top:270px;text-align:center;font-size:160px;line-height:1}
+.tile{position:absolute;width:456px;height:500px;border-radius:6px;overflow:hidden;box-shadow:0 24px 50px rgba(60,40,20,.2)}
+.tile span{position:absolute;left:22px;bottom:18px;font-size:20px;letter-spacing:.26em;text-transform:uppercase;color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.6)}
+/* s8 */
+#s8 .props{position:absolute;left:84px;right:84px;top:540px}
+#s8 .props .line{font-size:132px;line-height:1.12;white-space:nowrap}
+#s8 .ship{position:absolute;left:84px;top:1120px;font-size:25px;line-height:1.9}
+#s8 .rule{position:absolute;left:84px;top:1080px;width:300px;height:2px;background:var(--tan);transform-origin:left}
+/* s9 */
+#s9{background:var(--cream);color:var(--ink)}
+#s9 .logo{position:absolute;left:290px;top:420px;width:500px;height:281px;background:url(assets/logo.png) center/contain no-repeat}
+#s9 .word{position:absolute;left:0;right:0;top:760px;text-align:center;font-size:104px;letter-spacing:.2em;padding-left:.2em}
+#s9 .word span{display:inline-block}
+#s9 .lpv{position:absolute;left:0;right:0;top:902px;text-align:center;font-size:62px;color:var(--bordeaux)}
+#s9 .sub{position:absolute;left:0;right:0;top:1010px;text-align:center;font-size:24px}
+#s9 .cta{position:absolute;left:200px;top:1160px;width:680px;height:124px;border-radius:62px;background:var(--ink);color:var(--cream);display:flex;align-items:center;justify-content:center;font-size:28px;letter-spacing:.3em;text-transform:uppercase}
+#s9 .url{position:absolute;left:0;right:0;top:1330px;text-align:center;font-size:66px}
+#s9 .hr{position:absolute;left:440px;top:728px;width:200px;height:2px;background:var(--tan)}
+/* overlays */
+#flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:90;pointer-events:none}
+#vig{position:absolute;inset:0;z-index:80;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.28) 100%);pointer-events:none}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="brand" class="caps">Mavelania</div>
+
+  <!-- 1 HOOK -->
+  <div class="scene" id="s1">
+    <div class="bg fl" style="background-image:url(assets/bordeaux.jpg)"></div>
+    <div class="bg fl" style="background-image:url(assets/briefcase.jpg)"></div>
+    <div class="bg fl" style="background-image:url(assets/odette0.jpg)"></div>
+    <div class="bg fl" style="background-image:url(assets/charm.jpg)"></div>
+    <div class="bg main" style="background-image:url(assets/evelin0.jpg);background-position:58% center"></div>
+    <div class="shade" style="background:linear-gradient(rgba(10,6,5,.15),rgba(10,6,5,0) 30%,rgba(10,6,5,.75) 75%)"></div>
+    <div class="tag caps">Handcrafted Leather Goods</div>
+    <h1 class="serif"><span class="line"><span>Leather</span></span><span class="line"><span class="it">lives</span></span><span class="line"><span>with time.</span></span></h1>
+  </div>
+
+  <!-- 2 -->
+  <div class="scene" id="s2">
+    <div class="bg" style="background-image:url(assets/walk.jpg)"></div>
+    <div class="shade" style="background:linear-gradient(rgba(20,14,12,.55),rgba(20,14,12,0) 45%,rgba(20,14,12,.35))"></div>
+    <h1 class="serif"><span class="line"><span>We only give it</span></span><span class="line"><span class="it" style="font-size:230px">meaning.</span></span></h1>
+    <div class="tag caps abs center">La Pelle Viva</div>
+  </div>
+
+  <!-- 3 BAGS -->
+  <div class="scene" id="s3" style="background:radial-gradient(circle at 50% 40%,#3a1217,#15110f 70%)">
+    <div class="title serif it"><span class="line"><span>Bags</span></span></div>
+    <div class="card"><div class="bg" style="background-image:url(assets/odette0.jpg)"></div><div class="cap"><b>Odette</b><i>Tote · 01</i></div></div>
+    <div class="card"><div class="bg" style="background-image:url(assets/valeria0.jpg)"></div><div class="cap"><b>Valeria</b><i>Shoulder · 02</i></div></div>
+    <div class="card"><div class="bg" style="background-image:url(assets/amelie0.jpg)"></div><div class="cap"><b>Amelie</b><i>Suede Tote · 03</i></div></div>
+    <div class="card"><div class="bg" style="background-image:url(assets/vivienne0.jpg)"></div><div class="cap"><b>Vivienne</b><i>Suede · 04</i></div></div>
+  </div>
+  <div class="scene" id="s3b">
+    <div class="big serif it">Mavelania</div>
+    <div class="ring"></div>
+    <div class="prod" style="background-image:url(assets/evelin1.jpg)"></div>
+    <div class="prod" style="background-image:url(assets/isadora1.jpg)"></div>
+    <div class="prod" style="background-image:url(assets/valeria1.jpg)"></div>
+    <div class="prod" style="background-image:url(assets/odette1.jpg)"></div>
+    <div class="pname serif it">Evelin</div>
+    <div class="pname serif it">Isadora</div>
+    <div class="pname serif it">Valeria</div>
+    <div class="pname serif it">Odette</div>
+    <div class="psub caps">Genuine Leather</div>
+  </div>
+
+  <!-- 4 MEN -->
+  <div class="scene" id="s4">
+    <div class="bg a" style="background-image:url(assets/briefcase.jpg)"></div>
+    <div class="bg b" style="background-image:url(assets/clutch.jpg)"></div>
+    <div class="shade" style="background:linear-gradient(transparent 45%,rgba(10,6,5,.72))"></div>
+    <div class="label la"><span class="n caps">For the workday</span><span class="t serif it"><span class="line"><span>Briefcases</span></span></span></div>
+    <div class="label lb"><span class="n caps">For the evening</span><span class="t serif it"><span class="line"><span>Clutches</span></span></span></div>
+  </div>
+
+  <!-- 5 WALLETS -->
+  <div class="scene" id="s5">
+    <div class="bg a" style="background-image:url(assets/rowan0.jpg)"></div>
+    <div class="bg b" style="background-image:url(assets/conrad0.jpg)"></div>
+    <div class="bg c" style="background-image:url(assets/wwallet.jpg)"></div>
+    <div class="shade" style="background:linear-gradient(rgba(10,6,5,.3),transparent 30%,transparent 45%,rgba(10,6,5,.75))"></div>
+    <div class="label"><span class="n caps">Card holders · Purses</span><span class="t serif it"><span class="line"><span>Wallets</span></span></span></div>
+    <div id="badge"><svg viewBox="0 0 300 300">
+      <circle cx="150" cy="150" r="146" fill="#FCFAF6"/>
+      <circle cx="150" cy="150" r="92" fill="none" stroke="#5a1a22" stroke-width="1.5"/>
+      <defs><path id="circ" d="M150,150 m-116,0 a116,116 0 1,1 232,0 a116,116 0 1,1 -232,0"/></defs>
+      <g class="spin" style="transform-origin:150px 150px"><text font-family="Jost" font-size="21" letter-spacing="7.6" fill="#5a1a22"><textPath href="#circ">RFID PROTECTION ✦ RFID PROTECTION ✦ </textPath></text></g>
+      <text x="150" y="146" text-anchor="middle" font-family="Cormorant" font-style="italic" font-size="62" fill="#15110f">RFID</text>
+      <text x="150" y="182" text-anchor="middle" font-family="Jost" font-size="17" letter-spacing="5" fill="#15110f">SAFE</text>
+    </svg></div>
+  </div>
+
+  <!-- 6 PHONE -->
+  <div class="scene" id="s6">
+    <div class="bg a" style="background-image:url(assets/phone.jpg);background-position:center 20%"></div>
+    <div class="top"><div class="bg" style="background-image:url(assets/sonat0.jpg)"></div><div class="shade" style="background:linear-gradient(transparent 55%,rgba(10,6,5,.8))"></div></div>
+    <div class="bot"><div class="bg" style="background-image:url(assets/cases.jpg)"></div></div>
+    <div class="shade" style="background:linear-gradient(transparent 50%,rgba(10,6,5,.7))"></div>
+    <div class="label"><span class="n caps">Leather · for iPhone</span><span class="t serif it" style="font-size:170px"><span class="line"><span>Phone Cases</span></span></span></div>
+  </div>
+
+  <!-- 7 ACCESSORIES -->
+  <div class="scene" id="s7">
+    <div class="title serif it"><span class="line"><span>Accessories</span></span></div>
+    <div class="tile" style="left:70px;top:500px"><div class="bg" style="background-image:url(assets/charm.jpg);background-position:35% 62%;background-size:190%"></div><span>Bag charms</span></div>
+    <div class="tile" style="left:554px;top:560px"><div class="bg" style="background-image:url(assets/amanda.jpg)"></div><span>Jewelry boxes</span></div>
+    <div class="tile" style="left:70px;top:1028px"><div class="bg" style="background-image:url(assets/deskmat.jpg)"></div><span>Desk mats</span></div>
+    <div class="tile" style="left:554px;top:1088px"><div class="bg" style="background-image:url(assets/heart.jpg)"></div><span>Little details</span></div>
+  </div>
+
+  <!-- 8 VALUES -->
+  <div class="scene" id="s8">
+    <div class="bg" style="background-image:url(assets/still.jpg)"></div>
+    <div class="shade" style="background:rgba(16,10,9,.74)"></div>
+    <div class="props serif">
+      <span class="line"><span>Handcrafted.</span></span>
+      <span class="line"><span class="it" style="color:#e7c9a5">Genuine leather.</span></span>
+      <span class="line"><span>Timeless design.</span></span>
+    </div>
+    <div class="rule"></div>
+    <div class="ship caps">Complimentary shipping<br>on selected orders</div>
+  </div>
+
+  <!-- 9 END -->
+  <div class="scene" id="s9">
+    <div class="logo"></div>
+    <div class="hr"></div>
+    <div class="word serif">MAVELANIA</div>
+    <div class="lpv serif it">La Pelle Viva</div>
+    <div class="sub caps">Handcrafted Leather Goods</div>
+    <div class="cta"><span>Discover the collection&nbsp;&nbsp;→</span></div>
+    <div class="url serif it">mavelania.com</div>
+  </div>
+
+  <div id="vig"></div>
+  <div id="flash"></div>
+</div>
+<script src="gsap.min.js"></script>
+<script>
+const B = 0.6;                 // one beat @100bpm
+const DUR = 36 * B;            // 21.6s
+const FPS = 30;
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+gsap.ticker.lagSmoothing(0);
+const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+const b = n => n * B;
+
+// wordmark letters
+const word = $("#s9 .word"); word.innerHTML = [...word.textContent].map(c => `<span>${c}</span>`).join("");
+
+const show = (el, t) => tl.set(el, { visibility: "visible" }, t);
+const hide = (el, t) => tl.set(el, { visibility: "hidden" }, t);
+const flash = (t, o = .55) => tl.fromTo("#flash", { opacity: o }, { opacity: 0, duration: .22, ease: "power1.out", immediateRender: false }, t);
+const lines = (sel, t, st = .09, d = .55) => tl.fromTo(sel, { yPercent: 115, rotate: 4 }, { yPercent: 0, rotate: 0, duration: d, stagger: st, ease: "power4.out" }, t);
+const kb = (el, t, d, from = 1.16, to = 1.02, extra = {}) => tl.fromTo(el, { scale: from, ...extra.from }, { scale: to, ...extra.to, duration: d, ease: "none", immediateRender: false }, t);
+// whip: push transition with blur
+function whip(out, inn, t, dir = "y", sign = 1, d = .4) {
+  const p = dir === "y" ? "yPercent" : "xPercent";
+  show(inn, t - d / 2);
+  tl.fromTo(inn, { [p]: 100 * sign, filter: "blur(22px)" }, { [p]: 0, filter: "blur(0px)", duration: d, ease: "power4.inOut", immediateRender: false }, t - d / 2);
+  tl.to(out, { [p]: -100 * sign, filter: "blur(22px)", duration: d, ease: "power4.inOut" }, t - d / 2);
+  hide(out, t + d / 2);
+}
+function zoomThrough(out, inn, t, d = .4) {
+  show(inn, t - d / 2);
+  tl.fromTo(inn, { scale: .6, opacity: 0, filter: "blur(18px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: d, ease: "power3.inOut", immediateRender: false }, t - d / 2);
+  tl.to(out, { scale: 1.9, opacity: 0, filter: "blur(18px)", duration: d, ease: "power3.inOut" }, t - d / 2);
+  hide(out, t + d / 2);
+}
+function iris(out, inn, t, d = .5, at = "50% 50%") {
+  show(inn, t - d / 2);
+  tl.fromTo(inn, { clipPath: `circle(0% at ${at})` }, { clipPath: `circle(120% at ${at})`, duration: d, ease: "power2.inOut", immediateRender: false }, t - d / 2);
+  hide(out, t + d / 2);
+}
+const wipe = (el, t, from = "inset(0 100% 0 0)", d = .42) => tl.fromTo(el, { clipPath: from }, { clipPath: "inset(0 0% 0 0)", duration: d, ease: "power4.inOut", immediateRender: false }, t);
+
+/* ---------- 1 HOOK  (beats 0-4) ---------- */
+show("#s1", 0);
+const fl = $$("#s1 .fl"), F = 4 / FPS;
+gsap.set([...fl, "#s1 .main"], { visibility: "hidden" });
+fl.forEach((e, i) => { show(e, i * F); tl.fromTo(e, { scale: 1.25 }, { scale: 1.08, duration: F, ease: "none", immediateRender: false }, i * F); hide(e, (i + 1) * F); });
+const t1 = fl.length * F;
+show("#s1 .main", t1); flash(t1, .8);
+tl.fromTo("#s1 .main", { scale: 1.45 }, { scale: 1.12, duration: .7, ease: "expo.out", immediateRender: false }, t1);
+tl.to("#s1 .main", { scale: 1.2, duration: b(4) - t1 - .7, ease: "none" }, t1 + .7);
+tl.fromTo("#s1 .shade", { opacity: 0 }, { opacity: 1, duration: .3 }, t1);
+tl.fromTo("#s1 .line>span", { yPercent: 115, rotate: 5 }, { yPercent: 0, rotate: 0, duration: .5, stagger: B / 2, ease: "power4.out" }, b(1) - .05);
+tl.fromTo("#s1 .tag", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: .5 }, b(1));
+tl.to("#s1 h1", { scale: 1.04, transformOrigin: "left bottom", duration: b(2), ease: "none" }, b(2));
+
+/* ---------- 2  (beats 4-8) ---------- */
+whip("#s1", "#s2", b(4), "y", 1);
+kb("#s2 .bg", b(4) - .2, b(4) + .4, 1.22, 1.04, { from: { xPercent: -3 }, to: { xPercent: 2 } });
+lines("#s2 .line>span", b(4) + .1, B / 2 + .0, .6);
+tl.fromTo("#s2 .tag", { opacity: 0, letterSpacing: "1.2em" }, { opacity: 1, letterSpacing: ".42em", duration: .9 }, b(6));
+tl.to("#s2 h1", { letterSpacing: ".015em", duration: b(3.5), ease: "none" }, b(4.3));
+
+/* ---------- 3 BAGS (beats 8-12) ---------- */
+zoomThrough("#s2", "#s3", b(8), .44); flash(b(8), .5);
+tl.to("#brand", { opacity: .9, duration: .4 }, b(8));
+lines("#s3 .title .line>span", b(8) - .05, 0, .6);
+const rots = [-5, 4, -3, 2.5], fromX = [-1100, 1100, -1100, 1100];
+$$("#s3 .card").forEach((c, i) => {
+  const t = b(8 + i) + .02;
+  show(c, t);
+  tl.fromTo(c, { x: fromX[i], y: 300, rotate: rots[i] * 6, scale: 1.25 }, { x: (i - 1.5) * 10, y: i * -14, rotate: rots[i], scale: 1, duration: .46, ease: "back.out(1.1)" }, t);
+  kb($(".bg", c), t, b(4 - i) + .3, 1.14, 1.0);
+  if (i) tl.to($$("#s3 .card")[i - 1], { scale: .95, filter: "brightness(.6)", duration: .4 }, t);
+});
+tl.to("#s3 .title", { scale: 1.06, duration: b(4), ease: "none" }, b(8));
+
+/* ---------- 3b SPOTLIGHT (beats 12-14) ---------- */
+iris("#s3", "#s3b", b(12), .46, "50% 54%");
+tl.to("#vig", { opacity: .3, duration: .2 }, b(12)); tl.to("#vig", { opacity: 1, duration: .2 }, b(14)); tl.to("#vig", { opacity: .3, duration: .2 }, b(23)); tl.to("#vig", { opacity: 1, duration: .2 }, b(27)); tl.to("#vig", { opacity: .25, duration: .2 }, b(31));
+tl.to("#brand", { opacity: 0, duration: .15 }, b(12) - .2);
+const prods = $$("#s3b .prod"), names = $$("#s3b .pname");
+tl.fromTo("#s3b .big", { xPercent: 4 }, { xPercent: -30, duration: b(2.4), ease: "none" }, b(12) - .2);
+tl.fromTo("#s3b .ring", { scale: .6 }, { scale: 1, duration: .6, ease: "back.out(1.6)" }, b(12) - .1);
+prods.forEach((p, i) => {
+  const t = b(12 + i * .5);
+  show(p, t); show(names[i], t);
+  tl.fromTo(p, { scale: .72, rotate: i % 2 ? 9 : -9, y: 60 }, { scale: 1, rotate: 0, y: 0, duration: .28, ease: "back.out(2)" }, t);
+  tl.fromTo(names[i], { yPercent: 40, opacity: 0, letterSpacing: "-.04em" }, { yPercent: 0, opacity: 1, letterSpacing: "0em", duration: .25 }, t);
+  tl.fromTo("#s3b .ring", { scale: 1.07 }, { scale: 1, duration: .28, immediateRender: false }, t + .001);
+  if (i < prods.length - 1) { hide(p, t + B / 2); hide(names[i], t + B / 2); }
+});
+
+/* ---------- 4 MEN (beats 14-16) ---------- */
+whip("#s3b", "#s4", b(14), "x", 1);
+gsap.set(["#s4 .b", "#s4 .lb"], { visibility: "hidden" });
+kb("#s4 .a", b(14) - .2, b(1) + .4, 1.2, 1.08);
+lines("#s4 .la .line>span", b(14) + .05, 0, .5);
+tl.fromTo("#s4 .la .n", { opacity: 0 }, { opacity: 1, duration: .3 }, b(14) + .15);
+show("#s4 .b", b(15) - .2); wipe("#s4 .b", b(15) - .2, "inset(0 0 100% 0)", .4);
+kb("#s4 .b", b(15) - .2, b(1) + .4, 1.2, 1.08);
+hide("#s4 .la", b(15)); show("#s4 .lb", b(15));
+lines("#s4 .lb .line>span", b(15) + .02, 0, .5);
+tl.fromTo("#s4 .lb .n", { opacity: 0 }, { opacity: 1, duration: .3 }, b(15) + .1);
+tl.to("#brand", { opacity: .9, duration: .3 }, b(14) + .2);
+
+/* ---------- 5 WALLETS (beats 16-19) ---------- */
+whip("#s4", "#s5", b(16), "y", -1);
+gsap.set(["#s5 .b", "#s5 .c"], { visibility: "hidden" });
+kb("#s5 .a", b(16) - .2, b(1) + .2, 1.3, 1.1, { from: { rotate: -3 }, to: { rotate: 0 } });
+lines("#s5 .label .line>span", b(16) + .05, 0, .5);
+tl.fromTo("#s5 .label .n", { opacity: 0 }, { opacity: 1, duration: .3 }, b(16) + .2);
+show("#s5 .b", b(17)); flash(b(17), .35); kb("#s5 .b", b(17), b(1), 1.32, 1.12, { from: { rotate: 3 }, to: { rotate: 0 } });
+show("#s5 .c", b(18) - .18); wipe("#s5 .c", b(18) - .18, "inset(0 0 0 100%)", .36); kb("#s5 .c", b(18) - .18, b(1) + .4, 1.18, 1.06);
+show("#badge", b(17));
+tl.fromTo("#badge", { scale: 3, opacity: 0, rotate: -40 }, { scale: 1, opacity: 1, rotate: -8, duration: .34, ease: "power4.in" }, b(17));
+tl.fromTo("#badge", { scale: .9 }, { scale: 1, duration: .3, ease: "back.out(3)", immediateRender: false }, b(17) + .34);
+tl.fromTo("#badge .spin", { rotate: 0 }, { rotate: 70, duration: b(2.2), ease: "none" }, b(17));
+
+/* ---------- 6 PHONE (beats 19-23) ---------- */
+zoomThrough("#s5", "#s6", b(19), .4);
+gsap.set(["#s6 .top", "#s6 .bot"], { visibility: "hidden" });
+kb("#s6 .a", b(19) - .2, b(2) + .3, 1.22, 1.06);
+lines("#s6 .label .line>span", b(19) + .05, 0, .5);
+tl.fromTo("#s6 .label .n", { opacity: 0 }, { opacity: 1, duration: .3 }, b(19) + .2);
+show("#s6 .top", b(21) - .2); show("#s6 .bot", b(21) - .2);
+tl.fromTo("#s6 .top", { xPercent: -100 }, { xPercent: 0, duration: .42, ease: "power4.inOut" }, b(21) - .2);
+tl.fromTo("#s6 .bot", { xPercent: 100 }, { xPercent: 0, duration: .42, ease: "power4.inOut" }, b(21) - .2);
+kb("#s6 .top .bg", b(21) - .2, b(2) + .4, 1.18, 1.04);
+kb("#s6 .bot .bg", b(21) - .2, b(2) + .4, 1.04, 1.2);
+tl.to("#s6 .shade", { opacity: 0, duration: .3 }, b(21) - .2);
+tl.to("#s6 .label", { y: -500, duration: .42, ease: "power4.inOut" }, b(21) - .2);
+tl.fromTo("#s6 .label", { scale: 1 }, { scale: 1.05, transformOrigin: "left center", duration: .12, yoyo: true, repeat: 1, immediateRender: false }, b(22));
+
+/* ---------- 7 ACCESSORIES (beats 23-27) ---------- */
+iris("#s6", "#s7", b(23), .46, "50% 50%");
+tl.to("#brand", { opacity: 0, duration: .15 }, b(23) - .2);
+lines("#s7 .title .line>span", b(23), 0, .55);
+$$("#s7 .tile").forEach((e, i) => {
+  const t = b(23.5 + i * .5);
+  tl.fromTo(e, { scale: 0, rotate: i % 2 ? 14 : -14, opacity: 0 }, { scale: 1, rotate: i % 2 ? 1.5 : -1.5, opacity: 1, duration: .4, ease: "back.out(1.8)" }, t);
+  tl.fromTo($(".bg", e), { scale: 1.25 }, { scale: 1.05, duration: b(3.5 - i * .5), ease: "none" }, t);
+});
+tl.to("#s7 .tile", { y: i => (i % 2 ? -16 : 16), duration: b(1.4), ease: "sine.inOut" }, b(25.6));
+
+/* ---------- 8 VALUES (beats 27-31) ---------- */
+whip("#s7", "#s8", b(27), "y", 1);
+kb("#s8 .bg", b(27) - .2, b(4) + .4, 1.05, 1.25);
+const pl = $$("#s8 .props .line>span");
+pl.forEach((e, i) => {
+  const t = b(27 + i) + .04;
+  tl.fromTo(e, { yPercent: 115, rotate: 5 }, { yPercent: 0, rotate: 0, duration: .45, ease: "power4.out" }, t);
+  if (i) tl.to(pl.slice(0, i), { opacity: .38, duration: .3 }, t);
+});
+tl.to(pl, { opacity: 1, duration: .3 }, b(30));
+tl.fromTo("#s8 .rule", { scaleX: 0 }, { scaleX: 1, duration: .5 }, b(30));
+tl.fromTo("#s8 .ship", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .45 }, b(30) + .1);
+
+/* ---------- 9 END (beats 31-36) ---------- */
+iris("#s8", "#s9", b(31), .5, "50% 30%"); flash(b(31), .4);
+tl.fromTo("#s9 .logo", { scale: 2.6, opacity: 0, rotate: -25 }, { scale: 1, opacity: 1, rotate: 0, duration: .7, ease: "expo.out" }, b(31));
+tl.fromTo("#s9 .hr", { scaleX: 0 }, { scaleX: 1, duration: .5 }, b(31.6));
+tl.fromTo("#s9 .word span", { yPercent: 70, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .5, stagger: .045 }, b(31.6));
+tl.fromTo("#s9 .lpv", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: .5 }, b(32.6));
+tl.fromTo("#s9 .sub", { opacity: 0 }, { opacity: 1, duration: .5 }, b(33));
+tl.fromTo("#s9 .cta", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .5, ease: "back.out(1.8)" }, b(33.4));
+tl.fromTo("#s9 .url", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: .5 }, b(33.9));
+tl.fromTo("#s9 .cta", { scale: 1 }, { scale: 1.06, duration: .15, yoyo: true, repeat: 1, immediateRender: false }, b(35));
+tl.to("#s9 .logo", { scale: 1.05, duration: b(4), ease: "none" }, b(31) + .7);
+tl.set({}, {}, DUR);
+
+window.seek = t => { tl.time(t, false); };
+window.DUR = DUR; window.FPS = FPS;
+// preview in a browser: add ?play
+if (location.search.includes("play")) { document.body.style.zoom = .45; tl.play(0); } else seek(0);
+</script>
+</body>
+</html>
