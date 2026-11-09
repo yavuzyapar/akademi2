@@ -16,8 +16,7 @@ const browser = await chromium.launch();
 const open = async () => {
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
   await page.goto(url);
-  await page.evaluate(() => document.fonts.ready);
-  await page.waitForLoadState("networkidle");
+  await page.evaluate(() => window.ready);
   return page;
 };
 
@@ -52,7 +51,7 @@ await browser.close();
 const audio = path.join(dir, "out/music.wav");
 const args = ["-y", "-f", "image2pipe", "-framerate", String(FPS), "-c:v", "mjpeg", "-i", "-"];
 if (existsSync(audio)) args.push("-i", audio);
-args.push("-vf", "noise=alls=5:allf=t,format=yuv420p", "-c:v", "libx264", "-preset", "slow", "-crf", "20", "-maxrate", "10M", "-bufsize", "20M",
+args.push("-vf", "eq=contrast=1.03:saturation=1.04,noise=alls=5:allf=t,format=yuv420p", "-c:v", "libx264", "-preset", "slow", "-crf", "20", "-maxrate", "10M", "-bufsize", "20M",
   "-profile:v", "high", "-r", String(FPS), "-movflags", "+faststart");
 if (existsSync(audio)) args.push("-c:a", "aac", "-b:a", "256k", "-shortest");
 args.push(path.join(dir, "mavelania-reel.mp4"));

@@ -1,91 +1,96 @@
-# Synthesizes the soundtrack (100 BPM, 36 beats) -> out/music.wav. Needs only numpy.
-import numpy as np, wave
-SR=44100; B=0.6; DUR=36*B; N=int(SR*DUR)
-t=np.arange(N)/SR
-rng=np.random.default_rng(7)
-L=np.zeros(N); R=np.zeros(N)
-def add(buf,sig,at,g=1.0):
-    i=int(at*SR)
+# Synthesizes the soundtrack (felt piano + strings, 72 BPM, 10 bars) -> out/music.wav. Needs only numpy.
+import numpy as np, wave, os
+SR=44100; BEAT=60/72; BAR=4*BEAT; DUR=10*BAR; TAIL=0.0; N=int(SR*(DUR+TAIL))
+rng=np.random.default_rng(11)
+dry=np.zeros((2,N)); padb=np.zeros((2,N))
+f_=lambda m:440*2**((m-69)/12)
+def put(buf,sig,at,g=1.0,pan=0.0):
+    i=int(max(at,0)*SR)
     if i>=N: return
-    sig=sig[:N-i]; buf[i:i+len(sig)]+=sig*g
-def both(sig,at,g=1.0,pan=0.0):
-    add(L,sig,at,g*(1-max(pan,0))); add(R,sig,at,g*(1+min(pan,0)))
-def lp(x,fc):   # FFT brickwall-ish lowpass with soft slope
-    X=np.fft.rfft(x); f=np.fft.rfftfreq(len(x),1/SR); X*=1/(1+(f/fc)**4); return np.fft.irfft(X,len(x))
-def hp(x,fc):
-    X=np.fft.rfft(x); f=np.fft.rfftfreq(len(x),1/SR); X*=1-1/(1+(f/fc)**4); return np.fft.irfft(X,len(x))
-def note(m): return 440*2**((m-69)/12)
-def kick(g=1.0):
-    n=int(.34*SR); tt=np.arange(n)/SR
-    f=45+110*np.exp(-tt*38); ph=2*np.pi*np.cumsum(f)/SR
-    return np.sin(ph)*np.exp(-tt*11)*g
-def clap():
-    n=int(.22*SR); tt=np.arange(n)/SR
-    x=hp(lp(rng.standard_normal(n),5200),900)
-    env=np.exp(-tt*24)+.6*np.exp(-np.abs(tt-.012)*400)+.5*np.exp(-np.abs(tt-.024)*400)
-    return x*env*.5
-def hat(d=.05):
-    n=int(d*4*SR); tt=np.arange(n)/SR
-    return hp(rng.standard_normal(n),7500)*np.exp(-tt/d)*.25
-def pluck(m,d=.5):
-    n=int(d*SR); tt=np.arange(n)/SR; f=note(m)
-    x=np.sin(2*np.pi*f*tt)+.5*np.sin(2*np.pi*2*f*tt)*np.exp(-tt*9)+.25*np.sin(2*np.pi*3*f*tt)*np.exp(-tt*16)
-    return x*np.exp(-tt*7)*(1-np.exp(-tt*900))
-def pad(ms,d):
-    n=int(d*SR); tt=np.arange(n)/SR; x=np.zeros(n)
+    sig=sig[:N-i]; l=np.sqrt(.5*(1-pan)); r=np.sqrt(.5*(1+pan))
+    buf[0,i:i+len(sig)]+=sig*g*l; buf[1,i:i+len(sig)]+=sig*g*r
+def lowpass(x,fc,order=2):
+    X=np.fft.rfft(x); f=np.fft.rfftfreq(len(x),1/SR); X*=1/np.sqrt(1+(f/fc)**(2*order)); return np.fft.irfft(X,len(x))
+def piano(m,vel=.6,d=4.0):
+    f=f_(m); n=int(d*SR); t=np.arange(n)/SR; x=np.zeros(n)
+    B=0.0004*(1+(m-40)/40)
+    for k in range(1,10):
+        fk=f*k*np.sqrt(1+B*k*k)
+        if fk>9000: break
+        amp=(1/k**(1.9-vel*.7))*(0.6 if k==1 else 1)
+        dec=0.55+0.42*k+ (m-48)*0.012
+        for det in (-.0007,.0007):
+            x+=amp*np.sin(2*np.pi*fk*(1+det)*t+rng.uniform(0,6.28))*np.exp(-t*dec)
+    x*=1-np.exp(-t*260)                              # soft felt attack
+    x+=lowpass(rng.standard_normal(n),1400)*np.exp(-t*60)*.05*vel   # hammer thump
+    x=lowpass(x,1500+2600*vel)
+    return x*vel*np.minimum(1,(d-t)/.3)
+def strings(ms,d,g=1.0):
+    n=int(d*SR); t=np.arange(n)/SR; x=np.zeros(n)
     for m in ms:
-        f=note(m)
-        for det in (-.004,0,.004):
-            ph=rng.uniform(0,6.28)
-            x+=np.sin(2*np.pi*f*(1+det)*tt+ph)+.3*np.sin(2*np.pi*2*f*(1+det)*tt+ph)
-    env=np.minimum(1,tt/.25)*np.minimum(1,(d-tt)/.35)
-    return lp(x,1800)*env/len(ms)/3
-def bass(m,d):
-    n=int(d*SR); tt=np.arange(n)/SR; f=note(m)
-    return (np.sin(2*np.pi*f*tt)+.35*np.sin(2*np.pi*2*f*tt))*np.minimum(1,tt/.01)*np.exp(-tt*3.5)
-def whoosh(d=.55):
-    n=int(d*SR); tt=np.arange(n)/SR
+        f=f_(m)
+        for det in (-.006,-.002,.003,.007):
+            vib=1+.0025*np.sin(2*np.pi*(4.6+rng.uniform(-.4,.4))*t+rng.uniform(0,6.28))
+            ph=2*np.pi*np.cumsum(f*(1+det)*vib)/SR+rng.uniform(0,6.28)
+            x+=np.sin(ph)+.45*np.sin(2*ph)+.22*np.sin(3*ph)+.1*np.sin(4*ph)
+    env=np.minimum(1,t/1.3)**1.5*np.minimum(1,(d-t)/1.4)
+    return lowpass(x,1300)*env*g/len(ms)/4
+def sub(m,d=3.0):
+    n=int(d*SR); t=np.arange(n)/SR
+    return np.sin(2*np.pi*f_(m)*t)*np.minimum(1,t/.04)*np.exp(-t*1.1)
+def air(d=1.6):
+    n=int(d*SR); t=np.arange(n)/SR
     x=rng.standard_normal(n); X=np.fft.rfft(x); f=np.fft.rfftfreq(n,1/SR)
-    X*=np.exp(-((np.log(f+1)-np.log(2500))**2)/1.2); x=np.fft.irfft(X,n)
-    return x*(tt/d)**2.5*np.minimum(1,(d-tt)/.02)*.9
-def impact():
-    n=int(1.6*SR); tt=np.arange(n)/SR
-    return np.sin(2*np.pi*(38+30*np.exp(-tt*10))*tt)*np.exp(-tt*3)+lp(rng.standard_normal(n),900)*np.exp(-tt*6)*.5
+    X*=np.exp(-((np.log(f+1)-np.log(3200))**2)/.9); x=np.fft.irfft(X,n)
+    return x*np.sin(np.pi*t/d)**3
 
-# Am9 | Fmaj7 | Cmaj7 | Em7  (one chord per 4 beats)
-chords=[([57,60,64,67,71],45),([53,57,60,64],41),([48,52,55,59,64],36),([52,55,59,62],40)]
-duck=np.ones(N)
-for bar in range(9):
-    ms,root=chords[bar%4]; t0=bar*4*B
-    drums = 2<=bar<8          # beats 8..31
-    p=pad(ms,4*B+.3); both(p,t0,.55 if bar<8 else .7)
-    both(pad([m+12 for m in ms[:3]],4*B+.3),t0,.18)
-    arp=[ms[0]+12,ms[2]+12,ms[1]+12,ms[-1]+12,ms[2]+12,ms[1]+24,ms[-1]+12,ms[2]+12]
-    for k,m in enumerate(arp):
-        if bar==0 and k<2: continue
-        g=.16 if drums else .12
-        both(pluck(m),t0+k*B/2,g,pan=.5 if k%2 else -.5)
-        both(pluck(m),t0+k*B/2+B*.75,g*.35,pan=-.5 if k%2 else .5)   # echo
-    if bar<2:
-        both(kick(.6),t0,.8); both(kick(.6),t0+2*B,.55)
-    if drums:
-        for k in range(4):
-            tk=t0+k*B; both(kick(),tk,.95)
-            i=int(tk*SR); n=int(.3*SR); e=min(N,i+n); duck[i:e]*=np.linspace(.35,1,n)[:e-i]
-            both(hat(),tk+B/2,.9); both(hat(.02),tk+B/4,.35,pan=.4); both(hat(.02),tk+3*B/4,.35,pan=-.4)
-            both(bass(root,B*.5),tk+B/2,.5)
-            if k in (1,3): both(clap(),tk,.8)
-    if bar==8:
-        both(impact(),t0,.9)
-for bt in (4,8,12,14,16,19,23,27,31):
-    w=whoosh(.75 if bt in (8,31) else .5); both(w,bt*B-len(w)/SR,.5 if bt in (8,31) else .3)
-for bt in (8,12,17,23): both(impact(),bt*B,.3)
-# quick ticks for the opening flash cuts
-for k in range(4): both(hat(.015),k*4/30,1.2)
-mix=np.stack([L,R])*1.0
-mix=np.tanh(mix*1.5)
-fade=np.minimum(1,(DUR-t)/1.2); mix*=fade*np.minimum(1,t/.01)
-mix/=np.abs(mix).max()/.89
-import os; os.makedirs('out',exist_ok=True)
+#        bass, arpeggio tones,        pad,            melody [(beat, midi, vel)]
+bars=[
+ (41,[53,57,60,64],[53,57,60],[(2,76,.5)]),                 # Fmaj7
+ (36,[48,55,60,64],[48,55,64],[(0,74,.5),(2,79,.55)]),      # C
+ (45,[57,60,64,67],[57,60,64],[(0,76,.6),(3,72,.45)]),      # Am7
+ (43,[55,59,62,67],[55,59,62],[(0,74,.55),(2.5,71,.4)]),    # G
+ (41,[53,57,60,64],[53,60,69],[(0,81,.68),(2,79,.6)]),      # Fmaj7
+ (36,[48,55,60,64],[55,64,67],[(0,76,.62),(2,79,.62)]),     # C
+ (38,[50,57,60,65],[57,62,65],[(0,77,.65),(2,81,.7)]),      # Dm7
+ (43,[55,59,62,67],[55,62,67],[(0,79,.66),(2,74,.55)]),     # G
+ (41,[53,57,60,64],[53,57,60],[(0,76,.55),(2,72,.45)]),     # Fmaj7
+ (36,[48,55,60,64],[48,55,64],[(0,72,.5)]),                 # C
+]
+E8=BEAT/2
+for b,(bass,ar,pd,mel) in enumerate(bars):
+    t0=b*BAR
+    lvl=[.42,.48,.56,.58,.66,.68,.7,.66,.5,.42][b]
+    pat=[bass+12,ar[0]+12 if b<2 else ar[1],ar[2],ar[3],ar[2] if b<2 else ar[3]+ (12 if b in(4,5,6) else 0),ar[3] if b<2 else ar[2],ar[1],ar[2]]
+    if b==9: pat=[bass+12,ar[1],ar[2],ar[3]]
+    for k,m in enumerate(pat):
+        if b==0 and k in(1,3,5,7): continue           # sparse opening
+        tt=t0+k*E8+rng.normal(0,.006)+(k*.03 if b==9 else 0)
+        v=lvl*(1.0 if k==0 else .62+.1*(k%2==0))*rng.uniform(.92,1.06)
+        put(dry,piano(m,v),tt,1,pan=(m-60)/40)
+    put(dry,piano(bass,lvl*.6,5),t0,.8,pan=-.15)
+    if b>=2: put(dry,sub(bass if bass>=40 else bass+12),t0,.09*lvl)
+    for (bt,m,v) in mel:
+        put(dry,piano(m,v*.95,5),t0+bt*BEAT+rng.normal(0,.005),1.15,pan=.18)
+    if 2<=b<=8:
+        g=[0,0,.5,.62,.8,.9,1,.9,.55][b]
+        put(padb,strings(pd,BAR+1.5,g),t0-.5,1,pan=-.25); put(padb,strings([p+12 for p in pd[:2]],BAR+1.5,g*.5),t0-.5,1,pan=.3)
+    if b>=1: put(padb,air(),t0-1.0,.035,pan=.3 if b%2 else -.3)
+# final rolled chord
+for k,m in enumerate([36,48,55,60,64,67,72]): put(dry,piano(m,.5,6),9*BAR+2*BEAT+k*.07,1,pan=(m-60)/40)
+
+def reverb(x,seed,rt=2.6,wet=.33):
+    n=int(rt*SR); t=np.arange(n)/SR; r=np.random.default_rng(seed)
+    ir=lowpass(r.standard_normal(n),4200,1)*np.exp(-t*(6.9/rt)); ir[:int(.012*SR)]=0; ir/=np.sqrt((ir**2).sum())
+    L=len(x)+n; y=np.fft.irfft(np.fft.rfft(x,L)*np.fft.rfft(ir,L),L)[:len(x)]
+    return x*(1-wet*.4)+y*wet
+mix=np.stack([reverb(dry[c]+padb[c]*.9,5+c) for c in (0,1)])
+mix=np.stack([lowpass(mix[c],9000)-lowpass(mix[c],48) for c in (0,1)])
+t=np.arange(N)/SR
+mix*=np.minimum(1,t/.02)*np.minimum(1,(DUR-t)/2.2)**1.3
+mix/=np.abs(mix).max()/.92
+mix=np.tanh(mix*1.25)/np.tanh(1.25)*.92
+os.makedirs('out',exist_ok=True)
 w=wave.open('out/music.wav','wb'); w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
 w.writeframes((mix.T*32767).astype('<i2').tobytes()); w.close()
+print('ok',DUR)

@@ -7,369 +7,217 @@
 @font-face{font-family:"Cormorant";src:url(fonts/CormorantGaramond.woff2) format("woff2");font-weight:300 700;font-style:normal}
 @font-face{font-family:"Cormorant";src:url(fonts/CormorantGaramond-Italic.woff2) format("woff2");font-weight:300 700;font-style:italic}
 @font-face{font-family:"Jost";src:url(fonts/Jost.woff2) format("woff2");font-weight:100 900}
-:root{--cream:#FCFAF6;--ink:#15110f;--bordeaux:#5a1a22;--tan:#b98a5e}
+:root{--cream:#f6f1e8;--ink:#2a1b17;--bordeaux:#6a1f2a;--mute:#7a675d}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{background:#000;width:1080px;height:1920px;overflow:hidden}
-#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--ink);font-family:"Jost",sans-serif;color:var(--cream)}
-.scene{position:absolute;inset:0;overflow:hidden;visibility:hidden;background:var(--ink)}
-.bg{position:absolute;inset:0;background-size:cover;background-position:center;will-change:transform}
-.shade{position:absolute;inset:0}
-.serif{font-family:"Cormorant",serif;font-weight:400}
-.it{font-style:italic}
-.caps{font-family:"Jost";text-transform:uppercase;letter-spacing:.42em;font-weight:400}
-.line{display:block;overflow:hidden;padding:.08em .06em .16em;margin:-.08em -.06em -.16em}
-.line>span{display:inline-block;will-change:transform}
-.abs{position:absolute}
-.center{left:0;right:0;text-align:center}
-
-/* s1 hook */
-#s1 h1{position:absolute;left:84px;right:84px;top:1010px;font-size:178px;line-height:.98;letter-spacing:-.01em}
-#s1 .tag{position:absolute;left:90px;top:940px;font-size:26px}
-/* s2 */
-#s2 h1{position:absolute;left:0;right:0;top:300px;text-align:center;font-size:132px;line-height:1.02}
-#s2 .tag{top:1460px;font-size:27px}
-/* brand bar */
-#brand{position:absolute;left:0;right:0;top:196px;text-align:center;font-size:25px;letter-spacing:.62em;padding-left:.62em;z-index:50;opacity:0;mix-blend-mode:difference;color:#fff}
-/* s3 bags */
-#s3 .title{position:absolute;left:0;right:0;top:268px;text-align:center;font-size:250px;line-height:1}
-.card{position:absolute;left:140px;top:560px;width:800px;height:960px;border-radius:6px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.55);visibility:hidden;background:#222}
-.card .bg{inset:-4%}
-.card .cap{position:absolute;left:0;right:0;bottom:0;padding:120px 44px 40px;background:linear-gradient(transparent,rgba(10,6,5,.78));display:flex;justify-content:space-between;align-items:flex-end}
-.card .cap b{font-family:"Cormorant";font-weight:400;font-style:italic;font-size:84px;line-height:1}
-.card .cap i{font-style:normal;font-size:23px;letter-spacing:.3em;text-transform:uppercase;padding-bottom:10px}
-/* s3b spotlight */
-#s3b{background:var(--cream);color:var(--ink)}
-#s3b .ring{position:absolute;left:90px;top:420px;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,#efe6d8 0%,#f6efe4 60%,var(--cream) 72%)}
-#s3b .prod{position:absolute;left:40px;top:330px;width:1000px;height:1000px;background-size:contain;background-repeat:no-repeat;background-position:center;mix-blend-mode:multiply;visibility:hidden}
-#s3b .pname{position:absolute;left:0;right:0;top:1310px;text-align:center;font-size:170px;line-height:1;visibility:hidden}
-#s3b .psub{position:absolute;left:0;right:0;top:1500px;text-align:center;font-size:25px}
-#s3b .big{position:absolute;left:-40px;top:250px;font-size:400px;line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(90,26,34,.22);white-space:nowrap}
-/* label blocks */
-.label{position:absolute;left:84px;bottom:470px}
-.label .n{font-size:25px;margin-bottom:18px;display:block}
-.label .t{font-size:200px;line-height:.95;display:block}
-.label .s{font-size:27px;margin-top:26px;display:block}
-/* badge */
-#badge{position:absolute;right:120px;top:330px;width:300px;height:300px;visibility:hidden}
-#badge svg{width:100%;height:100%}
-/* s6 */
-#s6 .top,#s6 .bot{position:absolute;left:0;width:1080px;overflow:hidden}
-#s6 .top{top:0;height:1040px}#s6 .bot{top:1056px;height:864px}
-/* s7 */
-#s7{background:var(--cream);color:var(--ink)}
-#s7 .title{position:absolute;left:0;right:0;top:270px;text-align:center;font-size:160px;line-height:1}
-.tile{position:absolute;width:456px;height:500px;border-radius:6px;overflow:hidden;box-shadow:0 24px 50px rgba(60,40,20,.2)}
-.tile span{position:absolute;left:22px;bottom:18px;font-size:20px;letter-spacing:.26em;text-transform:uppercase;color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.6)}
-/* s8 */
-#s8 .props{position:absolute;left:84px;right:84px;top:540px}
-#s8 .props .line{font-size:132px;line-height:1.12;white-space:nowrap}
-#s8 .ship{position:absolute;left:84px;top:1120px;font-size:25px;line-height:1.9}
-#s8 .rule{position:absolute;left:84px;top:1080px;width:300px;height:2px;background:var(--tan);transform-origin:left}
-/* s9 */
-#s9{background:var(--cream);color:var(--ink)}
-#s9 .logo{position:absolute;left:290px;top:420px;width:500px;height:281px;background:url(assets/logo.png) center/contain no-repeat}
-#s9 .word{position:absolute;left:0;right:0;top:760px;text-align:center;font-size:104px;letter-spacing:.2em;padding-left:.2em}
-#s9 .word span{display:inline-block}
-#s9 .lpv{position:absolute;left:0;right:0;top:902px;text-align:center;font-size:62px;color:var(--bordeaux)}
-#s9 .sub{position:absolute;left:0;right:0;top:1010px;text-align:center;font-size:24px}
-#s9 .cta{position:absolute;left:200px;top:1160px;width:680px;height:124px;border-radius:62px;background:var(--ink);color:var(--cream);display:flex;align-items:center;justify-content:center;font-size:28px;letter-spacing:.3em;text-transform:uppercase}
-#s9 .url{position:absolute;left:0;right:0;top:1330px;text-align:center;font-size:66px}
-#s9 .hr{position:absolute;left:440px;top:728px;width:200px;height:2px;background:var(--tan)}
-/* overlays */
-#flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:90;pointer-events:none}
-#vig{position:absolute;inset:0;z-index:80;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.28) 100%);pointer-events:none}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--cream);font-family:"Jost",sans-serif;color:var(--ink)}
+.shot{position:absolute;inset:0;overflow:hidden;visibility:hidden;background:var(--cream)}
+.rig{position:absolute;inset:0;transform-origin:540px 780px}
+.rig img{position:absolute;left:0;top:0;height:1920px;transform-origin:0 0;will-change:transform}
+.gobo{position:absolute;inset:-20% -60%;mix-blend-mode:soft-light;
+  background:linear-gradient(112deg,transparent 30%,rgba(255,240,214,.75) 41%,rgba(255,240,214,.2) 47%,rgba(255,240,214,.7) 53%,transparent 64%)}
+#leak{position:absolute;left:0;top:0;width:1500px;height:1500px;border-radius:50%;mix-blend-mode:soft-light;z-index:20;
+  background:radial-gradient(circle,rgba(255,196,128,.55) 0%,rgba(255,196,128,.18) 40%,transparent 68%)}
+#veil{position:absolute;inset:0;z-index:30;
+  background:linear-gradient(to bottom,rgba(246,241,232,0) 60%,rgba(246,241,232,.5) 69%,rgba(246,241,232,.9) 78%,#f6f1e8 90%)}
+#vig{position:absolute;inset:0;z-index:31;background:radial-gradient(ellipse 75% 60% at 50% 42%,transparent 60%,rgba(74,48,34,.16) 100%)}
+#bloom{position:absolute;inset:0;z-index:60;background:#fff4e2;opacity:0}
+#brand{position:absolute;left:0;right:0;top:188px;text-align:center;font-size:24px;letter-spacing:.62em;padding-left:.62em;z-index:40;text-transform:uppercase;opacity:0}
+.cap{position:absolute;left:60px;right:60px;bottom:340px;text-align:center;z-index:40;text-shadow:0 0 30px rgba(246,241,232,.9)}
+.cap::before{content:"";position:absolute;inset:-110px -60px -90px;z-index:-1;background:radial-gradient(ellipse closest-side,rgba(246,241,232,.82) 35%,rgba(246,241,232,0) 100%)}
+.cap .ov{font-size:23px;letter-spacing:.46em;padding-left:.46em;text-transform:uppercase;color:var(--bordeaux);margin-bottom:26px;white-space:nowrap}
+.cap .ti{font-family:"Cormorant",serif;font-weight:400;font-size:118px;line-height:1.02;letter-spacing:-.005em}
+.cap .ti.ch{font-style:italic;font-size:164px;line-height:1}
+.cap .ti i{font-style:italic}
+.ln{display:block;overflow:hidden;padding:.06em .1em .2em;margin:-.06em -.1em -.2em}
+.ln>span{display:inline-block;will-change:transform}
+.cap .sub{position:relative;height:30px;margin-top:30px;font-size:21px;letter-spacing:.36em;text-transform:uppercase;color:var(--mute)}
+.cap .sub span{position:absolute;left:0;right:0;padding-left:.36em;white-space:nowrap}
+/* products */
+#s9{background:radial-gradient(ellipse 90% 60% at 50% 40%,#fbf8f2,#f6f1e8 60%,#ece3d4)}
+#track{position:absolute;left:0;top:330px;height:860px;width:4000px}
+#track figure{position:absolute;top:0;width:860px;height:860px;mix-blend-mode:multiply}
+#track img{width:100%;height:100%}
+#track figcaption{position:absolute;left:0;right:0;bottom:-26px;text-align:center;font-family:"Cormorant";font-style:italic;font-size:54px;color:var(--mute)}
+#floor{position:absolute;left:0;right:0;top:1118px;height:2px;background:linear-gradient(90deg,transparent,rgba(106,31,42,.25),transparent)}
+#cap9 .ti{font-size:92px;line-height:1.1}
+/* end */
+#s10{background:radial-gradient(ellipse 90% 55% at 50% 38%,#fdfbf7,#f6f1e8 60%,#eadfce)}
+#s10 .logo{position:absolute;left:300px;top:440px;width:480px;height:270px;background:url(assets/logo.png) center/contain no-repeat}
+#s10 .hr{position:absolute;left:440px;top:752px;width:200px;height:1.5px;background:var(--bordeaux);opacity:.6}
+#s10 .word{position:absolute;left:0;right:0;top:786px;text-align:center;font-family:"Cormorant";font-size:100px;letter-spacing:.22em;padding-left:.22em}
+#s10 .word span{display:inline-block}
+#s10 .lpv{position:absolute;left:0;right:0;top:922px;text-align:center;font-family:"Cormorant";font-style:italic;font-size:60px;color:var(--bordeaux)}
+#s10 .sub{position:absolute;left:0;right:0;top:1040px;text-align:center;font-size:22px;letter-spacing:.46em;padding-left:.46em;text-transform:uppercase;color:var(--mute)}
+#s10 .cta{position:absolute;left:0;right:0;top:1210px;text-align:center;font-size:24px;letter-spacing:.4em;padding-left:.4em;text-transform:uppercase}
+#s10 .cta b{font-weight:400;display:inline-block;padding:0 0 16px;border-bottom:1.5px solid var(--ink)}
+#s10 .url{position:absolute;left:0;right:0;top:1318px;text-align:center;font-family:"Cormorant";font-style:italic;font-size:68px}
 </style>
 </head>
 <body>
 <div id="stage">
-  <div id="brand" class="caps">Mavelania</div>
-
-  <!-- 1 HOOK -->
-  <div class="scene" id="s1">
-    <div class="bg fl" style="background-image:url(assets/bordeaux.jpg)"></div>
-    <div class="bg fl" style="background-image:url(assets/briefcase.jpg)"></div>
-    <div class="bg fl" style="background-image:url(assets/odette0.jpg)"></div>
-    <div class="bg fl" style="background-image:url(assets/charm.jpg)"></div>
-    <div class="bg main" style="background-image:url(assets/evelin0.jpg);background-position:58% center"></div>
-    <div class="shade" style="background:linear-gradient(rgba(10,6,5,.15),rgba(10,6,5,0) 30%,rgba(10,6,5,.75) 75%)"></div>
-    <div class="tag caps">Handcrafted Leather Goods</div>
-    <h1 class="serif"><span class="line"><span>Leather</span></span><span class="line"><span class="it">lives</span></span><span class="line"><span>with time.</span></span></h1>
-  </div>
-
-  <!-- 2 -->
-  <div class="scene" id="s2">
-    <div class="bg" style="background-image:url(assets/walk.jpg)"></div>
-    <div class="shade" style="background:linear-gradient(rgba(20,14,12,.55),rgba(20,14,12,0) 45%,rgba(20,14,12,.35))"></div>
-    <h1 class="serif"><span class="line"><span>We only give it</span></span><span class="line"><span class="it" style="font-size:230px">meaning.</span></span></h1>
-    <div class="tag caps abs center">La Pelle Viva</div>
-  </div>
-
-  <!-- 3 BAGS -->
-  <div class="scene" id="s3" style="background:radial-gradient(circle at 50% 40%,#3a1217,#15110f 70%)">
-    <div class="title serif it"><span class="line"><span>Bags</span></span></div>
-    <div class="card"><div class="bg" style="background-image:url(assets/odette0.jpg)"></div><div class="cap"><b>Odette</b><i>Tote · 01</i></div></div>
-    <div class="card"><div class="bg" style="background-image:url(assets/valeria0.jpg)"></div><div class="cap"><b>Valeria</b><i>Shoulder · 02</i></div></div>
-    <div class="card"><div class="bg" style="background-image:url(assets/amelie0.jpg)"></div><div class="cap"><b>Amelie</b><i>Suede Tote · 03</i></div></div>
-    <div class="card"><div class="bg" style="background-image:url(assets/vivienne0.jpg)"></div><div class="cap"><b>Vivienne</b><i>Suede · 04</i></div></div>
-  </div>
-  <div class="scene" id="s3b">
-    <div class="big serif it">Mavelania</div>
-    <div class="ring"></div>
-    <div class="prod" style="background-image:url(assets/evelin1.jpg)"></div>
-    <div class="prod" style="background-image:url(assets/isadora1.jpg)"></div>
-    <div class="prod" style="background-image:url(assets/valeria1.jpg)"></div>
-    <div class="prod" style="background-image:url(assets/odette1.jpg)"></div>
-    <div class="pname serif it">Evelin</div>
-    <div class="pname serif it">Isadora</div>
-    <div class="pname serif it">Valeria</div>
-    <div class="pname serif it">Odette</div>
-    <div class="psub caps">Genuine Leather</div>
-  </div>
-
-  <!-- 4 MEN -->
-  <div class="scene" id="s4">
-    <div class="bg a" style="background-image:url(assets/briefcase.jpg)"></div>
-    <div class="bg b" style="background-image:url(assets/clutch.jpg)"></div>
-    <div class="shade" style="background:linear-gradient(transparent 45%,rgba(10,6,5,.72))"></div>
-    <div class="label la"><span class="n caps">For the workday</span><span class="t serif it"><span class="line"><span>Briefcases</span></span></span></div>
-    <div class="label lb"><span class="n caps">For the evening</span><span class="t serif it"><span class="line"><span>Clutches</span></span></span></div>
-  </div>
-
-  <!-- 5 WALLETS -->
-  <div class="scene" id="s5">
-    <div class="bg a" style="background-image:url(assets/rowan0.jpg)"></div>
-    <div class="bg b" style="background-image:url(assets/conrad0.jpg)"></div>
-    <div class="bg c" style="background-image:url(assets/wwallet.jpg)"></div>
-    <div class="shade" style="background:linear-gradient(rgba(10,6,5,.3),transparent 30%,transparent 45%,rgba(10,6,5,.75))"></div>
-    <div class="label"><span class="n caps">Card holders · Purses</span><span class="t serif it"><span class="line"><span>Wallets</span></span></span></div>
-    <div id="badge"><svg viewBox="0 0 300 300">
-      <circle cx="150" cy="150" r="146" fill="#FCFAF6"/>
-      <circle cx="150" cy="150" r="92" fill="none" stroke="#5a1a22" stroke-width="1.5"/>
-      <defs><path id="circ" d="M150,150 m-116,0 a116,116 0 1,1 232,0 a116,116 0 1,1 -232,0"/></defs>
-      <g class="spin" style="transform-origin:150px 150px"><text font-family="Jost" font-size="21" letter-spacing="7.6" fill="#5a1a22"><textPath href="#circ">RFID PROTECTION ✦ RFID PROTECTION ✦ </textPath></text></g>
-      <text x="150" y="146" text-anchor="middle" font-family="Cormorant" font-style="italic" font-size="62" fill="#15110f">RFID</text>
-      <text x="150" y="182" text-anchor="middle" font-family="Jost" font-size="17" letter-spacing="5" fill="#15110f">SAFE</text>
-    </svg></div>
-  </div>
-
-  <!-- 6 PHONE -->
-  <div class="scene" id="s6">
-    <div class="bg a" style="background-image:url(assets/phone.jpg);background-position:center 20%"></div>
-    <div class="top"><div class="bg" style="background-image:url(assets/sonat0.jpg)"></div><div class="shade" style="background:linear-gradient(transparent 55%,rgba(10,6,5,.8))"></div></div>
-    <div class="bot"><div class="bg" style="background-image:url(assets/cases.jpg)"></div></div>
-    <div class="shade" style="background:linear-gradient(transparent 50%,rgba(10,6,5,.7))"></div>
-    <div class="label"><span class="n caps">Leather · for iPhone</span><span class="t serif it" style="font-size:170px"><span class="line"><span>Phone Cases</span></span></span></div>
-  </div>
-
-  <!-- 7 ACCESSORIES -->
-  <div class="scene" id="s7">
-    <div class="title serif it"><span class="line"><span>Accessories</span></span></div>
-    <div class="tile" style="left:70px;top:500px"><div class="bg" style="background-image:url(assets/charm.jpg);background-position:35% 62%;background-size:190%"></div><span>Bag charms</span></div>
-    <div class="tile" style="left:554px;top:560px"><div class="bg" style="background-image:url(assets/amanda.jpg)"></div><span>Jewelry boxes</span></div>
-    <div class="tile" style="left:70px;top:1028px"><div class="bg" style="background-image:url(assets/deskmat.jpg)"></div><span>Desk mats</span></div>
-    <div class="tile" style="left:554px;top:1088px"><div class="bg" style="background-image:url(assets/heart.jpg)"></div><span>Little details</span></div>
-  </div>
-
-  <!-- 8 VALUES -->
-  <div class="scene" id="s8">
-    <div class="bg" style="background-image:url(assets/still.jpg)"></div>
-    <div class="shade" style="background:rgba(16,10,9,.74)"></div>
-    <div class="props serif">
-      <span class="line"><span>Handcrafted.</span></span>
-      <span class="line"><span class="it" style="color:#e7c9a5">Genuine leather.</span></span>
-      <span class="line"><span>Timeless design.</span></span>
+  <div class="shot photo" data-img="bordeaux"></div>
+  <div class="shot photo" data-img="walk"></div>
+  <div class="shot photo" data-img="valeria0"></div>
+  <div class="shot photo" data-img="alden0"></div>
+  <div class="shot photo" data-img="briefcase"></div>
+  <div class="shot photo" data-img="wwallet"></div>
+  <div class="shot photo" data-img="phone"></div>
+  <div class="shot photo" data-img="charm"></div>
+  <div class="shot" id="s9">
+    <div id="floor"></div>
+    <div id="track">
+      <figure><img src="assets/evelin1.jpg"><figcaption>Evelin</figcaption></figure>
+      <figure><img src="assets/isadora1.jpg"><figcaption>Isadora</figcaption></figure>
+      <figure><img src="assets/valeria1.jpg"><figcaption>Valeria</figcaption></figure>
+      <figure><img src="assets/odette1.jpg"><figcaption>Odette</figcaption></figure>
     </div>
-    <div class="rule"></div>
-    <div class="ship caps">Complimentary shipping<br>on selected orders</div>
+  </div>
+  <div class="shot" id="s10">
+    <div class="logo"></div><div class="hr"></div>
+    <div class="word">MAVELANIA</div>
+    <div class="lpv">La Pelle Viva</div>
+    <div class="sub">Handcrafted Leather Goods</div>
+    <div class="cta"><b>Discover the collection</b></div>
+    <div class="url">mavelania.com</div>
   </div>
 
-  <!-- 9 END -->
-  <div class="scene" id="s9">
-    <div class="logo"></div>
-    <div class="hr"></div>
-    <div class="word serif">MAVELANIA</div>
-    <div class="lpv serif it">La Pelle Viva</div>
-    <div class="sub caps">Handcrafted Leather Goods</div>
-    <div class="cta"><span>Discover the collection&nbsp;&nbsp;→</span></div>
-    <div class="url serif it">mavelania.com</div>
-  </div>
-
+  <div id="leak"></div>
+  <div id="veil"></div>
   <div id="vig"></div>
-  <div id="flash"></div>
+  <div id="brand">Mavelania</div>
+
+  <div class="cap" id="cap1"><div class="ov">Handcrafted Leather Goods</div><div class="ti"><span class="ln"><span>Leather <i>lives</i></span></span><span class="ln"><span>with time.</span></span></div></div>
+  <div class="cap" id="cap2"><div class="ov">La Pelle Viva</div><div class="ti"><span class="ln"><span>We only give it</span></span><span class="ln"><span><i>meaning.</i></span></span></div></div>
+  <div class="cap" id="cap3"><div class="ov">The Collection &nbsp;·&nbsp; I</div><div class="ti ch"><span class="ln"><span>Bags</span></span></div><div class="sub"><span>Valeria Shoulder Bag</span><span>Alden Clutch Bag</span></div></div>
+  <div class="cap" id="cap5"><div class="ov">The Collection &nbsp;·&nbsp; II</div><div class="ti ch"><span class="ln"><span>Briefcases</span></span></div><div class="sub"><span>For work &amp; travel</span></div></div>
+  <div class="cap" id="cap6"><div class="ov">The Collection &nbsp;·&nbsp; III</div><div class="ti ch"><span class="ln"><span>Wallets</span></span></div><div class="sub"><span>With RFID protection</span></div></div>
+  <div class="cap" id="cap7"><div class="ov">The Collection &nbsp;·&nbsp; IV</div><div class="ti ch" style="font-size:142px"><span class="ln"><span>Phone Cases</span></span></div><div class="sub"><span>Leather, for iPhone</span></div></div>
+  <div class="cap" id="cap8"><div class="ov">The Collection &nbsp;·&nbsp; V</div><div class="ti ch" style="font-size:142px"><span class="ln"><span>Accessories</span></span></div><div class="sub"><span>Charms · Jewelry boxes · Desk mats</span></div></div>
+  <div class="cap" id="cap9"><div class="ti"><span class="ln"><span>Handcrafted.</span></span><span class="ln"><span><i style="color:var(--bordeaux)">Genuine leather.</i></span></span><span class="ln"><span>Timeless design.</span></span></div></div>
+
+  <div id="bloom"></div>
 </div>
 <script src="gsap.min.js"></script>
 <script>
-const B = 0.6;                 // one beat @100bpm
-const DUR = 36 * B;            // 21.6s
-const FPS = 30;
-const $ = (s, r = document) => r.querySelector(s);
-const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const FPS = 30, BAR = 10 / 3, NBARS = 10, DUR = BAR * NBARS, X = 1.0;   // 72 bpm, 4 beats per shot
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const lerp = (a, b, p) => a + (b - a) * p, clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const AX = 540, AY = 780, FLOOR = 1800;   // screen anchor of the camera target; images may end where the veil is opaque
+
+// camera per photo: c0 -> c1 = {u,v: point of the image to aim at (0..1), z: zoom}; par = depth strength, px = lateral parallax
+const CAMS = {
+  bordeaux:  { c0: { u: .50, v: .40, z: 1.03 }, c1: { u: .54, v: .44, z: 1.12 }, par: .07, px: 16, gobo: 1 },
+  walk:      { c0: { u: .60, v: .44, z: 1.12 }, c1: { u: .45, v: .45, z: 1.22 }, par: .05, px: 46, gobo: -1 },
+  valeria0:  { c0: { u: .57, v: .54, z: 1.12 }, c1: { u: .50, v: .34, z: 1.02 }, par: .07, px: -14, gobo: 1 },
+  alden0:    { c0: { u: .46, v: .34, z: 1.18 }, c1: { u: .56, v: .68, z: 1.30 }, par: .06, px: 14, gobo: -1 },
+  briefcase: { c0: { u: .50, v: .38, z: 1.04 }, c1: { u: .48, v: .68, z: 1.32 }, par: .06, px: -12, gobo: 1 },
+  wwallet:   { c0: { u: .60, v: .72, z: 1.38 }, c1: { u: .48, v: .46, z: 1.08 }, par: .06, px: 14, gobo: -1 },
+  phone:     { c0: { u: .46, v: .38, z: 1.04 }, c1: { u: .37, v: .34, z: 1.30 }, par: .07, px: -16, gobo: 1 },
+  charm:     { c0: { u: .50, v: .45, z: 1.04 }, c1: { u: .42, v: .61, z: 1.52 }, par: .06, px: 12, gobo: -1 },
+};
+const shots = $$(".shot");
+const photos = [];
+$$(".shot.photo").forEach((el, i) => {
+  const n = el.dataset.img;
+  el.innerHTML = `<div class="rig"><img class="bgl" src="assets/${n}_bg.jpg"><div class="gobo"></div><img class="fgl" src="assets/${n}_fg.webp"></div>`;
+  photos.push({ el, i, cam: CAMS[n], rig: $(".rig", el), bg: $(".bgl", el), fg: $(".fgl", el), gobo: $(".gobo", el) });
+});
+const ease = p => p * p * (3 - 2 * p) * .35 + p * .65;       // nearly linear with soft ends
+function place(img, W, u, v, z, ox, oy) {
+  let tx = AX + ox - u * W * z, ty = AY + oy - v * 1920 * z;
+  tx = clamp(tx, 1080 + 14 - W * z, -14); ty = clamp(ty, FLOOR - 1920 * z, -14);
+  img.style.transform = `translate(${tx.toFixed(2)}px,${ty.toFixed(2)}px) scale(${z.toFixed(5)})`;
+}
+function camera(s, t) {
+  const t0 = s.i * BAR - X / 2, t1 = (s.i + 1) * BAR + X / 2;
+  if (t < t0 - .1 || t > t1 + .1) return;
+  const p = ease(clamp((t - t0) / (t1 - t0), 0, 1)), c = s.cam;
+  const W = s.bg.naturalWidth / s.bg.naturalHeight * 1920;
+  const u = lerp(c.c0.u, c.c1.u, p), v = lerp(c.c0.v, c.c1.v, p), z = c.c0.z * Math.pow(c.c1.z / c.c0.z, p);
+  // gentle hand-held drift
+  const hx = 5 * Math.sin(t * .83 + s.i * 1.7) + 2.5 * Math.sin(t * 2.1 + s.i), hy = 4 * Math.sin(t * .97 + 2 + s.i) + 2 * Math.sin(t * 2.6 + 1);
+  const d = p - .5;
+  place(s.bg, W, u, v, z * (1 - c.par * d * .35), hx * .6 - c.px * d * .3, hy * .6);
+  place(s.fg, W, u, v, z * (1 + c.par * d * .65), hx + c.px * d * .7, hy);
+  s.rig.style.transform = `rotate(${(.14 * Math.sin(t * .6 + s.i * 2.1)).toFixed(4)}deg)`;
+  s.gobo.style.transform = `translateX(${(c.gobo * lerp(-420, 420, p)).toFixed(1)}px)`;
+}
+
 gsap.ticker.lagSmoothing(0);
-const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
-const b = n => n * B;
+const tl = gsap.timeline({ paused: true });
+const word = $("#s10 .word"); word.innerHTML = [...word.textContent].map(c => `<span>${c}</span>`).join("");
 
-// wordmark letters
-const word = $("#s9 .word"); word.innerHTML = [...word.textContent].map(c => `<span>${c}</span>`).join("");
-
-const show = (el, t) => tl.set(el, { visibility: "visible" }, t);
-const hide = (el, t) => tl.set(el, { visibility: "hidden" }, t);
-const flash = (t, o = .55) => tl.fromTo("#flash", { opacity: o }, { opacity: 0, duration: .22, ease: "power1.out", immediateRender: false }, t);
-const lines = (sel, t, st = .09, d = .55) => tl.fromTo(sel, { yPercent: 115, rotate: 4 }, { yPercent: 0, rotate: 0, duration: d, stagger: st, ease: "power4.out" }, t);
-const kb = (el, t, d, from = 1.16, to = 1.02, extra = {}) => tl.fromTo(el, { scale: from, ...extra.from }, { scale: to, ...extra.to, duration: d, ease: "none", immediateRender: false }, t);
-// whip: push transition with blur
-function whip(out, inn, t, dir = "y", sign = 1, d = .4) {
-  const p = dir === "y" ? "yPercent" : "xPercent";
-  show(inn, t - d / 2);
-  tl.fromTo(inn, { [p]: 100 * sign, filter: "blur(22px)" }, { [p]: 0, filter: "blur(0px)", duration: d, ease: "power4.inOut", immediateRender: false }, t - d / 2);
-  tl.to(out, { [p]: -100 * sign, filter: "blur(22px)", duration: d, ease: "power4.inOut" }, t - d / 2);
-  hide(out, t + d / 2);
+/* ---- shot dissolves ---- */
+gsap.set(shots[0], { visibility: "visible" });
+tl.fromTo(shots[0], { filter: "blur(9px) brightness(1.1)" }, { filter: "blur(0px) brightness(1)", duration: 1.0, ease: "power2.out" }, 0);
+tl.fromTo("#bloom", { opacity: .3 }, { opacity: 0, duration: 1.0, ease: "power1.out" }, 0);
+for (let i = 1; i < shots.length; i++) {
+  const t = i * BAR - X / 2;
+  tl.set(shots[i], { visibility: "visible" }, t);
+  tl.fromTo(shots[i], { opacity: 0, filter: "blur(16px) brightness(1.1)" }, { opacity: 1, filter: "blur(0px) brightness(1)", duration: X, ease: "sine.inOut" }, t);
+  tl.to(shots[i - 1], { filter: "blur(12px) brightness(1.06)", duration: X, ease: "sine.in" }, t);
+  tl.set(shots[i - 1], { visibility: "hidden" }, t + X);
+  tl.fromTo("#bloom", { opacity: 0 }, { opacity: .2, duration: X / 2, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false }, t);
 }
-function zoomThrough(out, inn, t, d = .4) {
-  show(inn, t - d / 2);
-  tl.fromTo(inn, { scale: .6, opacity: 0, filter: "blur(18px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: d, ease: "power3.inOut", immediateRender: false }, t - d / 2);
-  tl.to(out, { scale: 1.9, opacity: 0, filter: "blur(18px)", duration: d, ease: "power3.inOut" }, t - d / 2);
-  hide(out, t + d / 2);
+
+/* ---- captions ---- */
+function capIn(id, t) {
+  const c = $(id);
+  gsap.set(c, { visibility: "hidden" }); tl.set(c, { visibility: "visible" }, t);
+  if ($(".ov", c)) tl.fromTo($(".ov", c), { opacity: 0, letterSpacing: ".8em" }, { opacity: 1, letterSpacing: ".46em", duration: 1.3, ease: "power2.out" }, t);
+  tl.fromTo($$(".ln>span", c), { yPercent: 108, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 1.15, stagger: .16, ease: "power3.out" }, t + .12);
+  const subs = $$(".sub span", c);
+  if (subs.length) { gsap.set(subs, { opacity: 0 }); tl.to(subs[0], { opacity: 1, duration: .9, ease: "power1.out" }, t + .7); }
 }
-function iris(out, inn, t, d = .5, at = "50% 50%") {
-  show(inn, t - d / 2);
-  tl.fromTo(inn, { clipPath: `circle(0% at ${at})` }, { clipPath: `circle(120% at ${at})`, duration: d, ease: "power2.inOut", immediateRender: false }, t - d / 2);
-  hide(out, t + d / 2);
+function capOut(id, t) { tl.to(id, { opacity: 0, y: -18, duration: .55, ease: "power2.in" }, t); tl.set(id, { visibility: "hidden" }, t + .56); }
+const IN = .4, OUT = .62;
+capIn("#cap1", .25); capOut("#cap1", BAR - OUT);
+capIn("#cap2", BAR + IN); capOut("#cap2", 2 * BAR - OUT);
+capIn("#cap3", 2 * BAR + IN); capOut("#cap3", 4 * BAR - OUT);
+tl.to("#cap3 .sub span:nth-child(1)", { opacity: 0, duration: .5 }, 3 * BAR - .3);
+tl.to("#cap3 .sub span:nth-child(2)", { opacity: 1, duration: .7 }, 3 * BAR + .2);
+[5, 6, 7, 8].forEach(n => { capIn("#cap" + n, (n - 1) * BAR + IN); capOut("#cap" + n, n * BAR - OUT); });
+// values: one line per beat
+{
+  const c = $("#cap9"), t = 8 * BAR + .3, L = $$(".ln>span", c);
+  gsap.set(c, { visibility: "hidden" }); tl.set(c, { visibility: "visible" }, t);
+  L.forEach((l, i) => tl.fromTo(l, { yPercent: 108, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 1.1, ease: "power3.out" }, t + i * BAR / 4));
+  capOut("#cap9", 9 * BAR - OUT);
 }
-const wipe = (el, t, from = "inset(0 100% 0 0)", d = .42) => tl.fromTo(el, { clipPath: from }, { clipPath: "inset(0 0% 0 0)", duration: d, ease: "power4.inOut", immediateRender: false }, t);
+tl.to("#brand", { opacity: .82, duration: 1.4, ease: "power1.out" }, 1.0);
+tl.to("#brand", { opacity: 0, duration: .8 }, 9 * BAR - .9);
+tl.to("#vig", { opacity: 0, duration: 1 }, 8 * BAR - .5);
+tl.to("#veil", { opacity: 0, duration: 1 }, 9 * BAR - .5);
 
-/* ---------- 1 HOOK  (beats 0-4) ---------- */
-show("#s1", 0);
-const fl = $$("#s1 .fl"), F = 4 / FPS;
-gsap.set([...fl, "#s1 .main"], { visibility: "hidden" });
-fl.forEach((e, i) => { show(e, i * F); tl.fromTo(e, { scale: 1.25 }, { scale: 1.08, duration: F, ease: "none", immediateRender: false }, i * F); hide(e, (i + 1) * F); });
-const t1 = fl.length * F;
-show("#s1 .main", t1); flash(t1, .8);
-tl.fromTo("#s1 .main", { scale: 1.45 }, { scale: 1.12, duration: .7, ease: "expo.out", immediateRender: false }, t1);
-tl.to("#s1 .main", { scale: 1.2, duration: b(4) - t1 - .7, ease: "none" }, t1 + .7);
-tl.fromTo("#s1 .shade", { opacity: 0 }, { opacity: 1, duration: .3 }, t1);
-tl.fromTo("#s1 .line>span", { yPercent: 115, rotate: 5 }, { yPercent: 0, rotate: 0, duration: .5, stagger: B / 2, ease: "power4.out" }, b(1) - .05);
-tl.fromTo("#s1 .tag", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: .5 }, b(1));
-tl.to("#s1 h1", { scale: 1.04, transformOrigin: "left bottom", duration: b(2), ease: "none" }, b(2));
+/* ---- product tracking shot ---- */
+$$("#track figure").forEach((f, i) => f.style.left = (i * 900) + "px");
+tl.fromTo("#track figure", { x: 110 }, { x: -1040, duration: BAR + X, ease: "none" }, 8 * BAR - X / 2);
 
-/* ---------- 2  (beats 4-8) ---------- */
-whip("#s1", "#s2", b(4), "y", 1);
-kb("#s2 .bg", b(4) - .2, b(4) + .4, 1.22, 1.04, { from: { xPercent: -3 }, to: { xPercent: 2 } });
-lines("#s2 .line>span", b(4) + .1, B / 2 + .0, .6);
-tl.fromTo("#s2 .tag", { opacity: 0, letterSpacing: "1.2em" }, { opacity: 1, letterSpacing: ".42em", duration: .9 }, b(6));
-tl.to("#s2 h1", { letterSpacing: ".015em", duration: b(3.5), ease: "none" }, b(4.3));
-
-/* ---------- 3 BAGS (beats 8-12) ---------- */
-zoomThrough("#s2", "#s3", b(8), .44); flash(b(8), .5);
-tl.to("#brand", { opacity: .9, duration: .4 }, b(8));
-lines("#s3 .title .line>span", b(8) - .05, 0, .6);
-const rots = [-5, 4, -3, 2.5], fromX = [-1100, 1100, -1100, 1100];
-$$("#s3 .card").forEach((c, i) => {
-  const t = b(8 + i) + .02;
-  show(c, t);
-  tl.fromTo(c, { x: fromX[i], y: 300, rotate: rots[i] * 6, scale: 1.25 }, { x: (i - 1.5) * 10, y: i * -14, rotate: rots[i], scale: 1, duration: .46, ease: "back.out(1.1)" }, t);
-  kb($(".bg", c), t, b(4 - i) + .3, 1.14, 1.0);
-  if (i) tl.to($$("#s3 .card")[i - 1], { scale: .95, filter: "brightness(.6)", duration: .4 }, t);
-});
-tl.to("#s3 .title", { scale: 1.06, duration: b(4), ease: "none" }, b(8));
-
-/* ---------- 3b SPOTLIGHT (beats 12-14) ---------- */
-iris("#s3", "#s3b", b(12), .46, "50% 54%");
-tl.to("#vig", { opacity: .3, duration: .2 }, b(12)); tl.to("#vig", { opacity: 1, duration: .2 }, b(14)); tl.to("#vig", { opacity: .3, duration: .2 }, b(23)); tl.to("#vig", { opacity: 1, duration: .2 }, b(27)); tl.to("#vig", { opacity: .25, duration: .2 }, b(31));
-tl.to("#brand", { opacity: 0, duration: .15 }, b(12) - .2);
-const prods = $$("#s3b .prod"), names = $$("#s3b .pname");
-tl.fromTo("#s3b .big", { xPercent: 4 }, { xPercent: -30, duration: b(2.4), ease: "none" }, b(12) - .2);
-tl.fromTo("#s3b .ring", { scale: .6 }, { scale: 1, duration: .6, ease: "back.out(1.6)" }, b(12) - .1);
-prods.forEach((p, i) => {
-  const t = b(12 + i * .5);
-  show(p, t); show(names[i], t);
-  tl.fromTo(p, { scale: .72, rotate: i % 2 ? 9 : -9, y: 60 }, { scale: 1, rotate: 0, y: 0, duration: .28, ease: "back.out(2)" }, t);
-  tl.fromTo(names[i], { yPercent: 40, opacity: 0, letterSpacing: "-.04em" }, { yPercent: 0, opacity: 1, letterSpacing: "0em", duration: .25 }, t);
-  tl.fromTo("#s3b .ring", { scale: 1.07 }, { scale: 1, duration: .28, immediateRender: false }, t + .001);
-  if (i < prods.length - 1) { hide(p, t + B / 2); hide(names[i], t + B / 2); }
-});
-
-/* ---------- 4 MEN (beats 14-16) ---------- */
-whip("#s3b", "#s4", b(14), "x", 1);
-gsap.set(["#s4 .b", "#s4 .lb"], { visibility: "hidden" });
-kb("#s4 .a", b(14) - .2, b(1) + .4, 1.2, 1.08);
-lines("#s4 .la .line>span", b(14) + .05, 0, .5);
-tl.fromTo("#s4 .la .n", { opacity: 0 }, { opacity: 1, duration: .3 }, b(14) + .15);
-show("#s4 .b", b(15) - .2); wipe("#s4 .b", b(15) - .2, "inset(0 0 100% 0)", .4);
-kb("#s4 .b", b(15) - .2, b(1) + .4, 1.2, 1.08);
-hide("#s4 .la", b(15)); show("#s4 .lb", b(15));
-lines("#s4 .lb .line>span", b(15) + .02, 0, .5);
-tl.fromTo("#s4 .lb .n", { opacity: 0 }, { opacity: 1, duration: .3 }, b(15) + .1);
-tl.to("#brand", { opacity: .9, duration: .3 }, b(14) + .2);
-
-/* ---------- 5 WALLETS (beats 16-19) ---------- */
-whip("#s4", "#s5", b(16), "y", -1);
-gsap.set(["#s5 .b", "#s5 .c"], { visibility: "hidden" });
-kb("#s5 .a", b(16) - .2, b(1) + .2, 1.3, 1.1, { from: { rotate: -3 }, to: { rotate: 0 } });
-lines("#s5 .label .line>span", b(16) + .05, 0, .5);
-tl.fromTo("#s5 .label .n", { opacity: 0 }, { opacity: 1, duration: .3 }, b(16) + .2);
-show("#s5 .b", b(17)); flash(b(17), .35); kb("#s5 .b", b(17), b(1), 1.32, 1.12, { from: { rotate: 3 }, to: { rotate: 0 } });
-show("#s5 .c", b(18) - .18); wipe("#s5 .c", b(18) - .18, "inset(0 0 0 100%)", .36); kb("#s5 .c", b(18) - .18, b(1) + .4, 1.18, 1.06);
-show("#badge", b(17));
-tl.fromTo("#badge", { scale: 3, opacity: 0, rotate: -40 }, { scale: 1, opacity: 1, rotate: -8, duration: .34, ease: "power4.in" }, b(17));
-tl.fromTo("#badge", { scale: .9 }, { scale: 1, duration: .3, ease: "back.out(3)", immediateRender: false }, b(17) + .34);
-tl.fromTo("#badge .spin", { rotate: 0 }, { rotate: 70, duration: b(2.2), ease: "none" }, b(17));
-
-/* ---------- 6 PHONE (beats 19-23) ---------- */
-zoomThrough("#s5", "#s6", b(19), .4);
-gsap.set(["#s6 .top", "#s6 .bot"], { visibility: "hidden" });
-kb("#s6 .a", b(19) - .2, b(2) + .3, 1.22, 1.06);
-lines("#s6 .label .line>span", b(19) + .05, 0, .5);
-tl.fromTo("#s6 .label .n", { opacity: 0 }, { opacity: 1, duration: .3 }, b(19) + .2);
-show("#s6 .top", b(21) - .2); show("#s6 .bot", b(21) - .2);
-tl.fromTo("#s6 .top", { xPercent: -100 }, { xPercent: 0, duration: .42, ease: "power4.inOut" }, b(21) - .2);
-tl.fromTo("#s6 .bot", { xPercent: 100 }, { xPercent: 0, duration: .42, ease: "power4.inOut" }, b(21) - .2);
-kb("#s6 .top .bg", b(21) - .2, b(2) + .4, 1.18, 1.04);
-kb("#s6 .bot .bg", b(21) - .2, b(2) + .4, 1.04, 1.2);
-tl.to("#s6 .shade", { opacity: 0, duration: .3 }, b(21) - .2);
-tl.to("#s6 .label", { y: -500, duration: .42, ease: "power4.inOut" }, b(21) - .2);
-tl.fromTo("#s6 .label", { scale: 1 }, { scale: 1.05, transformOrigin: "left center", duration: .12, yoyo: true, repeat: 1, immediateRender: false }, b(22));
-
-/* ---------- 7 ACCESSORIES (beats 23-27) ---------- */
-iris("#s6", "#s7", b(23), .46, "50% 50%");
-tl.to("#brand", { opacity: 0, duration: .15 }, b(23) - .2);
-lines("#s7 .title .line>span", b(23), 0, .55);
-$$("#s7 .tile").forEach((e, i) => {
-  const t = b(23.5 + i * .5);
-  tl.fromTo(e, { scale: 0, rotate: i % 2 ? 14 : -14, opacity: 0 }, { scale: 1, rotate: i % 2 ? 1.5 : -1.5, opacity: 1, duration: .4, ease: "back.out(1.8)" }, t);
-  tl.fromTo($(".bg", e), { scale: 1.25 }, { scale: 1.05, duration: b(3.5 - i * .5), ease: "none" }, t);
-});
-tl.to("#s7 .tile", { y: i => (i % 2 ? -16 : 16), duration: b(1.4), ease: "sine.inOut" }, b(25.6));
-
-/* ---------- 8 VALUES (beats 27-31) ---------- */
-whip("#s7", "#s8", b(27), "y", 1);
-kb("#s8 .bg", b(27) - .2, b(4) + .4, 1.05, 1.25);
-const pl = $$("#s8 .props .line>span");
-pl.forEach((e, i) => {
-  const t = b(27 + i) + .04;
-  tl.fromTo(e, { yPercent: 115, rotate: 5 }, { yPercent: 0, rotate: 0, duration: .45, ease: "power4.out" }, t);
-  if (i) tl.to(pl.slice(0, i), { opacity: .38, duration: .3 }, t);
-});
-tl.to(pl, { opacity: 1, duration: .3 }, b(30));
-tl.fromTo("#s8 .rule", { scaleX: 0 }, { scaleX: 1, duration: .5 }, b(30));
-tl.fromTo("#s8 .ship", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .45 }, b(30) + .1);
-
-/* ---------- 9 END (beats 31-36) ---------- */
-iris("#s8", "#s9", b(31), .5, "50% 30%"); flash(b(31), .4);
-tl.fromTo("#s9 .logo", { scale: 2.6, opacity: 0, rotate: -25 }, { scale: 1, opacity: 1, rotate: 0, duration: .7, ease: "expo.out" }, b(31));
-tl.fromTo("#s9 .hr", { scaleX: 0 }, { scaleX: 1, duration: .5 }, b(31.6));
-tl.fromTo("#s9 .word span", { yPercent: 70, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .5, stagger: .045 }, b(31.6));
-tl.fromTo("#s9 .lpv", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: .5 }, b(32.6));
-tl.fromTo("#s9 .sub", { opacity: 0 }, { opacity: 1, duration: .5 }, b(33));
-tl.fromTo("#s9 .cta", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .5, ease: "back.out(1.8)" }, b(33.4));
-tl.fromTo("#s9 .url", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: .5 }, b(33.9));
-tl.fromTo("#s9 .cta", { scale: 1 }, { scale: 1.06, duration: .15, yoyo: true, repeat: 1, immediateRender: false }, b(35));
-tl.to("#s9 .logo", { scale: 1.05, duration: b(4), ease: "none" }, b(31) + .7);
+/* ---- end card ---- */
+const E = 9 * BAR;
+tl.fromTo("#s10 .logo", { opacity: 0, scale: 1.12 }, { opacity: 1, scale: 1, duration: 1.4, ease: "power2.out" }, E - .1);
+tl.fromTo("#s10 .hr", { scaleX: 0 }, { scaleX: 1, duration: 1.1, ease: "power2.inOut" }, E + .45);
+tl.fromTo("#s10 .word span", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 1, stagger: .05, ease: "power2.out" }, E + .5);
+tl.fromTo("#s10 .lpv", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, E + 1.15);
+tl.fromTo("#s10 .sub", { opacity: 0 }, { opacity: 1, duration: 1 }, E + 1.45);
+tl.fromTo("#s10 .cta", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, E + 1.8);
+tl.fromTo("#s10 .url", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, E + 2.05);
+tl.fromTo("#s10 .logo", { y: 0 }, { y: -10, duration: BAR, ease: "none", immediateRender: false }, E);
 tl.set({}, {}, DUR);
 
-window.seek = t => { tl.time(t, false); };
+const leak = $("#leak");
+window.seek = t => {
+  tl.time(t, false);
+  photos.forEach(s => camera(s, t));
+  leak.style.transform = `translate(${(-200 + 420 * Math.sin(t * .21 + 1)).toFixed(1)}px,${(160 + 520 * Math.sin(t * .13)).toFixed(1)}px)`;
+  leak.style.opacity = (.55 + .3 * Math.sin(t * .37)).toFixed(3);
+};
 window.DUR = DUR; window.FPS = FPS;
-// preview in a browser: add ?play
-if (location.search.includes("play")) { document.body.style.zoom = .45; tl.play(0); } else seek(0);
+window.ready = Promise.all([document.fonts.ready, ...$$("img").map(i => i.decode().catch(() => {}))]).then(() => {
+  if (location.search.includes("play")) { document.body.style.zoom = .45; const t0 = performance.now(); (function f() { seek(((performance.now() - t0) / 1000) % DUR); requestAnimationFrame(f); })(); }
+  else seek(0);
+});
 </script>
 </body>
 </html>
