@@ -1,0 +1,109 @@
+.mv-product-trust{display:flex;flex-wrap:wrap;gap:8px 16px;margin:24px 0 20px;padding:14px 0;border-block:1px solid rgba(58,49,41,.14);color:#5d5047;font:500 9px/1.4 Jost,sans-serif;letter-spacing:.13em;text-transform:uppercase}.mv-product-trust span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}.mv-product-trust span:before{width:4px;height:4px;border-radius:50%;background:#7a6758;content:""}.mv-product-details{margin:22px 0;border-block:1px solid rgba(58,49,41,.14)}.mv-product-details summary{display:flex;align-items:center;justify-content:space-between;min-height:56px;cursor:pointer;color:#332a24;font:500 10px/1.2 Jost,sans-serif;letter-spacing:.16em;text-transform:uppercase;list-style:none}.mv-product-details summary::-webkit-details-marker{display:none}.mv-product-details summary:after{font-size:20px;font-weight:300;content:"+"}.mv-product-details[open] summary:after{content:"−"}.mv-product-details .mv-product-description{margin:0;padding:0 0 20px}.mv-color-native{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}.mv-color-swatches{display:flex;flex-wrap:wrap;gap:9px;margin:2px 0 4px}.mv-color-swatch{width:38px;height:38px;border:1px solid rgba(58,49,41,.2);border-radius:50%;background:var(--swatch);box-shadow:inset 0 0 0 3px #fcfaf6;cursor:pointer}.mv-color-swatch[aria-checked=true]{border:2px solid #241d18;box-shadow:inset 0 0 0 4px #fcfaf6}.mv-color-swatch-label{display:block;margin:12px 0 0;color:#5d5047;font:500 10px/1.2 Jost,sans-serif;letter-spacing:.13em;text-transform:uppercase}.mv-related-products{max-width:1500px;margin:72px auto 0;padding:0 0 96px}.mv-related-products__head{margin:0 0 28px;text-align:center}.mv-related-products__head p{margin:0 0 9px;color:#76675c;font:500 9px/1 Jost,sans-serif;letter-spacing:.18em;text-transform:uppercase}.mv-related-products__head h2{margin:0;color:#211a16;font:400 clamp(30px,3vw,46px)/1.05 "Cormorant Garamond",serif}.mv-related-products__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.mv-related-product{display:block;color:inherit;text-decoration:none}.mv-related-product img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:#f3eee5}.mv-related-product div{padding:13px 2px}.mv-related-product h3{margin:0 0 7px;font:400 20px/1.08 "Cormorant Garamond",serif}.mv-related-product span{color:#67584e;font:500 10px/1 Jost,sans-serif;letter-spacing:.06em}.mv-cart-drawer{position:fixed;z-index:1300;top:0;right:0;display:flex;flex-direction:column;width:min(390px,100%);height:100dvh;padding:0 26px;background:#fcfaf6;box-shadow:-18px 0 42px rgba(35,26,20,.16);transform:translateX(104%);transition:transform .28s ease}.mv-cart-drawer.is-open{transform:translateX(0)}.mv-cart-backdrop{position:fixed;z-index:1290;inset:0;border:0;background:rgba(27,22,18,.24)}.mv-cart-drawer__head{display:flex;align-items:center;justify-content:space-between;min-height:78px;border-bottom:1px solid rgba(58,49,41,.14);font:500 11px/1 Jost,sans-serif;letter-spacing:.15em;text-transform:uppercase}.mv-cart-drawer__head button{width:40px;height:40px;border:0;background:0 0;font-size:28px}.mv-cart-drawer__item{display:grid;grid-template-columns:82px 1fr;gap:16px;padding:24px 0}.mv-cart-drawer__item img{width:82px;height:100px;object-fit:cover;background:#f3eee5}.mv-cart-drawer__item h3{margin:0 0 7px;font:400 22px/1.1 "Cormorant Garamond",serif}.mv-cart-drawer__item p{margin:0;color:#73655b;font:400 10px/1.6 Jost,sans-serif;letter-spacing:.08em;text-transform:uppercase}.mv-cart-drawer__item strong{display:block;margin-top:12px;font:500 14px/1 Jost,sans-serif}.mv-cart-drawer__foot{margin-top:auto;padding:20px 0 calc(24px + env(safe-area-inset-bottom));border-top:1px solid rgba(58,49,41,.14)}.mv-cart-drawer__foot>div{display:flex;justify-content:space-between;margin-bottom:18px}.mv-cart-drawer__checkout,.mv-cart-drawer__continue{display:grid;width:100%;height:52px;place-items:center;box-sizing:border-box;text-decoration:none;font:500 10px/1 Jost,sans-serif;letter-spacing:.14em;text-transform:uppercase}.mv-cart-drawer__checkout{background:#1b1612;color:#fff}.mv-cart-drawer__continue{border:0;background:0 0;color:#554940}.mv-mobile-buybar{display:none}@media(max-width:900px){body[data-page=product] .site-main{padding-bottom:calc(82px + env(safe-area-inset-bottom))}.mv-mobile-buybar{position:fixed;z-index:1150;right:0;bottom:0;left:0;display:grid;grid-template-columns:88px 128px minmax(142px,170px);grid-template-rows:50px;justify-content:center;align-items:center;gap:12px;padding:10px calc(14px + env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) calc(14px + env(safe-area-inset-left));border-top:1px solid rgba(58,49,41,.14);background:rgba(252,250,246,.96);box-shadow:0 -12px 30px rgba(35,26,20,.06)}.mv-mobile-buybar>[data-mobile-price]{font:500 20px/1.1 Jost,sans-serif;text-align:center}.mv-mobile-quantity{display:grid;grid-template-columns:46px 36px 46px;align-items:center;height:44px;border:1px solid rgba(58,49,41,.22)}.mv-mobile-quantity button{width:46px;height:42px;border:0;background:0 0;font-size:21px}.mv-mobile-quantity output{text-align:center}.mv-mobile-buybar>[data-mobile-add]{height:50px;border:1px solid #1b1612;background:#1b1612;color:#fff;font:500 10px/1 Jost,sans-serif;letter-spacing:.14em;text-transform:uppercase}.mv-mobile-buybar>[data-mobile-add]:disabled{opacity:.42}.mv-related-products{margin-top:42px;padding-bottom:82px}.mv-related-products__grid{display:flex;gap:12px;overflow-x:auto;margin-right:-20px;padding-right:20px}.mv-related-product{flex:0 0 148px}.mv-related-product img{height:178px;aspect-ratio:auto;object-fit:contain;background:#f6f2eb}.mv-cart-drawer{top:auto;bottom:0;width:100%;height:auto;min-height:410px;max-height:86dvh;padding:0 20px;border-radius:18px 18px 0 0;transform:translateY(106%)}.mv-cart-drawer.is-open{transform:translateY(0)}}@media(max-width:420px){.mv-mobile-buybar{grid-template-columns:60px 106px minmax(120px,1fr);grid-template-rows:44px;gap:7px;padding:8px calc(10px + env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left))}.mv-mobile-buybar>[data-mobile-price]{font-size:16px}.mv-mobile-buybar>[data-mobile-add]{height:44px;font-size:9px}.mv-mobile-quantity{grid-template-columns:37px 32px 37px;height:42px}.mv-mobile-quantity button{width:37px;height:40px}}.mv-color-swatch:focus-visible{outline:2px solid #241d18;outline-offset:3px}.mv-color-swatch[data-light=true]{border-color:rgba(58,49,41,.45)}.mv-color-swatch[data-unavailable=true]{position:relative;opacity:.45}.mv-color-swatch[data-unavailable=true]::after{position:absolute;inset:0;border-radius:50%;background:linear-gradient(to top left,transparent calc(50% - 1px),rgba(58,49,41,.75) calc(50% - 1px),rgba(58,49,41,.75) calc(50% + 1px),transparent calc(50% + 1px));content:""}.mv-color-swatch{position:relative}.mv-color-swatch::before{position:absolute;inset:-4px;content:""}.mv-cart-drawer__items{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.mv-cart-drawer__items .mv-cart-drawer__item+.mv-cart-drawer__item{border-top:1px solid rgba(58,49,41,.1)}.mv-cart-drawer__empty{margin:34px 0;color:#73655b;font:400 13px/1.6 Jost,sans-serif}.mv-cart-drawer:focus{outline:0}.mv-cart-drawer__head button{width:44px;height:44px}body.mv-cart-open{overflow:hidden}
+
+
+.mv-product-main-media {
+  position: relative;
+}
+
+.mv-product-main-media img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.mv-gallery-nav {
+  position: absolute;
+  z-index: 2;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+.mv-gallery-nav button {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid rgba(58, 49, 41, 0.25);
+  border-radius: 50%;
+  background: rgba(252, 250, 246, 0.92);
+  color: #241d18;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.mv-gallery-nav button:disabled {
+  cursor: default;
+  opacity: 0.32;
+}
+
+@media (max-width: 900px) {
+  .mv-gallery-nav {
+    display: none;
+  }
+}.mv-product-main-media.is-next img {
+  animation: mv-gallery-next 0.34s ease both;
+}
+
+.mv-product-main-media.is-prev img {
+  animation: mv-gallery-prev 0.34s ease both;
+}
+
+@keyframes mv-gallery-next {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes mv-gallery-prev {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mv-product-main-media.is-next img,
+  .mv-product-main-media.is-prev img {
+    animation: none;
+  }
+}
+/* ── gallery filtering hides thumbnails for other colours ── */
+.mv-product-thumbs>[hidden]{display:none!important}
+
+/* ── moved out of templates/product.json custom_css ── */
+.mv-vendor{display:none!important}
+.mv-product-gallery{min-width:0;overflow:hidden}
+.mv-product-main-media{height:auto!important;min-height:0!important;aspect-ratio:auto!important}
+.mv-product-main-media img{width:100%!important;height:auto!important}
+.mv-product-thumbs{display:flex!important;overflow-x:auto!important;gap:8px}
+.mv-product-thumbs>*{flex:0 0 70px!important;height:70px!important}
+.mv-product-thumbs img{width:100%!important;height:100%!important;object-fit:cover!important}
+
+
+/* ── Swatch finish separation ─────────────────────────────────────────
+   "Brown" and "Suede Brown" are the same leather colour in a different
+   finish. Because they share a hex value the customer saw two identical
+   circles, so the texture is layered over the swatch to tell them apart.
+   The base colour comes from the background-color in the .mv-color-swatch
+   rule; only the layer is added here. */
+.mv-color-swatch[data-finish="suede"]{
+  background-image:radial-gradient(circle at 34% 28%,rgba(255,255,255,.20),rgba(0,0,0,.16) 76%);
+}
+.mv-color-swatch[data-finish="grain"]{
+  background-image:radial-gradient(rgba(255,255,255,.22) .75px,transparent .8px);
+  background-size:4px 4px;
+}
+.mv-color-swatch[data-finish="gloss"]{
+  background-image:linear-gradient(142deg,rgba(255,255,255,.46) 0 26%,rgba(255,255,255,.04) 50%);
+}

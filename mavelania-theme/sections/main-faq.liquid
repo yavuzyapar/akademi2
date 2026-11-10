@@ -1,0 +1,93 @@
+
+<section class="mv-faq" aria-labelledby="faqTitle">
+  <div class="mv-faq-shell">
+    <header class="mv-faq-header">
+      <span class="mv-faq-ghost" aria-hidden="true">FAQ</span>
+      <p class="mv-eyebrow">{{ 'faq.eyebrow' | t }}</p>
+      <h1 id="faqTitle">{{ 'faq.title' | t }}</h1>
+      <p class="mv-faq-intro">{{ 'faq.intro' | t }}</p>
+    </header>
+
+    <div class="mv-faq-panel">
+      <details class="mv-faq-item">
+        <summary><span>{{ 'faq.q_handmade' | t }}</span><span class="mv-faq-toggle" aria-hidden="true"></span></summary>
+        <div class="mv-faq-answer">
+          <p>{{ 'faq.a_handmade' | t }}</p>
+        </div>
+      </details>
+      <details class="mv-faq-item">
+        <summary><span>{{ 'faq.q_variations' | t }}</span><span class="mv-faq-toggle" aria-hidden="true"></span></summary>
+        <div class="mv-faq-answer">
+          <p>{{ 'faq.a_variations' | t }}</p>
+        </div>
+      </details>
+      <details class="mv-faq-item">
+        <summary><span>{{ 'faq.q_rfid' | t }}</span><span class="mv-faq-toggle" aria-hidden="true"></span></summary>
+        <div class="mv-faq-answer">
+          <p>{{ 'faq.a_rfid' | t }}</p>
+        </div>
+      </details>
+      <details class="mv-faq-item">
+        <summary><span>{{ 'faq.q_rfid_models' | t }}</span><span class="mv-faq-toggle" aria-hidden="true"></span></summary>
+        <div class="mv-faq-answer">
+          <p>{{ 'faq.a_rfid_models' | t }}</p>
+        </div>
+      </details>
+      <details class="mv-faq-item">
+        <summary><span>{{ 'faq.q_care' | t }}</span><span class="mv-faq-toggle" aria-hidden="true"></span></summary>
+        <div class="mv-faq-answer">
+          <p>{{ 'faq.a_care' | t }}</p>
+        </div>
+      </details>
+      <details class="mv-faq-item">
+        <summary><span>{{ 'faq.q_water' | t }}</span><span class="mv-faq-toggle" aria-hidden="true"></span></summary>
+        <div class="mv-faq-answer">
+          <p>{{ 'faq.a_water' | t }}</p>
+        </div>
+      </details>
+      <details class="mv-faq-item">
+        <summary><span>{{ 'faq.q_shipping' | t }}</span><span class="mv-faq-toggle" aria-hidden="true"></span></summary>
+        <div class="mv-faq-answer">
+          <p>{{ 'faq.a_shipping' | t }}</p>
+          {% if shop.shipping_policy.body != blank %}<a href="{{ shop.shipping_policy.url }}">{{ 'faq.shipping_link' | t }}</a>{% endif %}
+        </div>
+      </details>
+      <details class="mv-faq-item">
+        <summary><span>{{ 'faq.q_change' | t }}</span><span class="mv-faq-toggle" aria-hidden="true"></span></summary>
+        <div class="mv-faq-answer">
+          <p>{{ 'faq.a_change' | t }}</p>
+        </div>
+      </details>
+      <details class="mv-faq-item">
+        <summary><span>{{ 'faq.q_international' | t }}</span><span class="mv-faq-toggle" aria-hidden="true"></span></summary>
+        <div class="mv-faq-answer">
+          <p>{{ 'faq.a_international' | t }}</p>
+        </div>
+      </details>
+      <details class="mv-faq-item">
+        <summary><span>{{ 'faq.q_returns' | t }}</span><span class="mv-faq-toggle" aria-hidden="true"></span></summary>
+        <div class="mv-faq-answer">
+          <p>{{ 'faq.a_returns' | t }}</p>
+          {% if shop.refund_policy.body != blank %}<a href="{{ shop.refund_policy.url }}">{{ 'faq.refund_link' | t }}</a>{% endif %}
+        </div>
+      </details>
+      <details class="mv-faq-item">
+        <summary><span>{{ 'faq.q_payment' | t }}</span><span class="mv-faq-toggle" aria-hidden="true"></span></summary>
+        <div class="mv-faq-answer">
+          <p>{{ 'faq.a_payment' | t }}</p>
+        </div>
+      </details>
+      <details class="mv-faq-item">
+        <summary><span>{{ 'faq.q_contact' | t }}</span><span class="mv-faq-toggle" aria-hidden="true"></span></summary>
+        <div class="mv-faq-answer">
+          <p>{{ 'faq.a_contact' | t }}</p>
+          <a href="mailto:{{ settings.contact_email | default: 'info@mavelania.com' | escape }}">{{ 'faq.contact_link' | t }}</a>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{"name":"FAQ","settings":[]}
+{% endschema %}

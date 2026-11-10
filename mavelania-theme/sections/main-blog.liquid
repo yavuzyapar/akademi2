@@ -1,0 +1,38 @@
+<section class="mv-blog">
+  <header class="mv-blog-head">
+    <p class="mv-eyebrow">{{ settings.organization_name | default: shop.name }}</p>
+    <h1>{{ blog.title }}</h1>
+  </header>
+
+  {% paginate blog.articles by section.settings.articles_per_page %}
+    {% if blog.articles.size > 0 %}
+      <div class="mv-blog-grid">
+        {% for article in blog.articles %}
+          <article class="mv-blog-card">
+            <a href="{{ article.url }}">
+              {% if article.image %}
+                <span class="mv-blog-card-image">
+                  {{ article.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '320,480,640,900', sizes: '(max-width: 900px) 92vw, 30vw', alt: article.image.alt | default: article.title }}
+                </span>
+              {% endif %}
+              <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%d %B %Y' }}</time>
+              <h2>{{ article.title }}</h2>
+              {% if article.excerpt_or_content != blank %}
+                <p>{{ article.excerpt_or_content | strip_html | truncatewords: 26 }}</p>
+              {% endif %}
+            </a>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="mv-collection-empty">{{ 'blog.empty' | t }}</p>
+    {% endif %}
+
+    {% if paginate.pages > 1 %}
+      <nav class="mv-pagination" aria-label="Pagination">{{ paginate | default_pagination }}</nav>
+    {% endif %}
+  {% endpaginate %}
+</section>
+{% schema %}
+{"name":"Blog posts","settings":[{"type":"range","id":"articles_per_page","min":3,"max":24,"step":3,"default":9,"label":"Articles per page"}]}
+{% endschema %}

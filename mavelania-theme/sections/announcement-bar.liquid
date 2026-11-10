@@ -1,0 +1,6 @@
+{% if settings.announcement != blank %}
+  <div class="mv-announcement">{{ settings.announcement | escape }}</div>
+{% endif %}
+{% schema %}
+{"name":"Announcement bar","settings":[]}
+{% endschema %}

@@ -1,0 +1,230 @@
+<section class="mv-collection">
+  {% liquid
+    assign hero_title = collection.title
+    assign hero_description = collection.description | strip_html
+    assign hero_asset = blank
+    assign hero_variant = collection.handle
+    assign hero_width = 1886
+    assign hero_height = 834
+
+    # English-only store: match the collection by its handle or title.
+    # A renamed collection falls back to the default hero image.
+    assign coll_key = collection.handle | append: ' ' | append: collection.title | downcase
+
+    # Order of preference: collection metafield > collection image > the word
+    # match below. This keeps the hero image from changing silently when a
+    # collection is renamed.
+    assign hero_metafield = collection.metafields.custom.hero_image
+
+    if coll_key contains 'phone case'
+      assign hero_asset = 'collection-hero-phone-cases.webp'
+      assign hero_variant = 'phone-cases'
+      assign hero_width = 1662
+      assign hero_height = 946
+      if hero_description == blank
+        assign hero_description = 'collections.phone_cases.description' | t
+      endif
+    elsif coll_key contains 'accessor'
+      assign hero_asset = 'collection-hero-accessories.webp'
+      assign hero_variant = 'accessories'
+      assign hero_width = 1651
+      assign hero_height = 953
+      if hero_description == blank
+        assign hero_description = 'collections.accessories.description' | t
+      endif
+    elsif coll_key contains 'card'
+      assign hero_asset = 'collection-hero-cardholders.webp'
+      assign hero_variant = 'card-holders'
+      assign hero_width = 1888
+      assign hero_height = 833
+      if hero_description == blank
+        assign hero_description = 'collections.card_holders.description' | t
+      endif
+    elsif coll_key contains 'wallet' or coll_key contains 'purse'
+      assign hero_asset = 'collection-hero-wallets.webp'
+      assign hero_variant = 'wallets'
+      if hero_description == blank
+        assign hero_description = 'collections.wallets.description' | t
+      endif
+    elsif coll_key contains 'bag'
+      assign hero_asset = 'collection-hero-bags.webp'
+      assign hero_variant = 'bags'
+      if hero_description == blank
+        assign hero_description = 'collections.bags.description' | t
+      endif
+    endif
+
+    # Editorial copy under the grid: collection metafield first, else locale.
+    assign editorial = blank
+    if collection.metafields.custom.editorial != blank
+      assign editorial = collection.metafields.custom.editorial | metafield_tag
+    endif
+    if editorial == blank
+      if coll_key contains 'phone case'
+        assign editorial = 'collections.phone_cases.editorial_html' | t
+      elsif coll_key contains 'accessor'
+        assign editorial = 'collections.accessories.editorial_html' | t
+      elsif coll_key contains 'card'
+        assign editorial = 'collections.card_holders.editorial_html' | t
+      elsif coll_key contains 'wallet' or coll_key contains 'purse'
+        assign editorial = 'collections.wallets.editorial_html' | t
+      elsif coll_key contains 'bag'
+        assign editorial = 'collections.bags.editorial_html' | t
+      endif
+    endif
+  %}
+  {%- if hero_metafield != blank -%}{%- assign hero_asset = blank -%}{%- endif -%}
+  <header class="mv-collection-hero mv-collection-hero--{{ hero_variant }}">
+    <div class="mv-collection-hero-copy">
+      <p class="mv-eyebrow">{{ 'collections.eyebrow' | t }}</p>
+      <h1>{{ hero_title }}</h1>
+      {% if hero_description != blank %}<p class="mv-collection-intro">{{ hero_description }}</p>{% endif %}
+    </div>
+    <div class="mv-collection-hero-image">
+      {% if hero_metafield != blank %}
+        {{ hero_metafield | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '600,900,1200,1600', sizes: '(max-width: 900px) 100vw, 58vw', alt: hero_title }}
+      {% elsif hero_asset != blank %}
+        <img src="{{ hero_asset | asset_url }}" alt="{{ hero_title | escape }}" width="{{ hero_width }}" height="{{ hero_height }}" loading="eager" fetchpriority="high" decoding="async">
+      {% elsif collection.image %}
+        {{ collection.image | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '600,900,1200,1600', sizes: '(max-width: 900px) 100vw, 58vw', alt: collection.title }}
+      {% else %}
+        <img src="{{ 'collection-hero-bags.webp' | asset_url }}" alt="{{ hero_title | escape }}" width="1886" height="834" loading="eager" fetchpriority="high" decoding="async">
+      {% endif %}
+    </div>
+  </header>
+  {%- liquid
+    assign has_filters = false
+    for filter in collection.filters
+      assign has_filters = true
+      break
+    endfor
+    assign active_sort = collection.sort_by | default: collection.default_sort_by
+
+    # Active filter count: used both in the filter summary and in the empty
+    # state message, so it is computed outside the toolbar block.
+    assign active_total = 0
+    for filter in collection.filters
+      assign active_total = active_total | plus: filter.active_values.size
+      if filter.min_value.value or filter.max_value.value
+        assign active_total = active_total | plus: 1
+      endif
+    endfor
+  -%}
+  {% if has_filters or collection.sort_options.size > 0 %}
+    <form class="mv-collection-toolbar" method="get" action="{{ collection.url }}" data-collection-toolbar>
+      {% if has_filters %}
+        <div class="mv-filters">
+          {% for filter in collection.filters %}
+            {% case filter.type %}
+              {% when 'price_range' %}
+                <details class="mv-filter">
+                  <summary>{{ 'collections.filter_price' | t }}{% if filter.min_value.value or filter.max_value.value %} <span class="mv-filter-count">1</span>{% endif %}</summary>
+                  <div class="mv-filter-values mv-filter-price">
+                    <label>
+                      <span>{{ 'collections.price_from' | t }}</span>
+                      <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" inputmode="decimal">
+                    </label>
+                    <label>
+                      <span>{{ 'collections.price_to' | t }}</span>
+                      <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" inputmode="decimal">
+                    </label>
+                  </div>
+                </details>
+              {% else %}
+                <details class="mv-filter">
+                  <summary>{% if filter.param_name contains 'availability' %}{{ 'collections.filter_availability' | t }}{% else %}{{ filter.label }}{% endif %}{% if filter.active_values.size > 0 %} <span class="mv-filter-count">{{ filter.active_values.size }}</span>{% endif %}</summary>
+                  <div class="mv-filter-values">
+                    {% for value in filter.values %}
+                      <label{% if value.count == 0 and value.active == false %} class="is-empty"{% endif %}>
+                        <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value | escape }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
+                        <span>{{ value.label }} <small>{{ value.count }}</small></span>
+                      </label>
+                    {% endfor %}
+                  </div>
+                </details>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if collection.sort_options.size > 0 %}
+        <div class="mv-sort">
+          <label for="SortBy">{{ 'collections.sort_by' | t }}</label>
+          <select id="SortBy" name="sort_by">
+            {% for option in collection.sort_options %}
+              <option value="{{ option.value }}"{% if option.value == active_sort %} selected{% endif %}>{{ option.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+
+      <button class="mv-filter-apply" type="submit">{{ 'collections.filter_apply' | t }}</button>
+    </form>
+
+    {% if active_total > 0 %}
+      <p class="mv-filter-active">
+        <span>{{ 'collections.filter_active' | t: count: active_total }}</span>
+        <a href="{{ collection.url }}{% if active_sort != blank %}?sort_by={{ active_sort }}{% endif %}">{{ 'collections.filter_clear' | t }}</a>
+      </p>
+    {% endif %}
+  {% endif %}
+
+  {% paginate collection.products by section.settings.products_per_page %}
+    <div class="mv-product-grid-list">
+      {% for product in collection.products %}
+        <article class="mv-product-card">
+          <button class="mv-card-favorite" type="button" data-favorite-product data-handle="{{ product.handle }}" data-title="{{ product.title | escape }}" data-url="{{ product.url }}" data-image="{% if product.featured_image %}{{ product.featured_image | image_url: width: 320 }}{% endif %}" data-price="{{ product.price | money | escape }}" aria-label="{{ 'favorites.add' | t | escape }}" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.6 2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 17l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8Z"/></svg></button>
+          <a href="{{ product.url | within: collection }}">
+            <span class="mv-card-image">{% if product.featured_image %}{{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '320,480,640,900', sizes: '(max-width: 900px) 48vw, 32vw', alt: product.title }}{% endif %}</span>
+            {% if product.type != blank %}<small>{{ product.type }}</small>{% endif %}
+            <h2>{{ product.title }}</h2>
+            <p>{% if product.price_varies %}{% assign formatted_price = product.price_min | money %}{{ 'products.from_price' | t: price: formatted_price }}{% else %}{{ product.price | money }}{% endif %}</p>
+          </a>
+        </article>
+      {% endfor %}
+    </div>
+    {% if paginate.pages > 1 %}
+      <nav class="mv-pagination" aria-label="{{ 'collections.pagination' | t | escape }}">
+        {{ paginate | default_pagination }}
+      </nav>
+    {% endif %}
+  {% endpaginate %}
+  {% if collection.products_count == 0 %}
+    {% if active_total > 0 %}
+      {%- comment -%} The collection has products, but no filter match. {%- endcomment -%}
+      <p class="mv-collection-empty">
+        {{ 'collections.no_results' | t }}
+        <a href="{{ collection.url }}{% if active_sort != blank %}?sort_by={{ active_sort }}{% endif %}">{{ 'collections.filter_clear' | t }}</a>
+      </p>
+    {% else %}
+      <p class="mv-collection-empty">{{ 'collections.coming_soon' | t }}</p>
+    {% endif %}
+  {% endif %}
+  {% if editorial != blank %}
+    <aside class="mv-collection-editorial">
+      <div class="rte">{{ editorial }}</div>
+    </aside>
+  {% endif %}
+</section>
+<script>
+(function(){
+  var form = document.querySelector('[data-collection-toolbar]');
+  if(!form) return;
+  form.classList.add('mv-toolbar-auto');
+  var timer = null;
+  function submitSoon(delay){
+    window.clearTimeout(timer);
+    timer = window.setTimeout(function(){ form.submit(); }, delay);
+  }
+  form.addEventListener('change', function(event){
+    if(event.target.type === 'number') return; // wait for typing to settle
+    submitSoon(0);
+  });
+  form.addEventListener('input', function(event){
+    if(event.target.type === 'number') submitSoon(700);
+  });
+})();
+</script>
+{% schema %}
+{"name":"Collection products","settings":[{"type":"range","id":"products_per_page","min":4,"max":36,"step":4,"default":12,"label":"Products per page"}]}
+{% endschema %}

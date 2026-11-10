@@ -1,0 +1,280 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="#FCFAF6">
+    {%- liquid
+      # Shopify's default "homepage/frontpage" collection and empty blogs
+      # appear in the sitemap but hold nothing worth indexing.
+      assign seo_noindex = false
+      if request.page_type == 'collection' and collection.handle
+        if collection.handle == 'homepage' or collection.handle == 'frontpage'
+          assign seo_noindex = true
+        endif
+      endif
+      if request.page_type == 'blog' and blog.articles_count == 0
+        assign seo_noindex = true
+      endif
+    -%}
+    {% if seo_noindex %}
+      <meta name="robots" content="noindex, follow, max-image-preview:large">
+    {% else %}
+      <meta name="robots" content="max-image-preview:large">
+    {% endif %}
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon != blank -%}
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="192x192"
+        href="https:{{ settings.favicon | image_url: width: 192, height: 192 }}"
+      >
+      <link
+        rel="shortcut icon"
+        type="image/png"
+        href="https:{{ settings.favicon | image_url: width: 192, height: 192 }}"
+      >
+      <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="https:{{ settings.favicon | image_url: width: 180, height: 180 }}"
+      >
+    {%- endif -%}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@200;300;400;500&display=swap"
+    >
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@200;300;400;500&display=swap"
+    >
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Allura&display=swap"
+      media="print"
+      onload="this.media='all'"
+    >
+
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Allura&display=swap"
+      >
+    </noscript>
+
+    <title>{{ page_title }}{% if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} &ndash; {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
+
+    {%- liquid
+      # Meta description, in order of preference:
+      #  1) the SEO description set in the Shopify admin (page_description)
+      #  2) the collection's own copy, so every collection is unique
+      #  3) the store-wide default
+      # Google truncates around 160 characters, so we cut on a word boundary.
+      # Product descriptions previously rendered at 320 characters and were
+      # clipped mid-sentence in search results.
+      assign seo_description = page_description
+      if seo_description == blank and collection.description != blank
+        assign seo_description = collection.description
+      endif
+      if seo_description == blank and request.page_type == 'collection'
+        # The collections have no description in Shopify, so we reuse the same
+        # mapping as main-collection.liquid to give each one its own copy.
+        # Without this all five collections shared one default description.
+        assign coll_key = collection.handle | append: ' ' | append: collection.title | downcase
+        if coll_key contains 'phone case'
+          assign seo_description = 'collections.phone_cases.seo_description' | t
+        elsif coll_key contains 'accessor'
+          assign seo_description = 'collections.accessories.seo_description' | t
+        elsif coll_key contains 'card'
+          assign seo_description = 'collections.card_holders.seo_description' | t
+        elsif coll_key contains 'wallet' or coll_key contains 'purse'
+          assign seo_description = 'collections.wallets.seo_description' | t
+        elsif coll_key contains 'bag'
+          assign seo_description = 'collections.bags.seo_description' | t
+        endif
+      endif
+      if seo_description == blank
+        assign seo_description = settings.default_meta_description | default: shop.description
+      endif
+      assign seo_description = seo_description | strip_html | strip_newlines
+      if seo_description.size > 160
+        assign seo_description = seo_description | truncatewords: 26, '' | strip | truncate: 157, '' | strip | append: '…'
+      endif
+    -%}
+
+    {% if seo_description != blank %}
+      <meta
+        name="description"
+        content="{{ seo_description | escape }}"
+      >
+    {% endif %}
+
+    {%- if request.page_type == 'index' -%}
+      {%- comment -%}
+        LCP image: the first active slide on the home page
+        (.hero-slide.is-active in sections/mavelania-home.liquid). If the slide
+        order changes, update both file names below or the wrong image is
+        preloaded.
+      {%- endcomment -%}
+      <link
+        rel="preload"
+        as="image"
+        href="{{ 'mobile-hero-phone-cases-20260919-v2.webp' | asset_url }}"
+        media="(max-width: 760px)"
+        fetchpriority="high"
+      >
+
+      <link
+        rel="preload"
+        as="image"
+        href="{{ 'hero-phone-cases-20260919.webp' | asset_url }}"
+        media="(min-width: 761px)"
+        fetchpriority="high"
+      >
+    {%- elsif request.page_type == 'collection' and collection.image != blank -%}
+      <link
+        rel="preload"
+        as="image"
+        href="{{ collection.image | image_url: width: 1600 }}"
+        imagesrcset="{{ collection.image | image_url: width: 600 }} 600w, {{ collection.image | image_url: width: 900 }} 900w, {{ collection.image | image_url: width: 1200 }} 1200w, {{ collection.image | image_url: width: 1600 }} 1600w"
+        imagesizes="(max-width: 900px) 100vw, 58vw"
+        fetchpriority="high"
+      >
+    {%- elsif request.page_type == 'product' and product.featured_media != blank -%}
+      <link
+        rel="preload"
+        as="image"
+        href="{{ product.featured_media | image_url: width: 1200 }}"
+        imagesrcset="{{ product.featured_media | image_url: width: 480 }} 480w, {{ product.featured_media | image_url: width: 720 }} 720w, {{ product.featured_media | image_url: width: 960 }} 960w, {{ product.featured_media | image_url: width: 1200 }} 1200w"
+        imagesizes="(max-width: 900px) 100vw, 58vw"
+        fetchpriority="high"
+      >
+    {%- endif -%}
+
+    {% render 'social-meta-tags' %}
+    {% render 'structured-data' %}
+
+    {{ content_for_header }}
+
+    {{ 'mavelania-core.css' | asset_url | stylesheet_tag }}
+
+    {% if request.page_type == 'index' %}
+      {{ 'mavelania-home.css' | asset_url | stylesheet_tag }}
+    {% endif %}
+
+    {% if template.suffix == 'faq' %}
+      {{ 'mavelania-faq.css' | asset_url | stylesheet_tag }}
+    {% endif %}
+
+    {% if request.page_type == 'product' %}
+      {{ 'mavelania-product-enhancements.css' | asset_url | stylesheet_tag }}
+
+      <script
+        src="{{ 'mavelania-product-enhancements.js' | asset_url }}"
+        defer
+      ></script>
+    {% endif %}
+
+    {{ 'mavelania-overrides.css' | asset_url | stylesheet_tag }}
+
+    <script
+      src="{{ 'shopify-theme.js' | asset_url }}"
+      defer
+    ></script>
+  </head>
+
+  <body
+    data-page="{% if request.page_type == 'index' %}home{% else %}{{ request.page_type }}{% endif %}"
+    data-favorite-empty="{{ 'favorites.empty' | t | escape }}"
+    data-favorite-add="{{ 'favorites.add' | t | escape }}"
+    data-favorite-remove="{{ 'favorites.remove' | t | escape }}"
+    data-favorite-added="{{ 'favorites.added' | t | escape }}"
+    data-favorite-removed="{{ 'favorites.removed' | t | escape }}"
+  >
+    <a class="skip-link" href="#MainContent">
+      {{ 'general.skip_to_content' | t }}
+    </a>
+
+    {% section 'announcement-bar' %}
+
+    {% section 'header' %}
+
+    <main
+      id="MainContent"
+      class="site-main"
+      role="main"
+      tabindex="-1"
+    >
+      {{ content_for_layout }}
+    </main>
+
+    {% section 'footer' %}
+
+    <aside
+      class="mv-favorites-drawer"
+      id="FavoritesDrawer"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="FavoritesDrawerTitle"
+      aria-hidden="true"
+    >
+      <header>
+        <h2 id="FavoritesDrawerTitle">
+          {{ 'favorites.title' | t }}
+        </h2>
+
+        <button
+          type="button"
+          data-favorites-close
+          aria-label="{{ 'favorites.close' | t | escape }}"
+        >
+          &times;
+        </button>
+      </header>
+
+      <div data-favorites-list>
+        <p>{{ 'favorites.empty' | t }}</p>
+      </div>
+
+      <p
+        class="mv-visually-hidden"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        data-favorites-status
+      ></p>
+    </aside>
+
+    <button
+      class="mv-drawer-backdrop"
+      type="button"
+      data-favorites-close
+      aria-label="{{ 'favorites.close' | t | escape }}"
+      hidden
+    ></button>
+
+    <div
+      class="page-transition"
+      id="pageTransition"
+      aria-hidden="true"
+    >
+      <div class="page-transition-ring">
+        <img
+          src="{{ 'mavelania-logo-original-transparent.png' | asset_url }}"
+          alt="Mavelania"
+          width="240"
+          height="240"
+        >
+      </div>
+    </div>
+  </body>
+</html>

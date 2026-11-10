@@ -1,0 +1,35 @@
+<article class="mv-article">
+  <nav class="mv-breadcrumb">
+    <a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a><span>/</span>
+    <a href="{{ blog.url }}">{{ blog.title }}</a><span>/</span>
+    <span>{{ article.title }}</span>
+  </nav>
+
+  <header class="mv-article-head">
+    <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%d %B %Y' }}</time>
+    <h1>{{ article.title }}</h1>
+    {% if article.excerpt != blank %}
+      <p class="mv-about-lede">{{ article.excerpt | strip_html }}</p>
+    {% endif %}
+  </header>
+
+  {% if article.image %}
+    <figure class="mv-about-figure">
+      {{ article.image | image_url: width: 1800 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '600,900,1200,1800', sizes: '(max-width: 900px) 100vw, 760px', alt: article.image.alt | default: article.title }}
+    </figure>
+  {% endif %}
+
+  <div class="rte mv-article-body">{{ article.content }}</div>
+
+  <nav class="mv-article-nav" aria-label="{{ blog.title | escape }}">
+    {% if blog.previous_article %}
+      <a href="{{ blog.previous_article.url }}" rel="prev">&larr; {{ blog.previous_article.title }}</a>
+    {% endif %}
+    {% if blog.next_article %}
+      <a href="{{ blog.next_article.url }}" rel="next">{{ blog.next_article.title }} &rarr;</a>
+    {% endif %}
+  </nav>
+</article>
+{% schema %}
+{"name":"Article","settings":[]}
+{% endschema %}

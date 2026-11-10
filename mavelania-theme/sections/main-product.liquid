@@ -1,0 +1,269 @@
+<section class="mv-product" data-product-root data-add-label="{{ 'products.add_to_cart' | t | escape }}" data-sold-label="{{ 'products.sold_out' | t | escape }}" data-unavailable-label="{{ 'products.unavailable' | t | escape }}" data-money-format="{{ shop.money_format | escape }}" data-cart-add-url="{{ routes.cart_add_url }}" data-cart-url="{{ routes.cart_url }}" data-quantity-label="{{ 'cart.quantity' | t | escape }}" data-empty-label="{{ 'cart.empty' | t | escape }}" data-color-label="{{ 'products.color_label' | t | escape }}" data-details-label="{{ 'products.details' | t | escape }}" data-trust1="{{ 'products.genuine_leather' | t | escape }}" data-trust2="{{ 'products.handmade' | t | escape }}" data-trust3="{{ 'products.secure_payment_short' | t | escape }}">
+
+  <nav class="mv-breadcrumb">
+    <a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a>
+    <span>/</span>
+    {% if collection %}
+      <a href="{{ collection.url }}">{{ collection.title }}</a>
+      <span>/</span>
+    {% endif %}
+    <span>{{ product.title }}</span>
+  </nav>
+
+  <div class="mv-product-grid">
+    <div class="mv-product-gallery">
+      <div class="mv-product-main-media">
+        {% if product.featured_media %}
+          {{ product.featured_media | image_url: width: 1600 | image_tag: loading: 'eager', widths: '480,720,960,1200,1600', sizes: '(max-width: 900px) 100vw, 58vw', alt: product.title }}
+        {% endif %}
+      </div>
+
+      {% if product.media.size > 1 %}
+        <div class="mv-product-thumbs">
+          {% for media in product.media %}
+            <button
+              type="button"
+              data-media-id="{{ media.id }}"
+              data-image-id="{{ media.preview_image.id }}"
+              data-media-src="{{ media | image_url: width: 1600 }}"
+              data-media-srcset="{{ media | image_url: width: 480 }} 480w, {{ media | image_url: width: 720 }} 720w, {{ media | image_url: width: 960 }} 960w, {{ media | image_url: width: 1200 }} 1200w, {{ media | image_url: width: 1600 }} 1600w"
+              data-media-alt="{{ media.alt | default: product.title | escape }}"
+              data-media-group="{{ media.alt | downcase | escape }}"
+              aria-label="{{ 'products.show_image' | t: index: forloop.index | escape }}"
+              {% if media.id == product.featured_media.id %}aria-current="true"{% endif %}
+            >
+              {{ media | image_url: width: 220 | image_tag: loading: 'lazy', alt: media.alt | default: product.title }}
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="mv-product-info">
+      {% if product.type != blank %}
+        <p class="mv-eyebrow">{{ product.type }}</p>
+      {% endif %}
+
+      <h1>{{ product.title }}</h1>
+
+      {% if product.vendor != blank %}
+        <p class="mv-vendor">{{ product.vendor }}</p>
+      {% endif %}
+
+      <div class="mv-price" data-product-price>
+        {{ product.selected_or_first_available_variant.price | money }}
+        {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+          <s>{{ product.selected_or_first_available_variant.compare_at_price | money }}</s>
+        {% endif %}
+      </div>
+
+      {% form 'localization', id: 'ProductCountryForm', class: 'mv-product-localization' %}
+        <input type="hidden" name="return_to" value="{{ request.path }}">
+
+        <label for="ProductCountrySelector">
+          Ülke / Para Birimi
+        </label>
+
+        <select
+          id="ProductCountrySelector"
+          name="country_code"
+          data-localization-select
+          aria-label="Ülke ve para birimi seçin"
+        >
+          {% for country in localization.available_countries %}
+            <option
+              value="{{ country.iso_code }}"
+              {% if country.iso_code == localization.country.iso_code %}selected{% endif %}
+            >
+              {{ country.name }} · {{ country.currency.iso_code }}
+            </option>
+          {% endfor %}
+        </select>
+      {% endform %}
+
+      <button class="mv-product-favorite" type="button" data-favorite-product data-handle="{{ product.handle }}" data-title="{{ product.title | escape }}" data-url="{{ product.url }}" data-image="{% if product.featured_image %}{{ product.featured_image | image_url: width: 320 }}{% endif %}" data-price="{{ product.price | money | escape }}" aria-label="{{ 'favorites.add' | t | escape }}" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m12 3.6 2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 17l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8Z"/>
+        </svg>
+        <span>{{ 'favorites.add' | t }}</span>
+      </button>
+
+      {% if product.description != blank %}
+        <div class="mv-product-description">{{ product.description }}</div>
+      {% endif %}
+
+      {% form 'product', product, class: 'mv-product-form' %}
+        {% unless product.has_only_default_variant %}
+          {% for option in product.options_with_values %}
+            <label for="Option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
+            <select id="Option-{{ section.id }}-{{ forloop.index0 }}" data-option-index="{{ forloop.index0 }}">
+              {% for value in option.values %}
+                <option value="{{ value | escape }}"{% if option.selected_value == value %} selected{% endif %}>
+                  {{ value }}
+                </option>
+              {% endfor %}
+            </select>
+          {% endfor %}
+        {% endunless %}
+
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
+
+        <label for="Quantity-{{ section.id }}">{{ 'products.quantity' | t }}</label>
+        <input id="Quantity-{{ section.id }}" type="number" name="quantity" min="1" value="1">
+
+        <button class="mv-primary-button" type="submit" name="add"{% unless product.selected_or_first_available_variant.available %} disabled{% endunless %} data-add-button>
+          {% if product.selected_or_first_available_variant.available %}
+            {{ 'products.add_to_cart' | t }}
+          {% else %}
+            {{ 'products.sold_out' | t }}
+          {% endif %}
+        </button>
+
+        {{ form | payment_button }}
+      {% endform %}
+
+      {%- liquid
+        assign show_delivery = false
+        if settings.return_window_days > 0 or settings.delivery_note != blank
+          assign show_delivery = true
+        endif
+      -%}
+
+      {% if show_delivery %}
+        <ul class="mv-delivery-facts">
+          {% if settings.delivery_note != blank %}
+            <li>{{ settings.delivery_note }}</li>
+          {% endif %}
+
+          {% if settings.return_window_days > 0 %}
+            <li>
+              {{ 'products.returns_within' | t: days: settings.return_window_days }}
+              {%- if shop.refund_policy.url != blank %}
+                <a href="{{ shop.refund_policy.url }}">{{ 'faq.refund_link' | t }}</a>
+              {% endif -%}
+            </li>
+          {% endif %}
+        </ul>
+      {% endif %}
+
+      <div class="mv-assurance">
+        <span>{{ 'products.secure_payment' | t }}</span>
+        <span>{{ 'products.shipping_at_checkout' | t }}</span>
+        <span>{{ 'products.shopify_protected' | t }}</span>
+      </div>
+    </div>
+  </div>
+
+  {% assign related_collection = product.collections.first %}
+  {% if related_collection != blank %}
+    <section class="mv-related-products" aria-labelledby="RelatedProductsTitle">
+      {% assign related_count = 0 %}
+
+      <div class="mv-related-products__head">
+        <p>{{ 'related.eyebrow' | t }}</p>
+        <h2 id="RelatedProductsTitle">{{ 'related.title' | t }}</h2>
+      </div>
+
+      <div class="mv-related-products__grid">
+        {% for related_product in related_collection.products limit: 5 %}
+          {% unless related_product.id == product.id %}
+            <a class="mv-related-product" href="{{ related_product.url }}">
+              {% if related_product.featured_image != blank %}
+                <img src="{{ related_product.featured_image | image_url: width: 600 }}" alt="{{ related_product.featured_image.alt | default: related_product.title | escape }}" loading="lazy" width="600" height="750">
+              {% endif %}
+              <div>
+                <h3>{{ related_product.title }}</h3>
+                <span>{{ related_product.price | money }}</span>
+              </div>
+            </a>
+
+            {% assign related_count = related_count | plus: 1 %}
+            {% if related_count == 4 %}{% break %}{% endif %}
+          {% endunless %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% assign mobile_variant = product.selected_or_first_available_variant %}
+
+  <div class="mv-mobile-buybar" data-mobile-buybar data-currency="{{ cart.currency.iso_code }}" data-locale="{{ request.locale.iso_code }}">
+    <strong data-mobile-price>{{ mobile_variant.price | money }}</strong>
+
+    <div class="mv-mobile-quantity" role="group" aria-label="{{ 'products.quantity_selector' | t | escape }}">
+      <button type="button" data-mobile-decrease aria-label="{{ 'products.decrease_quantity' | t | escape }}">−</button>
+      <output data-mobile-quantity aria-live="polite">1</output>
+      <button type="button" data-mobile-increase aria-label="{{ 'products.increase_quantity' | t | escape }}">+</button>
+    </div>
+
+    <button type="button" data-mobile-add{% unless mobile_variant.available %} disabled{% endunless %}>
+      {% if mobile_variant.available %}
+        {{ 'products.add_to_cart' | t }}
+      {% else %}
+        {{ 'products.sold_out' | t }}
+      {% endif %}
+    </button>
+  </div>
+
+  <aside class="mv-cart-drawer" id="MiniCartDrawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="MiniCartTitle" tabindex="-1">
+    <div class="mv-cart-drawer__head">
+      <span id="MiniCartTitle">{{ 'cart.your_bag' | t }}</span>
+      <button type="button" data-mini-cart-close aria-label="{{ 'general.close' | t | escape }}">×</button>
+    </div>
+
+    <div class="mv-cart-drawer__items" data-mini-cart-items></div>
+
+    <div class="mv-cart-drawer__foot">
+      <div>
+        <small>{{ 'cart.total' | t }}</small>
+        <strong data-mini-cart-total></strong>
+      </div>
+      <a href="{{ routes.cart_url }}" class="mv-cart-drawer__checkout">{{ 'cart.checkout_now' | t }}</a>
+      <button type="button" data-mini-cart-close class="mv-cart-drawer__continue">{{ 'cart.continue_shopping' | t }}</button>
+    </div>
+  </aside>
+
+  <button class="mv-cart-backdrop" type="button" data-mini-cart-close aria-label="{{ 'cart.close_bag' | t | escape }}" hidden></button>
+
+  <script type="application/json" data-product-json>{{ product.variants | json }}</script>
+</section>
+
+<style>
+  .mv-product-localization {
+    width: 100%;
+    margin: 20px 0;
+    padding: 18px 0;
+    border-top: 1px solid #e2ddd6;
+    border-bottom: 1px solid #e2ddd6;
+  }
+
+  .mv-product-localization label {
+    display: block;
+    margin-bottom: 9px;
+    color: #5f564d;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .mv-product-localization select {
+    width: 100%;
+    max-width: 285px;
+    min-height: 48px;
+    padding: 0 40px 0 14px;
+    border: 1px solid #d4cec6;
+    border-radius: 0;
+    background-color: #fff;
+    color: #2e2925;
+    font: inherit;
+    cursor: pointer;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Product info",
+  "settings": []
+}
+{% endschema %}

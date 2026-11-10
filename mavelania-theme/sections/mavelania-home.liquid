@@ -1,0 +1,311 @@
+<div class="page">
+
+  <!-- ══ HERO ══ -->
+  <section class="stage hero media has-baked-copy">
+    <div class="hero-slides">
+      <picture><source media="(max-width:760px)" srcset="{{ 'mobile-hero-phone-cases-20260919-v2.webp' | asset_url }}"><img class="bg hero-slide is-active" width="1774" height="887" src="{{ 'hero-phone-cases-20260919.webp' | asset_url }}" alt="Mavelania leather phone cases" fetchpriority="high" decoding="sync"></picture>
+      <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero1.webp' | asset_url }}"><img class="bg hero-slide" width="1810" height="869" data-src="{{ 'hero1.webp' | asset_url }}" alt="Woman in a red dress beside a Mavelania bag" decoding="async"></picture>
+      <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero2.webp' | asset_url }}"><img class="bg hero-slide" width="1810" height="869" data-src="{{ 'hero2.webp' | asset_url }}" alt="Man at a desk with a Mavelania leather bag" decoding="async"></picture>
+      <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero4.webp' | asset_url }}"><img class="bg hero-slide" width="1810" height="869" data-src="{{ 'hero4.webp' | asset_url }}" alt="Mavelania leather bag collection" decoding="async"></picture>
+      <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero-wallets.webp' | asset_url }}"><img class="bg hero-slide" width="1810" height="869" data-src="{{ 'hero-wallets.webp' | asset_url }}" alt="Mavelania wallet and card holder collection" decoding="async"></picture>
+    </div>
+    <div class="shade"></div>
+    <h1 class="hero-brand-signature">{{ 'general.brand_signature' | t }}</h1>
+    <div class="hero-in">
+      <p class="hero-title">{{ 'home.brand_motto' | t }}</p>
+      <div class="orn"><i></i><b>❖</b><i></i></div>
+      <p>{{ 'home.brand_tagline_html' | t }}</p>
+      <a class="go" href="#s-wallet"><span>{{ 'home.discover_collection' | t }}</span><span>→</span></a>
+    </div>
+    <a class="hero-hotspot cta-hit" href="#s-wallet" aria-label="{{ 'home.discover_collection' | t | escape }}"></a>
+    <button class="hero-hotspot prev-hit" id="heroPrev" type="button" aria-label="{{ 'home.hero_previous' | t | escape }}"></button>
+    <button class="hero-hotspot pause-hit" id="heroPause" type="button" aria-label="{{ 'home.hero_pause' | t | escape }}" data-pause-label="{{ 'home.hero_pause' | t | escape }}" data-resume-label="{{ 'home.hero_resume' | t | escape }}" aria-pressed="false"></button>
+    <button class="hero-hotspot next-hit" id="heroNext" type="button" aria-label="{{ 'home.hero_next' | t | escape }}"></button>
+    <div class="hero-lines" aria-label="{{ 'home.hero_selector' | t | escape }}">
+      <button class="hero-line is-active" type="button" data-hero="0" aria-label="{{ 'home.hero_image' | t: index: 1 | escape }}" aria-current="true"></button>
+      <button class="hero-line" type="button" data-hero="1" aria-label="{{ 'home.hero_image' | t: index: 2 | escape }}"></button>
+      <button class="hero-line" type="button" data-hero="2" aria-label="{{ 'home.hero_image' | t: index: 3 | escape }}"></button>
+      <button class="hero-line" type="button" data-hero="3" aria-label="{{ 'home.hero_image' | t: index: 4 | escape }}"></button>
+      <button class="hero-line" type="button" data-hero="4" aria-label="{{ 'home.hero_image' | t: index: 5 | escape }}"></button>
+    </div>
+  </section>
+
+  <!-- ══ TRIPLE COLLECTION ══ -->
+  <section class="rfid-heading" aria-labelledby="rfidTitle">
+    <h2 id="rfidTitle">{{ 'home.rfid_heading' | t }}</h2>
+  </section>
+  <section class="collection-heading" aria-labelledby="collectionTitle">
+    <h2 id="collectionTitle" class="rv">{{ 'home.collection_heading' | t }}</h2>
+  </section>
+  <div class="story-gallery">
+  <div class="collection-rail-spacer" aria-hidden="true"></div>
+  <!-- ══ I · BAGS (lifestyle) ══ -->
+  <section class="story rev" id="s-wallet">
+    <div class="visual t3 rv">
+      <span class="mark">II</span>
+      <img src="{{ 'collection-bag-bordeaux.webp' | asset_url }}" alt="Woman carrying a bordeaux leather bag" width="1023" height="1537" loading="lazy" decoding="async">
+      <a class="collection-card-hit" href="{{ routes.root_url }}collections/bags" aria-label="{{ 'collections.bags.title' | t | escape }}"></a>
+    </div>
+    <a class="collection-link" href="{{ routes.root_url }}collections/bags"><h3 class="collection-link-title">{{ 'collections.bags.card_title' | t }}</h3><span class="thin-arrow" aria-hidden="true">&rarr;</span></a>
+  </section>
+
+  <!-- ══ II · BAGS (studio) ══ -->
+  <section class="story" id="s-bag">
+    <div class="visual t4 rv">
+      <span class="mark">III</span>
+      <img src="{{ 'men-leather-briefcase-model.webp' | asset_url }}" alt="Male model carrying a brown leather briefcase" width="1023" height="1537" loading="lazy" decoding="async">
+      <a class="collection-card-hit" href="{{ routes.root_url }}collections/bags" aria-label="{{ 'collections.bags.title' | t | escape }}"></a>
+    </div>
+    <a class="collection-link" href="{{ routes.root_url }}collections/bags"><h3 class="collection-link-title">{{ 'collections.bags.card_title' | t }}</h3><span class="thin-arrow" aria-hidden="true">&rarr;</span></a>
+  </section>
+
+  <div class="collection-rail-spacer" aria-hidden="true"></div>
+
+  <!-- ══ /story-gallery ══ -->
+  </div>
+
+  <!-- ══ WALLET & CARD HOLDER CARDS ══ -->
+  <div class="story-gallery wallet-gallery" aria-label="{{ 'collections.wallets.title' | t | escape }}">
+    <div class="collection-rail-spacer" aria-hidden="true"></div>
+    <section class="story" id="wallet-card-men">
+      <div class="visual rv">
+        <img src="{{ 'men-leather-bag-model.webp' | asset_url }}" alt="Male model carrying a black leather bag" width="1023" height="1537" loading="lazy" decoding="async">
+        <a class="collection-card-hit" href="{{ routes.root_url }}collections/wallets-purses" aria-label="{{ 'collections.wallets.title' | t | escape }}"></a>
+      </div>
+      <a class="collection-link" href="{{ routes.root_url }}collections/wallets-purses"><h3 class="collection-link-title">{{ 'collections.wallets.card_title' | t }}</h3><span class="thin-arrow" aria-hidden="true">&rarr;</span></a>
+    </section>
+    <section class="story" id="wallet-card-women">
+      <div class="visual rv rv-d1">
+        <img src="{{ 'women-leather-wallet-model.webp' | asset_url }}" alt="Female model using a leather wallet" width="1023" height="1537" loading="lazy" decoding="async">
+        <a class="collection-card-hit" href="{{ routes.root_url }}collections/wallets-purses" aria-label="{{ 'collections.wallets.title' | t | escape }}"></a>
+      </div>
+      <a class="collection-link" href="{{ routes.root_url }}collections/wallets-purses"><h3 class="collection-link-title">{{ 'collections.wallets.card_title' | t }}</h3><span class="thin-arrow" aria-hidden="true">&rarr;</span></a>
+    </section>
+    <div class="collection-rail-spacer" aria-hidden="true"></div>
+  </div>
+
+  <div class="story-gallery lower-wallet-gallery" aria-label="{{ 'home.phone_cases_and_accessories' | t | escape }}">
+    <div class="collection-rail-spacer" aria-hidden="true"></div>
+    <section class="story" id="lower-card-women">
+      <div class="visual rv rv-d1">
+        <img src="{{ 'phone-case-model-new.webp' | asset_url }}" alt="Female model holding a leather phone case with card slots" width="1086" height="1448" loading="lazy" decoding="async">
+        <a class="collection-card-hit" href="{{ routes.root_url }}collections/phone-cases" aria-label="{{ 'collections.phone_cases.title' | t | escape }}"></a>
+      </div>
+      <a class="collection-link" href="{{ routes.root_url }}collections/phone-cases"><h3 class="collection-link-title">{{ 'collections.phone_cases.card_title' | t }}</h3><span class="thin-arrow" aria-hidden="true">&rarr;</span></a>
+    </section>
+    <section class="story" id="lower-card-accessories">
+      <div class="visual rv rv-d1">
+        <img src="{{ 'home-accessories-card.webp' | asset_url }}" alt="Woman carrying a Mavelania bag styled with leather accessories" width="1086" height="1448" loading="lazy" decoding="async">
+        <a class="collection-card-hit" href="{{ routes.root_url }}collections/accessories" aria-label="{{ 'collections.accessories.title' | t | escape }}"></a>
+      </div>
+      <a class="collection-link" href="{{ routes.root_url }}collections/accessories"><h3 class="collection-link-title">{{ 'collections.accessories.title' | t }}</h3><span class="thin-arrow" aria-hidden="true">&rarr;</span></a>
+    </section>
+    <div class="collection-rail-spacer" aria-hidden="true"></div>
+  </div>
+
+  {%- assign featured = section.settings.featured_collection -%}
+  {% if featured != blank and featured.products_count > 0 %}
+    <section class="mv-featured" aria-labelledby="featuredTitle">
+      <div class="mv-featured-head">
+        <p class="mv-eyebrow">{{ 'home.featured_eyebrow' | t }}</p>
+        <h2 id="featuredTitle">{{ section.settings.featured_heading | default: featured.title }}</h2>
+      </div>
+      <div class="mv-featured-grid">
+        {% for product in featured.products limit: section.settings.featured_count %}
+          <article class="mv-product-card">
+            <a href="{{ product.url }}">
+              <span class="mv-card-image">
+                {%- if product.featured_image -%}
+                  {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '320,480,640,900', sizes: '(max-width: 700px) 46vw, 23vw', alt: product.featured_image.alt | default: product.title }}
+                {%- endif -%}
+              </span>
+              {% if product.type != blank %}<small>{{ product.type }}</small>{% endif %}
+              <h3>{{ product.title }}</h3>
+              <p>{% if product.price_varies %}{% assign fp = product.price_min | money %}{{ 'products.from_price' | t: price: fp }}{% else %}{{ product.price | money }}{% endif %}</p>
+            </a>
+          </article>
+        {% endfor %}
+      </div>
+      <a class="collection-link mv-featured-link" href="{{ routes.root_url }}collections/{{ featured.handle }}">
+        <span>{{ 'general.see_collection' | t }}</span>
+        <span class="thin-arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </section>
+  {% endif %}
+
+  <section class="before-footer-showcase" aria-label="{{ 'collections.bags.title' | t | escape }}">
+    <picture>
+      <source media="(max-width:700px)" srcset="{{ 'before-footer-mobile.webp' | asset_url }}">
+      <img src="{{ 'before-footer.webp' | asset_url }}" alt="Female model carrying a brown leather shoulder bag" width="1881" height="836" loading="lazy" decoding="async">
+    </picture>
+  </section>
+
+</div>
+<script>
+(function(){
+  var $=function(s){return document.querySelector(s);},
+      $$=function(s){return [].slice.call(document.querySelectorAll(s));};
+
+  var heroPause = $('#heroPause'),
+      heroPrev = $('#heroPrev'),
+      heroNext = $('#heroNext'),
+      heroSlides = $$('.hero-slide'),
+      heroLines = $$('.hero-line'),
+      heroIndex = 0,
+      heroTimer = null,
+      heroFading = false;
+
+  var heroHydrated = false;
+  function hydrateHeroSlides(){
+    if(heroHydrated) return;
+    heroHydrated = true;
+    heroSlides.forEach(function(img){
+      var parent = img.parentNode;
+      if(parent && parent.tagName === 'PICTURE'){
+        [].slice.call(parent.querySelectorAll('source[data-srcset]')).forEach(function(source){
+          source.setAttribute('srcset', source.getAttribute('data-srcset'));
+          source.removeAttribute('data-srcset');
+        });
+      }
+      if(img.dataset.src){
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+      }
+    });
+  }
+  function scheduleHeroHydration(){
+    var run = function(){ window.setTimeout(hydrateHeroSlides, 150); };
+    if(document.readyState === 'complete') run();
+    else window.addEventListener('load', run, {once:true});
+  }
+
+  function updateHeroLines(){
+    heroLines.forEach(function(line, i){
+      var active = i === heroIndex;
+      line.classList.toggle('is-active', active);
+      if(active) line.setAttribute('aria-current', 'true'); else line.removeAttribute('aria-current');
+    });
+  }
+
+  function showHero(next){
+    if(!heroSlides.length || heroFading) return;
+    hydrateHeroSlides();
+    var target = (next + heroSlides.length) % heroSlides.length;
+    if(target === heroIndex) return;
+    var outgoing = heroSlides[heroIndex], incoming = heroSlides[target];
+    heroFading = true;
+    incoming.classList.add('is-active');
+    incoming.style.zIndex = '3';
+    outgoing.style.zIndex = '2';
+    heroIndex = target;
+    updateHeroLines();
+
+    if(typeof incoming.animate !== 'function'){
+      outgoing.classList.remove('is-active');
+      incoming.style.zIndex = '';
+      outgoing.style.zIndex = '';
+      heroFading = false;
+      return;
+    }
+
+    var outgoingFade = outgoing.animate(
+      [{opacity:1},{opacity:0}],
+      {duration:1600,easing:'ease-in-out',fill:'forwards'}
+    );
+    var incomingFade = incoming.animate(
+      [{opacity:0},{opacity:1}],
+      {duration:1600,easing:'ease-in-out',fill:'forwards'}
+    );
+
+    Promise.all([outgoingFade.finished, incomingFade.finished]).then(function(){
+      outgoing.classList.remove('is-active');
+      outgoingFade.cancel();
+      incomingFade.cancel();
+      incoming.style.zIndex = '';
+      outgoing.style.zIndex = '';
+      heroFading = false;
+    }).catch(function(){
+      outgoing.classList.remove('is-active');
+      heroIndex = target;
+      incoming.style.zIndex = '';
+      outgoing.style.zIndex = '';
+      heroFading = false;
+    });
+  }
+  function startHero(){
+    clearInterval(heroTimer);
+    heroTimer = setInterval(function(){ showHero(heroIndex + 1); }, 5000);
+  }
+  function moveHero(step){
+    showHero(heroIndex + step);
+    if(!heroPause || heroPause.getAttribute('aria-pressed') !== 'true') startHero();
+  }
+  scheduleHeroHydration();
+  if(heroSlides.length > 1) startHero();
+  if(heroPrev) heroPrev.addEventListener('click', function(){ moveHero(-1); });
+  if(heroNext) heroNext.addEventListener('click', function(){ moveHero(1); });
+  heroLines.forEach(function(line){
+    line.addEventListener('click', function(){
+      showHero(Number(line.getAttribute('data-hero')) || 0);
+      if(!heroPause || heroPause.getAttribute('aria-pressed') !== 'true') startHero();
+    });
+  });
+  if(heroPause){
+    heroPause.addEventListener('click', function(){
+      var hero = heroPause.closest('.hero');
+      var paused = hero.classList.toggle('hero-paused');
+      heroPause.setAttribute('aria-pressed', String(paused));
+      heroPause.setAttribute('aria-label', paused ? heroPause.dataset.resumeLabel : heroPause.dataset.pauseLabel);
+      if(paused) clearInterval(heroTimer); else startHero();
+    });
+  }
+
+  var mobileGalleryQuery = window.matchMedia('(max-width: 900px)'),
+      mobileGalleries = $$('.story-gallery'),
+      mobileGalleryFrame = null;
+
+  function updateMobileGalleryFocus(){
+    mobileGalleryFrame = null;
+    mobileGalleries.forEach(function(gallery){
+      var cards = [].slice.call(gallery.querySelectorAll('.story'));
+      if(!mobileGalleryQuery.matches){
+        cards.forEach(function(card){ card.classList.remove('is-mobile-active'); });
+        return;
+      }
+      var galleryRect = gallery.getBoundingClientRect(),
+          galleryCenter = galleryRect.left + (gallery.clientWidth / 2),
+          activeCard = null,
+          activeDistance = Infinity;
+      cards.forEach(function(card){
+        var cardRect = card.getBoundingClientRect(),
+            distance = Math.abs((cardRect.left + cardRect.width / 2) - galleryCenter);
+        if(distance < activeDistance){
+          activeDistance = distance;
+          activeCard = card;
+        }
+      });
+      cards.forEach(function(card){ card.classList.toggle('is-mobile-active', card === activeCard); });
+    });
+  }
+
+  function scheduleMobileGalleryFocus(){
+    if(mobileGalleryFrame !== null) return;
+    mobileGalleryFrame = window.requestAnimationFrame(updateMobileGalleryFocus);
+  }
+
+  mobileGalleries.forEach(function(gallery){
+    gallery.addEventListener('scroll', scheduleMobileGalleryFocus, {passive:true});
+  });
+  window.addEventListener('resize', scheduleMobileGalleryFocus, {passive:true});
+  if(typeof mobileGalleryQuery.addEventListener === 'function'){
+    mobileGalleryQuery.addEventListener('change', scheduleMobileGalleryFocus);
+  }else if(typeof mobileGalleryQuery.addListener === 'function'){
+    mobileGalleryQuery.addListener(scheduleMobileGalleryFocus);
+  }
+  updateMobileGalleryFocus();
+
+})();
+</script>
+{% schema %}
+{"name":"Mavelania home","settings":[{"type":"header","content":"Selected pieces"},{"type":"collection","id":"featured_collection","label":"Collection to feature","info":"Leave empty to hide the strip."},{"type":"text","id":"featured_heading","label":"Heading","default":"Selected pieces"},{"type":"range","id":"featured_count","min":2,"max":8,"step":1,"default":4,"label":"Number of products"}],"presets":[{"name":"Mavelania home"}]}
+{% endschema %}

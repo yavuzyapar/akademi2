@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "mavelania-home",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

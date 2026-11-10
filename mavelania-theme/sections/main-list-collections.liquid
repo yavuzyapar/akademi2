@@ -1,0 +1,30 @@
+<section class="mv-about">
+  <header class="mv-about-hero">
+    <p class="mv-eyebrow">{{ settings.organization_name | default: shop.name }}</p>
+    <h1>{{ 'collections.all_title' | t }}</h1>
+    <p class="mv-about-lede">{{ 'collections.all_lede' | t }}</p>
+  </header>
+
+  <div class="mv-featured-grid">
+    {% for collection in collections %}
+      {% unless collection.handle == 'frontpage' or collection.all_products_count == 0 %}
+        <article class="mv-product-card">
+          <a href="{{ collection.url }}">
+            <span class="mv-card-image">
+              {% if collection.image %}
+                {{ collection.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '320,480,640,900', sizes: '(max-width: 700px) 46vw, 23vw', alt: collection.title }}
+              {% elsif collection.products.first.featured_image %}
+                {{ collection.products.first.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '320,480,640,900', sizes: '(max-width: 700px) 46vw, 23vw', alt: collection.title }}
+              {% endif %}
+            </span>
+            <h2>{{ collection.title }}</h2>
+            <p>{{ collection.all_products_count }}</p>
+          </a>
+        </article>
+      {% endunless %}
+    {% endfor %}
+  </div>
+</section>
+{% schema %}
+{"name":"Collections list","settings":[]}
+{% endschema %}

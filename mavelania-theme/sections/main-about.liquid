@@ -1,0 +1,152 @@
+<article class="mv-about">
+  <header class="mv-about-hero">
+    <p class="mv-eyebrow">{{ 'about.eyebrow' | t }}</p>
+    <h1>{{ 'about.title' | t }}</h1>
+    <p class="mv-about-lede">{{ 'about.lede' | t }}</p>
+  </header>
+
+  <figure class="mv-about-figure">
+    <img
+      src="{{ 'hero-wallets.webp' | asset_url }}"
+      alt="{{ 'about.figure_leather_alt' | t | escape }}"
+      width="1810"
+      height="869"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    >
+  </figure>
+
+  <section class="mv-about-block" aria-labelledby="aboutMaterial">
+    <h2 id="aboutMaterial">{{ 'about.material_title' | t }}</h2>
+    <p>{{ 'about.material_body' | t }}</p>
+  </section>
+
+  <section class="mv-about-block" aria-labelledby="aboutCraft">
+    <h2 id="aboutCraft">{{ 'about.craft_title' | t }}</h2>
+    <p>{{ 'about.craft_body' | t }}</p>
+  </section>
+
+  <figure class="mv-about-figure">
+    <img
+      src="{{ 'collection-bag-bordeaux.webp' | asset_url }}"
+      alt="{{ 'about.figure_craft_alt' | t | escape }}"
+      width="1023"
+      height="1537"
+      loading="lazy"
+      decoding="async"
+    >
+  </figure>
+
+  <section class="mv-about-block" aria-labelledby="aboutRfid">
+    <h2 id="aboutRfid">{{ 'about.rfid_title' | t }}</h2>
+    <p>{{ 'about.rfid_body' | t }}</p>
+  </section>
+
+  <section class="mv-about-block" aria-labelledby="aboutMake">
+    <h2 id="aboutMake">{{ 'about.make_title' | t }}</h2>
+    <p>{{ 'about.make_body' | t }}</p>
+    <nav class="mv-about-links" aria-label="{{ 'about.make_title' | t | escape }}">
+      {%- assign nav_count = collections['bags'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/bags">{{ 'collections.bags.card_title' | t }}</a>{%- endif -%}
+      {%- assign nav_count = collections['wallets-purses'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/wallets-purses">{{ 'collections.wallets.card_title' | t }}</a>{%- endif -%}
+      {%- assign nav_count = collections['phone-cases'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/phone-cases">{{ 'collections.phone_cases.card_title' | t }}</a>{%- endif -%}
+      <a href="{{ routes.root_url }}collections/accessories">{{ 'collections.accessories.card_title' | t }}</a>
+    </nav>
+  </section>
+
+  <section class="mv-about-block mv-about-company" aria-labelledby="aboutCompany">
+    <h2 id="aboutCompany">{{ 'about.company_title' | t }}</h2>
+    <p class="mv-about-company-lede">{{ 'about.company_lede' | t }}</p>
+
+    <dl class="mv-about-facts">
+      <div>
+        <dt>{{ 'about.fact_brand' | t }}</dt>
+        <dd>{{ settings.organization_name | default: shop.name }}</dd>
+      </div>
+
+      {% if settings.legal_name != blank %}
+        <div>
+          <dt>{{ 'about.fact_legal' | t }}</dt>
+          <dd>{{ settings.legal_name }}</dd>
+        </div>
+      {% endif %}
+
+      {% if settings.legal_entity_type != blank %}
+        <div>
+          <dt>{{ 'about.fact_entity' | t }}</dt>
+          <dd>{{ settings.legal_entity_type }}</dd>
+        </div>
+      {% endif %}
+
+      {% if settings.legal_jurisdiction != blank %}
+        <div>
+          <dt>{{ 'about.fact_jurisdiction' | t }}</dt>
+          <dd>{{ settings.legal_jurisdiction }}</dd>
+        </div>
+      {% endif %}
+
+      {% if settings.legal_filing_id != blank %}
+        <div>
+          <dt>{{ 'about.fact_filing_id' | t }}</dt>
+          <dd>{{ settings.legal_filing_id }}</dd>
+        </div>
+      {% endif %}
+
+      {% if settings.legal_filing_date != blank %}
+        <div>
+          <dt>{{ 'about.fact_founded' | t }}</dt>
+          <dd>{{ settings.legal_filing_date }}</dd>
+        </div>
+      {% elsif settings.founding_date != blank %}
+        <div>
+          <dt>{{ 'about.fact_founded' | t }}</dt>
+          <dd>{{ settings.founding_date }}</dd>
+        </div>
+      {% endif %}
+
+      {% if settings.legal_registered_agent != blank %}
+        <div>
+          <dt>{{ 'about.fact_agent' | t }}</dt>
+          <dd>{{ settings.legal_registered_agent }}</dd>
+        </div>
+      {% endif %}
+
+      {% if settings.legal_registered_office_street != blank %}
+        <div>
+          <dt>{{ 'about.fact_office' | t }}</dt>
+          <dd>
+            {{ settings.legal_registered_office_street }}<br>
+            {{ settings.legal_registered_office_city }}, {{ settings.legal_registered_office_region }} {{ settings.legal_registered_office_postal }}<br>
+            {{ settings.legal_registered_office_country_name | default: settings.legal_registered_office_country }}
+          </dd>
+        </div>
+      {% endif %}
+
+      <div>
+        <dt>{{ 'about.fact_contact' | t }}</dt>
+        <dd>
+          <a href="mailto:{{ settings.contact_email | default: 'info@mavelania.com' | escape }}">
+            {{ settings.contact_email | default: 'info@mavelania.com' }}
+          </a>
+        </dd>
+      </div>
+    </dl>
+
+    {% if settings.legal_registered_office_street != blank %}
+      <p class="mv-about-note">{{ 'about.office_note' | t }}</p>
+    {% endif %}
+
+    <p class="mv-about-note">
+      {{ 'about.registry_note' | t }}
+      <a href="https://wyobiz.wyo.gov/Business/FilingSearch.aspx" target="_blank" rel="noopener noreferrer">{{ 'about.registry_link' | t }}</a>
+    </p>
+
+    {% if page.content != blank %}
+      <div class="rte mv-about-extra">{{ page.content }}</div>
+    {% endif %}
+  </section>
+</article>
+
+{% schema %}
+{"name":"About page","settings":[]}
+{% endschema %}

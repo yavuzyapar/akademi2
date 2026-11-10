@@ -1,0 +1,24 @@
+<section class="mv-cart">
+  <h1>{{ 'cart.title' | t }}</h1>
+  {% if cart.item_count == 0 %}
+    <p>{{ 'cart.empty' | t }}</p>
+  {% else %}
+    <form action="{{ routes.cart_url }}" method="post">
+      <div class="mv-cart-items">
+        {% for item in cart.items %}
+          <article class="mv-cart-item">
+            <a href="{{ item.url }}">{% if item.image %}{{ item.image | image_url: width: 320 | image_tag: loading: 'lazy', alt: item.title }}{% endif %}</a>
+            <div><a href="{{ item.url }}"><h2>{{ item.product.title }}</h2></a>{% unless item.product.has_only_default_variant %}<p>{{ item.variant.title }}</p>{% endunless %}<p>{{ item.final_price | money }}</p></div>
+            <label>{{ 'cart.quantity' | t }}<input type="number" name="updates[]" value="{{ item.quantity }}" min="0"></label>
+            <strong>{{ item.final_line_price | money }}</strong>
+            <a href="{{ item.url_to_remove }}">{{ 'cart.remove' | t }}</a>
+          </article>
+        {% endfor %}
+      </div>
+      <div class="mv-cart-summary"><p><span>{{ 'cart.subtotal' | t }}</span><strong>{{ cart.total_price | money }}</strong></p><small>{{ 'cart.shipping_taxes_checkout' | t }}</small><button class="mv-secondary-button" type="submit" name="update">{{ 'cart.update' | t }}</button><button class="mv-primary-button" type="submit" name="checkout">{{ 'cart.checkout' | t }}</button></div>
+    </form>
+  {% endif %}
+</section>
+{% schema %}
+{"name":"Cart","settings":[]}
+{% endschema %}

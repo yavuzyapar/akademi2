@@ -1,0 +1,85 @@
+<article class="mv-about mv-contact">
+  <header class="mv-about-hero">
+    <p class="mv-eyebrow">{{ 'contact.eyebrow' | t }}</p>
+    <h1>{{ 'contact.title' | t }}</h1>
+    <p class="mv-about-lede">{{ 'contact.lede' | t }}</p>
+  </header>
+
+  <section class="mv-about-block" aria-labelledby="contactDirect">
+    <h2 id="contactDirect">{{ 'contact.direct_title' | t }}</h2>
+    <p>{{ 'contact.direct_body' | t }}</p>
+    <p class="mv-contact-email">
+      <a href="mailto:{{ settings.contact_email | default: 'info@mavelania.com' | escape }}">
+        {{ settings.contact_email | default: 'info@mavelania.com' }}
+      </a>
+    </p>
+  </section>
+
+  <section class="mv-about-block" aria-labelledby="contactElsewhere">
+    <h2 id="contactElsewhere">{{ 'contact.elsewhere_title' | t }}</h2>
+    <p>{{ 'contact.elsewhere_body' | t }}</p>
+    <nav class="mv-about-links" aria-label="{{ 'contact.elsewhere_title' | t | escape }}">
+      {% if settings.instagram_url != blank %}<a href="{{ settings.instagram_url }}" target="_blank" rel="noopener noreferrer">Instagram</a>{% endif %}
+      {% if settings.tiktok_url != blank %}<a href="{{ settings.tiktok_url }}" target="_blank" rel="noopener noreferrer">TikTok</a>{% endif %}
+      {% if settings.facebook_url != blank %}<a href="{{ settings.facebook_url }}" target="_blank" rel="noopener noreferrer">Facebook</a>{% endif %}
+      {% if settings.youtube_url != blank %}<a href="{{ settings.youtube_url }}" target="_blank" rel="noopener noreferrer">YouTube</a>{% endif %}
+      {% if settings.linkedin_url != blank %}<a href="{{ settings.linkedin_url }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>{% endif %}
+    </nav>
+  </section>
+
+  <section class="mv-about-block" aria-labelledby="contactHours">
+    <h2 id="contactHours">{{ 'contact.hours_title' | t }}</h2>
+    <p>{{ 'contact.hours_body' | t }}</p>
+  </section>
+
+  <section class="mv-about-block" aria-labelledby="contactForm">
+    <h2 id="contactForm">{{ 'contact.form_title' | t }}</h2>
+    <p>{{ 'contact.form_note' | t }}</p>
+  </section>
+
+  {% form 'contact', class: 'mv-contact-form' %}
+    {% if form.posted_successfully? %}
+      <p class="mv-contact-success" role="status">{{ 'contact.success' | t }}</p>
+    {% endif %}
+
+    {% if form.errors %}
+      <div class="mv-contact-errors" role="alert">
+        <ul>
+          {% for field in form.errors %}
+            <li>{{ form.errors.messages[field] }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <div class="mv-contact-row">
+      <label for="ContactName">{{ 'contact.form_name' | t }}</label>
+      <input id="ContactName" type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}" required>
+    </div>
+
+    <div class="mv-contact-row">
+      <label for="ContactEmail">{{ 'contact.form_email' | t }}</label>
+      <input id="ContactEmail" type="email" name="contact[email]" autocomplete="email" value="{{ form.email }}" required>
+    </div>
+
+    <div class="mv-contact-row">
+      <label for="ContactOrder">{{ 'contact.form_order' | t }}</label>
+      <input id="ContactOrder" type="text" name="contact[order number]" value="">
+    </div>
+
+    <div class="mv-contact-row">
+      <label for="ContactMessage">{{ 'contact.form_message' | t }}</label>
+      <textarea id="ContactMessage" name="contact[body]" rows="6" required>{{ form.body }}</textarea>
+    </div>
+
+    <button class="mv-primary-button mv-inline-button" type="submit">{{ 'contact.form_submit' | t }}</button>
+  {% endform %}
+
+  {% if page.content != blank %}
+    <div class="rte mv-about-extra">{{ page.content }}</div>
+  {% endif %}
+</article>
+
+{% schema %}
+{"name":"Contact page","settings":[]}
+{% endschema %}

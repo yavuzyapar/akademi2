@@ -1,0 +1,102 @@
+<header class="mv-header">
+  <button class="mv-menu-toggle" type="button" aria-expanded="false" aria-controls="MavelaniaMenu" aria-label="{{ 'general.menu_open' | t | escape }}" data-open-label="{{ 'general.menu_open' | t | escape }}" data-close-label="{{ 'general.menu_close' | t | escape }}">
+    <span class="mv-menu-toggle-lines" aria-hidden="true"><i></i><i></i><i></i></span>
+  </button>
+  <nav class="mv-nav mv-nav-left" aria-label="{{ 'general.main_menu' | t | escape }}">
+    {%- assign nav_count = collections['bags'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/bags">{{ 'navigation.bags' | t }}</a>{%- endif -%}
+    {%- assign nav_count = collections['wallets-purses'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/wallets-purses">{{ 'navigation.wallets_purses' | t }}</a>{%- endif -%}
+    {%- assign nav_count = collections['phone-cases'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/phone-cases">{{ 'navigation.phone_cases' | t }}</a>{%- endif -%}
+    <a href="{{ routes.root_url }}collections/accessories">{{ 'navigation.accessories' | t }}</a>
+  </nav>
+  <a class="mv-brand" href="{{ routes.root_url }}" aria-label="{{ shop.name }} — {{ 'general.home' | t | escape }}">
+    <span class="brandlock">
+      <span class="em"><img src="{{ 'mavelania-logo-original-transparent.png' | asset_url }}" alt="" width="54" height="54"></span>
+      <span class="script">Mavelania</span>
+    </span>
+  </a>
+  <a class="mv-mobile-cart" href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t | escape }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg><span data-cart-count>{{ cart.item_count }}</span></a>
+  <nav class="mv-nav mv-nav-tools" aria-label="{{ 'general.customer_links' | t | escape }}">
+    {% if section.settings.show_country_selector and localization.available_countries.size > 1 %}
+      {% form 'localization', id: 'HeaderCountryForm', class: 'mv-country-form mv-country-form--header' %}
+        <label class="mv-visually-hidden" for="HeaderCountrySelect">{{ 'general.country_region' | t }}</label>
+        <div class="mv-country-select-wrap">
+          <select id="HeaderCountrySelect" name="country_code" aria-label="{{ 'general.country_region' | t | escape }}" data-localization-select>
+            {% for country in localization.available_countries %}
+              <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>{{ country.name }} · {{ country.currency.iso_code }}</option>
+            {% endfor %}
+          </select>
+          <svg viewBox="0 0 12 8" aria-hidden="true"><path d="m1 1 5 5 5-5"/></svg>
+        </div>
+        <noscript><button type="submit">{{ 'general.apply' | t }}</button></noscript>
+      {% endform %}
+    {% endif %}
+    {%- liquid
+      # The FAQ page handle can change in the admin (it was the Turkish "sss").
+      # Resolve it rather than hard-coding a URL that would 404 after a rename.
+      assign faq_page = pages['faq']
+      if faq_page == blank
+        assign faq_page = pages['sss']
+      endif
+    -%}
+    {% if faq_page != blank %}<a class="mv-header-faq" href="{{ faq_page.url }}">{{ 'navigation.faq' | t }}</a>{% endif %}
+    {% if shop.customer_accounts_enabled %}<a class="mv-tool-icon" href="{{ routes.account_url }}" aria-label="{{ 'general.account' | t | escape }}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></a>{% endif %}
+    <form class="mv-header-search" action="{{ routes.search_url }}" method="get" role="search" data-smart-search>
+      <button type="submit" aria-label="{{ 'general.search' | t | escape }}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+      <input type="search" name="q" value="{{ search.terms | escape }}" aria-label="{{ 'general.search_placeholder' | t | escape }}" autocomplete="off" aria-autocomplete="list" aria-expanded="false" data-search-input>
+      <div class="mv-search-suggestions" role="listbox" aria-label="{{ 'general.search_suggestions' | t | escape }}" hidden data-search-suggestions></div>
+    </form>
+    <button class="mv-tool-icon mv-favorites-button" type="button" aria-label="{{ 'favorites.open' | t | escape }}" data-favorites-toggle><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.6 2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 17l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8Z"/></svg><span data-favorites-count>0</span></button>
+    <a class="mv-tool-icon" href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t | escape }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg><span data-cart-count>{{ cart.item_count }}</span></a>
+  </nav>
+  <nav id="MavelaniaMenu" class="mv-mobile-menu" role="dialog" aria-modal="true" aria-label="{{ 'general.mobile_menu' | t | escape }}" aria-hidden="true" tabindex="-1">
+    <div class="mv-mobile-menu-head">
+      <a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a>
+      <button class="mv-mobile-menu-close" type="button" aria-label="{{ 'general.menu_close' | t | escape }}" data-mobile-menu-close>&times;</button>
+    </div>
+
+    <form class="mv-mobile-menu-search" action="{{ routes.search_url }}" method="get" role="search" data-smart-search>
+      <label class="mv-visually-hidden" for="MobileSearch">{{ 'general.search' | t }}</label>
+      <input id="MobileSearch" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search_placeholder' | t | escape }}" autocomplete="off" aria-autocomplete="list" aria-expanded="false" data-search-input>
+      <button type="submit" aria-label="{{ 'search.submit' | t | escape }}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+      <div class="mv-search-suggestions" role="listbox" aria-label="{{ 'general.search_suggestions' | t | escape }}" hidden data-search-suggestions></div>
+    </form>
+
+    <div class="mv-mobile-menu-links">
+
+      <span class="mv-mobile-menu-space" aria-hidden="true"></span>
+
+      {%- assign nav_count = collections['bags'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/bags"><span>{{ 'navigation.bags' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
+      {%- assign nav_count = collections['wallets-purses'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/wallets-purses"><span>{{ 'navigation.wallets_purses' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
+      {%- assign nav_count = collections['phone-cases'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/phone-cases"><span>{{ 'navigation.phone_cases' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
+      <a href="{{ routes.root_url }}collections/accessories"><span>{{ 'navigation.accessories' | t }}</span><span aria-hidden="true">›</span></a>
+    </div>
+
+    <div class="mv-mobile-menu-footer">
+      {% if section.settings.show_country_selector and localization.available_countries.size > 1 %}
+        {% form 'localization', id: 'MobileCountryForm', class: 'mv-country-form mv-country-form--mobile' %}
+          <label for="MobileCountrySelect">{{ 'general.country_region' | t }}</label>
+          <div class="mv-country-select-wrap">
+            <select id="MobileCountrySelect" name="country_code" aria-label="{{ 'general.country_region' | t | escape }}" data-localization-select>
+              {% for country in localization.available_countries %}
+                <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>{{ country.name }} · {{ country.currency.iso_code }}</option>
+              {% endfor %}
+            </select>
+            <svg viewBox="0 0 12 8" aria-hidden="true"><path d="m1 1 5 5 5-5"/></svg>
+          </div>
+          <noscript><button type="submit">{{ 'general.apply' | t }}</button></noscript>
+        {% endform %}
+      {% endif %}
+      {% if shop.customer_accounts_enabled %}
+        <a href="{{ routes.account_login_url }}">{{ 'navigation.sign_in_register' | t }}</a>
+      {% else %}
+        <span>{{ 'navigation.sign_in_register' | t }}</span>
+      {% endif %}
+      <button class="mv-mobile-action" type="button" data-favorites-toggle>{{ 'favorites.title' | t }} <span data-favorites-count>0</span></button>
+      {% if faq_page != blank %}<a href="{{ faq_page.url }}">{{ 'navigation.faq' | t }}</a>{% endif %}
+      <a href="mailto:{{ settings.contact_email | default: 'info@mavelania.com' | escape }}">{{ 'navigation.customer_support' | t }}</a>
+    </div>
+  </nav>
+</header>
+{% schema %}
+{"name":"Header","settings":[{"type":"checkbox","id":"show_country_selector","label":"Show country/region selector","default":true}]}
+{% endschema %}

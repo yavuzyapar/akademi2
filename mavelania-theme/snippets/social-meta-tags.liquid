@@ -1,0 +1,64 @@
+{%- liquid
+  assign social_title = page_title | default: shop.name
+  assign social_description = page_description | default: settings.default_meta_description | default: shop.description | default: shop.name
+  assign social_type = 'website'
+  assign social_image = page_image
+
+  if request.page_type == 'product'
+    assign social_type = 'product'
+    assign social_image = product.featured_media.preview_image | default: product.featured_image
+  elsif request.page_type == 'article'
+    assign social_type = 'article'
+  endif
+
+  if social_image == blank and settings.social_share_image != blank
+    assign social_image = settings.social_share_image
+  endif
+
+  assign social_locale = 'en_US'
+-%}
+<meta property="og:site_name" content="{{ shop.name | escape }}">
+<meta property="og:url" content="{{ canonical_url }}">
+<meta property="og:title" content="{{ social_title | escape }}">
+<meta property="og:type" content="{{ social_type }}">
+<meta property="og:description" content="{{ social_description | strip_html | strip_newlines | escape }}">
+<meta property="og:locale" content="{{ social_locale }}">
+{% if social_image != blank %}
+  {%- comment -%}
+    Declaring the dimensions lets social networks draw the card at the right
+    aspect ratio straight away. For og:image:alt, when the image alt text in
+    Shopify is a SKU (e.g. "SVM9045572363") we fall back to the page title.
+  {%- endcomment -%}
+  {%- assign og_h = 1200 | times: social_image.height | divided_by: social_image.width -%}
+  {%- assign og_alt = social_title -%}
+  {%- if social_image.alt != blank and social_image.alt contains ' ' -%}
+    {%- assign og_alt = social_image.alt -%}
+  {%- endif -%}
+  <meta property="og:image" content="https:{{ social_image | image_url: width: 1200 }}">
+  <meta property="og:image:secure_url" content="https:{{ social_image | image_url: width: 1200 }}">
+  <meta property="og:image:width" content="1200">
+  {% if og_h > 0 %}<meta property="og:image:height" content="{{ og_h }}">{% endif %}
+  <meta property="og:image:alt" content="{{ og_alt | escape }}">
+{% else %}
+  <meta property="og:image" content="https:{{ 'mavelania-social-share.jpg' | asset_url }}">
+  <meta property="og:image:secure_url" content="https:{{ 'mavelania-social-share.jpg' | asset_url }}">
+  <meta property="og:image:width" content="1600">
+  <meta property="og:image:height" content="869">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:alt" content="Mavelania">
+{% endif %}
+{% if request.page_type == 'product' %}
+  <meta property="product:price:amount" content="{{ product.selected_or_first_available_variant.price | divided_by: 100.0 }}">
+  <meta property="product:price:currency" content="{{ cart.currency.iso_code }}">
+  <meta property="product:availability" content="{% if product.selected_or_first_available_variant.available %}in stock{% else %}out of stock{% endif %}">
+{% endif %}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ social_title | escape }}">
+<meta name="twitter:description" content="{{ social_description | strip_html | strip_newlines | escape }}">
+{% if social_image != blank %}
+  <meta name="twitter:image" content="https:{{ social_image | image_url: width: 1200 }}">
+  <meta name="twitter:image:alt" content="{{ og_alt | default: social_title | escape }}">
+{% else %}
+  <meta name="twitter:image" content="https:{{ 'mavelania-social-share.jpg' | asset_url }}">
+  <meta name="twitter:image:alt" content="Mavelania">
+{% endif %}

@@ -1,0 +1,135 @@
+{%- liquid
+  assign desktop_image = section.settings.image_desktop
+  assign mobile_image = section.settings.image_mobile
+  assign heading_tag = section.settings.heading_tag | default: 'h2'
+  assign has_text = false
+  if section.settings.heading != blank or section.settings.subheading != blank
+    assign has_text = true
+  endif
+-%}
+
+<section
+  class="mv-promo mv-promo--{{ section.settings.text_position }}"
+  {% if section.settings.heading != blank %}aria-labelledby="PromoHeading-{{ section.id }}"{% endif %}
+>
+  <picture class="mv-promo-media">
+    {%- comment -%}
+      width/height on each <source> so the browser reserves the right box per
+      breakpoint. Without them it would take the ratio from the <img> below and
+      squash the 4:5 mobile crop into a 2:1 frame.
+    {%- endcomment -%}
+    {%- if mobile_image != blank -%}
+      <source
+        media="(max-width: 749px)"
+        srcset="{{ mobile_image | image_url: width: 750 }} 750w, {{ mobile_image | image_url: width: 1000 }} 1000w"
+        sizes="100vw"
+        width="{{ mobile_image.width }}"
+        height="{{ mobile_image.height }}"
+      >
+    {%- else -%}
+      <source
+        media="(max-width: 749px)"
+        srcset="{{ 'promo-cases-mobile.webp' | asset_url }}"
+        width="1000"
+        height="1250"
+      >
+    {%- endif -%}
+
+    {%- if desktop_image != blank -%}
+      <img
+        src="{{ desktop_image | image_url: width: 2400 }}"
+        srcset="{{ desktop_image | image_url: width: 1200 }} 1200w, {{ desktop_image | image_url: width: 1800 }} 1800w, {{ desktop_image | image_url: width: 2400 }} 2400w"
+        sizes="100vw"
+        alt="{{ section.settings.image_alt | escape }}"
+        width="{{ desktop_image.width }}"
+        height="{{ desktop_image.height }}"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      >
+    {%- else -%}
+      <img
+        src="{{ 'promo-cases-desktop.webp' | asset_url }}"
+        alt="{{ section.settings.image_alt | escape }}"
+        width="2400"
+        height="1200"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      >
+    {%- endif -%}
+  </picture>
+
+  {% if has_text %}
+    <div class="mv-promo-scrim" aria-hidden="true"></div>
+
+    <div class="mv-promo-copy">
+      {% if section.settings.eyebrow != blank %}
+        <p class="mv-promo-eyebrow">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <{{ heading_tag }} id="PromoHeading-{{ section.id }}" class="mv-promo-heading">
+          {{ section.settings.heading }}
+        </{{ heading_tag }}>
+      {% endif %}
+
+      {% if section.settings.subheading != blank %}
+        <p class="mv-promo-sub">{{ section.settings.subheading }}</p>
+      {% endif %}
+
+      {% if section.settings.cta_primary_label != blank or section.settings.cta_secondary_label != blank %}
+        <div class="mv-promo-actions">
+          {% if section.settings.cta_primary_label != blank %}
+            <a class="mv-promo-button mv-promo-button--solid" href="{{ section.settings.cta_primary_link | default: routes.root_url }}">
+              <span>{{ section.settings.cta_primary_label }}</span>
+              <span class="mv-promo-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          {% endif %}
+          {% if section.settings.cta_secondary_label != blank %}
+            <a class="mv-promo-button mv-promo-button--ghost" href="{{ section.settings.cta_secondary_link | default: routes.root_url }}">
+              {{ section.settings.cta_secondary_label }}
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if section.settings.point_1 != blank or section.settings.point_2 != blank or section.settings.point_3 != blank %}
+        <ul class="mv-promo-points">
+          {% if section.settings.point_1 != blank %}<li>{{ section.settings.point_1 }}</li>{% endif %}
+          {% if section.settings.point_2 != blank %}<li>{{ section.settings.point_2 }}</li>{% endif %}
+          {% if section.settings.point_3 != blank %}<li>{{ section.settings.point_3 }}</li>{% endif %}
+        </ul>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Promo banner",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Images" },
+    { "type": "image_picker", "id": "image_desktop", "label": "Desktop image", "info": "2:1 ratio. Leave empty to use the built-in leather cases image." },
+    { "type": "image_picker", "id": "image_mobile", "label": "Mobile image", "info": "4:5 portrait. Leave empty to use the built-in one." },
+    { "type": "text", "id": "image_alt", "label": "Image description for screen readers", "default": "Two handcrafted leather phone cases in espresso and cognac" },
+    { "type": "header", "content": "Text" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Leather Phone Cases", "info": "To state compatibility, plain text only \u2014 e.g. \"Compatible with iPhone 15 Pro\". Never add the Apple logo or Apple\u0027s typeface: that implies official certification and Apple enforces it." },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Leather cases built to last." },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Timeless look. Everyday protection." },
+    { "type": "select", "id": "heading_tag", "label": "Heading level", "options": [{"value":"h1","label":"H1 - only if this is the page's main heading"},{"value":"h2","label":"H2 - recommended"}], "default": "h2" },
+    { "type": "select", "id": "text_position", "label": "Text position on desktop", "options": [{"value":"left","label":"Left"},{"value":"right","label":"Right"}], "default": "left" },
+    { "type": "header", "content": "Buttons" },
+    { "type": "text", "id": "cta_primary_label", "label": "Primary button", "default": "Explore the collection" },
+    { "type": "url", "id": "cta_primary_link", "label": "Primary link" },
+    { "type": "text", "id": "cta_secondary_label", "label": "Secondary button", "default": "Learn more" },
+    { "type": "url", "id": "cta_secondary_link", "label": "Secondary link" },
+    { "type": "header", "content": "Reassurance row" },
+    { "type": "text", "id": "point_1", "label": "Point 1", "default": "Genuine leather" },
+    { "type": "text", "id": "point_2", "label": "Point 2", "default": "Everyday protection" },
+    { "type": "text", "id": "point_3", "label": "Point 3", "default": "Precision fit" }
+  ],
+  "presets": [{ "name": "Promo banner" }]
+}
+{% endschema %}

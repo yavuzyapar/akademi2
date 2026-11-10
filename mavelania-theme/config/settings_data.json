@@ -1,0 +1,56 @@
+{
+  "current": {
+    "announcement": "Complimentary shipping on selected orders",
+    "instagram_url": "https://www.instagram.com/mavelania/",
+    "tiktok_url": "https://www.tiktok.com/@mavelaniaglobal",
+    "contact_email": "info@mavelania.com",
+    "favicon": "shopify://shop_images/mavelania-favicon-192x192.png",
+    "social_share_image": "shopify://shop_images/Mavelania_logo.jpg",
+    "default_meta_description": "Discover Mavelania's handcrafted leather bags, wallets and card holders, designed with timeless style and made for everyday use.",
+    "organization_logo": "shopify://shop_images/gerceksvg.png",
+    "organization_name": "Mavelania",
+    "organization_description": "Handcrafted leather bags, wallets and card holders with timeless design.",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "show_country_selector": true
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {}
+      },
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "settings": {}
+      }
+    },
+    "content_for_index": [],
+    "facebook_url": "https://www.facebook.com/profile.php?id=61593868683615",
+    "youtube_url": "https://www.youtube.com/@Mavelania",
+    "linkedin_url": "https://www.linkedin.com/company/144809211/",
+    "return_window_days": 14,
+    "return_free": false,
+    "legal_name": "Mavelania LLC",
+    "founding_date": "2026-08-17",
+    "brand_slogan": "Handcrafted Leather Goods",
+    "area_served": "Worldwide",
+    "knows_about": "Handcrafted leather goods, Genuine leather craftsmanship, Leather bags, Leather wallets, Leather card holders, RFID protection, Leather care",
+    "catalog_handles": "bags,wallets-purses,phone-cases,accessories",
+    "return_countries": "",
+    "delivery_note": "",
+    "legal_entity_type": "Limited Liability Company (LLC)",
+    "legal_jurisdiction": "State of Wyoming, United States",
+    "legal_filing_id": "2026-002058562",
+    "legal_filing_date": "17 August 2026",
+    "legal_registered_agent": "WY Commercial Registered Agent LLC",
+    "legal_registered_office_street": "75 E 3rd St, Ste 7",
+    "legal_registered_office_city": "Sheridan",
+    "legal_registered_office_region": "WY",
+    "legal_registered_office_postal": "82801",
+    "legal_registered_office_country": "US",
+    "legal_registered_office_country_name": "United States"
+  },
+  "presets": {}
+}
