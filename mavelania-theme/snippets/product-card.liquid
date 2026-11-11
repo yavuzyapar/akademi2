@@ -128,6 +128,10 @@
         <s>{{ product.compare_at_price | money }}</s>
       {%- endif -%}
     </p>
+    {%- if on_sale and product.price_varies == false -%}
+      {%- assign card_saving = product.compare_at_price | minus: product.price | money -%}
+      <p class="ms-card__saving">{{ 'products.you_save' | t: amount: card_saving }}</p>
+    {%- endif -%}
 
     {%- comment -%}
       Colour dots. Each one carries the image and URL of the first variant in

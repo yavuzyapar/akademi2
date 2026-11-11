@@ -1,0 +1,42 @@
+{%- comment -%}
+  "Add to your order": optional extras offered inside the buy box.
+
+  Source, in order of preference:
+    1. the product metafield custom.addons (list of products) set in the admin
+    2. the cheapest in-stock pieces of the add-on collection
+
+  Params: product, addon_collection (collection), limit
+{%- endcomment -%}
+{%- liquid
+  assign addon_limit = limit | default: 2
+  assign addon_list = product.metafields.custom.addons.value
+  assign addon_shown = 0
+-%}
+{%- capture addon_rows -%}
+  {%- if addon_list != blank -%}
+    {%- for addon in addon_list -%}
+      {%- if addon.available and addon.id != product.id and addon_shown < addon_limit -%}
+        {% render 'product-addon-row', addon: addon %}
+        {%- assign addon_shown = addon_shown | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- elsif addon_collection != blank -%}
+    {%- assign addon_sorted = addon_collection.products | sort: 'price' -%}
+    {%- for addon in addon_sorted -%}
+      {%- if addon.available and addon.id != product.id and addon_shown < addon_limit -%}
+        {% render 'product-addon-row', addon: addon %}
+        {%- assign addon_shown = addon_shown | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- if addon_shown > 0 -%}
+  <fieldset class="ms-addons" data-addons>
+    <legend>{% render 'icon', name: 'plus' %} {{ 'products.addons_title' | t }}</legend>
+    {{ addon_rows }}
+    <p class="ms-addons__total" data-order-total hidden>
+      <span>{{ 'products.order_total' | t }}</span>
+      <strong data-order-total-value></strong>
+    </p>
+  </fieldset>
+{%- endif -%}

@@ -1,0 +1,48 @@
+{%- comment -%}
+  One optional add-on on the product page: a real product with a visible
+  on/off switch. Switched on, it is added to the bag together with the main
+  product (assets/mavelania-shop.js).
+
+  Params: addon (product)
+{%- endcomment -%}
+{%- liquid
+  assign addon_variant = addon.selected_or_first_available_variant
+  assign addon_on_sale = false
+  if addon_variant.compare_at_price > addon_variant.price
+    assign addon_on_sale = true
+  endif
+-%}
+<div class="ms-addon" data-addon>
+  <a class="ms-addon__image" href="{{ addon.url }}" tabindex="-1" aria-hidden="true">
+    {%- if addon.featured_image -%}
+      {{ addon.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: '', width: 64, height: 64 }}
+    {%- endif -%}
+  </a>
+
+  <div class="ms-addon__info">
+    <a class="ms-addon__title" href="{{ addon.url }}">{{ addon.title }}</a>
+    <span class="ms-addon__price">
+      + <span data-addon-price>{{ addon_variant.price | money }}</span>
+      {%- if addon_on_sale %} <s>{{ addon_variant.compare_at_price | money }}</s>{% endif -%}
+    </span>
+
+    {%- if addon.variants.size > 1 -%}
+      <select class="ms-addon__variant" data-addon-variant aria-label="{{ addon.options.first | escape }}: {{ addon.title | escape }}">
+        {%- for variant in addon.variants -%}
+          {%- if variant.available -%}
+            <option value="{{ variant.id }}" data-price="{{ variant.price }}"{% if variant.id == addon_variant.id %} selected{% endif %}>{{ variant.title }}</option>
+          {%- endif -%}
+        {%- endfor -%}
+      </select>
+    {%- else -%}
+      <input type="hidden" data-addon-variant value="{{ addon_variant.id }}" data-price="{{ addon_variant.price }}">
+    {%- endif -%}
+  </div>
+
+  <label class="ms-toggle">
+    <input type="checkbox" data-addon-check>
+    <span class="ms-toggle__track" aria-hidden="true"></span>
+    <span class="ms-toggle__text" data-on="{{ 'products.addon_added' | t | escape }}" data-off="{{ 'products.addon_add' | t | escape }}" aria-hidden="true"></span>
+    <span class="mv-visually-hidden">{{ 'products.addon_label' | t: title: addon.title }}</span>
+  </label>
+</div>

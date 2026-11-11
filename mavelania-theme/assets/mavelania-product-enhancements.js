@@ -171,7 +171,8 @@ document.addEventListener('DOMContentLoaded',function(){
     if(!form.querySelector('[name="id"]').value)return;
     if(!window.MvCart)return;
     event.preventDefault();
-    window.MvCart.add(new FormData(form),event.submitter)
+    // addProductForm also sends any add-ons the shopper switched on.
+    (window.MvCart.addProductForm?window.MvCart.addProductForm(form,event.submitter):window.MvCart.add(new FormData(form),event.submitter))
       .catch(function(){HTMLFormElement.prototype.submit.call(form)});
   },true);
 });

@@ -782,6 +782,8 @@
     if (!root) return;
     var idInput = $('[data-variant-id]', root);
     var saveBadge = $('[data-product-save]', root);
+    var saving = $('[data-product-saving]', root);
+    var savingText = $('[data-product-saving-text]', root);
     var stock = $('[data-stock]', root);
     var stockText = $('[data-stock-text]', root);
     var price = $('[data-product-price]', root);
@@ -801,6 +803,10 @@
           var percent = Math.round((variant.compare_at_price - variant.price) * 100 / variant.compare_at_price);
           saveBadge.textContent = (root.dataset.saveLabel || 'Save [percent]%').replace('[percent]', percent);
         }
+      }
+      if (saving && savingText) {
+        saving.hidden = !onSale;
+        if (onSale) savingText.textContent = (root.dataset.savingLabel || 'You save [amount]').replace('[amount]', money(variant.compare_at_price - variant.price));
       }
       if (stock && stockText) {
         var state = variant ? (stockMap[variant.id] || (variant.available ? 'in' : 'out')) : 'out';
@@ -943,6 +949,194 @@
       var list = readRecent().filter(function (item) { return item.handle !== entry.handle; });
       list.unshift(entry);
       try { localStorage.setItem(recentKey, JSON.stringify(list.slice(0, 9))); } catch (error) {}
+    }
+  })();
+
+  /* ── Campaign bar: countdown to the real start date ────────────────── */
+  (function () {
+    var bar = $('[data-campaign]');
+    if (!bar) return;
+    var live = bar.dataset.campaign === 'live';
+    if (live) {
+      // Name the sale where reduced prices are shown.
+      $$('[data-campaign-tag]').forEach(function (tag) { tag.textContent = bar.dataset.campaignPriceLabel || ''; });
+      $$('[data-deals-title]').forEach(function (title) { if (bar.dataset.campaignDealsLabel) title.textContent = bar.dataset.campaignDealsLabel; });
+      return;
+    }
+    var clock = $('[data-countdown]', bar);
+    if (!clock) return;
+    var parts = (clock.dataset.countdown || '').split('-');
+    if (parts.length !== 3) return;
+    // Midnight at the start of the campaign day, in the shopper's own time zone.
+    var target = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])).getTime();
+    if (isNaN(target)) return;
+    var days = $('[data-countdown-days]', clock);
+    var hours = $('[data-countdown-hours]', clock);
+    var minutes = $('[data-countdown-minutes]', clock);
+    var seconds = $('[data-countdown-seconds]', clock);
+    var pad = function (value) { return (value < 10 ? '0' : '') + value; };
+    var timer = 0;
+    function tick() {
+      var left = Math.floor((target - Date.now()) / 1000);
+      if (left <= 0) { clock.hidden = true; window.clearInterval(timer); return; }
+      days.textContent = Math.floor(left / 86400);
+      hours.textContent = pad(Math.floor(left % 86400 / 3600));
+      minutes.textContent = pad(Math.floor(left % 3600 / 60));
+      seconds.textContent = pad(left % 60);
+      clock.hidden = false;
+    }
+    tick();
+    timer = window.setInterval(tick, 1000);
+  })();
+
+  /* ── Product page: add-ons, buy now, bundle ────────────────────────── */
+  (function () {
+    var root = $('[data-product-root]');
+    if (!root) return;
+    var form = $('[data-product-form]', root);
+    var idInput = $('[data-variant-id]', root);
+    var quantityInput = form && $('[name="quantity"]', form);
+    var variants = [];
+    try { variants = JSON.parse($('[data-product-json]', root).textContent) || []; } catch (error) { variants = []; }
+
+    function currentVariant() {
+      var id = idInput ? idInput.value : '';
+      return variants.filter(function (item) { return String(item.id) === String(id); })[0] || null;
+    }
+    function quantity() { return Math.max(1, parseInt(quantityInput && quantityInput.value, 10) || 1); }
+    function picked(node) {
+      // A <select> of variants, or a hidden input for single-variant products.
+      if (!node) return null;
+      var option = node.tagName === 'SELECT' ? node.options[node.selectedIndex] : node;
+      if (!option || !node.value) return null;
+      return { id: Number(node.value), price: Number(option.getAttribute('data-price')) || 0 };
+    }
+
+    // Add-ons: switched-on extras travel with the main product.
+    var addonRows = $$('[data-addon]', root);
+    var orderTotal = $('[data-order-total]', root);
+    var orderTotalValue = $('[data-order-total-value]', root);
+    function selectedAddons() {
+      return addonRows.filter(function (row) { return $('[data-addon-check]', row).checked; })
+        .map(function (row) { return picked($('[data-addon-variant]', row)); })
+        .filter(Boolean);
+    }
+    function syncAddons() {
+      addonRows.forEach(function (row) {
+        var choice = picked($('[data-addon-variant]', row));
+        var price = $('[data-addon-price]', row);
+        if (choice && price) price.textContent = money(choice.price);
+        row.classList.toggle('is-on', $('[data-addon-check]', row).checked);
+      });
+      if (!orderTotal) return;
+      var extras = selectedAddons();
+      var variant = currentVariant();
+      orderTotal.hidden = !extras.length || !variant;
+      if (extras.length && variant) {
+        var sum = variant.price * quantity();
+        extras.forEach(function (extra) { sum += extra.price; });
+        orderTotalValue.textContent = money(sum);
+      }
+    }
+    function orderItems() {
+      var variant = currentVariant();
+      if (!variant) return [];
+      var items = [{ id: variant.id, quantity: quantity() }];
+      selectedAddons().forEach(function (extra) { items.push({ id: extra.id, quantity: 1 }); });
+      return items;
+    }
+    if (form) {
+      form.addEventListener('change', function () { window.setTimeout(syncAddons, 40); });
+      syncAddons();
+    }
+
+    // Used by the product form (mavelania-product-enhancements.js).
+    if (window.MvCart) {
+      window.MvCart.addProductForm = function (productForm, button) {
+        var items = orderItems();
+        if (!items.length) return Promise.reject(new Error('No variant selected'));
+        return window.MvCart.add({ items: items }, button);
+      };
+    }
+
+    // Buy now: a cart permalink takes the shopper straight to checkout.
+    var buyNow = $('[data-buy-now]', root);
+    var addButton = $('[data-add-button]', root);
+    if (buyNow) {
+      var syncBuyNow = function () {
+        var variant = currentVariant();
+        buyNow.disabled = !variant || !variant.available;
+      };
+      buyNow.addEventListener('click', function () {
+        var items = orderItems();
+        if (!items.length) return;
+        buyNow.classList.add('is-loading');
+        window.location.href = (root.dataset.rootUrl || rootUrl) + 'cart/' + items.map(function (item) { return item.id + ':' + item.quantity; }).join(',');
+      });
+      // Coming back with the browser's back button must not leave the spinner on.
+      window.addEventListener('pageshow', function () { buyNow.classList.remove('is-loading'); });
+      if (form) form.addEventListener('change', function () { window.setTimeout(syncBuyNow, 40); });
+      syncBuyNow();
+    }
+
+    // Bundle
+    var bundle = $('[data-bundle]', root);
+    if (bundle) {
+      var bundleTotal = $('[data-bundle-total]', bundle);
+      var bundleCount = $('[data-bundle-count]', bundle);
+      var bundleAdd = $('[data-bundle-add]', bundle);
+      var mainPrice = $('[data-bundle-main-price]', bundle);
+      var mainVariant = $('[data-bundle-main-variant]', bundle);
+      var mainImage = $('[data-bundle-main] img', bundle);
+      var optional = $$('[data-bundle-item]', bundle).filter(function (item) { return !item.hasAttribute('data-bundle-main'); });
+      var bundleItems = function () {
+        var variant = currentVariant();
+        var items = variant && variant.available ? [{ id: variant.id, quantity: 1, price: variant.price }] : [];
+        optional.forEach(function (item) {
+          if (!$('[data-bundle-check]', item).checked) return;
+          var choice = picked($('[data-bundle-variant]', item));
+          if (choice) items.push({ id: choice.id, quantity: 1, price: choice.price });
+        });
+        return items;
+      };
+      var syncBundle = function () {
+        var variant = currentVariant();
+        if (variant) {
+          if (mainPrice) mainPrice.textContent = money(variant.price);
+          if (mainVariant) mainVariant.textContent = variant.title && variant.title !== 'Default Title' ? variant.title : '';
+          if (mainImage && variant.featured_image && variant.featured_image.src) {
+            mainImage.removeAttribute('srcset');
+            mainImage.src = variant.featured_image.src + (variant.featured_image.src.indexOf('?') > -1 ? '&' : '?') + 'width=320';
+          }
+        }
+        optional.forEach(function (item) {
+          var choice = picked($('[data-bundle-variant]', item));
+          var price = $('[data-bundle-price]', item);
+          if (choice && price) price.textContent = money(choice.price);
+          item.classList.toggle('is-off', !$('[data-bundle-check]', item).checked);
+        });
+        var items = bundleItems();
+        var sum = 0;
+        items.forEach(function (item) { sum += item.price; });
+        if (bundleTotal) bundleTotal.textContent = money(sum);
+        if (bundleCount) bundleCount.textContent = items.length > 1 ? (root.dataset.setCount || '[count] pieces').replace('[count]', items.length) : '';
+        if (bundleAdd) bundleAdd.disabled = items.length < 2 || !variant || !variant.available;
+      };
+      bundle.addEventListener('change', syncBundle);
+      if (form) form.addEventListener('change', function () { window.setTimeout(syncBundle, 40); });
+      if (bundleAdd) {
+        bundleAdd.addEventListener('click', function () {
+          var items = bundleItems().map(function (item) { return { id: item.id, quantity: item.quantity }; });
+          if (items.length < 2 || !window.MvCart) return;
+          var code = bundle.dataset.code;
+          // A real Shopify discount code, when the merchant configured one:
+          // visiting /discount/CODE makes checkout apply it automatically.
+          var applied = code ? fetch((root.dataset.rootUrl || rootUrl) + 'discount/' + encodeURIComponent(code), { credentials: 'same-origin' }).catch(function () {}) : Promise.resolve();
+          applied.then(function () { return window.MvCart.add({ items: items }, bundleAdd); })
+            .catch(function () { if (addButton) addButton.click(); });
+        });
+      }
+      syncBundle();
     }
   })();
 

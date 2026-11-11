@@ -23,7 +23,7 @@
     </p>
     <p class="ms-drawer__note">{{ 'cart.shipping_taxes_checkout' | t }}</p>
     <form action="{{ routes.cart_url }}" method="post">
-      <button class="ms-button ms-button--primary ms-button--block" type="submit" name="checkout">
+      <button class="ms-button ms-button--cta ms-button--block" type="submit" name="checkout">
         {% render 'icon', name: 'lock' %}
         <span>{{ 'cart.secure_checkout' | t }}</span>
       </button>
@@ -42,7 +42,7 @@
       <h2 id="QuickAddTitle" data-quick-title></h2>
       <p class="ms-quick__price" data-quick-price></p>
       <div data-quick-options></div>
-      <button class="ms-button ms-button--primary ms-button--block" type="button" data-quick-submit>{{ 'products.add_to_cart' | t }}</button>
+      <button class="ms-button ms-button--cta ms-button--block" type="button" data-quick-submit>{{ 'products.add_to_cart' | t }}</button>
       <a class="ms-quick__link" data-quick-link href="{{ routes.root_url }}">{{ 'products.view_details' | t }} {% render 'icon', name: 'arrow-right' %}</a>
     </div>
   </div>

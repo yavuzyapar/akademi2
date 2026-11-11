@@ -206,7 +206,9 @@
     "faq_all": "Read all FAQs",
     "contact_us": "Contact us",
     "shop_now": "Shop now",
-    "spot_wallets_copy": "Cut from genuine leather and kept deliberately slim, with card slots sized to hold without stretching and edges finished so they do not fray in a pocket."
+    "spot_wallets_copy": "Cut from genuine leather and kept deliberately slim, with card slots sized to hold without stretching and edges finished so they do not fray in a pocket.",
+    "deals_eyebrow": "Reduced now",
+    "deals_title": "Deals"
   },
   "navigation": {
     "accessories": "Accessories",
@@ -239,7 +241,7 @@
     "sold_out": "Sold out",
     "unavailable": "Unavailable",
     "returns_within": "{{ days }}-day returns",
-    "save_percent": "Save {{ percent }}%",
+    "save_percent": "-{{ percent }}%",
     "new": "New",
     "choose_options": "Choose options",
     "quick_add": "Quick add",
@@ -257,7 +259,30 @@
     "returns_exchanges": "Returns & exchanges",
     "leather_care": "Leather care",
     "zoom": "Zoom image",
-    "close_zoom": "Close zoomed image"
+    "close_zoom": "Close zoomed image",
+    "you_save": "You save {{ amount }}",
+    "buy_now": "Buy now",
+    "guest_checkout": "No account needed — you go straight to checkout",
+    "see_details": "See full details",
+    "info_title": "Product information",
+    "specifications": "Specifications",
+    "addons_title": "Add to your order",
+    "addon_add": "Add",
+    "addon_added": "Added",
+    "addon_label": "Add {{ title }} to this order",
+    "order_total": "Order total",
+    "bundle_eyebrow": "Bundle",
+    "bundle_title": "Buy it as a set",
+    "bundle_this_item": "This item",
+    "bundle_include": "Include {{ title }} in the set",
+    "bundle_total": "Set total",
+    "bundle_count": {
+      "one": "{{ count }} piece",
+      "other": "{{ count }} pieces"
+    },
+    "bundle_add": "Add the set to bag",
+    "bundle_note": "Untick a piece to leave it out. Each piece keeps its own return right.",
+    "bundle_code_note": "code {{ code }} is applied at checkout"
   },
   "related": {
     "eyebrow": "Selected for you",
@@ -351,5 +376,17 @@
     "success": "Thank you — you are on the list.",
     "note": "Unsubscribe at any time.",
     "eyebrow": "Newsletter"
+  },
+  "campaign": {
+    "teaser": "starts {{ date }}",
+    "live": "is live: up to {{ percent }}% off, until {{ date }}",
+    "notify": "Get notified",
+    "shop": "Shop the sale",
+    "days": "d",
+    "hours": "h",
+    "minutes": "m",
+    "seconds": "s",
+    "price_label": "{{ name }} price",
+    "deals_title": "{{ name }} deals"
   }
 }

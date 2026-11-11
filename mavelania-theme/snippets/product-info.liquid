@@ -1,0 +1,91 @@
+{%- comment -%}
+  "Product information": the description laid out for reading, with the
+  specification lines pulled into a table and the delivery / returns / care
+  answers behind clearly marked toggles.
+
+  Several product descriptions end with a dashed divider followed by lines
+  such as "Material: Leather". Everything after that divider is shown as a
+  specification table instead of loose paragraphs; the divider itself is not
+  printed. Descriptions without it are shown as written.
+
+  Params: product
+{%- endcomment -%}
+{%- liquid
+  assign desc_parts = product.description | split: '<p>---'
+  assign desc_main = desc_parts.first
+-%}
+{%- capture desc_specs -%}
+  {%- if desc_parts.size > 1 -%}
+    {%- assign spec_bits = desc_parts[1] | split: '</p>' -%}
+    {%- for bit in spec_bits offset: 1 -%}
+      {%- assign bit_text = bit | strip_html | strip -%}
+      {%- if bit_text != blank and bit_text contains ':' -%}
+        {%- assign spec_key = bit_text | split: ':' | first -%}
+        {%- assign spec_value = bit_text | remove_first: spec_key | remove_first: ':' | strip -%}
+        {%- if spec_value != blank -%}
+          <div><dt>{{ spec_key | strip }}</dt><dd>{{ spec_value }}</dd></div>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- assign desc_specs = desc_specs | strip -%}
+
+<section class="ms-info" id="ProductInfo" aria-labelledby="ProductInfoTitle">
+  <header class="ms-section__head">
+    <div>
+      <p class="ms-eyebrow">{{ 'products.details' | t }}</p>
+      <h2 id="ProductInfoTitle" class="ms-heading">{{ 'products.info_title' | t }}</h2>
+    </div>
+  </header>
+
+  <div class="ms-info__grid">
+    <div class="ms-info__main">
+      {%- if desc_main != blank -%}
+        <div class="ms-rte">{{ desc_main }}</div>
+      {%- endif -%}
+
+      {%- if desc_specs != blank -%}
+        <div class="ms-specs">
+          <h3>{{ 'products.specifications' | t }}</h3>
+          <dl>{{ desc_specs }}</dl>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="ms-info__side">
+      <div class="ms-accordion ms-accordion--boxed">
+        <details open>
+          <summary>{% render 'icon', name: 'truck' %}<span>{{ 'products.shipping_delivery' | t }}</span><i class="ms-accordion__toggle" aria-hidden="true"></i></summary>
+          <div>
+            {% if settings.delivery_note != blank %}<p>{{ settings.delivery_note }}</p>{% endif %}
+            <p>{{ 'faq.a_shipping' | t }}</p>
+            <p>{{ 'faq.a_international' | t }}</p>
+            {% if shop.shipping_policy.url != blank %}<p><a href="{{ shop.shipping_policy.url }}">{{ 'faq.shipping_link' | t }}</a></p>{% endif %}
+          </div>
+        </details>
+        <details>
+          <summary>{% render 'icon', name: 'return' %}<span>{{ 'products.returns_exchanges' | t }}</span><i class="ms-accordion__toggle" aria-hidden="true"></i></summary>
+          <div>
+            {% if settings.return_window_days > 0 %}<p><strong>{{ 'products.returns_within' | t: days: settings.return_window_days }}</strong></p>{% endif %}
+            <p>{{ 'faq.a_returns' | t }}</p>
+            {% if shop.refund_policy.url != blank %}<p><a href="{{ shop.refund_policy.url }}">{{ 'faq.refund_link' | t }}</a></p>{% endif %}
+          </div>
+        </details>
+        <details>
+          <summary>{% render 'icon', name: 'drop' %}<span>{{ 'products.leather_care' | t }}</span><i class="ms-accordion__toggle" aria-hidden="true"></i></summary>
+          <div>
+            <p>{{ 'faq.a_care' | t }}</p>
+            <p>{{ 'faq.a_variations' | t }}</p>
+          </div>
+        </details>
+        <details>
+          <summary>{% render 'icon', name: 'lock' %}<span>{{ 'faq.q_payment' | t }}</span><i class="ms-accordion__toggle" aria-hidden="true"></i></summary>
+          <div>
+            <p>{{ 'faq.a_payment' | t }}</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>

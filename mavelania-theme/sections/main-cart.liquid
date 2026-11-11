@@ -58,7 +58,7 @@
         <h2>{{ 'cart.summary' | t }}</h2>
         <p class="ms-cart__subtotal"><span>{{ 'cart.subtotal' | t }}</span><strong>{{ cart.total_price | money }}</strong></p>
         <p class="ms-cart__note">{{ 'cart.shipping_taxes_checkout' | t }}</p>
-        <button class="ms-button ms-button--primary ms-button--block" type="submit" name="checkout">
+        <button class="ms-button ms-button--cta ms-button--block" type="submit" name="checkout">
           {% render 'icon', name: 'lock' %}
           <span>{{ 'cart.secure_checkout' | t }}</span>
         </button>

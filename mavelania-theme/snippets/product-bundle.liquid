@@ -1,0 +1,85 @@
+{%- comment -%}
+  "Buy it as a set": this product plus up to two pieces that go with it, added
+  to the bag with one button.
+
+  Source, in order of preference:
+    1. the product metafield custom.bundle_products (list of products)
+    2. the first in-stock piece of each other category
+
+  The set is only presented as discounted when the merchant has entered a
+  real Shopify discount code for it (bundle_code); the code is then applied
+  at checkout. Without a code no saving is claimed.
+
+  Params: product, bundle_code, bundle_text
+{%- endcomment -%}
+{%- liquid
+  assign bundle_list = product.metafields.custom.bundle_products.value
+  assign bundle_handles = 'wallets-purses,accessories,phone-cases,bags' | split: ','
+  assign own_handles = product.collections | map: 'handle' | join: ','
+  assign bundle_shown = 0
+  assign main_variant = product.selected_or_first_available_variant
+-%}
+{%- capture bundle_rows -%}
+  {%- if bundle_list != blank -%}
+    {%- for item in bundle_list -%}
+      {%- if item.available and item.id != product.id and bundle_shown < 2 -%}
+        {% render 'product-bundle-item', item: item %}
+        {%- assign bundle_shown = bundle_shown | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- else -%}
+    {%- for handle in bundle_handles -%}
+      {%- unless own_handles contains handle -%}
+        {%- assign bundle_picked = false -%}
+        {%- for item in collections[handle].products limit: 12 -%}
+          {%- if item.available and item.id != product.id and bundle_picked == false and bundle_shown < 2 -%}
+            {% render 'product-bundle-item', item: item %}
+            {%- assign bundle_picked = true -%}
+            {%- assign bundle_shown = bundle_shown | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- if bundle_shown > 0 and product.available -%}
+  <section class="ms-bundle" aria-labelledby="BundleTitle" data-bundle{% if bundle_code != blank %} data-code="{{ bundle_code | escape }}"{% endif %}>
+    <header class="ms-bundle__head">
+      <p class="ms-eyebrow">{{ 'products.bundle_eyebrow' | t }}</p>
+      <h2 id="BundleTitle" class="ms-heading">{{ 'products.bundle_title' | t }}</h2>
+      {%- if bundle_code != blank and bundle_text != blank -%}
+        <p class="ms-bundle__offer">{% render 'icon', name: 'tag' %} {{ bundle_text }} — {{ 'products.bundle_code_note' | t: code: bundle_code }}</p>
+      {%- endif -%}
+    </header>
+
+    <div class="ms-bundle__body">
+      <ul class="ms-bundle__items">
+        <li class="ms-bundle__item is-main" data-bundle-item data-bundle-main>
+          <span class="ms-bundle__check is-locked" aria-hidden="true">{% render 'icon', name: 'check' %}</span>
+          <span class="ms-bundle__image">
+            {%- if product.featured_image -%}
+              {{ product.featured_image | image_url: width: 320 | image_tag: loading: 'lazy', alt: '' }}
+            {%- endif -%}
+          </span>
+          <span class="ms-bundle__info">
+            <span class="ms-bundle__tag">{{ 'products.bundle_this_item' | t }}</span>
+            <strong>{{ product.title }}</strong>
+            <span class="ms-bundle__variant" data-bundle-main-variant>{% unless product.has_only_default_variant %}{{ main_variant.title }}{% endunless %}</span>
+            <span class="ms-bundle__price" data-bundle-main-price>{{ main_variant.price | money }}</span>
+          </span>
+        </li>
+        {{ bundle_rows }}
+      </ul>
+
+      <div class="ms-bundle__summary">
+        <p class="ms-bundle__count" data-bundle-count></p>
+        <p class="ms-bundle__total"><span>{{ 'products.bundle_total' | t }}</span> <strong data-bundle-total></strong></p>
+        <button class="ms-button ms-button--cta ms-button--block" type="button" data-bundle-add data-label="{{ 'products.bundle_add' | t | escape }}">
+          {% render 'icon', name: 'bag' %}
+          <span>{{ 'products.bundle_add' | t }}</span>
+        </button>
+        <p class="ms-bundle__note">{{ 'products.bundle_note' | t }}</p>
+      </div>
+    </div>
+  </section>
+{%- endif -%}

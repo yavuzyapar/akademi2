@@ -27,6 +27,9 @@
   data-color-label="{{ 'products.color_label' | t | escape }}"
   data-details-label="{{ 'products.details' | t | escape }}"
   data-save-label="{{ 'products.save_percent' | t: percent: '[percent]' | escape }}"
+  data-saving-label="{{ 'products.you_save' | t: amount: '[amount]' | escape }}"
+  data-set-count="{{ 'products.bundle_count' | t: count: '[count]' | escape }}"
+  data-root-url="{{ routes.root_url }}"
   data-stock-in="{{ 'products.in_stock' | t | escape }}"
   data-stock-low="{{ 'products.low_stock' | t: count: '[count]' | escape }}"
   data-stock-out="{{ 'products.sold_out' | t | escape }}"
@@ -93,14 +96,19 @@
       {%- endif -%}
 
       <div class="ms-buybox__price">
+        <span class="ms-badge ms-badge--sale ms-badge--lg" data-product-save{% unless on_sale %} hidden{% endunless %}>{{ 'products.save_percent' | t: percent: save_pct }}</span>
         <div class="ms-price{% if on_sale %} is-sale{% endif %}" data-product-price>
           {{- current_variant.price | money -}}
           {%- if on_sale -%}
             <s>{{ current_variant.compare_at_price | money }}</s>
           {%- endif -%}
         </div>
-        <span class="ms-badge ms-badge--sale" data-product-save{% unless on_sale %} hidden{% endunless %}>{{ 'products.save_percent' | t: percent: save_pct }}</span>
       </div>
+      {%- assign saving_amount = current_variant.compare_at_price | minus: current_variant.price | money -%}
+      <p class="ms-buybox__saving" data-product-saving{% unless on_sale %} hidden{% endunless %}>
+        <span class="ms-campaign-tag" data-campaign-tag></span>
+        <span data-product-saving-text>{% if on_sale %}{{ 'products.you_save' | t: amount: saving_amount }}{% endif %}</span>
+      </p>
       <p class="ms-buybox__note">{{ 'products.shipping_at_checkout' | t }}</p>
 
       <p class="ms-stock{% unless current_variant.available %} is-out{% endunless %}" data-stock>
@@ -115,6 +123,18 @@
           {%- endif -%}
         </span>
       </p>
+
+      {%- comment -%} First bullet points of the description, so the essentials sit next to the price. {%- endcomment -%}
+      {%- assign highlight_parts = product.description | split: '<p>---' | first | split: '<li>' -%}
+      {%- if highlight_parts.size > 2 -%}
+        <ul class="ms-highlights">
+          {%- for part in highlight_parts offset: 1 limit: 4 -%}
+            {%- assign highlight = part | split: '</li>' | first | strip_html | strip -%}
+            {%- if highlight != blank -%}<li>{% render 'icon', name: 'check' %}<span>{{ highlight }}</span></li>{%- endif -%}
+          {%- endfor -%}
+        </ul>
+        <a class="ms-link ms-highlights__more" href="#ProductInfo">{{ 'products.see_details' | t }} {% render 'icon', name: 'arrow-right' %}</a>
+      {%- endif -%}
 
       {% form 'product', product, class: 'ms-buyform', data-product-form: '' %}
         {% unless product.has_only_default_variant %}
@@ -134,6 +154,14 @@
 
         <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
 
+        {%- if section.settings.show_addons -%}
+          {%- assign addon_collection = section.settings.addons_collection -%}
+          {%- if addon_collection == blank -%}
+            {%- assign addon_collection = collections['accessories'] -%}
+          {%- endif -%}
+          {% render 'product-addons', product: product, addon_collection: addon_collection, limit: section.settings.addons_limit %}
+        {%- endif -%}
+
         <div class="ms-buyform__row">
           <div class="ms-qty" data-qty>
             <label class="mv-visually-hidden" for="Quantity-{{ section.id }}">{{ 'products.quantity' | t }}</label>
@@ -142,7 +170,7 @@
             <button type="button" data-qty-plus aria-label="{{ 'products.increase_quantity' | t | escape }}">{% render 'icon', name: 'plus' %}</button>
           </div>
 
-          <button class="ms-button ms-button--primary ms-buyform__add" type="submit" name="add"{% unless current_variant.available %} disabled{% endunless %} data-add-button>
+          <button class="ms-button ms-button--cta ms-buyform__add" type="submit" name="add"{% unless current_variant.available %} disabled{% endunless %} data-add-button>
             {%- if current_variant.available -%}
               {{ 'products.add_to_cart' | t }}
             {%- else -%}
@@ -151,7 +179,19 @@
           </button>
         </div>
 
-        {{ form | payment_button }}
+        {%- comment -%}
+          Buy now sends the selected variant (and any switched-on add-ons)
+          straight to Shopify checkout through a cart permalink: the shopper
+          lands on the contact and delivery form, with no account step in
+          between as long as the store allows guest checkout.
+        {%- endcomment -%}
+        <button class="ms-button ms-button--dark ms-button--block ms-buyform__now" type="button" data-buy-now{% unless current_variant.available %} disabled{% endunless %}>
+          {% render 'icon', name: 'bolt' %}
+          <span>{{ 'products.buy_now' | t }}</span>
+        </button>
+        {%- if shop.customer_accounts_enabled == false or shop.customer_accounts_optional -%}
+          <p class="ms-buyform__guest">{% render 'icon', name: 'check' %} {{ 'products.guest_checkout' | t }}</p>
+        {%- endif -%}
       {% endform %}
 
       <button class="ms-buybox__favorite" type="button" data-favorite-product data-handle="{{ product.handle }}" data-title="{{ product.title | escape }}" data-url="{{ product.url }}" data-image="{% if product.featured_image %}{{ product.featured_image | image_url: width: 320 }}{% endif %}" data-price="{{ rv_price | escape }}" aria-label="{{ 'favorites.add' | t | escape }}" aria-pressed="false">
@@ -207,39 +247,14 @@
         {% endform %}
       {%- endif -%}
 
-      <div class="ms-accordion ms-accordion--product">
-        {% if product.description != blank %}
-          <details open>
-            <summary>{{ 'products.details' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
-            <div class="ms-rte">{{ product.description }}</div>
-          </details>
-        {% endif %}
-        <details>
-          <summary>{{ 'products.shipping_delivery' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
-          <div>
-            {% if settings.delivery_note != blank %}<p>{{ settings.delivery_note }}</p>{% endif %}
-            <p>{{ 'faq.a_shipping' | t }}</p>
-            <p>{{ 'faq.a_international' | t }}</p>
-            {% if shop.shipping_policy.url != blank %}<p><a href="{{ shop.shipping_policy.url }}">{{ 'faq.shipping_link' | t }}</a></p>{% endif %}
-          </div>
-        </details>
-        <details>
-          <summary>{{ 'products.returns_exchanges' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
-          <div>
-            <p>{{ 'faq.a_returns' | t }}</p>
-            {% if shop.refund_policy.url != blank %}<p><a href="{{ shop.refund_policy.url }}">{{ 'faq.refund_link' | t }}</a></p>{% endif %}
-          </div>
-        </details>
-        <details>
-          <summary>{{ 'products.leather_care' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
-          <div>
-            <p>{{ 'faq.a_care' | t }}</p>
-            <p>{{ 'faq.a_variations' | t }}</p>
-          </div>
-        </details>
-      </div>
     </div>
   </div>
+
+  {%- if section.settings.show_bundle -%}
+    {% render 'product-bundle', product: product, bundle_code: section.settings.bundle_code, bundle_text: section.settings.bundle_text %}
+  {%- endif -%}
+
+  {% render 'product-info', product: product %}
 
   {% assign related_collection = product.collections.first %}
   {% if related_collection != blank and related_collection.products_count > 1 %}
@@ -282,7 +297,7 @@
         <span data-stickybar-variant></span>
       </div>
       <span class="ms-stickybar__price" data-stickybar-price>{{ current_variant.price | money }}</span>
-      <button class="ms-button ms-button--primary" type="button" data-stickybar-add{% unless current_variant.available %} disabled{% endunless %}>
+      <button class="ms-button ms-button--cta" type="button" data-stickybar-add{% unless current_variant.available %} disabled{% endunless %}>
         {%- if current_variant.available -%}{{ 'products.add_to_cart' | t }}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
       </button>
     </div>
@@ -336,8 +351,17 @@
 {
   "name": "Product info",
   "settings": [
+    { "type": "header", "content": "Stock" },
     { "type": "checkbox", "id": "show_low_stock", "label": "Show \"Only X left\" when stock is low", "default": true, "info": "Uses the real tracked inventory of the selected variant. Nothing is shown for untracked products." },
-    { "type": "range", "id": "low_stock_threshold", "min": 1, "max": 10, "step": 1, "default": 5, "label": "Low stock threshold" }
+    { "type": "range", "id": "low_stock_threshold", "min": 1, "max": 10, "step": 1, "default": 5, "label": "Low stock threshold" },
+    { "type": "header", "content": "Add-ons", "info": "Optional extras with an on/off switch inside the buy box. To choose them per product, create a product metafield custom.addons (list of products)." },
+    { "type": "checkbox", "id": "show_addons", "label": "Show add-ons", "default": true },
+    { "type": "collection", "id": "addons_collection", "label": "Add-on collection", "info": "Used when a product has no custom.addons metafield. Leave empty to use Accessories. The cheapest in-stock pieces are offered." },
+    { "type": "range", "id": "addons_limit", "min": 1, "max": 4, "step": 1, "default": 2, "label": "Number of add-ons" },
+    { "type": "header", "content": "Bundle", "info": "\"Buy it as a set\". To choose the pieces per product, create a product metafield custom.bundle_products (list of products)." },
+    { "type": "checkbox", "id": "show_bundle", "label": "Show the bundle", "default": true },
+    { "type": "text", "id": "bundle_code", "label": "Bundle discount code", "info": "Optional. A discount code that exists in Shopify (Discounts). It is applied at checkout when a shopper adds the set. Leave empty to offer the set without a discount." },
+    { "type": "text", "id": "bundle_text", "label": "Bundle offer text", "info": "Shown only when a code is set, e.g. \"Save 10% on the set\". Must match what the code really does." }
   ]
 }
 {% endschema %}

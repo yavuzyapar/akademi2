@@ -1,10 +1,47 @@
 {%- comment -%}
-  Top bar. On desktop the messages sit side by side; on small screens they
-  rotate one at a time (assets/mavelania-shop.js). The first message is the
-  store-wide announcement setting; the rest are facts the store already
-  commits to elsewhere (return window, Shopify checkout).
+  Top bar. Two states:
+
+  1. Campaign (Black Friday). Before the start date it announces the date
+     with a countdown; between start and end it announces the sale. The sale
+     line and its "up to X%" figure are only shown when products really are
+     reduced (a compare-at price above the price), and X is calculated from
+     those prices, so the bar can never promise more than the catalogue holds.
+  2. Otherwise the regular messages: the store announcement, the return
+     window and secure checkout.
+
+  Dates are plain YYYY-MM-DD text settings.
 {%- endcomment -%}
 {%- liquid
+  assign campaign_state = 'off'
+  assign campaign_max = 0
+  assign campaign_count = 0
+
+  if section.settings.campaign_enabled and section.settings.campaign_start != blank
+    assign now_s = 'now' | date: '%s' | plus: 0
+    assign start_s = section.settings.campaign_start | date: '%s' | plus: 0
+    assign end_s = section.settings.campaign_end | default: section.settings.campaign_start | date: '%s' | plus: 86400
+
+    if now_s < start_s
+      assign campaign_state = 'teaser'
+    elsif now_s < end_s
+      for sale_product in collections.all.products limit: 250
+        if sale_product.compare_at_price > sale_product.price
+          assign campaign_count = campaign_count | plus: 1
+          assign sale_pct = sale_product.compare_at_price | minus: sale_product.price | times: 100.0 | divided_by: sale_product.compare_at_price | round
+          if sale_pct > campaign_max
+            assign campaign_max = sale_pct
+          endif
+        endif
+      endfor
+      if campaign_count > 0
+        assign campaign_state = 'live'
+      endif
+    endif
+  endif
+
+  assign campaign_name = section.settings.campaign_name | default: 'Black Friday'
+  assign campaign_link = section.settings.campaign_link | default: routes.all_products_collection_url
+
   assign bar_count = 0
   if settings.announcement != blank
     assign bar_count = bar_count | plus: 1
@@ -16,7 +53,40 @@
     assign bar_count = bar_count | plus: 1
   endif
 -%}
-{%- if bar_count > 0 -%}
+{%- if campaign_state != 'off' -%}
+  <div
+    class="ms-campaign ms-campaign--{{ campaign_state }}"
+    data-campaign="{{ campaign_state }}"
+    data-campaign-name="{{ campaign_name | escape }}"
+    data-campaign-start="{{ section.settings.campaign_start | escape }}"
+    data-campaign-end="{{ section.settings.campaign_end | default: section.settings.campaign_start | escape }}"
+    data-campaign-price-label="{{ 'campaign.price_label' | t: name: campaign_name | escape }}"
+    data-campaign-deals-label="{{ 'campaign.deals_title' | t: name: campaign_name | escape }}"
+  >
+    <div class="ms-campaign__inner">
+      <strong class="ms-campaign__name">{{ campaign_name }}</strong>
+
+      {%- if campaign_state == 'teaser' -%}
+        {%- assign start_label = section.settings.campaign_start | date: '%-d %B' -%}
+        <span class="ms-campaign__text">{{ 'campaign.teaser' | t: date: start_label }}</span>
+        <span class="ms-campaign__clock" data-countdown="{{ section.settings.campaign_start | escape }}" aria-hidden="true" hidden>
+          <span><b data-countdown-days>0</b> {{ 'campaign.days' | t }}</span>
+          <span><b data-countdown-hours>00</b> {{ 'campaign.hours' | t }}</span>
+          <span><b data-countdown-minutes>00</b> {{ 'campaign.minutes' | t }}</span>
+          <span><b data-countdown-seconds>00</b> {{ 'campaign.seconds' | t }}</span>
+        </span>
+        <a class="ms-campaign__link" href="#NewsletterTitle">{{ 'campaign.notify' | t }} {% render 'icon', name: 'arrow-right' %}</a>
+      {%- else -%}
+        {%- assign end_label = section.settings.campaign_end | default: section.settings.campaign_start | date: '%-d %B' -%}
+        <span class="ms-campaign__text">{{ 'campaign.live' | t: percent: campaign_max, date: end_label }}</span>
+        <a class="ms-campaign__link" href="{{ campaign_link }}">{{ 'campaign.shop' | t }} {% render 'icon', name: 'arrow-right' %}</a>
+      {%- endif -%}
+    </div>
+  </div>
+  {%- if campaign_state == 'live' -%}
+    <script>document.documentElement.classList.add('ms-campaign-live');</script>
+  {%- endif -%}
+{%- elsif bar_count > 0 -%}
   <div class="ms-topbar" data-topbar>
     <ul class="ms-topbar__list">
       {%- if settings.announcement != blank -%}
@@ -35,6 +105,13 @@
 {
   "name": "Announcement bar",
   "settings": [
+    { "type": "header", "content": "Campaign", "info": "Before the start date the bar counts down to it. From the start to the end date it announces the sale, but only if products are really reduced (compare-at price above the price)." },
+    { "type": "checkbox", "id": "campaign_enabled", "label": "Show the campaign bar", "default": true },
+    { "type": "text", "id": "campaign_name", "label": "Campaign name", "default": "Black Friday" },
+    { "type": "text", "id": "campaign_start", "label": "Start date (YYYY-MM-DD)", "default": "2026-11-27" },
+    { "type": "text", "id": "campaign_end", "label": "End date (YYYY-MM-DD)", "default": "2026-11-30", "info": "The sale line is shown up to and including this day." },
+    { "type": "url", "id": "campaign_link", "label": "Sale link", "info": "Where \"Shop the sale\" leads. Defaults to all products." },
+    { "type": "header", "content": "Regular messages" },
     { "type": "checkbox", "id": "show_returns", "label": "Show the return window", "default": true },
     { "type": "checkbox", "id": "show_secure", "label": "Show secure checkout", "default": true }
   ]

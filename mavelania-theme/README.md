@@ -24,6 +24,36 @@ canlı sitedekiyle aynı (masaüstü: amblem 49×49, yazı 180×47; mobil: 42×4
    kontrol edin, memnunsanız **Publish** deyin. Eski tema listede kalır; istediğiniz
    an geri dönebilirsiniz.
 
+## Satışa dönük katman
+
+- **Sepete ekle düğmesi** sayfadaki en dikkat çekici renkte (turuncu); ürün sayfası, sabit
+  satın alma çubuğu, mobil çubuk, hızlı ekleme, set ve ödeme düğmelerinde aynı renk.
+- **Hemen al (Buy now):** seçili varyantı (ve açılan ek ürünleri) Shopify'ın sepet
+  bağlantısıyla **doğrudan ödeme sayfasına** götürür; müşteri üyelik adımı olmadan
+  iletişim ve teslimat bilgilerini girer. Bunun çalışması için Shopify'da
+  **Settings → Customer accounts** altında girişin zorunlu olmaması gerekir; zorunluysa
+  Shopify ödeme öncesi giriş ister ve tema bunu değiştiremez. "No account needed" notu
+  yalnızca mağaza misafir ödemeye izin veriyorsa görünür.
+- **Ek ürünler (add-ons):** satın alma kutusunda aç/kapa anahtarlı gerçek ürünler. Açılanlar
+  ana ürünle birlikte sepete eklenir, toplam anında güncellenir. Varsayılan olarak
+  Accessories koleksiyonunun en uygun fiyatlı stoktaki ürünleri gelir; ürün bazında seçmek
+  için `custom.addons` (ürün listesi) metafield'ı kullanılır.
+- **Set (bundle):** "Buy it as a set": ürün + ona uyan iki parça, tek düğmeyle sepete.
+  Parçalar işaret kaldırılarak çıkarılabilir, renk seçilebilir. Ürün bazında seçmek için
+  `custom.bundle_products` metafield'ı. Sete indirim tanımlamak isterseniz Shopify'da bir
+  indirim kodu oluşturup tema düzenleyicide **Product info → Bundle discount code** alanına
+  yazın; kod ödeme sırasında uygulanır. Kod yoksa set için indirim iddia edilmez.
+- **İndirim gösterimi:** `-%` rozeti, üstü çizili eski fiyat, "You save …" tutarı (kartlarda
+  ve ürün sayfasında) ve ana sayfada indirimli ürünler şeridi. Hepsi gerçek compare-at
+  fiyatından hesaplanır; fiyat dosyaları için `../black-friday/README.md`.
+- **Black Friday şeridi:** başlangıç tarihine kadar geri sayım, kampanya süresince
+  "up to X% off" (X gerçek fiyatlardan hesaplanır). Tarihler tema düzenleyicide.
+- **Açıklama:** ürün bilgisi ayrı bir bölümde; açıklamanın ilk maddeleri fiyatın yanında
+  özet olarak, açıklamanın sonundaki "Brand: … / Material: …" satırları özellik tablosu
+  olarak gösterilir; kargo, iade, bakım ve ödeme yanıtları belirgin +/− düğmeli kutularda.
+- **Boşluklar** e-ticarete göre sıkılaştırıldı: daha kısa hero, daha küçük bölüm aralıkları,
+  geniş ekranda 5'li ürün şeridi.
+
 ## Sayfa sayfa kurgu
 
 | Alan | İçerik |
@@ -61,8 +91,8 @@ Tema hiçbir şeyi uydurmaz; veri yoksa ilgili öğe hiç görünmez.
 - **Promo banner** → görsel, metinler, düğme.
 - **Home: trust and help** → "Neden Mavelania", yaşam tarzı bandı ve SSS bloğu
   ayrı ayrı açılıp kapatılabilir.
-- **Announcement bar** → iade süresi ve güvenli ödeme mesajları.
-- **Product info** → az stok uyarısı ve eşiği.
+- **Announcement bar** → kampanya adı, başlangıç/bitiş tarihi ve bağlantısı; iade süresi ve güvenli ödeme mesajları.
+- **Product info** → az stok uyarısı ve eşiği, ek ürünler (koleksiyon, adet), set (aç/kapa, indirim kodu ve metni).
 - **Footer** → bülten kaydı (aboneler Customers altında `newsletter` etiketiyle saklanır).
 
 ## Dosyalar
@@ -73,6 +103,10 @@ Tema hiçbir şeyi uydurmaz; veri yoksa ilgili öğe hiç görünmez.
   kartları aynı haritayı kullanır.
 - `snippets/product-card.liquid` – tüm ızgara ve karusellerde kullanılan ürün kartı.
 - `snippets/cart-drawer.liquid` – sepet çekmecesi, hızlı ekleme penceresi, bildirim.
+- `snippets/product-addons.liquid`, `product-addon-row.liquid` – ek ürünler.
+- `snippets/product-bundle.liquid`, `product-bundle-item.liquid` – set.
+- `snippets/product-info.liquid` – ürün bilgisi, özellik tablosu, aç/kapa kutuları.
+- `sections/announcement-bar.liquid` – üst şerit ve kampanya (Black Friday) şeridi.
 - `snippets/trust-strip.liquid`, `payment-icons.liquid`, `rating.liquid`,
   `recently-viewed.liquid`, `icon.liquid`.
 - `sections/header.liquid` – başlık, mega menü, arama paneli, mobil menü.

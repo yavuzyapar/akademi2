@@ -61,6 +61,42 @@
   {%- comment -%} ── Reassurance strip ── {%- endcomment -%}
   {% render 'trust-strip', modifier: 'band' %}
 
+  {%- comment -%}
+    ── Deals ──
+    Only products with a compare-at price above their price. The section
+    disappears when nothing is reduced. During a live campaign the heading
+    becomes "<campaign name> deals" (assets/mavelania-shop.js).
+  {%- endcomment -%}
+  {%- assign deal_count = 0 -%}
+  {%- capture deal_cards -%}
+    {%- for product in collections.all.products limit: 250 -%}
+      {%- if product.available and product.compare_at_price > product.price and deal_count < 12 -%}
+        {% render 'product-card', product: product, heading: 'h3' %}
+        {%- assign deal_count = deal_count | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- if deal_count > 0 -%}
+    <section class="ms-section ms-deals" aria-labelledby="HomeDealsTitle">
+      <div class="ms-wrap">
+        <header class="ms-section__head">
+          <div>
+            <p class="ms-eyebrow">{{ 'home.deals_eyebrow' | t }}</p>
+            <h2 id="HomeDealsTitle" class="ms-heading" data-deals-title>{{ 'home.deals_title' | t }}</h2>
+          </div>
+          <a class="ms-link" href="{{ routes.all_products_collection_url }}">{{ 'home.view_all_products' | t }} {% render 'icon', name: 'arrow-right' %}</a>
+        </header>
+        <div class="ms-carousel" data-carousel>
+          <div class="ms-carousel__track" data-carousel-track>
+            {{ deal_cards }}
+          </div>
+          <button class="ms-carousel__arrow ms-carousel__arrow--prev" type="button" data-carousel-prev aria-label="{{ 'general.previous' | t | escape }}">{% render 'icon', name: 'arrow-left' %}</button>
+          <button class="ms-carousel__arrow ms-carousel__arrow--next" type="button" data-carousel-next aria-label="{{ 'general.next' | t | escape }}">{% render 'icon', name: 'arrow-right' %}</button>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
   {%- comment -%} ── Shop by category ── {%- endcomment -%}
   <section class="ms-section ms-wrap" aria-labelledby="HomeCategoriesTitle">
     <header class="ms-section__head ms-section__head--center">

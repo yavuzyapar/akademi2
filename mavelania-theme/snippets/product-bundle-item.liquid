@@ -1,0 +1,34 @@
+{%- comment -%}
+  One optional piece of a set (snippets/product-bundle.liquid). Ticked by
+  default; the shopper can untick it or pick another colour.
+
+  Params: item (product)
+{%- endcomment -%}
+{%- assign item_variant = item.selected_or_first_available_variant -%}
+<li class="ms-bundle__item" data-bundle-item>
+  <label class="ms-bundle__check">
+    <input type="checkbox" checked data-bundle-check>
+    <span aria-hidden="true">{% render 'icon', name: 'check' %}</span>
+    <span class="mv-visually-hidden">{{ 'products.bundle_include' | t: title: item.title }}</span>
+  </label>
+  <a class="ms-bundle__image" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
+    {%- if item.featured_image -%}
+      {{ item.featured_image | image_url: width: 320 | image_tag: loading: 'lazy', alt: '' }}
+    {%- endif -%}
+  </a>
+  <span class="ms-bundle__info">
+    <a href="{{ item.url }}"><strong>{{ item.title }}</strong></a>
+    {%- if item.variants.size > 1 -%}
+      <select class="ms-addon__variant" data-bundle-variant aria-label="{{ item.options.first | escape }}: {{ item.title | escape }}">
+        {%- for variant in item.variants -%}
+          {%- if variant.available -%}
+            <option value="{{ variant.id }}" data-price="{{ variant.price }}"{% if variant.id == item_variant.id %} selected{% endif %}>{{ variant.title }}</option>
+          {%- endif -%}
+        {%- endfor -%}
+      </select>
+    {%- else -%}
+      <input type="hidden" data-bundle-variant value="{{ item_variant.id }}" data-price="{{ item_variant.price }}">
+    {%- endif -%}
+    <span class="ms-bundle__price" data-bundle-price>{{ item_variant.price | money }}</span>
+  </span>
+</li>
