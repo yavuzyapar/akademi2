@@ -1,1 +1,17 @@
-<section class="mv-page"><header><p class="mv-eyebrow">404</p><h1>{{ 'errors.not_found_title' | t }}</h1></header><p>{{ 'errors.not_found_copy' | t }}</p><a class="mv-primary-button mv-inline-button" href="{{ routes.root_url }}">{{ 'errors.back_home' | t }}</a></section>
+<section class="mv-page ms-notfound">
+  <header><p class="mv-eyebrow">404</p><h1>{{ 'errors.not_found_title' | t }}</h1></header>
+  <p>{{ 'errors.not_found_copy' | t }}</p>
+  <div class="ms-notfound__actions">
+    <a class="ms-button ms-button--primary" href="{{ routes.all_products_collection_url }}">{{ 'navigation.shop_all' | t }} {% render 'icon', name: 'arrow-right' %}</a>
+    <a class="ms-button ms-button--outline" href="{{ routes.root_url }}">{{ 'errors.back_home' | t }}</a>
+  </div>
+  <nav class="ms-catnav" aria-label="{{ 'home.shop_by_category' | t | escape }}">
+    {%- assign notfound_handles = 'bags,wallets-purses,phone-cases,accessories' | split: ',' -%}
+    {%- for handle in notfound_handles -%}
+      {%- assign notfound_collection = collections[handle] -%}
+      {%- if notfound_collection.products_count > 0 -%}
+        <a href="{{ notfound_collection.url }}">{{ notfound_collection.title }} <span>{{ notfound_collection.products_count }}</span></a>
+      {%- endif -%}
+    {%- endfor -%}
+  </nav>
+</section>

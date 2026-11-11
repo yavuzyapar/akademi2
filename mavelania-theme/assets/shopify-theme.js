@@ -62,7 +62,7 @@
   }
   function saveFavorites() { try { localStorage.setItem(favoritesKey, JSON.stringify(favorites)); } catch (error) {} }
   function renderFavorites() {
-    document.querySelectorAll('[data-favorites-count]').forEach(function (count) { count.textContent = favorites.length; });
+    document.querySelectorAll('[data-favorites-count]').forEach(function (count) { count.textContent = favorites.length; count.classList.toggle('is-empty', !favorites.length); });
     document.querySelectorAll('[data-favorite-product]').forEach(function (button) {
       var selected = favorites.some(function (item) { return item.handle === button.dataset.handle; });
       button.setAttribute('aria-pressed', String(selected));
@@ -185,6 +185,7 @@
     var moneyFormat = root.dataset.moneyFormat || '${{amount}}';
     function formatMoney(cents) {
       if (cents == null) return '';
+      if (window.MvCart && window.MvCart.money) return window.MvCart.money(cents);
       var value = (cents / 100).toFixed(2);
       var parts = value.split('.');
       parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -225,7 +226,7 @@
       root.dispatchEvent(new CustomEvent('mv:options-updated', { bubbles: true }));
     }
  
-    var productForm = idInput.form || root.querySelector('.mv-product-form');
+    var productForm = idInput.form || root.querySelector('[data-product-form]');
     var dynamicCheckout = root.querySelector('.shopify-payment-button');
  
     function setDynamicCheckoutEnabled(enabled) {
@@ -305,7 +306,7 @@
       /* Not `disabled` — a disabled select is left out of the submission and
          the chosen country would never reach Shopify. */
       form.classList.add('is-submitting');
-      [].slice.call(document.querySelectorAll('[data-product-price], [data-mobile-price], .mv-product-card p, .mv-related-product span, .mv-cart-drawer__item strong, [data-mini-cart-total]'))
+      [].slice.call(document.querySelectorAll('[data-product-price], [data-mobile-price], .ms-card__price, .ms-line__price, .ms-mini__price, [data-mini-cart-total]'))
         .forEach(function (el) { el.classList.add('mv-price-pending'); });
       var overlay = document.getElementById('pageTransition');
       if (overlay) {
@@ -343,7 +344,7 @@
  
     function fallbackItems() {
       var items = [];
-      [].slice.call(document.querySelectorAll('.mv-nav-left a')).forEach(function (link) {
+      [].slice.call(document.querySelectorAll('[data-nav-collection]')).forEach(function (link) {
         var label = link.textContent.trim();
         if (label && link.href) items.push({ title: label, url: link.href, meta: 'Collection', kind: 'fallback' });
       });

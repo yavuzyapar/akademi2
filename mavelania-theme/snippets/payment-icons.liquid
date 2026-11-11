@@ -1,0 +1,12 @@
+{%- comment -%}
+  Payment methods actually enabled in Shopify Payments for this store.
+  Renders nothing if the list is empty, so no logo is shown that checkout
+  does not really accept.
+{%- endcomment -%}
+{%- if shop.enabled_payment_types.size > 0 -%}
+  <ul class="ms-payments" aria-label="{{ 'trust.payment_methods' | t | escape }}">
+    {%- for type in shop.enabled_payment_types -%}
+      <li>{{ type | payment_type_svg_tag: class: 'ms-payments__icon' }}</li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}

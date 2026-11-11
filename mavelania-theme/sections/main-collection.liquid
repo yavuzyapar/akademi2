@@ -1,4 +1,4 @@
-<section class="mv-collection">
+<section class="mv-collection ms-collection">
   {% liquid
     assign hero_title = collection.title
     assign hero_description = collection.description | strip_html
@@ -74,13 +74,20 @@
     endif
   %}
   {%- if hero_metafield != blank -%}{%- assign hero_asset = blank -%}{%- endif -%}
-  <header class="mv-collection-hero mv-collection-hero--{{ hero_variant }}">
-    <div class="mv-collection-hero-copy">
-      <p class="mv-eyebrow">{{ 'collections.eyebrow' | t }}</p>
-      <h1>{{ hero_title }}</h1>
-      {% if hero_description != blank %}<p class="mv-collection-intro">{{ hero_description }}</p>{% endif %}
+  <nav class="ms-breadcrumb" aria-label="{{ 'general.breadcrumb' | t | escape }}">
+    <a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{{ hero_title }}</span>
+  </nav>
+
+  <header class="ms-collection-hero ms-collection-hero--{{ hero_variant }}">
+    <div class="ms-collection-hero__copy">
+      <p class="ms-eyebrow">{{ 'collections.eyebrow' | t }}</p>
+      <h1 class="ms-heading">{{ hero_title }}</h1>
+      {% if hero_description != blank %}<p class="ms-collection-hero__intro">{{ hero_description }}</p>{% endif %}
+      <p class="ms-collection-hero__count">{{ 'home.product_count' | t: count: collection.products_count }}</p>
     </div>
-    <div class="mv-collection-hero-image">
+    <div class="ms-collection-hero__image">
       {% if hero_metafield != blank %}
         {{ hero_metafield | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '600,900,1200,1600', sizes: '(max-width: 900px) 100vw, 58vw', alt: hero_title }}
       {% elsif hero_asset != blank %}
@@ -92,6 +99,18 @@
       {% endif %}
     </div>
   </header>
+
+  {%- comment -%} Jump straight to another category without going back to the menu. {%- endcomment -%}
+  <nav class="ms-catnav" aria-label="{{ 'home.shop_by_category' | t | escape }}">
+    <a href="{{ routes.all_products_collection_url }}"{% if collection.handle == 'all' %} aria-current="page"{% endif %}>{{ 'navigation.shop_all' | t }}</a>
+    {%- assign catnav_handles = 'bags,wallets-purses,phone-cases,accessories' | split: ',' -%}
+    {%- for catnav_handle in catnav_handles -%}
+      {%- assign catnav_collection = collections[catnav_handle] -%}
+      {%- if catnav_collection.products_count > 0 -%}
+        <a href="{{ catnav_collection.url }}"{% if collection.handle == catnav_handle %} aria-current="page"{% endif %}>{{ catnav_collection.title }} <span>{{ catnav_collection.products_count }}</span></a>
+      {%- endif -%}
+    {%- endfor -%}
+  </nav>
   {%- liquid
     assign has_filters = false
     for filter in collection.filters
@@ -170,17 +189,13 @@
   {% endif %}
 
   {% paginate collection.products by section.settings.products_per_page %}
-    <div class="mv-product-grid-list">
+    <div class="ms-grid ms-grid--collection">
       {% for product in collection.products %}
-        <article class="mv-product-card">
-          <button class="mv-card-favorite" type="button" data-favorite-product data-handle="{{ product.handle }}" data-title="{{ product.title | escape }}" data-url="{{ product.url }}" data-image="{% if product.featured_image %}{{ product.featured_image | image_url: width: 320 }}{% endif %}" data-price="{{ product.price | money | escape }}" aria-label="{{ 'favorites.add' | t | escape }}" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.6 2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 17l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8Z"/></svg></button>
-          <a href="{{ product.url | within: collection }}">
-            <span class="mv-card-image">{% if product.featured_image %}{{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '320,480,640,900', sizes: '(max-width: 900px) 48vw, 32vw', alt: product.title }}{% endif %}</span>
-            {% if product.type != blank %}<small>{{ product.type }}</small>{% endif %}
-            <h2>{{ product.title }}</h2>
-            <p>{% if product.price_varies %}{% assign formatted_price = product.price_min | money %}{{ 'products.from_price' | t: price: formatted_price }}{% else %}{{ product.price | money }}{% endif %}</p>
-          </a>
-        </article>
+        {%- if forloop.index <= 4 -%}
+          {% render 'product-card', product: product, heading: 'h2', within: collection, eager: true %}
+        {%- else -%}
+          {% render 'product-card', product: product, heading: 'h2', within: collection %}
+        {%- endif -%}
       {% endfor %}
     </div>
     {% if paginate.pages > 1 %}

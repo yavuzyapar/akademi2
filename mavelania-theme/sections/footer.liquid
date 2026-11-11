@@ -1,188 +1,117 @@
-<footer class="mv-footer mv-footer-simple">
-  <div class="mv-footer-simple-grid">
-    <a
-      class="mv-footer-logo"
-      href="{{ routes.root_url }}"
-      aria-label="{{ shop.name }} — {{ 'general.home' | t | escape }}"
-    >
-      <span class="brandlock">
-        <span class="em">
-          <img
-            src="{{ 'mavelania-logo-original-transparent.png' | asset_url }}"
-            alt=""
-            width="54"
-            height="54"
-          >
+{%- liquid
+  assign faq_page = pages['faq']
+  if faq_page == blank
+    assign faq_page = pages['sss']
+  endif
+  assign about_page = pages['about']
+  if about_page == blank
+    assign about_page = pages['about-us']
+  endif
+  assign contact_page = pages['contact']
+  assign legal_page = pages['company-details']
+  assign contact_email = settings.contact_email | default: 'info@mavelania.com'
+-%}
+{%- unless request.page_type == 'index' -%}
+  <div class="ms-prefooter">
+    <div class="ms-wrap">
+      {% render 'trust-strip' %}
+    </div>
+  </div>
+{%- endunless -%}
+
+<footer class="ms-footer">
+  <div class="ms-footer__top ms-wrap">
+    <div class="ms-footer__brand">
+      <a class="ms-brand ms-brand--footer" href="{{ routes.root_url }}" aria-label="{{ shop.name }} — {{ 'general.home' | t | escape }}">
+        <img src="{{ 'mavelania-logo-original-transparent.png' | asset_url }}" alt="" width="46" height="46" loading="lazy">
+        <span class="ms-brand__name">
+          <span class="ms-brand__script">Mavelania</span>
+          <span class="ms-brand__tag">{{ 'general.brand_signature' | t }}</span>
         </span>
-        <span class="script">Mavelania</span>
-      </span>
-
-      <span class="mv-brand-signature" lang="en">
-        Handcrafted Leather Goods
-      </span>
-    </a>
-
-    <nav
-      class="mv-footer-column mv-footer-collections"
-      aria-label="{{ 'footer.collections' | t | escape }}"
-    >
-      <p class="mv-footer-label">{{ 'footer.collections' | t }}</p>
-
-      {%- assign nav_count = collections['bags'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/bags">
-        {{ 'navigation.bags' | t }}
-      </a>{%- endif -%}
-
-      {%- assign nav_count = collections['wallets-purses'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/wallets-purses">
-        {{ 'navigation.wallets_purses' | t }}
-      </a>{%- endif -%}
-
-      {%- assign nav_count = collections['phone-cases'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/phone-cases">
-        {{ 'navigation.phone_cases' | t }}
-      </a>{%- endif -%}
-
-      <a href="{{ routes.root_url }}collections/accessories">
-        {{ 'navigation.accessories' | t }}
       </a>
-    </nav>
+      <p>{{ settings.organization_description | default: shop.description }}</p>
 
-    <div class="mv-footer-column mv-footer-contact">
-      <p class="mv-footer-label">{{ 'footer.contact' | t }}</p>
-
-      <div class="mv-footer-social-icons">
-        <a
-          class="mv-social-link"
-          href="mailto:{{ settings.contact_email | default: 'info@mavelania.com' | escape }}"
-          aria-label="{{ 'footer.email_us' | t }}: {{ settings.contact_email | default: 'info@mavelania.com' | escape }}"
-          title="{{ settings.contact_email | default: 'info@mavelania.com' | escape }}"
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-            <path d="M4 7l8 6 8-6"></path>
-          </svg>
+      <div class="ms-social">
+        <a href="{{ settings.instagram_url | default: 'https://www.instagram.com/mavelania/' }}" target="_blank" rel="noopener noreferrer" aria-label="Mavelania Instagram" title="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg>
         </a>
-
-        <a
-          class="mv-social-link"
-          href="{{ settings.instagram_url | default: 'https://www.instagram.com/mavelania/' }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Mavelania Instagram"
-          title="Instagram"
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="5"></rect>
-            <circle cx="12" cy="12" r="4"></circle>
-            <circle cx="17.5" cy="6.5" r="1"></circle>
-          </svg>
+        <a href="{{ settings.tiktok_url | default: 'https://www.tiktok.com/@mavelaniaglobal' }}" target="_blank" rel="noopener noreferrer" aria-label="Mavelania TikTok" title="TikTok">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4v10.2a4.4 4.4 0 1 1-3.4-4.3"></path><path d="M14 4c1.2 2.7 3 4 5.5 4.2"></path></svg>
         </a>
-
-        <a
-          class="mv-social-link"
-          href="{{ settings.tiktok_url | default: 'https://www.tiktok.com/@mavelaniaglobal' }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Mavelania TikTok"
-          title="TikTok"
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M14 4v10.2a4.4 4.4 0 1 1-3.4-4.3"></path>
-            <path d="M14 4c1.2 2.7 3 4 5.5 4.2"></path>
-          </svg>
+        <a href="{{ settings.facebook_url | default: 'https://www.facebook.com/profile.php?id=61593868683615' }}" target="_blank" rel="noopener noreferrer" aria-label="Mavelania Facebook" title="Facebook">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v5h4v-5h3l1-4h-4V9c0-.6.4-1 1-1z"></path></svg>
         </a>
-
-        <a
-          class="mv-social-link"
-          href="{{ settings.facebook_url | default: 'https://www.facebook.com/profile.php?id=61593868683615' }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Mavelania Facebook"
-          title="Facebook"
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v5h4v-5h3l1-4h-4V9c0-.6.4-1 1-1z"></path>
-          </svg>
+        <a href="{{ settings.youtube_url | default: 'https://www.youtube.com/@Mavelania' }}" target="_blank" rel="noopener noreferrer" aria-label="Mavelania YouTube" title="YouTube">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="4"></rect><path d="M10 9l5 3-5 3z"></path></svg>
         </a>
-
-        <a
-          class="mv-social-link"
-          href="{{ settings.youtube_url | default: 'https://www.youtube.com/@Mavelania' }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Mavelania YouTube"
-          title="YouTube"
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="2.5" y="5" width="19" height="14" rx="4"></rect>
-            <path d="M10 9l5 3-5 3z"></path>
-          </svg>
-        </a>
-
-        <a
-          class="mv-social-link"
-          href="{{ settings.linkedin_url | default: 'https://www.linkedin.com/company/144809211/' }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Mavelania LinkedIn"
-          title="LinkedIn"
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-            <circle cx="8" cy="8" r="1"></circle>
-            <path d="M7 11v6"></path>
-            <path d="M11 17v-6"></path>
-            <path d="M11 14c0-1.7 1.2-3 3-3s3 1.3 3 3v3"></path>
-          </svg>
+        <a href="{{ settings.linkedin_url | default: 'https://www.linkedin.com/company/144809211/' }}" target="_blank" rel="noopener noreferrer" aria-label="Mavelania LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8" cy="8" r="1"></circle><path d="M7 11v6"></path><path d="M11 17v-6"></path><path d="M11 14c0-1.7 1.2-3 3-3s3 1.3 3 3v3"></path></svg>
         </a>
       </div>
     </div>
+
+    <nav class="ms-footer__col" aria-label="{{ 'footer.shop' | t | escape }}">
+      <p class="ms-footer__label">{{ 'footer.shop' | t }}</p>
+      {%- assign nav_count = collections['bags'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/bags">{{ 'navigation.bags' | t }}</a>{%- endif -%}
+      {%- assign nav_count = collections['wallets-purses'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/wallets-purses">{{ 'navigation.wallets_purses' | t }}</a>{%- endif -%}
+      {%- assign nav_count = collections['phone-cases'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/phone-cases">{{ 'navigation.phone_cases' | t }}</a>{%- endif -%}
+      <a href="{{ routes.root_url }}collections/accessories">{{ 'navigation.accessories' | t }}</a>
+      <a href="{{ routes.all_products_collection_url }}">{{ 'navigation.shop_all' | t }}</a>
+    </nav>
+
+    <nav class="ms-footer__col" aria-label="{{ 'footer.help' | t | escape }}">
+      <p class="ms-footer__label">{{ 'footer.help' | t }}</p>
+      {%- if faq_page != blank -%}<a href="{{ faq_page.url }}">{{ 'navigation.faq' | t }}</a>{%- endif -%}
+      {%- if shop.shipping_policy.body != blank -%}<a href="{{ shop.shipping_policy.url }}">{{ 'footer.shipping_policy' | t }}</a>{%- endif -%}
+      {%- if shop.refund_policy.body != blank -%}<a href="{{ shop.refund_policy.url }}">{{ 'footer.refund_policy' | t }}</a>{%- endif -%}
+      {%- if contact_page != blank -%}<a href="{{ contact_page.url }}">{{ 'footer.contact' | t }}</a>{%- endif -%}
+      <a href="mailto:{{ contact_email | escape }}">{{ contact_email }}</a>
+    </nav>
+
+    <nav class="ms-footer__col" aria-label="{{ 'footer.company' | t | escape }}">
+      <p class="ms-footer__label">{{ 'footer.company' | t }}</p>
+      {%- if about_page != blank -%}<a href="{{ about_page.url }}">{{ 'navigation.about' | t }}</a>{%- endif -%}
+      {%- if legal_page != blank -%}<a href="{{ legal_page.url }}">{{ 'footer.legal' | t }}</a>{%- endif -%}
+      {%- if shop.privacy_policy.body != blank -%}<a href="{{ shop.privacy_policy.url }}">{{ 'footer.privacy' | t }}</a>{%- endif -%}
+      {%- if shop.terms_of_service.body != blank -%}<a href="{{ shop.terms_of_service.url }}">{{ 'footer.terms' | t }}</a>{%- endif -%}
+    </nav>
+
+    {%- if section.settings.show_newsletter -%}
+      <div class="ms-footer__news">
+        <p class="ms-footer__label">{{ 'newsletter.title' | t }}</p>
+        <p>{{ 'newsletter.copy' | t }}</p>
+        {% form 'customer', id: 'FooterNewsletter', class: 'ms-newsletter' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          {%- if form.posted_successfully? -%}
+            <p class="ms-newsletter__ok" role="status">{% render 'icon', name: 'check' %} {{ 'newsletter.success' | t }}</p>
+          {%- else -%}
+            <label class="mv-visually-hidden" for="FooterNewsletterEmail">{{ 'contact.form_email' | t }}</label>
+            <div class="ms-newsletter__row">
+              <input id="FooterNewsletterEmail" type="email" name="contact[email]" value="{{ form.email }}" placeholder="{{ 'contact.form_email' | t | escape }}" autocomplete="email" autocapitalize="off" required>
+              <button type="submit">{{ 'newsletter.submit' | t }}</button>
+            </div>
+            {%- if form.errors -%}
+              <p class="ms-newsletter__error" role="alert">{{ form.errors | default_errors }}</p>
+            {%- endif -%}
+            <p class="ms-newsletter__note">{{ 'newsletter.note' | t }}</p>
+          {%- endif -%}
+        {% endform %}
+      </div>
+    {%- endif -%}
   </div>
 
-  <div class="mv-footer-simple-bottom">
-    <span>
-      © {{ 'now' | date: '%Y' }} Mavelania LLC.
-      {{ 'footer.rights_reserved' | t }}
-    </span>
-
-    <span class="mv-footer-policy-links">
-      {% if shop.privacy_policy.body != blank %}
-        <a href="{{ shop.privacy_policy.url }}">
-          {{ 'footer.privacy' | t }}
-        </a>
-      {% endif %}
-
-      {% if shop.terms_of_service.body != blank %}
-        <a href="{{ shop.terms_of_service.url }}">
-          {{ 'footer.terms' | t }}
-        </a>
-      {% endif %}
-
-      {% if shop.refund_policy.body != blank %}
-        <a href="{{ shop.refund_policy.url }}">
-          {{ 'footer.refund_policy' | t }}
-        </a>
-      {% endif %}
-
-      {% if shop.shipping_policy.body != blank %}
-        <a href="{{ shop.shipping_policy.url }}">
-          {{ 'footer.shipping_policy' | t }}
-        </a>
-      {% endif %}
-
-      {% assign legal_page = pages['company-details'] %}
-
-      {% if legal_page != blank %}
-        <a href="{{ legal_page.url }}">
-          {{ 'footer.legal' | t }}
-        </a>
-      {% endif %}
-    </span>
+  <div class="ms-footer__bottom ms-wrap">
+    <span>© {{ 'now' | date: '%Y' }} {{ settings.legal_name | default: 'Mavelania LLC' }}. {{ 'footer.rights_reserved' | t }}</span>
+    <span class="ms-footer__secure">{% render 'icon', name: 'lock' %} {{ 'trust.secure_checkout_short' | t }}</span>
+    {% render 'payment-icons' %}
   </div>
 </footer>
-
 
 {% schema %}
 {
   "name": "Footer",
-  "settings": []
+  "settings": [
+    { "type": "checkbox", "id": "show_newsletter", "label": "Show the newsletter sign-up", "default": true, "info": "Subscribers are saved under Customers in the Shopify admin with the tag \"newsletter\"." }
+  ]
 }
 {% endschema %}

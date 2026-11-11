@@ -1,6 +1,42 @@
-{% if settings.announcement != blank %}
-  <div class="mv-announcement">{{ settings.announcement | escape }}</div>
-{% endif %}
+{%- comment -%}
+  Top bar. On desktop the messages sit side by side; on small screens they
+  rotate one at a time (assets/mavelania-shop.js). The first message is the
+  store-wide announcement setting; the rest are facts the store already
+  commits to elsewhere (return window, Shopify checkout).
+{%- endcomment -%}
+{%- liquid
+  assign bar_count = 0
+  if settings.announcement != blank
+    assign bar_count = bar_count | plus: 1
+  endif
+  if section.settings.show_returns and settings.return_window_days > 0
+    assign bar_count = bar_count | plus: 1
+  endif
+  if section.settings.show_secure
+    assign bar_count = bar_count | plus: 1
+  endif
+-%}
+{%- if bar_count > 0 -%}
+  <div class="ms-topbar" data-topbar>
+    <ul class="ms-topbar__list">
+      {%- if settings.announcement != blank -%}
+        <li class="is-active">{% render 'icon', name: 'truck' %}<span>{{ settings.announcement | escape }}</span></li>
+      {%- endif -%}
+      {%- if section.settings.show_returns and settings.return_window_days > 0 -%}
+        <li{% if settings.announcement == blank %} class="is-active"{% endif %}>{% render 'icon', name: 'return' %}<span>{{ 'products.returns_within' | t: days: settings.return_window_days }}</span></li>
+      {%- endif -%}
+      {%- if section.settings.show_secure -%}
+        <li{% if bar_count == 1 %} class="is-active"{% endif %}>{% render 'icon', name: 'lock' %}<span>{{ 'trust.secure_checkout_short' | t }}</span></li>
+      {%- endif -%}
+    </ul>
+  </div>
+{%- endif -%}
 {% schema %}
-{"name":"Announcement bar","settings":[]}
+{
+  "name": "Announcement bar",
+  "settings": [
+    { "type": "checkbox", "id": "show_returns", "label": "Show the return window", "default": true },
+    { "type": "checkbox", "id": "show_secure", "label": "Show secure checkout", "default": true }
+  ]
+}
 {% endschema %}

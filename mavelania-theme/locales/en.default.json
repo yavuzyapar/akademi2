@@ -12,7 +12,15 @@
     "title": "Your Bag",
     "total": "Total",
     "update": "Update bag",
-    "your_bag": "Your bag"
+    "your_bag": "Your bag",
+    "added": "Added to your bag",
+    "adding": "Adding…",
+    "error": "Sorry, that could not be added. Please try again.",
+    "secure_checkout": "Secure checkout",
+    "view_bag": "View bag",
+    "start_shopping": "Start shopping",
+    "summary": "Order summary",
+    "support": "Questions? Write to"
   },
   "collections": {
     "bags": {
@@ -119,7 +127,10 @@
     "rights_reserved": "All rights reserved.",
     "shipping_policy": "Shipping Policy",
     "terms": "Terms of Use",
-    "email_us": "Email us"
+    "email_us": "Email us",
+    "shop": "Shop",
+    "help": "Help",
+    "company": "Company"
   },
   "general": {
     "account": "My account",
@@ -138,7 +149,10 @@
     "skip_to_content": "Skip to content",
     "apply": "Apply",
     "country_region": "Country/region",
-    "brand_signature": "Handcrafted Leather Goods"
+    "brand_signature": "Handcrafted Leather Goods",
+    "breadcrumb": "Breadcrumb",
+    "search_long_placeholder": "Search bags, wallets, phone cases…",
+    "account_short": "Account"
   },
   "home": {
     "discover_collection": "Discover the collection",
@@ -148,12 +162,45 @@
     "hero_previous": "Previous image",
     "hero_resume": "Resume image motion",
     "hero_selector": "Hero image selection",
-    "featured_eyebrow": "Mavelania",
+    "featured_eyebrow": "Selected for you",
     "brand_motto": "La Pelle Viva",
     "brand_tagline_html": "Leather lives with time.<br>We only give it meaning.",
     "rfid_heading": "Our wallets feature RFID protection",
     "collection_heading": "Mavelania Collection",
-    "phone_cases_and_accessories": "Phone cases and accessories"
+    "phone_cases_and_accessories": "Phone cases and accessories",
+    "shop_by_category": "Shop by category",
+    "hero_label": "Highlights",
+    "shop_phone_cases": "Shop phone cases",
+    "shop_bags": "Shop bags",
+    "shop_wallets": "Shop wallets",
+    "tile_wallets_eyebrow": "RFID protection on selected models",
+    "tile_accessories_eyebrow": "Small leather goods",
+    "view_all_products": "View all products",
+    "product_count": {
+      "one": "{{ count }} product",
+      "other": "{{ count }} products"
+    },
+    "tabs_heading": "Shop the collection",
+    "view_all_count": "View all {{ count }}",
+    "view_all_in": "View all {{ title }}",
+    "why_eyebrow": "Why Mavelania",
+    "why_heading": "Made by hand, from genuine leather",
+    "why_leather_title": "Genuine leather",
+    "why_leather_copy": "Every piece is cut from genuine leather. Grain and tone vary from hide to hide, so no two are identical.",
+    "why_craft_title": "Finished by hand",
+    "why_craft_copy": "Cutting, construction and edge finishing are done by hand. Edges are sealed and burnished, not left raw.",
+    "why_rfid_title": "RFID protection where stated",
+    "why_rfid_copy": "Selected wallets and card holders carry a shielding layer. Where it is present, the product page says so.",
+    "why_company_title": "A registered company",
+    "why_company_copy": "{{ name }} is registered in the {{ place }}. Our company details are public.",
+    "why_company_copy_short": "{{ name }} is a registered company. Our company details are public.",
+    "about_link": "About Mavelania",
+    "banner_heading": "Made to be carried every day",
+    "banner_copy": "Leather bags that soften and darken along the lines where you handle them most.",
+    "faq_eyebrow": "Help",
+    "faq_heading": "Questions before you order?",
+    "faq_all": "Read all FAQs",
+    "contact_us": "Contact us"
   },
   "navigation": {
     "accessories": "Accessories",
@@ -162,7 +209,10 @@
     "faq": "FAQ",
     "phone_cases": "Phone Cases",
     "sign_in_register": "Sign in / Register",
-    "wallets_purses": "Wallets / Purses"
+    "wallets_purses": "Wallets / Purses",
+    "shop_all": "Shop All",
+    "about": "About",
+    "wallets_short": "Wallets"
   },
   "products": {
     "add_to_cart": "Add to bag",
@@ -182,7 +232,24 @@
     "show_image": "Show image {{ index }}",
     "sold_out": "Sold out",
     "unavailable": "Unavailable",
-    "returns_within": "{{ days }}-day returns"
+    "returns_within": "{{ days }}-day returns",
+    "save_percent": "Save {{ percent }}%",
+    "new": "New",
+    "choose_options": "Choose options",
+    "quick_add": "Quick add",
+    "select_option": "Select {{ name }}",
+    "color_count": {
+      "one": "{{ count }} color",
+      "other": "{{ count }} colors"
+    },
+    "rating_label": "Rated {{ rating }} out of {{ max }} from {{ count }} reviews",
+    "view_details": "View full details",
+    "in_stock": "In stock",
+    "low_stock": "Only {{ count }} left in stock",
+    "ship_to": "Deliver to",
+    "shipping_delivery": "Shipping & delivery",
+    "returns_exchanges": "Returns & exchanges",
+    "leather_care": "Leather care"
   },
   "related": {
     "eyebrow": "Selected for you",
@@ -252,5 +319,28 @@
   },
   "blog": {
     "empty": "No entries yet."
+  },
+  "trust": {
+    "label": "Why shop with Mavelania",
+    "leather_title": "Genuine leather",
+    "leather_copy": "Cut and finished by hand",
+    "payment_title": "Secure checkout",
+    "payment_copy": "Encrypted payments through Shopify",
+    "returns_copy": "Conditions are set out in our refund policy.",
+    "shipping_title": "International delivery",
+    "shipping_copy": "Options and costs shown at checkout",
+    "payment_methods": "Accepted payment methods",
+    "secure_checkout_short": "Secure checkout"
+  },
+  "recent": {
+    "eyebrow": "Pick up where you left off",
+    "title": "Recently viewed"
+  },
+  "newsletter": {
+    "title": "Stay in the loop",
+    "copy": "New pieces and leather-care notes, sent occasionally.",
+    "submit": "Subscribe",
+    "success": "Thank you — you are on the list.",
+    "note": "Unsubscribe at any time."
   }
 }

@@ -1,0 +1,20 @@
+{%- comment -%}
+  Star rating from the standard Shopify reviews.rating metafield, which review
+  apps (Judge.me, Shopify-compatible apps and others) fill in automatically.
+  Renders nothing until a product has real reviews.
+
+  Params: rating (rating metafield value), count, compact, link
+{%- endcomment -%}
+{%- liquid
+  assign rating_value = rating.rating | default: rating
+  assign rating_max = rating.scale_max | default: 5
+  assign rating_pct = rating_value | times: 100.0 | divided_by: rating_max | round
+  assign rating_label = rating_value | round: 1
+  assign rating_count_n = count | plus: 0
+-%}
+{%- if rating_value != blank and rating_count_n > 0 -%}
+  <{% if link != blank %}a href="{{ link }}"{% else %}p{% endif %} class="ms-rating{% if compact %} ms-rating--compact{% endif %}" aria-label="{{ 'products.rating_label' | t: rating: rating_label, max: rating_max, count: rating_count_n | escape }}">
+    <span class="ms-rating__stars" style="--rating:{{ rating_pct }}%" aria-hidden="true"></span>
+    <span class="ms-rating__text" aria-hidden="true">{{ rating_label }} <span>({{ rating_count_n }})</span></span>
+  </{% if link != blank %}a{% else %}p{% endif %}>
+{%- endif -%}

@@ -1,13 +1,51 @@
-<section class="mv-product" data-product-root data-add-label="{{ 'products.add_to_cart' | t | escape }}" data-sold-label="{{ 'products.sold_out' | t | escape }}" data-unavailable-label="{{ 'products.unavailable' | t | escape }}" data-money-format="{{ shop.money_format | escape }}" data-cart-add-url="{{ routes.cart_add_url }}" data-cart-url="{{ routes.cart_url }}" data-quantity-label="{{ 'cart.quantity' | t | escape }}" data-empty-label="{{ 'cart.empty' | t | escape }}" data-color-label="{{ 'products.color_label' | t | escape }}" data-details-label="{{ 'products.details' | t | escape }}" data-trust1="{{ 'products.genuine_leather' | t | escape }}" data-trust2="{{ 'products.handmade' | t | escape }}" data-trust3="{{ 'products.secure_payment_short' | t | escape }}">
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count.value
 
-  <nav class="mv-breadcrumb">
+  assign on_sale = false
+  assign save_pct = 0
+  if current_variant.compare_at_price > current_variant.price
+    assign on_sale = true
+    assign save_pct = current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round
+  endif
+
+  assign low_stock_limit = section.settings.low_stock_threshold | default: 5
+  assign rv_price = product.price | money
+-%}
+<section
+  class="mv-product ms-product"
+  data-product-root
+  data-add-label="{{ 'products.add_to_cart' | t | escape }}"
+  data-sold-label="{{ 'products.sold_out' | t | escape }}"
+  data-unavailable-label="{{ 'products.unavailable' | t | escape }}"
+  data-money-format="{{ shop.money_format | escape }}"
+  data-cart-add-url="{{ routes.cart_add_url }}"
+  data-cart-url="{{ routes.cart_url }}"
+  data-quantity-label="{{ 'cart.quantity' | t | escape }}"
+  data-empty-label="{{ 'cart.empty' | t | escape }}"
+  data-color-label="{{ 'products.color_label' | t | escape }}"
+  data-details-label="{{ 'products.details' | t | escape }}"
+  data-save-label="{{ 'products.save_percent' | t: percent: '[percent]' | escape }}"
+  data-stock-in="{{ 'products.in_stock' | t | escape }}"
+  data-stock-low="{{ 'products.low_stock' | t: count: '[count]' | escape }}"
+  data-stock-out="{{ 'products.sold_out' | t | escape }}"
+  data-rv-handle="{{ product.handle }}"
+  data-rv-title="{{ product.title | escape }}"
+  data-rv-url="{{ product.url }}"
+  data-rv-image="{% if product.featured_image %}{{ product.featured_image | image_url: width: 480 }}{% endif %}"
+  data-rv-price="{{ rv_price | escape }}"
+>
+
+  <nav class="ms-breadcrumb" aria-label="{{ 'general.breadcrumb' | t | escape }}">
     <a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a>
-    <span>/</span>
-    {% if collection %}
-      <a href="{{ collection.url }}">{{ collection.title }}</a>
-      <span>/</span>
+    <span aria-hidden="true">/</span>
+    {%- assign crumb_collection = collection | default: product.collections.first -%}
+    {% if crumb_collection %}
+      <a href="{{ crumb_collection.url }}">{{ crumb_collection.title }}</a>
+      <span aria-hidden="true">/</span>
     {% endif %}
-    <span>{{ product.title }}</span>
+    <span aria-current="page">{{ product.title }}</span>
   </nav>
 
   <div class="mv-product-grid">
@@ -39,144 +77,182 @@
       {% endif %}
     </div>
 
-    <div class="mv-product-info">
+    <div class="ms-buybox">
       {% if product.type != blank %}
-        <p class="mv-eyebrow">{{ product.type }}</p>
+        <p class="ms-eyebrow">{{ product.type }}</p>
       {% endif %}
 
       <h1>{{ product.title }}</h1>
 
-      {% if product.vendor != blank %}
-        <p class="mv-vendor">{{ product.vendor }}</p>
-      {% endif %}
+      {%- if rating != blank -%}
+        {% render 'rating', rating: rating, count: rating_count %}
+      {%- endif -%}
 
-      <div class="mv-price" data-product-price>
-        {{ product.selected_or_first_available_variant.price | money }}
-        {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
-          <s>{{ product.selected_or_first_available_variant.compare_at_price | money }}</s>
-        {% endif %}
+      <div class="ms-buybox__price">
+        <div class="ms-price{% if on_sale %} is-sale{% endif %}" data-product-price>
+          {{- current_variant.price | money -}}
+          {%- if on_sale -%}
+            <s>{{ current_variant.compare_at_price | money }}</s>
+          {%- endif -%}
+        </div>
+        <span class="ms-badge ms-badge--sale" data-product-save{% unless on_sale %} hidden{% endunless %}>{{ 'products.save_percent' | t: percent: save_pct }}</span>
       </div>
+      <p class="ms-buybox__note">{{ 'products.shipping_at_checkout' | t }}</p>
 
-      {% form 'localization', id: 'ProductCountryForm', class: 'mv-product-localization' %}
-        <input type="hidden" name="return_to" value="{{ request.path }}">
+      <p class="ms-stock{% unless current_variant.available %} is-out{% endunless %}" data-stock>
+        <i aria-hidden="true"></i>
+        <span data-stock-text>
+          {%- if current_variant.available == false -%}
+            {{ 'products.sold_out' | t }}
+          {%- elsif section.settings.show_low_stock and current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'deny' and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= low_stock_limit -%}
+            {{ 'products.low_stock' | t: count: current_variant.inventory_quantity }}
+          {%- else -%}
+            {{ 'products.in_stock' | t }}
+          {%- endif -%}
+        </span>
+      </p>
 
-        <label for="ProductCountrySelector">
-          Ülke / Para Birimi
-        </label>
-
-        <select
-          id="ProductCountrySelector"
-          name="country_code"
-          data-localization-select
-          aria-label="Ülke ve para birimi seçin"
-        >
-          {% for country in localization.available_countries %}
-            <option
-              value="{{ country.iso_code }}"
-              {% if country.iso_code == localization.country.iso_code %}selected{% endif %}
-            >
-              {{ country.name }} · {{ country.currency.iso_code }}
-            </option>
+      {% form 'product', product, class: 'ms-buyform', data-product-form: '' %}
+        {% unless product.has_only_default_variant %}
+          {% for option in product.options_with_values %}
+            <div class="ms-buyform__option">
+              <label for="Option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
+              <select id="Option-{{ section.id }}-{{ forloop.index0 }}" data-option-index="{{ forloop.index0 }}">
+                {% for value in option.values %}
+                  <option value="{{ value | escape }}"{% if option.selected_value == value %} selected{% endif %}>
+                    {{ value }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
           {% endfor %}
-        </select>
+        {% endunless %}
+
+        <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
+
+        <div class="ms-buyform__row">
+          <div class="ms-qty" data-qty>
+            <label class="mv-visually-hidden" for="Quantity-{{ section.id }}">{{ 'products.quantity' | t }}</label>
+            <button type="button" data-qty-minus aria-label="{{ 'products.decrease_quantity' | t | escape }}">{% render 'icon', name: 'minus' %}</button>
+            <input id="Quantity-{{ section.id }}" type="number" name="quantity" min="1" value="1" inputmode="numeric">
+            <button type="button" data-qty-plus aria-label="{{ 'products.increase_quantity' | t | escape }}">{% render 'icon', name: 'plus' %}</button>
+          </div>
+
+          <button class="ms-button ms-button--primary ms-buyform__add" type="submit" name="add"{% unless current_variant.available %} disabled{% endunless %} data-add-button>
+            {%- if current_variant.available -%}
+              {{ 'products.add_to_cart' | t }}
+            {%- else -%}
+              {{ 'products.sold_out' | t }}
+            {%- endif -%}
+          </button>
+        </div>
+
+        {{ form | payment_button }}
       {% endform %}
 
-      <button class="mv-product-favorite" type="button" data-favorite-product data-handle="{{ product.handle }}" data-title="{{ product.title | escape }}" data-url="{{ product.url }}" data-image="{% if product.featured_image %}{{ product.featured_image | image_url: width: 320 }}{% endif %}" data-price="{{ product.price | money | escape }}" aria-label="{{ 'favorites.add' | t | escape }}" aria-pressed="false">
+      <button class="ms-buybox__favorite" type="button" data-favorite-product data-handle="{{ product.handle }}" data-title="{{ product.title | escape }}" data-url="{{ product.url }}" data-image="{% if product.featured_image %}{{ product.featured_image | image_url: width: 320 }}{% endif %}" data-price="{{ rv_price | escape }}" aria-label="{{ 'favorites.add' | t | escape }}" aria-pressed="false">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="m12 3.6 2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 17l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8Z"/>
         </svg>
         <span>{{ 'favorites.add' | t }}</span>
       </button>
 
-      {% if product.description != blank %}
-        <div class="mv-product-description">{{ product.description }}</div>
-      {% endif %}
+      <ul class="ms-assure">
+        <li>
+          {% render 'icon', name: 'lock' %}
+          <div><strong>{{ 'products.secure_payment' | t }}</strong><span>{{ 'products.shopify_protected' | t }}</span></div>
+        </li>
+        {% if settings.return_window_days > 0 %}
+          <li>
+            {% render 'icon', name: 'return' %}
+            <div>
+              <strong>{{ 'products.returns_within' | t: days: settings.return_window_days }}</strong>
+              <span>
+                {{- 'trust.returns_copy' | t -}}
+                {%- if shop.refund_policy.url != blank %} <a href="{{ shop.refund_policy.url }}">{{ 'faq.refund_link' | t }}</a>{% endif -%}
+              </span>
+            </div>
+          </li>
+        {% endif %}
+        <li>
+          {% render 'icon', name: 'truck' %}
+          <div>
+            <strong>{{ 'trust.shipping_title' | t }}</strong>
+            <span>{% if settings.delivery_note != blank %}{{ settings.delivery_note }}{% else %}{{ 'trust.shipping_copy' | t }}{% endif %}</span>
+          </div>
+        </li>
+        <li>
+          {% render 'icon', name: 'leather' %}
+          <div><strong>{{ 'trust.leather_title' | t }}</strong><span>{{ 'trust.leather_copy' | t }}</span></div>
+        </li>
+      </ul>
 
-      {% form 'product', product, class: 'mv-product-form' %}
-        {% unless product.has_only_default_variant %}
-          {% for option in product.options_with_values %}
-            <label for="Option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
-            <select id="Option-{{ section.id }}-{{ forloop.index0 }}" data-option-index="{{ forloop.index0 }}">
-              {% for value in option.values %}
-                <option value="{{ value | escape }}"{% if option.selected_value == value %} selected{% endif %}>
-                  {{ value }}
-                </option>
-              {% endfor %}
-            </select>
-          {% endfor %}
-        {% endunless %}
+      {% render 'payment-icons' %}
 
-        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
+      {%- if localization.available_countries.size > 1 -%}
+        {% form 'localization', id: 'ProductCountryForm', class: 'ms-buybox__country' %}
+          <input type="hidden" name="return_to" value="{{ request.path }}">
+          <label for="ProductCountrySelector">{% render 'icon', name: 'globe' %} {{ 'products.ship_to' | t }}</label>
+          <select id="ProductCountrySelector" name="country_code" data-localization-select aria-label="{{ 'general.country_region' | t | escape }}">
+            {% for country in localization.available_countries %}
+              <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>
+                {{ country.name }} · {{ country.currency.iso_code }}
+              </option>
+            {% endfor %}
+          </select>
+        {% endform %}
+      {%- endif -%}
 
-        <label for="Quantity-{{ section.id }}">{{ 'products.quantity' | t }}</label>
-        <input id="Quantity-{{ section.id }}" type="number" name="quantity" min="1" value="1">
-
-        <button class="mv-primary-button" type="submit" name="add"{% unless product.selected_or_first_available_variant.available %} disabled{% endunless %} data-add-button>
-          {% if product.selected_or_first_available_variant.available %}
-            {{ 'products.add_to_cart' | t }}
-          {% else %}
-            {{ 'products.sold_out' | t }}
-          {% endif %}
-        </button>
-
-        {{ form | payment_button }}
-      {% endform %}
-
-      {%- liquid
-        assign show_delivery = false
-        if settings.return_window_days > 0 or settings.delivery_note != blank
-          assign show_delivery = true
-        endif
-      -%}
-
-      {% if show_delivery %}
-        <ul class="mv-delivery-facts">
-          {% if settings.delivery_note != blank %}
-            <li>{{ settings.delivery_note }}</li>
-          {% endif %}
-
-          {% if settings.return_window_days > 0 %}
-            <li>
-              {{ 'products.returns_within' | t: days: settings.return_window_days }}
-              {%- if shop.refund_policy.url != blank %}
-                <a href="{{ shop.refund_policy.url }}">{{ 'faq.refund_link' | t }}</a>
-              {% endif -%}
-            </li>
-          {% endif %}
-        </ul>
-      {% endif %}
-
-      <div class="mv-assurance">
-        <span>{{ 'products.secure_payment' | t }}</span>
-        <span>{{ 'products.shipping_at_checkout' | t }}</span>
-        <span>{{ 'products.shopify_protected' | t }}</span>
+      <div class="ms-accordion ms-accordion--product">
+        {% if product.description != blank %}
+          <details open>
+            <summary>{{ 'products.details' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
+            <div class="ms-rte">{{ product.description }}</div>
+          </details>
+        {% endif %}
+        <details>
+          <summary>{{ 'products.shipping_delivery' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
+          <div>
+            {% if settings.delivery_note != blank %}<p>{{ settings.delivery_note }}</p>{% endif %}
+            <p>{{ 'faq.a_shipping' | t }}</p>
+            <p>{{ 'faq.a_international' | t }}</p>
+            {% if shop.shipping_policy.url != blank %}<p><a href="{{ shop.shipping_policy.url }}">{{ 'faq.shipping_link' | t }}</a></p>{% endif %}
+          </div>
+        </details>
+        <details>
+          <summary>{{ 'products.returns_exchanges' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
+          <div>
+            <p>{{ 'faq.a_returns' | t }}</p>
+            {% if shop.refund_policy.url != blank %}<p><a href="{{ shop.refund_policy.url }}">{{ 'faq.refund_link' | t }}</a></p>{% endif %}
+          </div>
+        </details>
+        <details>
+          <summary>{{ 'products.leather_care' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
+          <div>
+            <p>{{ 'faq.a_care' | t }}</p>
+            <p>{{ 'faq.a_variations' | t }}</p>
+          </div>
+        </details>
       </div>
     </div>
   </div>
 
   {% assign related_collection = product.collections.first %}
-  {% if related_collection != blank %}
-    <section class="mv-related-products" aria-labelledby="RelatedProductsTitle">
-      {% assign related_count = 0 %}
+  {% if related_collection != blank and related_collection.products_count > 1 %}
+    <section class="ms-section ms-related" aria-labelledby="RelatedProductsTitle">
+      <header class="ms-section__head">
+        <div>
+          <p class="ms-eyebrow">{{ 'related.eyebrow' | t }}</p>
+          <h2 id="RelatedProductsTitle" class="ms-heading">{{ 'related.title' | t }}</h2>
+        </div>
+        <a class="ms-link" href="{{ related_collection.url }}">{{ 'home.view_all_in' | t: title: related_collection.title }} {% render 'icon', name: 'arrow-right' %}</a>
+      </header>
 
-      <div class="mv-related-products__head">
-        <p>{{ 'related.eyebrow' | t }}</p>
-        <h2 id="RelatedProductsTitle">{{ 'related.title' | t }}</h2>
-      </div>
-
-      <div class="mv-related-products__grid">
+      <div class="ms-rail ms-rail--four">
+        {% assign related_count = 0 %}
         {% for related_product in related_collection.products limit: 5 %}
           {% unless related_product.id == product.id %}
-            <a class="mv-related-product" href="{{ related_product.url }}">
-              {% if related_product.featured_image != blank %}
-                <img src="{{ related_product.featured_image | image_url: width: 600 }}" alt="{{ related_product.featured_image.alt | default: related_product.title | escape }}" loading="lazy" width="600" height="750">
-              {% endif %}
-              <div>
-                <h3>{{ related_product.title }}</h3>
-                <span>{{ related_product.price | money }}</span>
-              </div>
-            </a>
-
+            {% render 'product-card', product: related_product, heading: 'h3' %}
             {% assign related_count = related_count | plus: 1 %}
             {% if related_count == 4 %}{% break %}{% endif %}
           {% endunless %}
@@ -185,7 +261,9 @@
     </section>
   {% endif %}
 
-  {% assign mobile_variant = product.selected_or_first_available_variant %}
+  {% render 'recently-viewed', exclude: product.handle %}
+
+  {% assign mobile_variant = current_variant %}
 
   <div class="mv-mobile-buybar" data-mobile-buybar data-currency="{{ cart.currency.iso_code }}" data-locale="{{ request.locale.iso_code }}">
     <strong data-mobile-price>{{ mobile_variant.price | money }}</strong>
@@ -205,65 +283,36 @@
     </button>
   </div>
 
-  <aside class="mv-cart-drawer" id="MiniCartDrawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="MiniCartTitle" tabindex="-1">
-    <div class="mv-cart-drawer__head">
-      <span id="MiniCartTitle">{{ 'cart.your_bag' | t }}</span>
-      <button type="button" data-mini-cart-close aria-label="{{ 'general.close' | t | escape }}">×</button>
-    </div>
-
-    <div class="mv-cart-drawer__items" data-mini-cart-items></div>
-
-    <div class="mv-cart-drawer__foot">
-      <div>
-        <small>{{ 'cart.total' | t }}</small>
-        <strong data-mini-cart-total></strong>
-      </div>
-      <a href="{{ routes.cart_url }}" class="mv-cart-drawer__checkout">{{ 'cart.checkout_now' | t }}</a>
-      <button type="button" data-mini-cart-close class="mv-cart-drawer__continue">{{ 'cart.continue_shopping' | t }}</button>
-    </div>
-  </aside>
-
-  <button class="mv-cart-backdrop" type="button" data-mini-cart-close aria-label="{{ 'cart.close_bag' | t | escape }}" hidden></button>
-
   <script type="application/json" data-product-json>{{ product.variants | json }}</script>
+
+  {%- comment -%}
+    Stock state per variant. Only the state is sent to the browser, and a
+    count is included only for variants that Shopify tracks and that are
+    genuinely down to the last few pieces.
+  {%- endcomment -%}
+  <script type="application/json" data-stock-json>
+    {
+      {%- for variant in product.variants -%}
+        "{{ variant.id }}":
+        {%- if variant.available == false -%}
+          "out"
+        {%- elsif section.settings.show_low_stock and variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' and variant.inventory_quantity > 0 and variant.inventory_quantity <= low_stock_limit -%}
+          "low:{{ variant.inventory_quantity }}"
+        {%- else -%}
+          "in"
+        {%- endif -%}
+        {%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    }
+  </script>
 </section>
-
-<style>
-  .mv-product-localization {
-    width: 100%;
-    margin: 20px 0;
-    padding: 18px 0;
-    border-top: 1px solid #e2ddd6;
-    border-bottom: 1px solid #e2ddd6;
-  }
-
-  .mv-product-localization label {
-    display: block;
-    margin-bottom: 9px;
-    color: #5f564d;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-  }
-
-  .mv-product-localization select {
-    width: 100%;
-    max-width: 285px;
-    min-height: 48px;
-    padding: 0 40px 0 14px;
-    border: 1px solid #d4cec6;
-    border-radius: 0;
-    background-color: #fff;
-    color: #2e2925;
-    font: inherit;
-    cursor: pointer;
-  }
-</style>
 
 {% schema %}
 {
   "name": "Product info",
-  "settings": []
+  "settings": [
+    { "type": "checkbox", "id": "show_low_stock", "label": "Show \"Only X left\" when stock is low", "default": true, "info": "Uses the real tracked inventory of the selected variant. Nothing is shown for untracked products." },
+    { "type": "range", "id": "low_stock_threshold", "min": 1, "max": 10, "step": 1, "default": 5, "label": "Low stock threshold" }
+  ]
 }
 {% endschema %}

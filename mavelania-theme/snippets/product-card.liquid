@@ -1,0 +1,131 @@
+{%- comment -%}
+  Shop product card, shared by the home page, collections, search and
+  related products so every grid shows the same information.
+
+  Params
+    product        (required)
+    heading        'h2' | 'h3' (default 'h3')
+    within         collection object, keeps the collection in the product URL
+    sizes          img sizes attribute
+    eager          true for cards above the fold
+
+  Everything shown is read from the product itself: the sale badge needs a
+  real compare-at price, "New" needs a recent publish date, "Sold out" comes
+  from inventory and the stars only render when a reviews app has written the
+  standard reviews.rating metafield. Nothing here is invented.
+{%- endcomment -%}
+{%- liquid
+  assign heading_tag = heading | default: 'h3'
+  assign img_sizes = sizes | default: '(max-width: 700px) 46vw, (max-width: 1200px) 30vw, 22vw'
+  assign card_url = product.url
+  if within != blank
+    assign card_url = product.url | within: within
+  endif
+
+  assign on_sale = false
+  assign save_pct = 0
+  if product.compare_at_price > product.price
+    assign on_sale = true
+    assign save_pct = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round
+  endif
+
+  assign is_new = false
+  assign now_s = 'now' | date: '%s' | plus: 0
+  assign published_s = product.published_at | date: '%s' | plus: 0
+  assign age_days = now_s | minus: published_s | divided_by: 86400
+  if published_s > 0 and age_days < 30
+    assign is_new = true
+  endif
+
+  assign color_count = 0
+  for option in product.options_with_values
+    assign option_name = option.name | downcase
+    if option_name == 'color' or option_name == 'colour'
+      assign color_count = option.values.size
+    endif
+  endfor
+
+  assign single_variant = false
+  if product.variants.size == 1
+    assign single_variant = true
+  endif
+
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count.value | default: product.metafields.reviews.rating_count
+  assign second_image = product.images[1]
+  assign fav_price = product.price | money
+-%}
+<article class="ms-card{% unless product.available %} is-sold-out{% endunless %}" data-product-card>
+  <div class="ms-card__media">
+    <a class="ms-card__image" href="{{ card_url }}" tabindex="-1" aria-hidden="true">
+      {%- if product.featured_image -%}
+        {%- if eager -%}
+          {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'eager', widths: '240,360,480,640,900', sizes: img_sizes, alt: '', class: 'ms-card__img' }}
+        {%- else -%}
+          {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '240,360,480,640,900', sizes: img_sizes, alt: '', class: 'ms-card__img' }}
+        {%- endif -%}
+        {%- if second_image -%}
+          {{ second_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '240,360,480,640,900', sizes: img_sizes, alt: '', class: 'ms-card__img ms-card__img--hover' }}
+        {%- endif -%}
+      {%- endif -%}
+    </a>
+
+    <div class="ms-card__badges">
+      {%- unless product.available -%}
+        <span class="ms-badge ms-badge--muted">{{ 'products.sold_out' | t }}</span>
+      {%- else -%}
+        {%- if on_sale and save_pct > 0 -%}
+          <span class="ms-badge ms-badge--sale">{{ 'products.save_percent' | t: percent: save_pct }}</span>
+        {%- endif -%}
+        {%- if is_new -%}
+          <span class="ms-badge ms-badge--new">{{ 'products.new' | t }}</span>
+        {%- endif -%}
+      {%- endunless -%}
+    </div>
+
+    <button class="ms-card__favorite" type="button" data-favorite-product data-handle="{{ product.handle }}" data-title="{{ product.title | escape }}" data-url="{{ product.url }}" data-image="{% if product.featured_image %}{{ product.featured_image | image_url: width: 320 }}{% endif %}" data-price="{{ fav_price | escape }}" aria-label="{{ 'favorites.add' | t | escape }}" aria-pressed="false">
+      {% render 'icon', name: 'star' %}
+    </button>
+
+    {%- if product.available -%}
+      <button
+        class="ms-card__quick"
+        type="button"
+        data-quick-add
+        data-handle="{{ product.handle }}"
+        {% if single_variant %}data-variant-id="{{ product.variants.first.id }}"{% endif %}
+        aria-label="{% if single_variant %}{{ 'products.add_to_cart' | t | escape }}{% else %}{{ 'products.choose_options' | t | escape }}{% endif %}: {{ product.title | escape }}"
+      >
+        {% render 'icon', name: 'bag' %}
+        <span>{% if single_variant %}{{ 'products.add_to_cart' | t }}{% else %}{{ 'products.quick_add' | t }}{% endif %}</span>
+      </button>
+    {%- endif -%}
+  </div>
+
+  <div class="ms-card__body">
+    {%- if product.type != blank -%}
+      <p class="ms-card__type">{{ product.type }}</p>
+    {%- endif -%}
+    <{{ heading_tag }} class="ms-card__title"><a href="{{ card_url }}">{{ product.title }}</a></{{ heading_tag }}>
+
+    {%- if rating != blank -%}
+      {% render 'rating', rating: rating, count: rating_count, compact: true %}
+    {%- endif -%}
+
+    <p class="ms-card__price{% if on_sale %} is-sale{% endif %}">
+      {%- if product.price_varies -%}
+        {%- assign from_price = product.price_min | money -%}
+        <span class="ms-card__price-now">{{ 'products.from_price' | t: price: from_price }}</span>
+      {%- else -%}
+        <span class="ms-card__price-now">{{ product.price | money }}</span>
+      {%- endif -%}
+      {%- if on_sale -%}
+        <s>{{ product.compare_at_price | money }}</s>
+      {%- endif -%}
+    </p>
+
+    {%- if color_count > 1 -%}
+      <p class="ms-card__meta">{{ 'products.color_count' | t: count: color_count }}</p>
+    {%- endif -%}
+  </div>
+</article>

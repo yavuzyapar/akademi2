@@ -1,4 +1,4 @@
-<section class="mv-search">
+<section class="mv-search ms-search-page">
   <h1>{{ 'search.title' | t }}</h1>
   <form action="{{ routes.search_url }}" method="get" role="search">
     <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t | escape }}" aria-label="{{ 'search.title' | t | escape }}">
@@ -9,16 +9,10 @@
       <p class="mv-search-empty">{{ 'search.no_results' | t }}</p>
     {% else %}
       {% paginate search.results by 24 %}
-        <div class="mv-product-grid-list">
+        <div class="ms-grid ms-grid--collection">
           {% for item in search.results %}
             {% if item.object_type == 'product' %}
-              <article class="mv-product-card">
-                <a href="{{ item.url }}">
-                  <span class="mv-card-image">{% if item.featured_image %}{{ item.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '320,480,640,900', sizes: '(max-width: 900px) 48vw, 32vw', alt: item.title }}{% endif %}</span>
-                  <h2>{{ item.title }}</h2>
-                  <p>{{ item.price | money }}</p>
-                </a>
-              </article>
+              {% render 'product-card', product: item, heading: 'h2' %}
             {% else %}
               <article class="mv-search-page-result">
                 <a href="{{ item.url }}">

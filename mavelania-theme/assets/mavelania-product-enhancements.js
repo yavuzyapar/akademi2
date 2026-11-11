@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded',function(){
-  var form=document.querySelector('.mv-product-form'),root=document.querySelector('[data-product-root]');if(!form||!root)return;
+  var form=document.querySelector('[data-product-form]'),root=document.querySelector('[data-product-root]');if(!form||!root)return;
   if(root.dataset.mvEnhanced)return;root.dataset.mvEnhanced='1';
   var moneyFormat=root.dataset.moneyFormat||'${{amount}}';
   function mvMoney(cents){
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded',function(){
     });
   }catch(e){mvPriceMap={}}
   var description=root.querySelector('.mv-product-description');
-  if(description){var trust=document.createElement('div');trust.className='mv-product-trust';trust.innerHTML='<span>'+(root.dataset.trust1||'Genuine leather')+'</span><span>'+(root.dataset.trust2||'Handmade')+'</span><span>'+(root.dataset.trust3||'Secure payment')+'</span>';var details=document.createElement('details');details.className='mv-product-details';details.innerHTML='<summary>'+(root.dataset.detailsLabel||'Details')+'</summary>';description.parentNode.insertBefore(trust,description);description.parentNode.insertBefore(details,description);details.appendChild(description)}
+  if(description&&!description.closest('details')){var trust=document.createElement('div');trust.className='mv-product-trust';trust.innerHTML='<span>'+(root.dataset.trust1||'Genuine leather')+'</span><span>'+(root.dataset.trust2||'Handmade')+'</span><span>'+(root.dataset.trust3||'Secure payment')+'</span>';var details=document.createElement('details');details.className='mv-product-details';details.innerHTML='<summary>'+(root.dataset.detailsLabel||'Details')+'</summary>';description.parentNode.insertBefore(trust,description);description.parentNode.insertBefore(details,description);details.appendChild(description)}
   var select=Array.prototype.slice.call(form.querySelectorAll('select')).find(function(item){var label=form.querySelector('label[for="'+item.id+'"]');return /color|colour/i.test(item.name+' '+(label?label.textContent:''))});
   if(select){
     var colors={
@@ -268,82 +268,15 @@ document.addEventListener('DOMContentLoaded',function(){
   }
   var bar=document.querySelector('[data-mobile-buybar]'),quantity=form.querySelector('[name="quantity"]'),variantId=form.querySelector('[name="id"]'),add=form.querySelector('[data-add-button]');
   if(bar&&quantity&&variantId&&add){var variants=JSON.parse(root.querySelector('[data-product-json]').textContent),price=bar.querySelector('[data-mobile-price]'),out=bar.querySelector('[data-mobile-quantity]'),minus=bar.querySelector('[data-mobile-decrease]'),plus=bar.querySelector('[data-mobile-increase]'),mobileAdd=bar.querySelector('[data-mobile-add]'),formatter=null;var syncBar=function(){var v=variants.find(function(item){return String(item.id)===String(variantId.value)});var q=Math.max(1,parseInt(quantity.value,10)||1);if(!v){price.textContent='';out.textContent=q;minus.disabled=q===1;mobileAdd.disabled=true;mobileAdd.textContent=root.dataset.unavailableLabel||root.dataset.soldLabel||'Unavailable';return}price.textContent=q===1&&mvPriceMap[v.id]&&mvPriceMap[v.id].price?mvPriceMap[v.id].price:mvMoney(v.price*q);out.textContent=q;minus.disabled=q===1;mobileAdd.disabled=!v.available||add.disabled;mobileAdd.textContent=mobileAdd.disabled?(root.dataset.soldLabel||'Sold out'):(root.dataset.addLabel||'Add to bag')};minus.addEventListener('click',function(){quantity.value=Math.max(1,(parseInt(quantity.value,10)||1)-1);quantity.dispatchEvent(new Event('change',{bubbles:true}))});plus.addEventListener('click',function(){quantity.value=(parseInt(quantity.value,10)||1)+1;quantity.dispatchEvent(new Event('change',{bubbles:true}))});mobileAdd.addEventListener('click',function(){add.click()});form.addEventListener('change',function(){setTimeout(syncBar,40)});syncBar()}
-  var drawer=document.getElementById('MiniCartDrawer'),backdrop=document.querySelector('.mv-cart-backdrop');
-  if(!drawer||!backdrop)return;
-  var itemsBox=drawer.querySelector('[data-mini-cart-items]'),
-      total=drawer.querySelector('[data-mini-cart-total]'),
-      cartUrl=(root.dataset.cartUrl||'/cart'),
-      addUrl=(root.dataset.cartAddUrl||'/cart/add'),
-      quantityLabel=root.dataset.quantityLabel||'Quantity',
-      emptyLabel=root.dataset.emptyLabel||'Your bag is empty.',
-      lastFocused=null;
-
-  function el(tag,className,text){
-    var node=document.createElement(tag);
-    if(className)node.className=className;
-    if(text!==undefined&&text!==null)node.textContent=text;
-    return node;
-  }
-
-  function renderCart(cart){
-    itemsBox.textContent='';
-    var items=(cart&&cart.items)||[];
-    if(!items.length){itemsBox.appendChild(el('p','mv-cart-drawer__empty',emptyLabel));}
-    items.forEach(function(item){
-      var row=el('div','mv-cart-drawer__item');
-      if(item.image){
-        var img=document.createElement('img');
-        img.src=item.image;img.alt='';img.width=82;img.height=100;img.loading='lazy';
-        row.appendChild(img);
-      }
-      var body=el('div');
-      body.appendChild(el('h3',null,item.product_title));
-      if(item.variant_title&&item.variant_title!=='Default Title')body.appendChild(el('p',null,item.variant_title));
-      body.appendChild(el('p',null,quantityLabel+' '+item.quantity));
-      body.appendChild(el('strong',null,mvMoney(item.final_line_price)));
-      row.appendChild(body);
-      itemsBox.appendChild(row);
-    });
-    if(total)total.textContent=mvMoney((cart&&cart.total_price)||0);
-  }
-
-  function refreshCart(){
-    return fetch(cartUrl+'.js',{headers:{Accept:'application/json'}})
-      .then(function(res){return res.json()})
-      .then(renderCart)
-      .catch(function(){});
-  }
-
-  function closeDrawer(){
-    drawer.classList.remove('is-open');
-    drawer.setAttribute('aria-hidden','true');
-    backdrop.hidden=true;
-    document.body.classList.remove('mv-cart-open');
-    if(lastFocused&&typeof lastFocused.focus==='function')lastFocused.focus();
-  }
-  function openDrawer(){
-    lastFocused=document.activeElement;
-    drawer.classList.add('is-open');
-    drawer.setAttribute('aria-hidden','false');
-    backdrop.hidden=false;
-    document.body.classList.add('mv-cart-open');
-    var first=drawer.querySelector('[data-mini-cart-close]');
-    setTimeout(function(){(first||drawer).focus({preventScroll:true})},40);
-  }
-  document.querySelectorAll('[data-mini-cart-close]').forEach(function(button){button.addEventListener('click',closeDrawer)});
-  document.addEventListener('keydown',function(event){
-    if(!drawer.classList.contains('is-open'))return;
-    if(event.key==='Escape'){event.preventDefault();closeDrawer();return}
-    if(window.mvTrapFocus)window.mvTrapFocus(drawer,event);
-  });
-
+  // The bag drawer lives in snippets/cart-drawer.liquid and is driven by
+  // mavelania-shop.js (window.MvCart) so it works on every page, not only
+  // here. Without it the form simply posts to the bag page as usual.
   form.addEventListener('submit',function(event){
     if(!event.submitter||event.submitter.name!=='add')return;
     if(!form.querySelector('[name="id"]').value)return;
+    if(!window.MvCart)return;
     event.preventDefault();
-    fetch(addUrl+'.js',{method:'POST',headers:{Accept:'application/json'},body:new FormData(form)})
-      .then(function(res){if(!res.ok)throw Error();return res.json()})
-      .then(function(){openDrawer();return refreshCart()})
+    window.MvCart.add(new FormData(form),event.submitter)
       .catch(function(){HTMLFormElement.prototype.submit.call(form)});
   },true);
 });
@@ -443,7 +376,7 @@ thumbs.forEach(function (thumb, index) {
   var root = document.querySelector('[data-product-root]');
   if (!root) return;
 
-  var form = root.querySelector('.mv-product-form');
+  var form = root.querySelector('[data-product-form]');
   var thumbs = [].slice.call(root.querySelectorAll('.mv-product-thumbs [data-media-group]'));
   if (!form || thumbs.length < 2) return;
 

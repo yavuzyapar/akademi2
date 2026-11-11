@@ -1,0 +1,39 @@
+{%- comment -%}
+  Reassurance strip. Every claim is backed by a store setting or policy:
+  the return window comes from settings.return_window_days, and payments run
+  through Shopify checkout.
+
+  Params: modifier ('band' for the tinted full-width version)
+{%- endcomment -%}
+<ul class="ms-trust{% if modifier != blank %} ms-trust--{{ modifier }}{% endif %}" aria-label="{{ 'trust.label' | t | escape }}">
+  <li>
+    {% render 'icon', name: 'leather' %}
+    <div>
+      <strong>{{ 'trust.leather_title' | t }}</strong>
+      <span>{{ 'trust.leather_copy' | t }}</span>
+    </div>
+  </li>
+  <li>
+    {% render 'icon', name: 'lock' %}
+    <div>
+      <strong>{{ 'trust.payment_title' | t }}</strong>
+      <span>{{ 'trust.payment_copy' | t }}</span>
+    </div>
+  </li>
+  {%- if settings.return_window_days > 0 -%}
+    <li>
+      {% render 'icon', name: 'return' %}
+      <div>
+        <strong>{{ 'products.returns_within' | t: days: settings.return_window_days }}</strong>
+        <span>{{ 'trust.returns_copy' | t }}</span>
+      </div>
+    </li>
+  {%- endif -%}
+  <li>
+    {% render 'icon', name: 'globe' %}
+    <div>
+      <strong>{{ 'trust.shipping_title' | t }}</strong>
+      <span>{{ 'trust.shipping_copy' | t }}</span>
+    </div>
+  </li>
+</ul>

@@ -1,311 +1,247 @@
-<div class="page">
+{%- comment -%}
+  Storefront home page: category shortcuts, hero carousel with two promo
+  tiles, reassurance strip, shop-by-category tiles, a featured product grid
+  and a tabbed product rail per category.
 
-  <!-- ══ HERO ══ -->
-  <section class="stage hero media has-baked-copy">
-    <div class="hero-slides">
-      <picture><source media="(max-width:760px)" srcset="{{ 'mobile-hero-phone-cases-20260919-v2.webp' | asset_url }}"><img class="bg hero-slide is-active" width="1774" height="887" src="{{ 'hero-phone-cases-20260919.webp' | asset_url }}" alt="Mavelania leather phone cases" fetchpriority="high" decoding="sync"></picture>
-      <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero1.webp' | asset_url }}"><img class="bg hero-slide" width="1810" height="869" data-src="{{ 'hero1.webp' | asset_url }}" alt="Woman in a red dress beside a Mavelania bag" decoding="async"></picture>
-      <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero2.webp' | asset_url }}"><img class="bg hero-slide" width="1810" height="869" data-src="{{ 'hero2.webp' | asset_url }}" alt="Man at a desk with a Mavelania leather bag" decoding="async"></picture>
-      <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero4.webp' | asset_url }}"><img class="bg hero-slide" width="1810" height="869" data-src="{{ 'hero4.webp' | asset_url }}" alt="Mavelania leather bag collection" decoding="async"></picture>
-      <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero-wallets.webp' | asset_url }}"><img class="bg hero-slide" width="1810" height="869" data-src="{{ 'hero-wallets.webp' | asset_url }}" alt="Mavelania wallet and card holder collection" decoding="async"></picture>
+  Product data is always live: prices, "from" prices, product counts, sale
+  and sold-out states all come from the catalogue.
+{%- endcomment -%}
+{%- liquid
+  assign catalog_handles = 'bags,wallets-purses,phone-cases,accessories' | split: ','
+  assign bags = collections['bags']
+  assign wallets = collections['wallets-purses']
+  assign cases = collections['phone-cases']
+  assign accessories = collections['accessories']
+  assign featured = section.settings.featured_collection
+  assign featured_count = section.settings.featured_count | default: 8
+-%}
+<div class="ms-home">
+
+  {%- comment -%} ── Mobile category shortcuts ── {%- endcomment -%}
+  <nav class="ms-chips" aria-label="{{ 'home.shop_by_category' | t | escape }}">
+    {%- if bags.products_count > 0 -%}
+      <a href="{{ bags.url }}"><img src="{{ 'collection-bag-bordeaux.webp' | asset_url }}" alt="" width="64" height="64" loading="eager"><span>{{ 'navigation.bags' | t }}</span></a>
+    {%- endif -%}
+    {%- if wallets.products_count > 0 -%}
+      <a href="{{ wallets.url }}"><img src="{{ 'women-leather-wallet-model.webp' | asset_url }}" alt="" width="64" height="64" loading="eager"><span>{{ 'navigation.wallets_short' | t }}</span></a>
+    {%- endif -%}
+    {%- if cases.products_count > 0 -%}
+      <a href="{{ cases.url }}"><img src="{{ 'phone-case-model-new.webp' | asset_url }}" alt="" width="64" height="64" loading="eager"><span>{{ 'navigation.phone_cases' | t }}</span></a>
+    {%- endif -%}
+    {%- if accessories.products_count > 0 -%}
+      <a href="{{ accessories.url }}"><img src="{{ 'home-accessories-card.webp' | asset_url }}" alt="" width="64" height="64" loading="eager"><span>{{ 'navigation.accessories' | t }}</span></a>
+    {%- endif -%}
+    <a href="{{ routes.all_products_collection_url }}"><span class="ms-chips__all">{% render 'icon', name: 'bag' %}</span><span>{{ 'navigation.shop_all' | t }}</span></a>
+  </nav>
+
+  {%- comment -%} ── Hero: carousel + two promo tiles ── {%- endcomment -%}
+  <section class="ms-hero" aria-label="{{ 'home.hero_label' | t | escape }}">
+    <div class="ms-hero__main" data-hero aria-roledescription="carousel">
+      <div class="ms-hero__slides">
+        <a class="ms-hero__slide is-active" href="{{ routes.root_url }}collections/phone-cases" data-hero-slide>
+          <picture><source media="(max-width:760px)" srcset="{{ 'mobile-hero-phone-cases-20260919-v2.webp' | asset_url }}"><img width="1774" height="887" src="{{ 'hero-phone-cases-20260919.webp' | asset_url }}" alt="Mavelania leather phone cases" fetchpriority="high" decoding="sync"></picture>
+          <span class="ms-hero__cta">{{ 'home.shop_phone_cases' | t }} {% render 'icon', name: 'arrow-right' %}</span>
+        </a>
+        <a class="ms-hero__slide" href="{{ routes.root_url }}collections/bags" data-hero-slide tabindex="-1">
+          <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero1.webp' | asset_url }}"><img width="1810" height="869" data-src="{{ 'hero1.webp' | asset_url }}" alt="Woman seated beside a Mavelania leather bag" decoding="async"></picture>
+          <span class="ms-hero__cta">{{ 'home.shop_bags' | t }} {% render 'icon', name: 'arrow-right' %}</span>
+        </a>
+        <a class="ms-hero__slide" href="{{ routes.root_url }}collections/bags" data-hero-slide tabindex="-1">
+          <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero2.webp' | asset_url }}"><img width="1810" height="869" data-src="{{ 'hero2.webp' | asset_url }}" alt="Man at a desk with a Mavelania leather briefcase" decoding="async"></picture>
+          <span class="ms-hero__cta">{{ 'home.shop_bags' | t }} {% render 'icon', name: 'arrow-right' %}</span>
+        </a>
+        <a class="ms-hero__slide" href="{{ routes.root_url }}collections/bags" data-hero-slide tabindex="-1">
+          <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero4.webp' | asset_url }}"><img width="1810" height="869" data-src="{{ 'hero4.webp' | asset_url }}" alt="Mavelania leather bag collection" decoding="async"></picture>
+          <span class="ms-hero__cta">{{ 'home.shop_bags' | t }} {% render 'icon', name: 'arrow-right' %}</span>
+        </a>
+        <a class="ms-hero__slide" href="{{ routes.root_url }}collections/wallets-purses" data-hero-slide tabindex="-1">
+          <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero-wallets.webp' | asset_url }}"><img width="1810" height="869" data-src="{{ 'hero-wallets.webp' | asset_url }}" alt="Mavelania wallet and card holder collection" decoding="async"></picture>
+          <span class="ms-hero__cta">{{ 'home.shop_wallets' | t }} {% render 'icon', name: 'arrow-right' %}</span>
+        </a>
+      </div>
+
+      <button class="ms-hero__arrow ms-hero__arrow--prev" type="button" data-hero-prev aria-label="{{ 'home.hero_previous' | t | escape }}">{% render 'icon', name: 'arrow-left' %}</button>
+      <button class="ms-hero__arrow ms-hero__arrow--next" type="button" data-hero-next aria-label="{{ 'home.hero_next' | t | escape }}">{% render 'icon', name: 'arrow-right' %}</button>
+
+      <div class="ms-hero__controls">
+        <div class="ms-hero__dots" role="group" aria-label="{{ 'home.hero_selector' | t | escape }}">
+          {%- for i in (1..5) -%}
+            <button type="button" data-hero-dot="{{ forloop.index0 }}" aria-label="{{ 'home.hero_image' | t: index: i | escape }}"{% if forloop.first %} class="is-active" aria-current="true"{% endif %}></button>
+          {%- endfor -%}
+        </div>
+        <button class="ms-hero__pause" type="button" data-hero-pause aria-pressed="false" aria-label="{{ 'home.hero_pause' | t | escape }}" data-pause-label="{{ 'home.hero_pause' | t | escape }}" data-resume-label="{{ 'home.hero_resume' | t | escape }}">
+          <span class="ms-hero__pause-on">{% render 'icon', name: 'pause' %}</span>
+          <span class="ms-hero__pause-off">{% render 'icon', name: 'play' %}</span>
+        </button>
+      </div>
     </div>
-    <div class="shade"></div>
-    <h1 class="hero-brand-signature">{{ 'general.brand_signature' | t }}</h1>
-    <div class="hero-in">
-      <p class="hero-title">{{ 'home.brand_motto' | t }}</p>
-      <div class="orn"><i></i><b>❖</b><i></i></div>
-      <p>{{ 'home.brand_tagline_html' | t }}</p>
-      <a class="go" href="#s-wallet"><span>{{ 'home.discover_collection' | t }}</span><span>→</span></a>
-    </div>
-    <a class="hero-hotspot cta-hit" href="#s-wallet" aria-label="{{ 'home.discover_collection' | t | escape }}"></a>
-    <button class="hero-hotspot prev-hit" id="heroPrev" type="button" aria-label="{{ 'home.hero_previous' | t | escape }}"></button>
-    <button class="hero-hotspot pause-hit" id="heroPause" type="button" aria-label="{{ 'home.hero_pause' | t | escape }}" data-pause-label="{{ 'home.hero_pause' | t | escape }}" data-resume-label="{{ 'home.hero_resume' | t | escape }}" aria-pressed="false"></button>
-    <button class="hero-hotspot next-hit" id="heroNext" type="button" aria-label="{{ 'home.hero_next' | t | escape }}"></button>
-    <div class="hero-lines" aria-label="{{ 'home.hero_selector' | t | escape }}">
-      <button class="hero-line is-active" type="button" data-hero="0" aria-label="{{ 'home.hero_image' | t: index: 1 | escape }}" aria-current="true"></button>
-      <button class="hero-line" type="button" data-hero="1" aria-label="{{ 'home.hero_image' | t: index: 2 | escape }}"></button>
-      <button class="hero-line" type="button" data-hero="2" aria-label="{{ 'home.hero_image' | t: index: 3 | escape }}"></button>
-      <button class="hero-line" type="button" data-hero="3" aria-label="{{ 'home.hero_image' | t: index: 4 | escape }}"></button>
-      <button class="hero-line" type="button" data-hero="4" aria-label="{{ 'home.hero_image' | t: index: 5 | escape }}"></button>
+
+    <div class="ms-hero__side">
+      {%- if wallets.products_count > 0 -%}
+        {%- assign wallets_from = wallets.products | map: 'price_min' | sort | first | money -%}
+        <a class="ms-tile" href="{{ wallets.url }}">
+          <img src="{{ 'collection-hero-wallets.webp' | asset_url }}" alt="" width="1886" height="834" loading="eager" decoding="async">
+          <span class="ms-tile__copy">
+            <span class="ms-tile__eyebrow">{% render 'icon', name: 'rfid' %}{{ 'home.tile_wallets_eyebrow' | t }}</span>
+            <strong>{{ 'collections.wallets.card_title' | t }}</strong>
+            <span class="ms-tile__link">{{ 'products.from_price' | t: price: wallets_from }} {% render 'icon', name: 'arrow-right' %}</span>
+          </span>
+        </a>
+      {%- endif -%}
+      {%- if accessories.products_count > 0 -%}
+        {%- assign accessories_from = accessories.products | map: 'price_min' | sort | first | money -%}
+        <a class="ms-tile" href="{{ accessories.url }}">
+          <img src="{{ 'collection-hero-accessories.webp' | asset_url }}" alt="" width="1651" height="953" loading="eager" decoding="async">
+          <span class="ms-tile__copy">
+            <span class="ms-tile__eyebrow">{{ 'home.tile_accessories_eyebrow' | t }}</span>
+            <strong>{{ 'collections.accessories.card_title' | t }}</strong>
+            <span class="ms-tile__link">{{ 'products.from_price' | t: price: accessories_from }} {% render 'icon', name: 'arrow-right' %}</span>
+          </span>
+        </a>
+      {%- endif -%}
     </div>
   </section>
 
-  <!-- ══ TRIPLE COLLECTION ══ -->
-  <section class="rfid-heading" aria-labelledby="rfidTitle">
-    <h2 id="rfidTitle">{{ 'home.rfid_heading' | t }}</h2>
-  </section>
-  <section class="collection-heading" aria-labelledby="collectionTitle">
-    <h2 id="collectionTitle" class="rv">{{ 'home.collection_heading' | t }}</h2>
-  </section>
-  <div class="story-gallery">
-  <div class="collection-rail-spacer" aria-hidden="true"></div>
-  <!-- ══ I · BAGS (lifestyle) ══ -->
-  <section class="story rev" id="s-wallet">
-    <div class="visual t3 rv">
-      <span class="mark">II</span>
-      <img src="{{ 'collection-bag-bordeaux.webp' | asset_url }}" alt="Woman carrying a bordeaux leather bag" width="1023" height="1537" loading="lazy" decoding="async">
-      <a class="collection-card-hit" href="{{ routes.root_url }}collections/bags" aria-label="{{ 'collections.bags.title' | t | escape }}"></a>
-    </div>
-    <a class="collection-link" href="{{ routes.root_url }}collections/bags"><h3 class="collection-link-title">{{ 'collections.bags.card_title' | t }}</h3><span class="thin-arrow" aria-hidden="true">&rarr;</span></a>
-  </section>
-
-  <!-- ══ II · BAGS (studio) ══ -->
-  <section class="story" id="s-bag">
-    <div class="visual t4 rv">
-      <span class="mark">III</span>
-      <img src="{{ 'men-leather-briefcase-model.webp' | asset_url }}" alt="Male model carrying a brown leather briefcase" width="1023" height="1537" loading="lazy" decoding="async">
-      <a class="collection-card-hit" href="{{ routes.root_url }}collections/bags" aria-label="{{ 'collections.bags.title' | t | escape }}"></a>
-    </div>
-    <a class="collection-link" href="{{ routes.root_url }}collections/bags"><h3 class="collection-link-title">{{ 'collections.bags.card_title' | t }}</h3><span class="thin-arrow" aria-hidden="true">&rarr;</span></a>
-  </section>
-
-  <div class="collection-rail-spacer" aria-hidden="true"></div>
-
-  <!-- ══ /story-gallery ══ -->
+  {%- comment -%} ── Reassurance strip ── {%- endcomment -%}
+  <div class="ms-wrap">
+    {% render 'trust-strip' %}
   </div>
 
-  <!-- ══ WALLET & CARD HOLDER CARDS ══ -->
-  <div class="story-gallery wallet-gallery" aria-label="{{ 'collections.wallets.title' | t | escape }}">
-    <div class="collection-rail-spacer" aria-hidden="true"></div>
-    <section class="story" id="wallet-card-men">
-      <div class="visual rv">
-        <img src="{{ 'men-leather-bag-model.webp' | asset_url }}" alt="Male model carrying a black leather bag" width="1023" height="1537" loading="lazy" decoding="async">
-        <a class="collection-card-hit" href="{{ routes.root_url }}collections/wallets-purses" aria-label="{{ 'collections.wallets.title' | t | escape }}"></a>
+  {%- comment -%} ── Shop by category ── {%- endcomment -%}
+  <section class="ms-section ms-wrap" aria-labelledby="HomeCategoriesTitle">
+    <header class="ms-section__head">
+      <div>
+        <p class="ms-eyebrow">{{ 'home.shop_by_category' | t }}</p>
+        <h1 id="HomeCategoriesTitle" class="ms-heading">{{ 'general.brand_signature' | t }}</h1>
       </div>
-      <a class="collection-link" href="{{ routes.root_url }}collections/wallets-purses"><h3 class="collection-link-title">{{ 'collections.wallets.card_title' | t }}</h3><span class="thin-arrow" aria-hidden="true">&rarr;</span></a>
-    </section>
-    <section class="story" id="wallet-card-women">
-      <div class="visual rv rv-d1">
-        <img src="{{ 'women-leather-wallet-model.webp' | asset_url }}" alt="Female model using a leather wallet" width="1023" height="1537" loading="lazy" decoding="async">
-        <a class="collection-card-hit" href="{{ routes.root_url }}collections/wallets-purses" aria-label="{{ 'collections.wallets.title' | t | escape }}"></a>
-      </div>
-      <a class="collection-link" href="{{ routes.root_url }}collections/wallets-purses"><h3 class="collection-link-title">{{ 'collections.wallets.card_title' | t }}</h3><span class="thin-arrow" aria-hidden="true">&rarr;</span></a>
-    </section>
-    <div class="collection-rail-spacer" aria-hidden="true"></div>
-  </div>
+      <a class="ms-link" href="{{ routes.all_products_collection_url }}">{{ 'home.view_all_products' | t }} {% render 'icon', name: 'arrow-right' %}</a>
+    </header>
 
-  <div class="story-gallery lower-wallet-gallery" aria-label="{{ 'home.phone_cases_and_accessories' | t | escape }}">
-    <div class="collection-rail-spacer" aria-hidden="true"></div>
-    <section class="story" id="lower-card-women">
-      <div class="visual rv rv-d1">
-        <img src="{{ 'phone-case-model-new.webp' | asset_url }}" alt="Female model holding a leather phone case with card slots" width="1086" height="1448" loading="lazy" decoding="async">
-        <a class="collection-card-hit" href="{{ routes.root_url }}collections/phone-cases" aria-label="{{ 'collections.phone_cases.title' | t | escape }}"></a>
-      </div>
-      <a class="collection-link" href="{{ routes.root_url }}collections/phone-cases"><h3 class="collection-link-title">{{ 'collections.phone_cases.card_title' | t }}</h3><span class="thin-arrow" aria-hidden="true">&rarr;</span></a>
-    </section>
-    <section class="story" id="lower-card-accessories">
-      <div class="visual rv rv-d1">
-        <img src="{{ 'home-accessories-card.webp' | asset_url }}" alt="Woman carrying a Mavelania bag styled with leather accessories" width="1086" height="1448" loading="lazy" decoding="async">
-        <a class="collection-card-hit" href="{{ routes.root_url }}collections/accessories" aria-label="{{ 'collections.accessories.title' | t | escape }}"></a>
-      </div>
-      <a class="collection-link" href="{{ routes.root_url }}collections/accessories"><h3 class="collection-link-title">{{ 'collections.accessories.title' | t }}</h3><span class="thin-arrow" aria-hidden="true">&rarr;</span></a>
-    </section>
-    <div class="collection-rail-spacer" aria-hidden="true"></div>
-  </div>
+    <div class="ms-cats">
+      {%- if bags.products_count > 0 -%}
+        <a class="ms-cat" href="{{ bags.url }}">
+          <span class="ms-cat__image"><img src="{{ 'collection-bag-bordeaux.webp' | asset_url }}" alt="Woman carrying a bordeaux leather bag" width="1023" height="1537" loading="lazy" decoding="async"></span>
+          <span class="ms-cat__copy"><strong>{{ 'collections.bags.card_title' | t }}</strong><span>{{ 'home.product_count' | t: count: bags.products_count }}</span></span>
+          <span class="ms-cat__arrow">{% render 'icon', name: 'arrow-right' %}</span>
+        </a>
+      {%- endif -%}
+      {%- if wallets.products_count > 0 -%}
+        <a class="ms-cat" href="{{ wallets.url }}">
+          <span class="ms-cat__image"><img src="{{ 'women-leather-wallet-model.webp' | asset_url }}" alt="Woman holding a leather wallet" width="1023" height="1537" loading="lazy" decoding="async"></span>
+          <span class="ms-cat__copy"><strong>{{ 'collections.wallets.card_title' | t }}</strong><span>{{ 'home.product_count' | t: count: wallets.products_count }}</span></span>
+          <span class="ms-cat__arrow">{% render 'icon', name: 'arrow-right' %}</span>
+        </a>
+      {%- endif -%}
+      {%- if cases.products_count > 0 -%}
+        <a class="ms-cat" href="{{ cases.url }}">
+          <span class="ms-cat__image"><img src="{{ 'phone-case-model-new.webp' | asset_url }}" alt="Woman holding a leather phone case with card slots" width="1086" height="1448" loading="lazy" decoding="async"></span>
+          <span class="ms-cat__copy"><strong>{{ 'collections.phone_cases.card_title' | t }}</strong><span>{{ 'home.product_count' | t: count: cases.products_count }}</span></span>
+          <span class="ms-cat__arrow">{% render 'icon', name: 'arrow-right' %}</span>
+        </a>
+      {%- endif -%}
+      {%- if accessories.products_count > 0 -%}
+        <a class="ms-cat" href="{{ accessories.url }}">
+          <span class="ms-cat__image"><img src="{{ 'home-accessories-card.webp' | asset_url }}" alt="Mavelania bag styled with leather accessories" width="1086" height="1448" loading="lazy" decoding="async"></span>
+          <span class="ms-cat__copy"><strong>{{ 'collections.accessories.card_title' | t }}</strong><span>{{ 'home.product_count' | t: count: accessories.products_count }}</span></span>
+          <span class="ms-cat__arrow">{% render 'icon', name: 'arrow-right' %}</span>
+        </a>
+      {%- endif -%}
+    </div>
+  </section>
 
-  {%- assign featured = section.settings.featured_collection -%}
-  {% if featured != blank and featured.products_count > 0 %}
-    <section class="mv-featured" aria-labelledby="featuredTitle">
-      <div class="mv-featured-head">
-        <p class="mv-eyebrow">{{ 'home.featured_eyebrow' | t }}</p>
-        <h2 id="featuredTitle">{{ section.settings.featured_heading | default: featured.title }}</h2>
+  {%- comment -%}
+    ── Featured products ──
+    A collection picked in the theme editor wins. With none selected the grid
+    takes the first pieces of each category so the home page is never empty.
+  {%- endcomment -%}
+  <section class="ms-section ms-wrap" aria-labelledby="HomeFeaturedTitle">
+    <header class="ms-section__head">
+      <div>
+        <p class="ms-eyebrow">{{ 'home.featured_eyebrow' | t }}</p>
+        <h2 id="HomeFeaturedTitle" class="ms-heading">{{ section.settings.featured_heading | default: 'Featured pieces' }}</h2>
       </div>
-      <div class="mv-featured-grid">
-        {% for product in featured.products limit: section.settings.featured_count %}
-          <article class="mv-product-card">
-            <a href="{{ product.url }}">
-              <span class="mv-card-image">
-                {%- if product.featured_image -%}
-                  {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '320,480,640,900', sizes: '(max-width: 700px) 46vw, 23vw', alt: product.featured_image.alt | default: product.title }}
-                {%- endif -%}
-              </span>
-              {% if product.type != blank %}<small>{{ product.type }}</small>{% endif %}
-              <h3>{{ product.title }}</h3>
-              <p>{% if product.price_varies %}{% assign fp = product.price_min | money %}{{ 'products.from_price' | t: price: fp }}{% else %}{{ product.price | money }}{% endif %}</p>
-            </a>
-          </article>
-        {% endfor %}
-      </div>
-      <a class="collection-link mv-featured-link" href="{{ routes.root_url }}collections/{{ featured.handle }}">
-        <span>{{ 'general.see_collection' | t }}</span>
-        <span class="thin-arrow" aria-hidden="true">&rarr;</span>
-      </a>
-    </section>
-  {% endif %}
+      <a class="ms-link" href="{% if featured != blank and featured.products_count > 0 %}{{ featured.url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">{{ 'home.view_all_products' | t }} {% render 'icon', name: 'arrow-right' %}</a>
+    </header>
 
-  <section class="before-footer-showcase" aria-label="{{ 'collections.bags.title' | t | escape }}">
-    <picture>
-      <source media="(max-width:700px)" srcset="{{ 'before-footer-mobile.webp' | asset_url }}">
-      <img src="{{ 'before-footer.webp' | asset_url }}" alt="Female model carrying a brown leather shoulder bag" width="1881" height="836" loading="lazy" decoding="async">
-    </picture>
+    <div class="ms-grid">
+      {%- if featured != blank and featured.products_count > 0 -%}
+        {%- for product in featured.products limit: featured_count -%}
+          {% render 'product-card', product: product, heading: 'h3' %}
+        {%- endfor -%}
+      {%- else -%}
+        {%- assign per_category = featured_count | divided_by: 4 | at_least: 1 -%}
+        {%- for handle in catalog_handles -%}
+          {%- comment -%} In-stock pieces only: a sold-out product should not lead the home page. {%- endcomment -%}
+          {%- assign shown = 0 -%}
+          {%- for product in collections[handle].products limit: 24 -%}
+            {%- if product.available and shown < per_category -%}
+              {% render 'product-card', product: product, heading: 'h3' %}
+              {%- assign shown = shown | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- comment -%} ── Products by category (tabs) ── {%- endcomment -%}
+  <section class="ms-section ms-section--tint" aria-labelledby="HomeTabsTitle" data-tabs>
+    <div class="ms-wrap">
+      <header class="ms-section__head ms-section__head--stack">
+        <div>
+          <p class="ms-eyebrow">{{ 'home.collection_heading' | t }}</p>
+          <h2 id="HomeTabsTitle" class="ms-heading">{{ 'home.tabs_heading' | t }}</h2>
+        </div>
+        <div class="ms-tabs" role="tablist" aria-label="{{ 'home.shop_by_category' | t | escape }}">
+          {%- assign tab_index = 0 -%}
+          {%- for handle in catalog_handles -%}
+            {%- assign tab_collection = collections[handle] -%}
+            {%- if tab_collection.products_count > 0 -%}
+              <button type="button" role="tab" id="HomeTab-{{ handle }}" aria-controls="HomePanel-{{ handle }}" aria-selected="{% if tab_index == 0 %}true{% else %}false{% endif %}"{% if tab_index > 0 %} tabindex="-1"{% endif %} data-tab>
+                {{ tab_collection.title }} <span>{{ tab_collection.products_count }}</span>
+              </button>
+              {%- assign tab_index = tab_index | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </header>
+
+      {%- assign tab_index = 0 -%}
+      {%- for handle in catalog_handles -%}
+        {%- assign tab_collection = collections[handle] -%}
+        {%- if tab_collection.products_count > 0 -%}
+          <div class="ms-tabpanel" role="tabpanel" id="HomePanel-{{ handle }}" aria-labelledby="HomeTab-{{ handle }}" tabindex="0" data-tab-panel{% if tab_index > 0 %} hidden{% endif %}>
+            <div class="ms-rail">
+              {%- for product in tab_collection.products limit: 8 -%}
+                {% render 'product-card', product: product, heading: 'h3', sizes: '(max-width: 700px) 62vw, (max-width: 1200px) 30vw, 22vw' %}
+              {%- endfor -%}
+              {%- if tab_collection.products_count > 8 -%}
+                <a class="ms-rail__more" href="{{ tab_collection.url }}">
+                  <span>{{ 'home.view_all_count' | t: count: tab_collection.products_count }}</span>
+                  {% render 'icon', name: 'arrow-right' %}
+                </a>
+              {%- endif -%}
+            </div>
+            <p class="ms-tabpanel__foot">
+              <a class="ms-button ms-button--outline" href="{{ tab_collection.url }}">{{ 'home.view_all_in' | t: title: tab_collection.title }} {% render 'icon', name: 'arrow-right' %}</a>
+            </p>
+          </div>
+          {%- assign tab_index = tab_index | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
   </section>
 
 </div>
-<script>
-(function(){
-  var $=function(s){return document.querySelector(s);},
-      $$=function(s){return [].slice.call(document.querySelectorAll(s));};
-
-  var heroPause = $('#heroPause'),
-      heroPrev = $('#heroPrev'),
-      heroNext = $('#heroNext'),
-      heroSlides = $$('.hero-slide'),
-      heroLines = $$('.hero-line'),
-      heroIndex = 0,
-      heroTimer = null,
-      heroFading = false;
-
-  var heroHydrated = false;
-  function hydrateHeroSlides(){
-    if(heroHydrated) return;
-    heroHydrated = true;
-    heroSlides.forEach(function(img){
-      var parent = img.parentNode;
-      if(parent && parent.tagName === 'PICTURE'){
-        [].slice.call(parent.querySelectorAll('source[data-srcset]')).forEach(function(source){
-          source.setAttribute('srcset', source.getAttribute('data-srcset'));
-          source.removeAttribute('data-srcset');
-        });
-      }
-      if(img.dataset.src){
-        img.src = img.dataset.src;
-        img.removeAttribute('data-src');
-      }
-    });
-  }
-  function scheduleHeroHydration(){
-    var run = function(){ window.setTimeout(hydrateHeroSlides, 150); };
-    if(document.readyState === 'complete') run();
-    else window.addEventListener('load', run, {once:true});
-  }
-
-  function updateHeroLines(){
-    heroLines.forEach(function(line, i){
-      var active = i === heroIndex;
-      line.classList.toggle('is-active', active);
-      if(active) line.setAttribute('aria-current', 'true'); else line.removeAttribute('aria-current');
-    });
-  }
-
-  function showHero(next){
-    if(!heroSlides.length || heroFading) return;
-    hydrateHeroSlides();
-    var target = (next + heroSlides.length) % heroSlides.length;
-    if(target === heroIndex) return;
-    var outgoing = heroSlides[heroIndex], incoming = heroSlides[target];
-    heroFading = true;
-    incoming.classList.add('is-active');
-    incoming.style.zIndex = '3';
-    outgoing.style.zIndex = '2';
-    heroIndex = target;
-    updateHeroLines();
-
-    if(typeof incoming.animate !== 'function'){
-      outgoing.classList.remove('is-active');
-      incoming.style.zIndex = '';
-      outgoing.style.zIndex = '';
-      heroFading = false;
-      return;
-    }
-
-    var outgoingFade = outgoing.animate(
-      [{opacity:1},{opacity:0}],
-      {duration:1600,easing:'ease-in-out',fill:'forwards'}
-    );
-    var incomingFade = incoming.animate(
-      [{opacity:0},{opacity:1}],
-      {duration:1600,easing:'ease-in-out',fill:'forwards'}
-    );
-
-    Promise.all([outgoingFade.finished, incomingFade.finished]).then(function(){
-      outgoing.classList.remove('is-active');
-      outgoingFade.cancel();
-      incomingFade.cancel();
-      incoming.style.zIndex = '';
-      outgoing.style.zIndex = '';
-      heroFading = false;
-    }).catch(function(){
-      outgoing.classList.remove('is-active');
-      heroIndex = target;
-      incoming.style.zIndex = '';
-      outgoing.style.zIndex = '';
-      heroFading = false;
-    });
-  }
-  function startHero(){
-    clearInterval(heroTimer);
-    heroTimer = setInterval(function(){ showHero(heroIndex + 1); }, 5000);
-  }
-  function moveHero(step){
-    showHero(heroIndex + step);
-    if(!heroPause || heroPause.getAttribute('aria-pressed') !== 'true') startHero();
-  }
-  scheduleHeroHydration();
-  if(heroSlides.length > 1) startHero();
-  if(heroPrev) heroPrev.addEventListener('click', function(){ moveHero(-1); });
-  if(heroNext) heroNext.addEventListener('click', function(){ moveHero(1); });
-  heroLines.forEach(function(line){
-    line.addEventListener('click', function(){
-      showHero(Number(line.getAttribute('data-hero')) || 0);
-      if(!heroPause || heroPause.getAttribute('aria-pressed') !== 'true') startHero();
-    });
-  });
-  if(heroPause){
-    heroPause.addEventListener('click', function(){
-      var hero = heroPause.closest('.hero');
-      var paused = hero.classList.toggle('hero-paused');
-      heroPause.setAttribute('aria-pressed', String(paused));
-      heroPause.setAttribute('aria-label', paused ? heroPause.dataset.resumeLabel : heroPause.dataset.pauseLabel);
-      if(paused) clearInterval(heroTimer); else startHero();
-    });
-  }
-
-  var mobileGalleryQuery = window.matchMedia('(max-width: 900px)'),
-      mobileGalleries = $$('.story-gallery'),
-      mobileGalleryFrame = null;
-
-  function updateMobileGalleryFocus(){
-    mobileGalleryFrame = null;
-    mobileGalleries.forEach(function(gallery){
-      var cards = [].slice.call(gallery.querySelectorAll('.story'));
-      if(!mobileGalleryQuery.matches){
-        cards.forEach(function(card){ card.classList.remove('is-mobile-active'); });
-        return;
-      }
-      var galleryRect = gallery.getBoundingClientRect(),
-          galleryCenter = galleryRect.left + (gallery.clientWidth / 2),
-          activeCard = null,
-          activeDistance = Infinity;
-      cards.forEach(function(card){
-        var cardRect = card.getBoundingClientRect(),
-            distance = Math.abs((cardRect.left + cardRect.width / 2) - galleryCenter);
-        if(distance < activeDistance){
-          activeDistance = distance;
-          activeCard = card;
-        }
-      });
-      cards.forEach(function(card){ card.classList.toggle('is-mobile-active', card === activeCard); });
-    });
-  }
-
-  function scheduleMobileGalleryFocus(){
-    if(mobileGalleryFrame !== null) return;
-    mobileGalleryFrame = window.requestAnimationFrame(updateMobileGalleryFocus);
-  }
-
-  mobileGalleries.forEach(function(gallery){
-    gallery.addEventListener('scroll', scheduleMobileGalleryFocus, {passive:true});
-  });
-  window.addEventListener('resize', scheduleMobileGalleryFocus, {passive:true});
-  if(typeof mobileGalleryQuery.addEventListener === 'function'){
-    mobileGalleryQuery.addEventListener('change', scheduleMobileGalleryFocus);
-  }else if(typeof mobileGalleryQuery.addListener === 'function'){
-    mobileGalleryQuery.addListener(scheduleMobileGalleryFocus);
-  }
-  updateMobileGalleryFocus();
-
-})();
-</script>
 {% schema %}
-{"name":"Mavelania home","settings":[{"type":"header","content":"Selected pieces"},{"type":"collection","id":"featured_collection","label":"Collection to feature","info":"Leave empty to hide the strip."},{"type":"text","id":"featured_heading","label":"Heading","default":"Selected pieces"},{"type":"range","id":"featured_count","min":2,"max":8,"step":1,"default":4,"label":"Number of products"}],"presets":[{"name":"Mavelania home"}]}
+{
+  "name": "Home: shop",
+  "settings": [
+    { "type": "header", "content": "Featured products" },
+    { "type": "collection", "id": "featured_collection", "label": "Collection to feature", "info": "Leave empty to show the first pieces of every category." },
+    { "type": "text", "id": "featured_heading", "label": "Heading", "default": "Featured pieces" },
+    { "type": "range", "id": "featured_count", "min": 4, "max": 12, "step": 4, "default": 8, "label": "Number of products" }
+  ],
+  "presets": [{ "name": "Home: shop" }]
+}
 {% endschema %}

@@ -1,23 +1,80 @@
-<section class="mv-cart">
-  <h1>{{ 'cart.title' | t }}</h1>
+{%- liquid
+  assign catalog_handles = 'bags,wallets-purses,phone-cases,accessories' | split: ','
+-%}
+<section class="mv-cart ms-cart">
+  <nav class="ms-breadcrumb" aria-label="{{ 'general.breadcrumb' | t | escape }}">
+    <a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{{ 'cart.title' | t }}</span>
+  </nav>
+
+  <h1 class="ms-heading">{{ 'cart.title' | t }}{% if cart.item_count > 0 %} <span>({{ cart.item_count }})</span>{% endif %}</h1>
+
   {% if cart.item_count == 0 %}
-    <p>{{ 'cart.empty' | t }}</p>
+    <div class="ms-cart__empty">
+      {% render 'icon', name: 'bag' %}
+      <p>{{ 'cart.empty' | t }}</p>
+      <a class="ms-button ms-button--primary" href="{{ routes.all_products_collection_url }}">{{ 'cart.start_shopping' | t }} {% render 'icon', name: 'arrow-right' %}</a>
+      <div class="ms-catnav">
+        {%- for handle in catalog_handles -%}
+          {%- assign empty_collection = collections[handle] -%}
+          {%- if empty_collection.products_count > 0 -%}
+            <a href="{{ empty_collection.url }}">{{ empty_collection.title }}</a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
   {% else %}
-    <form action="{{ routes.cart_url }}" method="post">
-      <div class="mv-cart-items">
+    <form class="ms-cart__layout" action="{{ routes.cart_url }}" method="post" data-cart-form>
+      <div class="ms-cart__items">
         {% for item in cart.items %}
-          <article class="mv-cart-item">
-            <a href="{{ item.url }}">{% if item.image %}{{ item.image | image_url: width: 320 | image_tag: loading: 'lazy', alt: item.title }}{% endif %}</a>
-            <div><a href="{{ item.url }}"><h2>{{ item.product.title }}</h2></a>{% unless item.product.has_only_default_variant %}<p>{{ item.variant.title }}</p>{% endunless %}<p>{{ item.final_price | money }}</p></div>
-            <label>{{ 'cart.quantity' | t }}<input type="number" name="updates[]" value="{{ item.quantity }}" min="0"></label>
-            <strong>{{ item.final_line_price | money }}</strong>
-            <a href="{{ item.url_to_remove }}">{{ 'cart.remove' | t }}</a>
+          <article class="ms-cart__item">
+            <a class="ms-cart__image" href="{{ item.url }}">
+              {% if item.image %}{{ item.image | image_url: width: 320 | image_tag: loading: 'lazy', alt: item.title }}{% endif %}
+            </a>
+            <div class="ms-cart__info">
+              <h2><a href="{{ item.url }}">{{ item.product.title }}</a></h2>
+              {% unless item.product.has_only_default_variant %}<p>{{ item.variant.title }}</p>{% endunless %}
+              <p class="ms-cart__unit">{{ item.final_price | money }}</p>
+            </div>
+            <div class="ms-qty ms-qty--small" data-qty data-qty-submit>
+              <label class="mv-visually-hidden" for="CartQuantity-{{ forloop.index }}">{{ 'cart.quantity' | t }}</label>
+              <button type="button" data-qty-minus aria-label="{{ 'products.decrease_quantity' | t | escape }}">{% render 'icon', name: 'minus' %}</button>
+              <input id="CartQuantity-{{ forloop.index }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric">
+              <button type="button" data-qty-plus aria-label="{{ 'products.increase_quantity' | t | escape }}">{% render 'icon', name: 'plus' %}</button>
+            </div>
+            <strong class="ms-cart__line">{{ item.final_line_price | money }}</strong>
+            <a class="ms-cart__remove" href="{{ item.url_to_remove }}" aria-label="{{ 'cart.remove' | t | escape }}: {{ item.product.title | escape }}">{% render 'icon', name: 'trash' %}<span>{{ 'cart.remove' | t }}</span></a>
           </article>
         {% endfor %}
+
+        <div class="ms-cart__actions">
+          <a class="ms-link" href="{{ routes.all_products_collection_url }}">{% render 'icon', name: 'arrow-left' %} {{ 'cart.continue_shopping' | t }}</a>
+          <button class="ms-button ms-button--ghost" type="submit" name="update">{{ 'cart.update' | t }}</button>
+        </div>
       </div>
-      <div class="mv-cart-summary"><p><span>{{ 'cart.subtotal' | t }}</span><strong>{{ cart.total_price | money }}</strong></p><small>{{ 'cart.shipping_taxes_checkout' | t }}</small><button class="mv-secondary-button" type="submit" name="update">{{ 'cart.update' | t }}</button><button class="mv-primary-button" type="submit" name="checkout">{{ 'cart.checkout' | t }}</button></div>
+
+      <aside class="ms-cart__summary" aria-label="{{ 'cart.summary' | t | escape }}">
+        <h2>{{ 'cart.summary' | t }}</h2>
+        <p class="ms-cart__subtotal"><span>{{ 'cart.subtotal' | t }}</span><strong>{{ cart.total_price | money }}</strong></p>
+        <p class="ms-cart__note">{{ 'cart.shipping_taxes_checkout' | t }}</p>
+        <button class="ms-button ms-button--primary ms-button--block" type="submit" name="checkout">
+          {% render 'icon', name: 'lock' %}
+          <span>{{ 'cart.secure_checkout' | t }}</span>
+        </button>
+        <ul class="ms-cart__assure">
+          <li>{% render 'icon', name: 'shield' %}<span>{{ 'products.shopify_protected' | t }}</span></li>
+          {% if settings.return_window_days > 0 %}
+            <li>{% render 'icon', name: 'return' %}<span>{{ 'products.returns_within' | t: days: settings.return_window_days }}</span></li>
+          {% endif %}
+          <li>{% render 'icon', name: 'mail' %}<span>{{ 'cart.support' | t }} <a href="mailto:{{ settings.contact_email | default: 'info@mavelania.com' | escape }}">{{ settings.contact_email | default: 'info@mavelania.com' }}</a></span></li>
+        </ul>
+        {% render 'payment-icons' %}
+      </aside>
     </form>
   {% endif %}
+
+  {% render 'recently-viewed' %}
 </section>
 {% schema %}
 {"name":"Cart","settings":[]}

@@ -1,0 +1,52 @@
+{%- comment -%}
+  Site-wide bag drawer, quick-add dialog and toast. Rendered once from
+  layout/theme.liquid and driven by assets/mavelania-shop.js.
+
+  The drawer ids/attributes (#MiniCartDrawer, data-mini-cart-*) are the ones
+  the product page already used, so the drawer that used to exist only on
+  product pages now opens from any "add to bag" on the site.
+{%- endcomment -%}
+<aside class="ms-drawer" id="MiniCartDrawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="MiniCartTitle" tabindex="-1">
+  <header class="ms-drawer__head">
+    <h2 id="MiniCartTitle">{{ 'cart.your_bag' | t }} <span data-cart-count-label>({{ cart.item_count }})</span></h2>
+    <button type="button" data-mini-cart-close aria-label="{{ 'general.close' | t | escape }}">{% render 'icon', name: 'close' %}</button>
+  </header>
+
+  <p class="ms-drawer__added" data-mini-cart-added hidden>{% render 'icon', name: 'check' %}<span>{{ 'cart.added' | t }}</span></p>
+
+  <div class="ms-drawer__items" data-mini-cart-items></div>
+
+  <footer class="ms-drawer__foot" data-mini-cart-foot>
+    <p class="ms-drawer__subtotal">
+      <span>{{ 'cart.subtotal' | t }}</span>
+      <strong data-mini-cart-total>{{ cart.total_price | money }}</strong>
+    </p>
+    <p class="ms-drawer__note">{{ 'cart.shipping_taxes_checkout' | t }}</p>
+    <form action="{{ routes.cart_url }}" method="post">
+      <button class="ms-button ms-button--primary ms-button--block" type="submit" name="checkout">
+        {% render 'icon', name: 'lock' %}
+        <span>{{ 'cart.secure_checkout' | t }}</span>
+      </button>
+    </form>
+    <a class="ms-button ms-button--ghost ms-button--block" href="{{ routes.cart_url }}">{{ 'cart.view_bag' | t }}</a>
+    {% render 'payment-icons' %}
+  </footer>
+</aside>
+<button class="ms-backdrop" type="button" data-mini-cart-close data-mini-cart-backdrop aria-label="{{ 'cart.close_bag' | t | escape }}" hidden></button>
+
+<div class="ms-quick" id="QuickAdd" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="QuickAddTitle" tabindex="-1" hidden>
+  <div class="ms-quick__panel">
+    <button class="ms-quick__close" type="button" data-quick-close aria-label="{{ 'general.close' | t | escape }}">{% render 'icon', name: 'close' %}</button>
+    <div class="ms-quick__media"><img data-quick-image alt="" width="480" height="480"></div>
+    <div class="ms-quick__body">
+      <h2 id="QuickAddTitle" data-quick-title></h2>
+      <p class="ms-quick__price" data-quick-price></p>
+      <div data-quick-options></div>
+      <button class="ms-button ms-button--primary ms-button--block" type="button" data-quick-submit>{{ 'products.add_to_cart' | t }}</button>
+      <a class="ms-quick__link" data-quick-link href="{{ routes.root_url }}">{{ 'products.view_details' | t }} {% render 'icon', name: 'arrow-right' %}</a>
+    </div>
+  </div>
+</div>
+<button class="ms-backdrop" type="button" data-quick-close data-quick-backdrop aria-label="{{ 'general.close' | t | escape }}" hidden></button>
+
+<p class="ms-toast" role="status" aria-live="polite" data-toast hidden></p>

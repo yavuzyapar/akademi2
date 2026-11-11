@@ -43,8 +43,7 @@
         alt="{{ section.settings.image_alt | escape }}"
         width="{{ desktop_image.width }}"
         height="{{ desktop_image.height }}"
-        loading="eager"
-        fetchpriority="high"
+        {% if heading_tag == 'h1' %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}
         decoding="async"
       >
     {%- else -%}
@@ -53,8 +52,7 @@
         alt="{{ section.settings.image_alt | escape }}"
         width="2400"
         height="1200"
-        loading="eager"
-        fetchpriority="high"
+        {% if heading_tag == 'h1' %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}
         decoding="async"
       >
     {%- endif -%}

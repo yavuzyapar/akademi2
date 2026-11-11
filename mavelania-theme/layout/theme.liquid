@@ -49,12 +49,12 @@
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@200;300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@200;300;400;500;600&display=swap"
     >
 
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@200;300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@200;300;400;500;600&display=swap"
     >
 
     <link
@@ -186,8 +186,16 @@
 
     {{ 'mavelania-overrides.css' | asset_url | stylesheet_tag }}
 
+    {%- comment -%} Storefront layer: header, product cards, bag drawer, home sections. {%- endcomment -%}
+    {{ 'mavelania-shop.css' | asset_url | stylesheet_tag }}
+
     <script
       src="{{ 'shopify-theme.js' | asset_url }}"
+      defer
+    ></script>
+
+    <script
+      src="{{ 'mavelania-shop.js' | asset_url }}"
       defer
     ></script>
   </head>
@@ -199,6 +207,23 @@
     data-favorite-remove="{{ 'favorites.remove' | t | escape }}"
     data-favorite-added="{{ 'favorites.added' | t | escape }}"
     data-favorite-removed="{{ 'favorites.removed' | t | escape }}"
+    data-root-url="{{ routes.root_url }}"
+    data-cart-url="{{ routes.cart_url }}"
+    data-cart-add-url="{{ routes.cart_add_url }}"
+    data-cart-change-url="{{ routes.cart_change_url }}"
+    data-money-format="{{ shop.money_format | escape }}"
+    data-cart-empty="{{ 'cart.empty' | t | escape }}"
+    data-cart-remove="{{ 'cart.remove' | t | escape }}"
+    data-cart-quantity="{{ 'cart.quantity' | t | escape }}"
+    data-cart-increase="{{ 'products.increase_quantity' | t | escape }}"
+    data-cart-decrease="{{ 'products.decrease_quantity' | t | escape }}"
+    data-cart-adding="{{ 'cart.adding' | t | escape }}"
+    data-cart-error="{{ 'cart.error' | t | escape }}"
+    data-add-label="{{ 'products.add_to_cart' | t | escape }}"
+    data-sold-label="{{ 'products.sold_out' | t | escape }}"
+    data-unavailable-label="{{ 'products.unavailable' | t | escape }}"
+    data-start-shopping="{{ 'cart.start_shopping' | t | escape }}"
+    data-shop-all-url="{{ routes.all_products_collection_url }}"
   >
     <a class="skip-link" href="#MainContent">
       {{ 'general.skip_to_content' | t }}
@@ -261,6 +286,8 @@
       aria-label="{{ 'favorites.close' | t | escape }}"
       hidden
     ></button>
+
+    {% render 'cart-drawer' %}
 
     <div
       class="page-transition"
