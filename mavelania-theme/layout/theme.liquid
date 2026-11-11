@@ -167,10 +167,6 @@
 
     {{ 'mavelania-core.css' | asset_url | stylesheet_tag }}
 
-    {% if request.page_type == 'index' %}
-      {{ 'mavelania-home.css' | asset_url | stylesheet_tag }}
-    {% endif %}
-
     {% if template.suffix == 'faq' %}
       {{ 'mavelania-faq.css' | asset_url | stylesheet_tag }}
     {% endif %}

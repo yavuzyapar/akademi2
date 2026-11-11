@@ -1881,3 +1881,10 @@ body[data-page="home"] .mv-promo-points li { gap: .9rem; }
 /* Recently viewed inside a page that already has its own gutters. */
 .ms-product .ms-recent.ms-wrap,
 .ms-cart .ms-recent.ms-wrap { padding-inline: 0; }
+
+/* Search results page: the older ".mv-search button" rule must not stretch
+   the buttons inside product cards. */
+.ms-search-page.mv-search { max-width: var(--ms-max); padding: clamp(20px, 3vw, 44px) var(--ms-gutter) clamp(48px, 6vw, 80px); }
+.ms-search-page.mv-search > h1 { margin-bottom: 22px; font-size: clamp(2rem, 3.4vw, 3rem); font-weight: 500; }
+.ms-search-page.mv-search > form { margin-bottom: clamp(24px, 3vw, 40px); }
+.ms-search-page .ms-card button { min-width: 0; }
