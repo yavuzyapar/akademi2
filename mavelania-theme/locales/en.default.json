@@ -20,7 +20,9 @@
     "view_bag": "View bag",
     "start_shopping": "Start shopping",
     "summary": "Order summary",
-    "support": "Questions? Write to"
+    "support": "Questions? Write to",
+    "pairs_with": "Goes well with",
+    "add": "Add"
   },
   "collections": {
     "bags": {
@@ -152,7 +154,9 @@
     "brand_signature": "Handcrafted Leather Goods",
     "breadcrumb": "Breadcrumb",
     "search_long_placeholder": "Search bags, wallets, phone cases…",
-    "account_short": "Account"
+    "account_short": "Account",
+    "previous": "Previous",
+    "next": "Next"
   },
   "home": {
     "discover_collection": "Discover the collection",
@@ -200,7 +204,9 @@
     "faq_eyebrow": "Help",
     "faq_heading": "Questions before you order?",
     "faq_all": "Read all FAQs",
-    "contact_us": "Contact us"
+    "contact_us": "Contact us",
+    "shop_now": "Shop now",
+    "spot_wallets_copy": "Cut from genuine leather and kept deliberately slim, with card slots sized to hold without stretching and edges finished so they do not fray in a pocket."
   },
   "navigation": {
     "accessories": "Accessories",
@@ -249,7 +255,9 @@
     "ship_to": "Deliver to",
     "shipping_delivery": "Shipping & delivery",
     "returns_exchanges": "Returns & exchanges",
-    "leather_care": "Leather care"
+    "leather_care": "Leather care",
+    "zoom": "Zoom image",
+    "close_zoom": "Close zoomed image"
   },
   "related": {
     "eyebrow": "Selected for you",
@@ -341,6 +349,7 @@
     "copy": "New pieces and leather-care notes, sent occasionally.",
     "submit": "Subscribe",
     "success": "Thank you — you are on the list.",
-    "note": "Unsubscribe at any time."
+    "note": "Unsubscribe at any time.",
+    "eyebrow": "Newsletter"
   }
 }

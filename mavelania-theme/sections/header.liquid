@@ -1,3 +1,8 @@
+{%- comment -%}
+  Header: category navigation with mega menus on the left, the brand mark in
+  the centre and the shopper's tools on the right. The brand lockup (emblem
+  above the "Mavelania" script) is the original one and is not restyled here.
+{%- endcomment -%}
 {%- liquid
   # The FAQ page handle can change in the admin (it was the Turkish "sss").
   # Resolve it rather than hard-coding a URL that would 404 after a rename.
@@ -15,33 +20,95 @@
     assign show_country = true
   endif
   assign current_path = request.path
+  assign nav_handles = 'bags,wallets-purses,phone-cases,accessories' | split: ','
 -%}
 <header class="ms-header" data-header>
-  <div class="ms-header__main">
-    <button class="mv-menu-toggle ms-header__menu" type="button" aria-expanded="false" aria-controls="MavelaniaMenu" aria-label="{{ 'general.menu_open' | t | escape }}" data-open-label="{{ 'general.menu_open' | t | escape }}" data-close-label="{{ 'general.menu_close' | t | escape }}">
-      <span class="mv-menu-toggle-lines" aria-hidden="true"><i></i><i></i><i></i></span>
-    </button>
+  <div class="ms-header__bar">
+    <div class="ms-header__left">
+      <button class="mv-menu-toggle ms-header__menu" type="button" aria-expanded="false" aria-controls="MavelaniaMenu" aria-label="{{ 'general.menu_open' | t | escape }}" data-open-label="{{ 'general.menu_open' | t | escape }}" data-close-label="{{ 'general.menu_close' | t | escape }}">
+        <span class="mv-menu-toggle-lines" aria-hidden="true"><i></i><i></i><i></i></span>
+      </button>
+      <button class="ms-tool ms-tool--search-mobile" type="button" aria-label="{{ 'general.search' | t | escape }}" aria-expanded="false" aria-controls="SearchPanel" data-search-open>{% render 'icon', name: 'search' %}</button>
 
-    <a class="ms-brand" href="{{ routes.root_url }}" aria-label="{{ shop.name }} — {{ 'general.home' | t | escape }}">
-      <img src="{{ 'mavelania-logo-original-transparent.png' | asset_url }}" alt="" width="46" height="46">
-      <span class="ms-brand__name">
-        <span class="ms-brand__script">Mavelania</span>
-        <span class="ms-brand__tag">{{ 'general.brand_signature' | t }}</span>
+      <nav class="ms-nav" aria-label="{{ 'general.main_menu' | t | escape }}">
+        <ul>
+          {%- for handle in nav_handles -%}
+            {%- liquid
+              assign nav_collection = collections[handle]
+              assign nav_count = nav_collection.products_count | default: 0
+              case handle
+                when 'bags'
+                  assign nav_label = 'navigation.bags' | t
+                  assign nav_copy = 'collections.bags.description' | t
+                when 'wallets-purses'
+                  assign nav_label = 'navigation.wallets_purses' | t
+                  assign nav_copy = 'collections.wallets.description' | t
+                when 'phone-cases'
+                  assign nav_label = 'navigation.phone_cases' | t
+                  assign nav_copy = 'collections.phone_cases.description' | t
+                else
+                  assign nav_label = 'navigation.accessories' | t
+                  assign nav_copy = 'collections.accessories.description' | t
+              endcase
+              assign nav_url = routes.root_url | append: 'collections/' | append: handle
+              assign nav_path = '/collections/' | append: handle
+            -%}
+            {%- if nav_count > 0 -%}
+              <li class="ms-nav__item ms-nav__item--mega" data-mega>
+                <a href="{{ nav_url }}" data-nav-collection{% if current_path contains nav_path %} aria-current="page"{% endif %}>{{ nav_label }}</a>
+                <div class="ms-mega" data-mega-panel>
+                  <div class="ms-mega__inner">
+                    <div class="ms-mega__intro">
+                      <p class="ms-eyebrow">{{ 'collections.eyebrow' | t }}</p>
+                      <p class="ms-mega__title">{{ nav_label }}</p>
+                      <p class="ms-mega__copy">{{ nav_copy }}</p>
+                      <a class="ms-button ms-button--primary" href="{{ nav_url }}">{{ 'home.view_all_count' | t: count: nav_count }} {% render 'icon', name: 'arrow-right' %}</a>
+                    </div>
+
+                    <ul class="ms-mega__list">
+                      {%- for nav_product in nav_collection.products limit: 8 -%}
+                        <li><a href="{{ nav_product.url | within: nav_collection }}">{{ nav_product.title }}</a></li>
+                      {%- endfor -%}
+                    </ul>
+
+                    <div class="ms-mega__products">
+                      {%- assign mega_shown = 0 -%}
+                      {%- for nav_product in nav_collection.products limit: 12 -%}
+                        {%- if nav_product.available and nav_product.featured_image and mega_shown < 3 -%}
+                          <a class="ms-mega__product" href="{{ nav_product.url | within: nav_collection }}">
+                            <span class="ms-mega__image">{{ nav_product.featured_image | image_url: width: 480 | image_tag: loading: 'lazy', widths: '240,360,480', sizes: '220px', alt: '' }}</span>
+                            <span class="ms-mega__name">{{ nav_product.title }}</span>
+                            <span class="ms-mega__price">{% if nav_product.price_varies %}{% assign nav_from = nav_product.price_min | money %}{{ 'products.from_price' | t: price: nav_from }}{% else %}{{ nav_product.price | money }}{% endif %}</span>
+                          </a>
+                          {%- assign mega_shown = mega_shown | plus: 1 -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                </div>
+              </li>
+            {%- elsif handle == 'accessories' -%}
+              <li class="ms-nav__item"><a href="{{ nav_url }}" data-nav-collection>{{ nav_label }}</a></li>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if about_page != blank -%}
+            <li class="ms-nav__item ms-nav__item--minor"><a href="{{ about_page.url }}"{% if current_path == about_page.url %} aria-current="page"{% endif %}>{{ 'navigation.about' | t }}</a></li>
+          {%- endif -%}
+        </ul>
+      </nav>
+    </div>
+
+    <a class="mv-brand" href="{{ routes.root_url }}" aria-label="{{ shop.name }} — {{ 'general.home' | t | escape }}">
+      <span class="brandlock">
+        <span class="em"><img src="{{ 'mavelania-logo-original-transparent.png' | asset_url }}" alt="" width="54" height="54"></span>
+        <span class="script">Mavelania</span>
       </span>
     </a>
-
-    <form class="ms-search" action="{{ routes.search_url }}" method="get" role="search" data-smart-search>
-      <label class="mv-visually-hidden" for="HeaderSearch">{{ 'general.search' | t }}</label>
-      <input id="HeaderSearch" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search_long_placeholder' | t | escape }}" autocomplete="off" aria-autocomplete="list" aria-expanded="false" data-search-input>
-      <button type="submit" aria-label="{{ 'general.search' | t | escape }}">{% render 'icon', name: 'search' %}</button>
-      <div class="mv-search-suggestions" role="listbox" aria-label="{{ 'general.search_suggestions' | t | escape }}" hidden data-search-suggestions></div>
-    </form>
 
     <div class="ms-tools" aria-label="{{ 'general.customer_links' | t | escape }}">
       {%- if show_country -%}
         {% form 'localization', id: 'HeaderCountryForm', class: 'ms-country' %}
           <label class="mv-visually-hidden" for="HeaderCountrySelect">{{ 'general.country_region' | t }}</label>
-          {% render 'icon', name: 'globe' %}
           <select id="HeaderCountrySelect" name="country_code" aria-label="{{ 'general.country_region' | t | escape }}" data-localization-select>
             {%- for country in localization.available_countries -%}
               <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>{{ country.name }} · {{ country.currency.iso_code }}</option>
@@ -51,92 +118,102 @@
         {% endform %}
       {%- endif -%}
 
+      {%- if faq_page != blank -%}
+        <a class="ms-tools__link" href="{{ faq_page.url }}">{{ 'navigation.faq' | t }}</a>
+      {%- endif -%}
+
+      <button class="ms-tool ms-tool--search" type="button" aria-label="{{ 'general.search' | t | escape }}" aria-expanded="false" aria-controls="SearchPanel" data-search-open>{% render 'icon', name: 'search' %}</button>
+
       {%- if shop.customer_accounts_enabled -%}
-        <a class="ms-tool ms-tool--account" href="{{ routes.account_url }}">
-          {% render 'icon', name: 'user' %}
-          <span class="ms-tool__label">{{ 'general.account_short' | t }}</span>
-        </a>
+        <a class="ms-tool ms-tool--account" href="{{ routes.account_url }}" aria-label="{{ 'general.account' | t | escape }}">{% render 'icon', name: 'user' %}</a>
       {%- endif -%}
 
       <button class="ms-tool ms-tool--favorites" type="button" aria-label="{{ 'favorites.open' | t | escape }}" data-favorites-toggle>
-        <span class="ms-tool__icon">{% render 'icon', name: 'star' %}<span class="ms-tool__count" data-favorites-count>0</span></span>
-        <span class="ms-tool__label">{{ 'favorites.title' | t }}</span>
+        {% render 'icon', name: 'star' %}<span class="ms-tool__count is-empty" data-favorites-count>0</span>
       </button>
 
       <a class="ms-tool ms-tool--cart" href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t | escape }}" data-cart-toggle>
-        <span class="ms-tool__icon">{% render 'icon', name: 'bag' %}<span class="ms-tool__count" data-cart-count>{{ cart.item_count }}</span></span>
-        <span class="ms-tool__label">{{ 'general.cart' | t }}</span>
+        {% render 'icon', name: 'bag' %}<span class="ms-tool__count{% if cart.item_count == 0 %} is-empty{% endif %}" data-cart-count>{{ cart.item_count }}</span>
       </a>
     </div>
   </div>
 
-  <nav class="ms-nav" aria-label="{{ 'general.main_menu' | t | escape }}">
-    <div class="ms-nav__inner">
-      <a href="{{ routes.all_products_collection_url }}"{% if current_path contains '/collections/all' %} aria-current="page"{% endif %}>{{ 'navigation.shop_all' | t }}</a>
-      {%- assign nav_count = collections['bags'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/bags" data-nav-collection{% if current_path contains '/collections/bags' %} aria-current="page"{% endif %}>{{ 'navigation.bags' | t }}</a>{%- endif -%}
-      {%- assign nav_count = collections['wallets-purses'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/wallets-purses" data-nav-collection{% if current_path contains '/collections/wallets-purses' %} aria-current="page"{% endif %}>{{ 'navigation.wallets_purses' | t }}</a>{%- endif -%}
-      {%- assign nav_count = collections['phone-cases'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/phone-cases" data-nav-collection{% if current_path contains '/collections/phone-cases' %} aria-current="page"{% endif %}>{{ 'navigation.phone_cases' | t }}</a>{%- endif -%}
-      <a href="{{ routes.root_url }}collections/accessories" data-nav-collection{% if current_path contains '/collections/accessories' %} aria-current="page"{% endif %}>{{ 'navigation.accessories' | t }}</a>
+  {%- comment -%} Search opens as a panel under the header instead of taking a permanent row. {%- endcomment -%}
+  <div class="ms-searchpanel" id="SearchPanel" data-search-panel hidden>
+    <div class="ms-searchpanel__inner">
+      <form class="ms-searchform" action="{{ routes.search_url }}" method="get" role="search" data-smart-search>
+        <label class="mv-visually-hidden" for="HeaderSearch">{{ 'general.search' | t }}</label>
+        {% render 'icon', name: 'search' %}
+        <input id="HeaderSearch" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search_long_placeholder' | t | escape }}" autocomplete="off" aria-autocomplete="list" aria-expanded="false" data-search-input>
+        <button class="ms-searchform__submit" type="submit">{{ 'search.submit' | t }}</button>
+        <button class="ms-searchform__close" type="button" aria-label="{{ 'general.close' | t | escape }}" data-search-close>{% render 'icon', name: 'close' %}</button>
+        <div class="mv-search-suggestions" role="listbox" aria-label="{{ 'general.search_suggestions' | t | escape }}" hidden data-search-suggestions></div>
+      </form>
 
-      <span class="ms-nav__spacer" aria-hidden="true"></span>
-
-      {%- if about_page != blank -%}<a class="ms-nav__minor" href="{{ about_page.url }}">{{ 'navigation.about' | t }}</a>{%- endif -%}
-      {%- if faq_page != blank -%}<a class="ms-nav__minor" href="{{ faq_page.url }}">{{ 'navigation.faq' | t }}</a>{%- endif -%}
-      {%- if contact_page != blank -%}
-        <a class="ms-nav__minor" href="{{ contact_page.url }}">{{ 'footer.contact' | t }}</a>
-      {%- else -%}
-        <a class="ms-nav__minor" href="mailto:{{ settings.contact_email | default: 'info@mavelania.com' | escape }}">{{ 'footer.contact' | t }}</a>
-      {%- endif -%}
+      <div class="ms-searchpanel__quick">
+        <p class="ms-eyebrow">{{ 'home.shop_by_category' | t }}</p>
+        <div class="ms-catnav">
+          {%- for handle in nav_handles -%}
+            {%- assign quick_collection = collections[handle] -%}
+            {%- if quick_collection.products_count > 0 -%}
+              <a href="{{ quick_collection.url }}">{{ quick_collection.title }} <span>{{ quick_collection.products_count }}</span></a>
+            {%- endif -%}
+          {%- endfor -%}
+          <a href="{{ routes.all_products_collection_url }}">{{ 'navigation.shop_all' | t }}</a>
+        </div>
+      </div>
     </div>
-  </nav>
-
-  <nav id="MavelaniaMenu" class="mv-mobile-menu" role="dialog" aria-modal="true" aria-label="{{ 'general.mobile_menu' | t | escape }}" aria-hidden="true" tabindex="-1">
-    <div class="mv-mobile-menu-head">
-      <a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a>
-      <button class="mv-mobile-menu-close" type="button" aria-label="{{ 'general.menu_close' | t | escape }}" data-mobile-menu-close>&times;</button>
-    </div>
-
-    <form class="mv-mobile-menu-search" action="{{ routes.search_url }}" method="get" role="search" data-smart-search>
-      <label class="mv-visually-hidden" for="MobileSearch">{{ 'general.search' | t }}</label>
-      <input id="MobileSearch" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search_placeholder' | t | escape }}" autocomplete="off" aria-autocomplete="list" aria-expanded="false" data-search-input>
-      <button type="submit" aria-label="{{ 'search.submit' | t | escape }}">{% render 'icon', name: 'search' %}</button>
-      <div class="mv-search-suggestions" role="listbox" aria-label="{{ 'general.search_suggestions' | t | escape }}" hidden data-search-suggestions></div>
-    </form>
-
-    <div class="mv-mobile-menu-links">
-      <span class="mv-mobile-menu-space" aria-hidden="true"></span>
-      <a href="{{ routes.all_products_collection_url }}"><span>{{ 'navigation.shop_all' | t }}</span><span aria-hidden="true">›</span></a>
-      {%- assign nav_count = collections['bags'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/bags"><span>{{ 'navigation.bags' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
-      {%- assign nav_count = collections['wallets-purses'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/wallets-purses"><span>{{ 'navigation.wallets_purses' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
-      {%- assign nav_count = collections['phone-cases'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/phone-cases"><span>{{ 'navigation.phone_cases' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
-      <a href="{{ routes.root_url }}collections/accessories"><span>{{ 'navigation.accessories' | t }}</span><span aria-hidden="true">›</span></a>
-    </div>
-
-    <div class="mv-mobile-menu-footer">
-      {%- if show_country -%}
-        {% form 'localization', id: 'MobileCountryForm', class: 'mv-country-form mv-country-form--mobile' %}
-          <label for="MobileCountrySelect">{{ 'general.country_region' | t }}</label>
-          <div class="mv-country-select-wrap">
-            <select id="MobileCountrySelect" name="country_code" aria-label="{{ 'general.country_region' | t | escape }}" data-localization-select>
-              {%- for country in localization.available_countries -%}
-                <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>{{ country.name }} · {{ country.currency.iso_code }}</option>
-              {%- endfor -%}
-            </select>
-            <svg viewBox="0 0 12 8" aria-hidden="true"><path d="m1 1 5 5 5-5"/></svg>
-          </div>
-          <noscript><button type="submit">{{ 'general.apply' | t }}</button></noscript>
-        {% endform %}
-      {%- endif -%}
-      {%- if shop.customer_accounts_enabled -%}
-        <a href="{{ routes.account_login_url }}">{{ 'navigation.sign_in_register' | t }}</a>
-      {%- endif -%}
-      <button class="mv-mobile-action" type="button" data-favorites-toggle>{{ 'favorites.title' | t }} <span data-favorites-count>0</span></button>
-      {%- if about_page != blank -%}<a href="{{ about_page.url }}">{{ 'navigation.about' | t }}</a>{%- endif -%}
-      {%- if faq_page != blank -%}<a href="{{ faq_page.url }}">{{ 'navigation.faq' | t }}</a>{%- endif -%}
-      <a href="mailto:{{ settings.contact_email | default: 'info@mavelania.com' | escape }}">{{ 'navigation.customer_support' | t }}</a>
-    </div>
-  </nav>
+  </div>
 </header>
+
+{%- comment -%} Kept outside <header> so the header can slide away on scroll without moving this full-screen menu. {%- endcomment -%}
+<nav id="MavelaniaMenu" class="mv-mobile-menu" role="dialog" aria-modal="true" aria-label="{{ 'general.mobile_menu' | t | escape }}" aria-hidden="true" tabindex="-1">
+  <div class="mv-mobile-menu-head">
+    <a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a>
+    <button class="mv-mobile-menu-close" type="button" aria-label="{{ 'general.menu_close' | t | escape }}" data-mobile-menu-close>&times;</button>
+  </div>
+
+  <form class="mv-mobile-menu-search" action="{{ routes.search_url }}" method="get" role="search" data-smart-search>
+    <label class="mv-visually-hidden" for="MobileSearch">{{ 'general.search' | t }}</label>
+    <input id="MobileSearch" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search_placeholder' | t | escape }}" autocomplete="off" aria-autocomplete="list" aria-expanded="false" data-search-input>
+    <button type="submit" aria-label="{{ 'search.submit' | t | escape }}">{% render 'icon', name: 'search' %}</button>
+    <div class="mv-search-suggestions" role="listbox" aria-label="{{ 'general.search_suggestions' | t | escape }}" hidden data-search-suggestions></div>
+  </form>
+
+  <div class="mv-mobile-menu-links">
+    <span class="mv-mobile-menu-space" aria-hidden="true"></span>
+    <a href="{{ routes.all_products_collection_url }}"><span>{{ 'navigation.shop_all' | t }}</span><span aria-hidden="true">›</span></a>
+    {%- assign nav_count = collections['bags'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/bags"><span>{{ 'navigation.bags' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
+    {%- assign nav_count = collections['wallets-purses'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/wallets-purses"><span>{{ 'navigation.wallets_purses' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
+    {%- assign nav_count = collections['phone-cases'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/phone-cases"><span>{{ 'navigation.phone_cases' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
+    <a href="{{ routes.root_url }}collections/accessories"><span>{{ 'navigation.accessories' | t }}</span><span aria-hidden="true">›</span></a>
+  </div>
+
+  <div class="mv-mobile-menu-footer">
+    {%- if show_country -%}
+      {% form 'localization', id: 'MobileCountryForm', class: 'mv-country-form mv-country-form--mobile' %}
+        <label for="MobileCountrySelect">{{ 'general.country_region' | t }}</label>
+        <div class="mv-country-select-wrap">
+          <select id="MobileCountrySelect" name="country_code" aria-label="{{ 'general.country_region' | t | escape }}" data-localization-select>
+            {%- for country in localization.available_countries -%}
+              <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>{{ country.name }} · {{ country.currency.iso_code }}</option>
+            {%- endfor -%}
+          </select>
+          <svg viewBox="0 0 12 8" aria-hidden="true"><path d="m1 1 5 5 5-5"/></svg>
+        </div>
+        <noscript><button type="submit">{{ 'general.apply' | t }}</button></noscript>
+      {% endform %}
+    {%- endif -%}
+    {%- if shop.customer_accounts_enabled -%}
+      <a href="{{ routes.account_login_url }}">{{ 'navigation.sign_in_register' | t }}</a>
+    {%- endif -%}
+    <button class="mv-mobile-action" type="button" data-favorites-toggle>{{ 'favorites.title' | t }} <span data-favorites-count>0</span></button>
+    {%- if about_page != blank -%}<a href="{{ about_page.url }}">{{ 'navigation.about' | t }}</a>{%- endif -%}
+    {%- if faq_page != blank -%}<a href="{{ faq_page.url }}">{{ 'navigation.faq' | t }}</a>{%- endif -%}
+    {%- if contact_page != blank -%}<a href="{{ contact_page.url }}">{{ 'footer.contact' | t }}</a>{%- endif -%}
+    <a href="mailto:{{ settings.contact_email | default: 'info@mavelania.com' | escape }}">{{ 'navigation.customer_support' | t }}</a>
+  </div>
+</nav>
 {% schema %}
 {"name":"Header","settings":[{"type":"checkbox","id":"show_country_selector","label":"Show country/region selector","default":true}]}
 {% endschema %}

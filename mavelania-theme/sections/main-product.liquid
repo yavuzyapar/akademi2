@@ -30,6 +30,10 @@
   data-stock-in="{{ 'products.in_stock' | t | escape }}"
   data-stock-low="{{ 'products.low_stock' | t: count: '[count]' | escape }}"
   data-stock-out="{{ 'products.sold_out' | t | escape }}"
+  data-zoom-label="{{ 'products.zoom' | t | escape }}"
+  data-zoom-close="{{ 'products.close_zoom' | t | escape }}"
+  data-prev-label="{{ 'general.previous' | t | escape }}"
+  data-next-label="{{ 'general.next' | t | escape }}"
   data-rv-handle="{{ product.handle }}"
   data-rv-title="{{ product.title | escape }}"
   data-rv-url="{{ product.url }}"
@@ -248,20 +252,41 @@
         <a class="ms-link" href="{{ related_collection.url }}">{{ 'home.view_all_in' | t: title: related_collection.title }} {% render 'icon', name: 'arrow-right' %}</a>
       </header>
 
-      <div class="ms-rail ms-rail--four">
+      <div class="ms-carousel" data-carousel>
+        <div class="ms-carousel__track" data-carousel-track>
         {% assign related_count = 0 %}
-        {% for related_product in related_collection.products limit: 5 %}
+        {% for related_product in related_collection.products limit: 9 %}
           {% unless related_product.id == product.id %}
             {% render 'product-card', product: related_product, heading: 'h3' %}
             {% assign related_count = related_count | plus: 1 %}
-            {% if related_count == 4 %}{% break %}{% endif %}
+            {% if related_count == 8 %}{% break %}{% endif %}
           {% endunless %}
         {% endfor %}
+        </div>
+        <button class="ms-carousel__arrow ms-carousel__arrow--prev" type="button" data-carousel-prev aria-label="{{ 'general.previous' | t | escape }}">{% render 'icon', name: 'arrow-left' %}</button>
+        <button class="ms-carousel__arrow ms-carousel__arrow--next" type="button" data-carousel-next aria-label="{{ 'general.next' | t | escape }}">{% render 'icon', name: 'arrow-right' %}</button>
       </div>
     </section>
   {% endif %}
 
   {% render 'recently-viewed', exclude: product.handle %}
+
+  {%- comment -%} Desktop buy bar: appears once the main "Add to bag" button has scrolled out of view. {%- endcomment -%}
+  <div class="ms-stickybar" data-stickybar hidden>
+    <div class="ms-stickybar__inner">
+      {% if product.featured_image %}
+        <img src="{{ product.featured_image | image_url: width: 160 }}" alt="" width="56" height="56" loading="lazy" data-stickybar-image>
+      {% endif %}
+      <div class="ms-stickybar__copy">
+        <strong>{{ product.title }}</strong>
+        <span data-stickybar-variant></span>
+      </div>
+      <span class="ms-stickybar__price" data-stickybar-price>{{ current_variant.price | money }}</span>
+      <button class="ms-button ms-button--primary" type="button" data-stickybar-add{% unless current_variant.available %} disabled{% endunless %}>
+        {%- if current_variant.available -%}{{ 'products.add_to_cart' | t }}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
+      </button>
+    </div>
+  </div>
 
   {% assign mobile_variant = current_variant %}
 

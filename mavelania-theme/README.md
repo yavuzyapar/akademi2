@@ -1,8 +1,18 @@
-# Mavelania – Shopify teması (mağaza görünümü)
+# Mavelania – Shopify teması (mağaza kurgusu)
 
 mavelania.com temasının e-ticaret odaklı sürümü. İlk commit, sitenin 10 Kasım 2026
 tarihli tema dışa aktarımıdır; sonraki commit'ler yapılan değişikliklerdir, yani
 `git diff` ile neyin değiştiği satır satır görülebilir.
+
+Kurgu, önde gelen deri ürün mağazalarının (Bellroy, Polène, Cuyana, Aspinal of London,
+Leatherology gibi) ortak kalıplarını izler: ortada marka, solda mega menülü kategori
+navigasyonu, tam genişlik hero, kategori görselleri, ürün karuselleri, renk noktalı
+ürün kartları, yan çekmece sepet ve satın almaya odaklı ürün sayfası. Hiçbir sitenin
+tasarımı, görseli ya da metni kopyalanmadı; yalnızca bu yerleşim kalıpları esas alındı.
+
+**Logo ve "Mavelania" yazısı değiştirilmedi.** Başlıkta ve alt bilgide orijinal
+işaretleme (`.mv-brand` / `.brandlock`) ve orijinal stil kuralları kullanılıyor; ölçüler
+canlı sitedekiyle aynı (masaüstü: amblem 49×49, yazı 180×47; mobil: 42×42, 158×39).
 
 ## Mağazaya yükleme
 
@@ -14,18 +24,20 @@ tarihli tema dışa aktarımıdır; sonraki commit'ler yapılan değişikliklerd
    kontrol edin, memnunsanız **Publish** deyin. Eski tema listede kalır; istediğiniz
    an geri dönebilirsiniz.
 
-## Neler değişti
+## Sayfa sayfa kurgu
 
-| Alan | Önce | Şimdi |
-| --- | --- | --- |
-| Ana sayfa | Ürün ve fiyat göstermeyen görsel vitrin | Kategori kısayolları, slider + 2 kampanya kutusu, güven şeridi, kategoriler, öne çıkan ürünler, kategori sekmeli ürün rafları, promo, "Neden Mavelania", SSS, son gezilenler |
-| Başlık | Ortada logo, küçük arama | Büyük arama çubuğu, hesap / favori / sepet, kategori menüsü, kaydırırken yapışkan |
-| Ürün kartı | Görsel + isim + fiyat | İndirim / yeni / tükendi rozetleri, ikinci görsel, renk sayısı, **hızlı sepete ekle** |
-| Sepet | Sadece ürün sayfasında açılan çekmece | Her sayfada açılan sepet çekmecesi (adet değiştir, sil, güvenli ödeme) |
-| Ürün sayfası | Açıklama satın alma düğmesinin üstünde | Fiyat → stok → seçenek → sepete ekle; güven kutusu, ödeme logoları, kargo / iade / bakım akordeonları |
-| Koleksiyon | Ekranı kaplayan büyük başlık | Kısa başlık, ürün sayısı, kategori geçiş düğmeleri, 4'lü ızgara |
-| Sepet sayfası | Tek sütun liste | Ürün listesi + sipariş özeti kartı |
-| Alt bilgi | Logo + 2 sütun | Mağaza / yardım / şirket linkleri, bülten kaydı, ödeme logoları |
+| Alan | İçerik |
+| --- | --- |
+| Üst şerit | Kargo duyurusu, iade süresi, güvenli ödeme (mobilde sırayla döner) |
+| Başlık | Solda kategoriler (üzerine gelince **mega menü**: koleksiyon tanıtımı, ürün listesi, 3 ürün görseli), ortada orijinal logo, sağda ülke/para birimi, SSS, arama, hesap, favoriler, sepet. Aşağı kaydırınca gizlenir, yukarı kaydırınca geri gelir |
+| Arama | Simgeye basınca başlığın altında açılan panel: canlı ürün önerileri + kategori kısayolları |
+| Ana sayfa | Tam genişlik hero (her görselin kendi "Shop …" düğmesi) → güven şeridi → 4 kategori görseli (ürün sayısı + başlangıç fiyatı) → öne çıkanlar karuseli → cüzdan vitrini → kategori sekmeli karusel → telefon kılıfı bandı → "Neden Mavelania" → yaşam tarzı bandı → SSS → son gezilenler → bülten |
+| Ürün kartı | İkinci görsel, rozetler (indirim / yeni / tükendi), **renk noktaları** (tıklayınca karttaki görsel o renge döner, kart o rengi açar), hızlı sepete ekleme |
+| Koleksiyon | Kısa başlık, ürün sayısı, kategori geçiş düğmeleri, filtre/sıralama, 4'lü ızgara |
+| Ürün sayfası | Solda dikey küçük resimler, tıklayınca **tam ekran büyütme**; sağda fiyat → stok → renk → adet + sepete ekle → güven kutusu → ödeme logoları → kargo / iade / bakım akordeonları. Düğme ekrandan çıkınca altta **sabit satın alma çubuğu** (mobilde zaten vardı) |
+| Sepet çekmecesi | Her sayfadan açılır; adet değiştir / sil, "Goes well with" önerileri (Shopify'ın kendi öneri motoru), güvenli ödeme |
+| Sepet sayfası | Ürün listesi + sipariş özeti kartı |
+| Alt bilgi | Bülten bandı, orijinal logo, mağaza / yardım / şirket linkleri, sosyal hesaplar, ödeme logoları |
 
 ## Gösterilen her bilgi gerçektir
 
@@ -39,6 +51,8 @@ Tema hiçbir şeyi uydurmaz; veri yoksa ilgili öğe hiç görünmez.
   sayfasında kendiliğinden görünür.
 - **Ödeme logoları** Shopify'da gerçekten açık olan ödeme yöntemleridir.
 - **İade süresi** tema ayarındaki `return_window_days` değerinden gelir.
+- **"Goes well with"** Shopify'ın ürün öneri uç noktasından gelir.
+- **"From $…" fiyatları ve ürün sayıları** koleksiyonlardan canlı hesaplanır.
 
 ## Tema düzenleyiciden ayarlanabilenler
 
@@ -53,10 +67,13 @@ Tema hiçbir şeyi uydurmaz; veri yoksa ilgili öğe hiç görünmez.
 
 ## Dosyalar
 
-- `assets/mavelania-shop.css`, `assets/mavelania-shop.js` – yeni mağaza katmanı
+- `assets/mavelania-shop.css`, `assets/mavelania-shop.js` – mağaza katmanı
   (tüm yeni sınıflar `ms-` ile başlar, eski `mv-` kurallarıyla çakışmaz).
-- `snippets/product-card.liquid` – tüm ızgaralarda kullanılan ortak ürün kartı.
+- `assets/mavelania-colors.js` – renk adı → renk eşlemesi; ürün sayfası ve ürün
+  kartları aynı haritayı kullanır.
+- `snippets/product-card.liquid` – tüm ızgara ve karusellerde kullanılan ürün kartı.
 - `snippets/cart-drawer.liquid` – sepet çekmecesi, hızlı ekleme penceresi, bildirim.
 - `snippets/trust-strip.liquid`, `payment-icons.liquid`, `rating.liquid`,
   `recently-viewed.liquid`, `icon.liquid`.
+- `sections/header.liquid` – başlık, mega menü, arama paneli, mobil menü.
 - `sections/mavelania-home.liquid`, `sections/home-trust.liquid` – ana sayfa.

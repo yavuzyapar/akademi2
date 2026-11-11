@@ -186,6 +186,11 @@
     {{ 'mavelania-shop.css' | asset_url | stylesheet_tag }}
 
     <script
+      src="{{ 'mavelania-colors.js' | asset_url }}"
+      defer
+    ></script>
+
+    <script
       src="{{ 'shopify-theme.js' | asset_url }}"
       defer
     ></script>
@@ -220,6 +225,9 @@
     data-unavailable-label="{{ 'products.unavailable' | t | escape }}"
     data-start-shopping="{{ 'cart.start_shopping' | t | escape }}"
     data-shop-all-url="{{ routes.all_products_collection_url }}"
+    data-pairs-with="{{ 'cart.pairs_with' | t | escape }}"
+    data-add-short="{{ 'cart.add' | t | escape }}"
+    data-quick-label="{{ 'products.quick_add' | t | escape }}"
   >
     <a class="skip-link" href="#MainContent">
       {{ 'general.skip_to_content' | t }}

@@ -19,14 +19,45 @@
   </div>
 {%- endunless -%}
 
+{%- if section.settings.show_newsletter -%}
+  <section class="ms-newsband" aria-labelledby="NewsletterTitle">
+    <div class="ms-newsband__inner">
+      <p class="ms-eyebrow">{{ 'newsletter.eyebrow' | t }}</p>
+      <h2 id="NewsletterTitle" class="ms-heading">{{ 'newsletter.title' | t }}</h2>
+      <p>{{ 'newsletter.copy' | t }}</p>
+      {% form 'customer', id: 'FooterNewsletter', class: 'ms-newsletter' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        {%- if form.posted_successfully? -%}
+          <p class="ms-newsletter__ok" role="status">{% render 'icon', name: 'check' %} {{ 'newsletter.success' | t }}</p>
+        {%- else -%}
+          <label class="mv-visually-hidden" for="FooterNewsletterEmail">{{ 'contact.form_email' | t }}</label>
+          <div class="ms-newsletter__row">
+            <input id="FooterNewsletterEmail" type="email" name="contact[email]" value="{{ form.email }}" placeholder="{{ 'contact.form_email' | t | escape }}" autocomplete="email" autocapitalize="off" required>
+            <button type="submit">{{ 'newsletter.submit' | t }}</button>
+          </div>
+          {%- if form.errors -%}
+            <p class="ms-newsletter__error" role="alert">{{ form.errors | default_errors }}</p>
+          {%- endif -%}
+          <p class="ms-newsletter__note">{{ 'newsletter.note' | t }}</p>
+        {%- endif -%}
+      {% endform %}
+    </div>
+  </section>
+{%- endif -%}
+
 <footer class="ms-footer">
   <div class="ms-footer__top ms-wrap">
     <div class="ms-footer__brand">
-      <a class="ms-brand ms-brand--footer" href="{{ routes.root_url }}" aria-label="{{ shop.name }} — {{ 'general.home' | t | escape }}">
-        <img src="{{ 'mavelania-logo-original-transparent.png' | asset_url }}" alt="" width="46" height="46" loading="lazy">
-        <span class="ms-brand__name">
-          <span class="ms-brand__script">Mavelania</span>
-          <span class="ms-brand__tag">{{ 'general.brand_signature' | t }}</span>
+      <a class="mv-footer-logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }} — {{ 'general.home' | t | escape }}">
+        <span class="brandlock">
+          <span class="em">
+            <img src="{{ 'mavelania-logo-original-transparent.png' | asset_url }}" alt="" width="54" height="54" loading="lazy">
+          </span>
+          <span class="script">Mavelania</span>
+        </span>
+
+        <span class="mv-brand-signature" lang="en">
+          Handcrafted Leather Goods
         </span>
       </a>
       <p>{{ settings.organization_description | default: shop.description }}</p>
@@ -76,28 +107,6 @@
       {%- if shop.terms_of_service.body != blank -%}<a href="{{ shop.terms_of_service.url }}">{{ 'footer.terms' | t }}</a>{%- endif -%}
     </nav>
 
-    {%- if section.settings.show_newsletter -%}
-      <div class="ms-footer__news">
-        <p class="ms-footer__label">{{ 'newsletter.title' | t }}</p>
-        <p>{{ 'newsletter.copy' | t }}</p>
-        {% form 'customer', id: 'FooterNewsletter', class: 'ms-newsletter' %}
-          <input type="hidden" name="contact[tags]" value="newsletter">
-          {%- if form.posted_successfully? -%}
-            <p class="ms-newsletter__ok" role="status">{% render 'icon', name: 'check' %} {{ 'newsletter.success' | t }}</p>
-          {%- else -%}
-            <label class="mv-visually-hidden" for="FooterNewsletterEmail">{{ 'contact.form_email' | t }}</label>
-            <div class="ms-newsletter__row">
-              <input id="FooterNewsletterEmail" type="email" name="contact[email]" value="{{ form.email }}" placeholder="{{ 'contact.form_email' | t | escape }}" autocomplete="email" autocapitalize="off" required>
-              <button type="submit">{{ 'newsletter.submit' | t }}</button>
-            </div>
-            {%- if form.errors -%}
-              <p class="ms-newsletter__error" role="alert">{{ form.errors | default_errors }}</p>
-            {%- endif -%}
-            <p class="ms-newsletter__note">{{ 'newsletter.note' | t }}</p>
-          {%- endif -%}
-        {% endform %}
-      </div>
-    {%- endif -%}
   </div>
 
   <div class="ms-footer__bottom ms-wrap">
