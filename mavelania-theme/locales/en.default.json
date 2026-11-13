@@ -218,7 +218,24 @@
     "craft_3_title": "Edges burnished",
     "craft_3_copy": "Edges are sealed and burnished rather than left raw, so they stay smooth in a pocket.",
     "craft_4_title": "Ages with you",
-    "craft_4_copy": "Genuine leather darkens and softens along the lines where it is handled most."
+    "craft_4_copy": "Genuine leather darkens and softens along the lines where it is handled most.",
+    "slide_bag_alt": "Woman walking with a dark leather shoulder bag",
+    "slide_wallet_alt": "Leather wallets on a marble surface",
+    "slide_card_alt": "Leather card holders on a marble surface",
+    "personal_line": "Your Style. Your Initials. Your Mavelania.",
+    "cta_discover": "Discover the collection",
+    "cta_personalize": "Personalize your piece",
+    "essentials_eyebrow": "Selected Essentials",
+    "essentials_title": "Selected Essentials",
+    "essentials_text": "A considered collection of leather goods, designed for everyday life and made personal through thoughtful details.",
+    "essential_bag": "The signature bag",
+    "essential_wallet": "The everyday wallet",
+    "essential_card": "The card holder",
+    "view_piece": "View the piece",
+    "collections_title": "Bags, Wallets and Card Holders",
+    "cat_bags_alt": "Woman carrying a bordeaux leather shoulder bag",
+    "cat_wallets_alt": "Woman holding a bordeaux leather wallet",
+    "also_in_shop": "Also in the shop:"
   },
   "navigation": {
     "accessories": "Accessories",
@@ -230,7 +247,11 @@
     "wallets_purses": "Wallets / Purses",
     "shop_all": "Shop All",
     "about": "About",
-    "wallets_short": "Wallets"
+    "wallets_short": "Wallets",
+    "shop": "Shop",
+    "personalize": "Personalize Your Piece",
+    "about_brand": "About Mavelania",
+    "card_holders": "Card Holders"
   },
   "products": {
     "add_to_cart": "Add to bag",
@@ -339,7 +360,10 @@
     "fact_office": "Registered office",
     "registry_note": "Company records can be verified through the Wyoming Secretary of State business search.",
     "registry_link": "Wyoming Secretary of State business search",
-    "office_note": "This is the company’s registered office address for legal correspondence. It is not a shop or a collection point — orders are shipped, and enquiries are handled by email."
+    "office_note": "This is the company’s registered office address for legal correspondence. It is not a shop or a collection point — orders are shipped, and enquiries are handled by email.",
+    "brand_title": "Crafted with Intention. Made Personal.",
+    "statement_title": "Our statement",
+    "make_body_new": "Bags, wallets and card holders, with phone cases and small accessories alongside. Selected pieces can be personalized with initials or a name."
   },
   "contact": {
     "eyebrow": "Mavelania",
@@ -373,7 +397,9 @@
     "shipping_title": "International delivery",
     "shipping_copy": "Options and costs shown at checkout",
     "payment_methods": "Accepted payment methods",
-    "secure_checkout_short": "Secure checkout"
+    "secure_checkout_short": "Secure checkout",
+    "personal_title": "Personalization",
+    "personal_copy": "On selected pieces"
   },
   "recent": {
     "eyebrow": "Pick up where you left off",
@@ -398,5 +424,88 @@
     "seconds": "s",
     "price_label": "{{ name }} price",
     "deals_title": "{{ name }} deals"
+  },
+  "personalize": {
+    "eyebrow": "Personalization",
+    "title": "Make It Yours.",
+    "lede": "Every detail tells a story. Add your initials, name, or a personal touch to selected leather pieces and create something that feels uniquely yours.",
+    "label": "Personalizable",
+    "available": "Personalization available on this piece",
+    "assure": "Add initials or a name before adding to bag",
+    "cta": "Create your personal piece",
+    "try_label": "Try your initials",
+    "demo_caption": "Preview of your text. On the piece it is applied into the leather, so the finish will look different.",
+    "what_label": "What you can add",
+    "what_value": "Initials or a short name",
+    "method_label": "Method",
+    "color_label": "Colour",
+    "which_label": "Which pieces",
+    "which_value": "Only the pieces shown below. Each product page lists the methods and colours available for it.",
+    "add": "Add personalization",
+    "add_sub": "Initials or a short name",
+    "text_label": "Your text",
+    "text_placeholder": "e.g. M.A.",
+    "text_help": "Letters, numbers, spaces and . & - only. Up to {{ max }} characters.",
+    "preview_sample": "M.A.",
+    "preview_note": "Preview only",
+    "prepared_note": "Personalized pieces are prepared after your order is placed. The text is applied exactly as entered.",
+    "returns_note": "Clearly personalized pieces may be excluded from change-of-mind returns where the law allows. This does not apply to items that are defective, damaged or not as described.",
+    "error_empty": "Please enter the text you would like added, or switch personalization off.",
+    "error_chars": "Please use letters, numbers, spaces and . & - only.",
+    "info_intro": "This piece can be personalized with initials or a short name. Add it in the form above, before adding the piece to your bag; it is shown in your bag and on your order.",
+    "steps_title": "How personalization works",
+    "step1_title": "Choose your piece",
+    "step1_text": "Pick one of the pieces below. Personalization is offered only where the product page says so.",
+    "step2_title": "Add your text",
+    "step2_text": "On the product page, switch on personalization, type your initials or a short name, and choose from the methods and colours available for that piece.",
+    "step3_title": "We prepare it for you",
+    "step3_text": "Your text travels with the item to checkout and onto your order, and the piece is prepared after the order is placed.",
+    "products_title": "Pieces you can personalize",
+    "none": "Personalization is not available on any piece at the moment.",
+    "policy_title": "Before you order",
+    "policy_spelling": "Please check spelling and spacing: the text is applied exactly as entered.",
+    "questions": "Questions about personalization? Write to",
+    "faq_q": "Can I personalize my piece?",
+    "faq_a": "Selected pieces can carry your initials or a short name. Where personalization is available, the product page shows it with the methods and colours offered for that piece, and you add your text before adding the piece to your bag."
+  },
+  "ribbon": {
+    "personal": "Personalization on selected pieces"
+  },
+  "philosophy": {
+    "eyebrow": "Our philosophy",
+    "title": "Three principles behind every piece",
+    "craft_title": "Thoughtful Craftsmanship",
+    "craft_text": "A piece starts with its material and with how it will be used. Proportions, seams and edges are considered so that it works as well as it looks, every day.",
+    "simplicity_title": "Refined Simplicity",
+    "simplicity_text": "Forms are kept clean and purposeful, in colours that sit easily with what you already wear and carry. Nothing is added that the piece does not need.",
+    "personal_title": "Personal Expression",
+    "personal_text": "Selected pieces can carry your initials or a name, so an everyday object becomes unmistakably yours."
+  },
+  "story": {
+    "eyebrow": "About Mavelania",
+    "title": "Who is Mavelania?",
+    "image_alt": "Man carrying a brown leather briefcase",
+    "p1": "Mavelania is a handcrafted leather goods brand built around thoughtful design, considered craftsmanship, and personal expression.",
+    "p2": "We believe that meaningful objects are defined not by excess, but by the attention given to every detail.",
+    "p3": "Our approach brings together carefully selected materials, refined forms, and personalization to create leather goods that reflect individual character and become part of everyday life.",
+    "p4": "Every piece represents our appreciation for craftsmanship, simplicity, and enduring design.",
+    "signature": "Mavelania — Handcrafted Leather Goods.",
+    "cta": "Discover Mavelania"
+  },
+  "service": {
+    "eyebrow": "Shopping with Mavelania",
+    "title": "Clear, from order to delivery",
+    "shipping_title": "International shipping",
+    "shipping_text": "Delivery options and costs for your country are shown at checkout, with tracking sent by email once your order ships.",
+    "returns_title": "Returns and exchanges",
+    "returns_text": "Return unused items within {{ days }} days of delivery. Personalized pieces may be excluded from change-of-mind returns where the law allows.",
+    "personal_title": "Personalization",
+    "personal_text": "Available on selected pieces only, with the methods and colours shown on their product pages.",
+    "secure_title": "Secure checkout",
+    "secure_text": "Payments are processed through Shopify. Mavelania does not store your card details.",
+    "materials_title": "Materials and care",
+    "materials_text": "Each product page lists the material, dimensions and care details we can confirm for that piece.",
+    "support_title": "Customer support",
+    "support_text": "Questions about a piece or an order? We reply within two business days."
   }
 }

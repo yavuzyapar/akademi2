@@ -8,7 +8,7 @@
   specification table instead of loose paragraphs; the divider itself is not
   printed. Descriptions without it are shown as written.
 
-  Params: product
+  Params: product, pers_on, pers_methods, pers_colors
 {%- endcomment -%}
 {%- liquid
   assign desc_parts = product.description | split: '<p>---'
@@ -55,7 +55,7 @@
 
     <div class="ms-info__side">
       <div class="ms-accordion ms-accordion--boxed">
-        <details open>
+        <details{% unless pers_on %} open{% endunless %}>
           <summary>{% render 'icon', name: 'truck' %}<span>{{ 'products.shipping_delivery' | t }}</span><i class="ms-accordion__toggle" aria-hidden="true"></i></summary>
           <div>
             {% if settings.delivery_note != blank %}<p>{{ settings.delivery_note }}</p>{% endif %}
@@ -72,6 +72,17 @@
             {% if shop.refund_policy.url != blank %}<p><a href="{{ shop.refund_policy.url }}">{{ 'faq.refund_link' | t }}</a></p>{% endif %}
           </div>
         </details>
+        {%- if pers_on -%}
+          <details open>
+            <summary>{% render 'icon', name: 'pen' %}<span>{{ 'personalize.label' | t }}</span><i class="ms-accordion__toggle" aria-hidden="true"></i></summary>
+            <div>
+              <p>{{ 'personalize.info_intro' | t }}</p>
+              {%- if pers_methods.size > 0 -%}<p><strong>{{ 'personalize.method_label' | t }}:</strong> {{ pers_methods | join: ' · ' }}</p>{%- endif -%}
+              {%- if pers_colors.size > 0 -%}<p><strong>{{ 'personalize.color_label' | t }}:</strong> {{ pers_colors | join: ' · ' }}</p>{%- endif -%}
+              <p>{{ 'personalize.returns_note' | t }}{% if shop.refund_policy.url != blank %} <a href="{{ shop.refund_policy.url }}">{{ 'faq.refund_link' | t }}</a>{% endif %}</p>
+            </div>
+          </details>
+        {%- endif -%}
         <details>
           <summary>{% render 'icon', name: 'drop' %}<span>{{ 'products.leather_care' | t }}</span><i class="ms-accordion__toggle" aria-hidden="true"></i></summary>
           <div>

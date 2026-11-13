@@ -2,22 +2,10 @@
   "sections": {
     "main": {
       "type": "mavelania-home",
-      "settings": {}
-    },
-    "promo": {
-      "type": "promo-banner",
       "settings": {
-        "eyebrow": "Leather Phone Cases",
-        "heading": "Leather cases built to last.",
-        "subheading": "Timeless look. Everyday protection.",
-        "heading_tag": "h2",
-        "text_position": "left",
-        "cta_primary_label": "Shop phone cases",
-        "cta_primary_link": "shopify://collections/phone-cases",
-        "cta_secondary_label": "",
-        "point_1": "Genuine leather",
-        "point_2": "Everyday protection",
-        "point_3": "Precision fit"
+        "signature_bag": "odette-leather-tote-bag",
+        "signature_wallet": "everett-leather-zip-wallet",
+        "signature_card": "lior-leather-card-holder"
       }
     },
     "trust": {
@@ -27,7 +15,6 @@
   },
   "order": [
     "main",
-    "promo",
     "trust"
   ]
 }

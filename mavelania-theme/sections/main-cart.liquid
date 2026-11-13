@@ -35,6 +35,12 @@
             <div class="ms-cart__info">
               <h2><a href="{{ item.url }}">{{ item.product.title }}</a></h2>
               {% unless item.product.has_only_default_variant %}<p>{{ item.variant.title }}</p>{% endunless %}
+              {%- for property in item.properties -%}
+                {%- assign property_first = property.first | slice: 0 -%}
+                {%- if property.last != blank and property_first != '_' -%}
+                  <p class="ms-cart__prop"><span>{{ property.first }}:</span> <strong>{{ property.last }}</strong></p>
+                {%- endif -%}
+              {%- endfor -%}
               <p class="ms-cart__unit">{{ item.final_price | money }}</p>
             </div>
             <div class="ms-qty ms-qty--small" data-qty data-qty-submit>

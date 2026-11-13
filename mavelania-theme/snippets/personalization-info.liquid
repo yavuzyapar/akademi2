@@ -1,0 +1,61 @@
+{%- comment -%}
+  Personalization facts for one product, read from the store's own data.
+  Outputs nothing for a product that is not personalizable, otherwise
+      1|<methods, comma separated>|<colours, comma separated>
+  Capture it and split on "|":
+      {% capture pers %}{% render 'personalization-info', product: product %}{% endcapture %}
+
+  Sources, in order:
+    1. product metafield custom.personalization (text), e.g.
+       "Laser and Embossed (Silver | Gold | Transparent | Black | Red)"
+    2. a "Personalization: ..." line in the product description, which is
+       how the catalogue states it today
+    3. the product tag "personalizable" (no methods or colours listed)
+
+  Only methods and colours named in that text are returned, so the site can
+  never offer an option the product does not have.
+{%- endcomment -%}
+{%- liquid
+  assign p_source = ''
+  assign p_field = product.metafields.custom.personalization.value | default: product.metafields.custom.personalization
+  if p_field != blank
+    assign p_source = p_field | append: ''
+  else
+    assign p_desc = product.description | strip_html | replace: '&nbsp;', ' ' | replace: 'Personalisation:', 'Personalization:'
+    if p_desc contains 'Personalization:'
+      assign p_source = p_desc | split: 'Personalization:' | last
+      if p_source contains ')'
+        assign p_source = p_source | split: ')' | first | append: ')'
+      else
+        assign p_source = p_source | slice: 0, 110
+      endif
+    endif
+  endif
+  if p_source == blank and product.tags contains 'personalizable'
+    assign p_source = 'yes'
+  endif
+
+  assign p_methods = ''
+  assign p_colors = ''
+  if p_source != blank
+    assign p_norm = p_source | downcase | replace: '|', ' ' | replace: '(', ' ' | replace: ')', ' ' | replace: ',', ' ' | replace: '.', ' ' | replace: ';', ' ' | replace: '/', ' ' | prepend: ' ' | append: ' '
+    if p_norm contains 'laser'
+      assign p_methods = p_methods | append: 'Laser engraving,'
+    endif
+    if p_norm contains 'emboss' or p_norm contains 'deboss'
+      assign p_methods = p_methods | append: 'Embossing,'
+    endif
+    if p_norm contains ' stamp'
+      assign p_methods = p_methods | append: 'Stamping,'
+    endif
+    assign p_known = 'silver,gold,transparent,black,red,white,blind' | split: ','
+    for p_color in p_known
+      assign p_word = ' ' | append: p_color | append: ' '
+      if p_norm contains p_word
+        assign p_color_name = p_color | capitalize
+        assign p_colors = p_colors | append: p_color_name | append: ','
+      endif
+    endfor
+  endif
+-%}
+{%- if p_source != blank -%}1|{{ p_methods }}|{{ p_colors }}{%- endif -%}

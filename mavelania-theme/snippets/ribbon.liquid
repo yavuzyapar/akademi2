@@ -1,11 +1,12 @@
 {%- comment -%}
-  Moving ribbon of what the store commits to. The list is printed twice so
-  the loop is seamless; the copy is hidden from screen readers so they read
-  it once. Every line is a promise made elsewhere on the site.
+  Ribbon of what the store commits to. The list is printed twice so the
+  loop is seamless; the copy is hidden from screen readers so they read it
+  once. Every line is a promise made elsewhere on the site (policies,
+  product data), never a claim about every product.
 {%- endcomment -%}
 {%- capture ribbon_items -%}
-  <li>{% render 'icon', name: 'leather' %}<span>{{ 'trust.leather_title' | t }}</span></li>
-  <li>{% render 'icon', name: 'needle' %}<span>{{ 'trust.leather_copy' | t }}</span></li>
+  <li>{% render 'icon', name: 'leather' %}<span>{{ 'general.brand_signature' | t }}</span></li>
+  <li>{% render 'icon', name: 'pen' %}<span>{{ 'ribbon.personal' | t }}</span></li>
   <li>{% render 'icon', name: 'rfid' %}<span>{{ 'home.tile_wallets_eyebrow' | t }}</span></li>
   {%- if settings.return_window_days > 0 -%}
     <li>{% render 'icon', name: 'return' %}<span>{{ 'products.returns_within' | t: days: settings.return_window_days }}</span></li>

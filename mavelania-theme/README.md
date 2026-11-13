@@ -24,6 +24,39 @@ canlı sitedekiyle aynı (masaüstü: amblem 49×49, yazı 180×47; mobil: 42×4
    kontrol edin, memnunsanız **Publish** deyin. Eski tema listede kalır; istediğiniz
    an geri dönebilirsiniz.
 
+## Marka kurgusu: "Crafted with Intention. Made Personal."
+
+- **Navigasyon:** Home · Shop (Bags / Wallets / Card Holders menüsü) · Personalize Your Piece · About Mavelania · Contact.
+- **Slider:** 1. çanta (her zaman ilk), 2. cüzdan, 3. kartlık. Telefon kılıfı slider'da yok.
+  3. slayt, seçilen kartlığın ürün verisinde kişiselleştirme varsa "Your Initials. Your Identity." /
+  "Personalize your piece", yoksa "Small in Size. Considered in Detail." / "Explore card holders" gösterir.
+- **Ana sayfa:** slider → marka cümlesi ve iki düğme → kayan şerit → Selected Essentials (tam 3 ürün)
+  → Make It Yours → Bags / Wallets / Card Holders → (indirim varsa) fırsatlar → Our Philosophy
+  → Who is Mavelania? → hizmet bilgileri → SSS → bülten.
+- **Selected Essentials:** tema düzenleyicide **Home: brand** bölümünden üç ürün seçilir
+  (varsayılan: Odette Leather Tote Bag, Everett Leather Zip Wallet, Lior Leather Card Holder).
+
+## Kişiselleştirme nasıl çalışır
+
+Kişiselleştirme **yalnızca ürün verisi bunu söylüyorsa** gösterilir. Kaynak sırası:
+
+1. Ürün metafield'ı `custom.personalization` (metin), örn. `Laser and Embossed (Silver | Gold | Black)`
+2. Ürün açıklamasındaki `Personalization: ...` satırı (bugün katalogda böyle yazılı)
+3. Ürün etiketi `personalizable` (yöntem/renk listelemeden)
+
+Yöntemler (Laser engraving / Embossing / Stamping) ve renkler (Silver, Gold, Transparent, Black,
+Red, White, Blind) yalnızca bu metinde geçiyorsa sunulur. Müşterinin metni, yöntemi ve rengi
+sepete, ödeme sayfasına ve Shopify'daki siparişe **satır özelliği** olarak geçer.
+
+Bugün katalogda kişiselleştirme yazan ürünler: Heart Leather Bag Charm, Markora Bookmark,
+Lined Leather Desk Mat, Amanda Jewelry Box, Sonat ve F360 telefon kılıfları. **Hiçbir çanta,
+cüzdan veya kartlığın** verisinde kişiselleştirme yok; o ürünlerde sunmak istiyorsanız ürüne
+yukarıdaki metafield'ı ya da açıklama satırını ekleyin, tema otomatik gösterir.
+
+"Personalize Your Piece" sayfası `/collections/all?view=personalize` adresindedir (sayfa
+oluşturmak gerekmez). İsterseniz `personalize` adlı bir sayfa açıp **page.personalize**
+şablonunu seçin; menü otomatik ona yönlenir.
+
 ## Satışa dönük katman
 
 - **Sepete ekle düğmesi** sayfadaki en dikkat çekici renkte (turuncu); ürün sayfası, sabit

@@ -1,54 +1,95 @@
 {%- comment -%}
-  Storefront home page, top half: full-width hero, reassurance strip,
-  shop-by-category tiles, a featured product carousel, a wallet spotlight and
-  a tabbed product carousel per category.
+  Home page, first half: the three-slide hero (bag, wallet, card holder),
+  the brand line with the personalization message, selected essentials,
+  "Make It Yours", the three collections and, when products are reduced,
+  the deals rail.
 
-  Product data is always live: prices, "from" prices, product counts, colour
-  dots, sale and sold-out states all come from the catalogue.
+  Everything about a product (price, availability, personalization) is
+  read from the catalogue. A slide or card that says "personalizable" only
+  does so when the product's own data says it.
 {%- endcomment -%}
 {%- liquid
-  assign catalog_handles = 'bags,wallets-purses,phone-cases,accessories' | split: ','
   assign bags = collections['bags']
   assign wallets = collections['wallets-purses']
-  assign cases = collections['phone-cases']
-  assign accessories = collections['accessories']
-  assign featured = section.settings.featured_collection
-  assign featured_count = section.settings.featured_count | default: 8
+  assign cards_url = routes.root_url | append: 'collections/types?q=Card%20Holder'
+  if collections['card-holders'].url != blank
+    assign cards_url = collections['card-holders'].url
+  endif
+  assign personalize_url = routes.all_products_collection_url | append: '?view=personalize'
+  if pages['personalize'].url != blank
+    assign personalize_url = pages['personalize'].url
+  endif
+
+  assign signature_bag = section.settings.signature_bag
+  assign signature_wallet = section.settings.signature_wallet
+  assign signature_card = section.settings.signature_card
 -%}
+{%- capture card_pers -%}{%- if signature_card != blank -%}{% render 'personalization-info', product: signature_card %}{%- endif -%}{%- endcapture -%}
+{%- assign card_pers = card_pers | strip -%}
+
 <div class="ms-home">
 
-  {%- comment -%} ── Hero ── {%- endcomment -%}
+  {%- comment -%} ── Hero: bag first, then wallet, then card holder ── {%- endcomment -%}
   <section class="ms-hero ms-wrap" aria-label="{{ 'home.hero_label' | t | escape }}">
    <div class="ms-hero__frame" data-hero aria-roledescription="carousel">
     <div class="ms-hero__slides">
-      <a class="ms-hero__slide is-active" href="{{ routes.root_url }}collections/phone-cases" data-hero-slide>
-        <picture><source media="(max-width:760px)" srcset="{{ 'mobile-hero-phone-cases-20260919-v2.webp' | asset_url }}" width="941" height="1672"><img width="1774" height="887" src="{{ 'hero-phone-cases-20260919.webp' | asset_url }}" alt="Mavelania leather phone cases" fetchpriority="high" decoding="sync"></picture>
-        <span class="ms-hero__cta">{{ 'home.shop_phone_cases' | t }} {% render 'icon', name: 'arrow-right' %}</span>
-      </a>
-      <a class="ms-hero__slide" href="{{ routes.root_url }}collections/bags" data-hero-slide tabindex="-1">
-        <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero1.webp' | asset_url }}" width="864" height="1821"><img width="1810" height="869" data-src="{{ 'hero1.webp' | asset_url }}" alt="Woman seated beside a Mavelania leather bag" decoding="async"></picture>
-        <span class="ms-hero__cta">{{ 'home.shop_bags' | t }} {% render 'icon', name: 'arrow-right' %}</span>
-      </a>
-      <a class="ms-hero__slide" href="{{ routes.root_url }}collections/bags" data-hero-slide tabindex="-1">
-        <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero2.webp' | asset_url }}" width="853" height="1844"><img width="1810" height="869" data-src="{{ 'hero2.webp' | asset_url }}" alt="Man at a desk with a Mavelania leather briefcase" decoding="async"></picture>
-        <span class="ms-hero__cta">{{ 'home.shop_bags' | t }} {% render 'icon', name: 'arrow-right' %}</span>
-      </a>
-      <a class="ms-hero__slide" href="{{ routes.root_url }}collections/bags" data-hero-slide tabindex="-1">
-        <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero4.webp' | asset_url }}" width="852" height="1846"><img width="1810" height="869" data-src="{{ 'hero4.webp' | asset_url }}" alt="Mavelania leather bag collection" decoding="async"></picture>
-        <span class="ms-hero__cta">{{ 'home.shop_bags' | t }} {% render 'icon', name: 'arrow-right' %}</span>
-      </a>
-      <a class="ms-hero__slide" href="{{ routes.root_url }}collections/wallets-purses" data-hero-slide tabindex="-1">
-        <picture><source media="(max-width:760px)" data-srcset="{{ 'mobile-hero-wallets.webp' | asset_url }}" width="900" height="1687"><img width="1810" height="869" data-src="{{ 'hero-wallets.webp' | asset_url }}" alt="Mavelania wallet and card holder collection" decoding="async"></picture>
-        <span class="ms-hero__cta">{{ 'home.shop_wallets' | t }} {% render 'icon', name: 'arrow-right' %}</span>
-      </a>
+
+      <div class="ms-hero__slide ms-hero__slide--left is-active" data-hero-slide>
+        <picture>
+          <source media="(max-width:760px)" srcset="{{ 'before-footer-mobile.webp' | asset_url }}" width="900" height="1599">
+          <img src="{{ 'before-footer.webp' | asset_url }}" width="1400" height="622" alt="{{ 'home.slide_bag_alt' | t | escape }}" fetchpriority="high" decoding="sync" style="--pos-m: center 22%">
+        </picture>
+        <div class="ms-hero__text">
+          <p class="ms-hero__eyebrow">{{ 'navigation.bags' | t }}</p>
+          <h2 class="ms-hero__title">{{ section.settings.slide_bag_title }}</h2>
+          <a class="ms-button ms-button--primary" href="{{ bags.url | default: routes.all_products_collection_url }}">{{ section.settings.slide_bag_cta }} {% render 'icon', name: 'arrow-right' %}</a>
+        </div>
+      </div>
+
+      <div class="ms-hero__slide ms-hero__slide--top" data-hero-slide aria-hidden="true">
+        <picture>
+          <source media="(max-width:760px)" data-srcset="{{ 'women-leather-wallet-model.webp' | asset_url }}" width="1023" height="1537">
+          <img data-src="{{ 'collection-hero-wallets.webp' | asset_url }}" width="1886" height="834" alt="{{ 'home.slide_wallet_alt' | t | escape }}" decoding="async" style="--pos-m: center 30%">
+        </picture>
+        <div class="ms-hero__text">
+          <p class="ms-hero__eyebrow">{{ 'navigation.wallets_short' | t }}</p>
+          <h2 class="ms-hero__title">{{ section.settings.slide_wallet_title }}</h2>
+          <a class="ms-button ms-button--primary" href="{{ wallets.url | default: routes.all_products_collection_url }}" tabindex="-1">{{ section.settings.slide_wallet_cta }} {% render 'icon', name: 'arrow-right' %}</a>
+        </div>
+      </div>
+
+      <div class="ms-hero__slide ms-hero__slide--top" data-hero-slide aria-hidden="true">
+        <picture>
+          {%- if signature_card.featured_image -%}
+            <source media="(max-width:760px)" data-srcset="{{ signature_card.featured_image | image_url: width: 900 }}" width="{{ signature_card.featured_image.width }}" height="{{ signature_card.featured_image.height }}">
+          {%- endif -%}
+          <img data-src="{{ 'collection-hero-cardholders.webp' | asset_url }}" width="1888" height="833" alt="{{ 'home.slide_card_alt' | t | escape }}" decoding="async" style="--pos-m: center 40%">
+        </picture>
+        <div class="ms-hero__text">
+          <p class="ms-hero__eyebrow">{{ 'navigation.card_holders' | t }}</p>
+          {%- if card_pers != blank -%}
+            {%- comment -%} This card holder really can be personalized. {%- endcomment -%}
+            <h2 class="ms-hero__title">{{ section.settings.slide_card_title }}</h2>
+            <a class="ms-button ms-button--primary" href="{{ signature_card.url }}#personalize" tabindex="-1">{{ section.settings.slide_card_cta }} {% render 'icon', name: 'arrow-right' %}</a>
+          {%- else -%}
+            <h2 class="ms-hero__title">{{ section.settings.slide_card_title_plain }}</h2>
+            <a class="ms-button ms-button--primary" href="{{ cards_url }}" tabindex="-1">{{ section.settings.slide_card_cta_plain }} {% render 'icon', name: 'arrow-right' %}</a>
+          {%- endif -%}
+        </div>
+      </div>
     </div>
+
+    <a class="ms-hero__pers" href="{{ personalize_url }}">
+      {% render 'icon', name: 'pen' %}
+      <span>{{ 'home.personal_line' | t }}</span>
+    </a>
 
     <button class="ms-hero__arrow ms-hero__arrow--prev" type="button" data-hero-prev aria-label="{{ 'home.hero_previous' | t | escape }}">{% render 'icon', name: 'arrow-left' %}</button>
     <button class="ms-hero__arrow ms-hero__arrow--next" type="button" data-hero-next aria-label="{{ 'home.hero_next' | t | escape }}">{% render 'icon', name: 'arrow-right' %}</button>
 
     <div class="ms-hero__controls">
       <div class="ms-hero__dots" role="group" aria-label="{{ 'home.hero_selector' | t | escape }}">
-        {%- for i in (1..5) -%}
+        {%- for i in (1..3) -%}
           <button type="button" data-hero-dot="{{ forloop.index0 }}" aria-label="{{ 'home.hero_image' | t: index: i | escape }}"{% if forloop.first %} class="is-active" aria-current="true"{% endif %}></button>
         {%- endfor -%}
       </div>
@@ -60,14 +101,79 @@
    </div>
   </section>
 
-  {%- comment -%} ── Moving ribbon of what the store commits to ── {%- endcomment -%}
+  {%- comment -%} ── Brand line: what Mavelania is, in one breath ── {%- endcomment -%}
+  <section class="ms-intro ms-wrap" aria-labelledby="HomeIntroTitle">
+    <div class="ms-intro__copy">
+      <p class="ms-eyebrow">{{ 'general.brand_signature' | t }}</p>
+      <h1 id="HomeIntroTitle" class="ms-intro__title">{{ section.settings.intro_title }}</h1>
+      <p class="ms-intro__text">{{ section.settings.intro_text }}</p>
+    </div>
+    <div class="ms-intro__actions">
+      <a class="ms-button ms-button--primary" href="{{ routes.all_products_collection_url }}">{{ 'home.cta_discover' | t }}</a>
+      <a class="ms-button ms-button--outline" href="{{ personalize_url }}">{% render 'icon', name: 'pen' %} {{ 'home.cta_personalize' | t }}</a>
+      <p class="ms-intro__personal">{{ 'home.personal_line' | t }}</p>
+    </div>
+  </section>
+
   {% render 'ribbon' %}
 
+  {%- comment -%} ── Selected essentials: exactly three pieces ── {%- endcomment -%}
+  <section class="ms-section ms-wrap" aria-labelledby="HomeEssentialsTitle">
+    <header class="ms-section__head ms-section__head--center">
+      <p class="ms-eyebrow">{{ 'home.essentials_eyebrow' | t }}</p>
+      <h2 id="HomeEssentialsTitle" class="ms-heading">{{ 'home.essentials_title' | t }}</h2>
+      <p class="ms-section__lede">{{ 'home.essentials_text' | t }}</p>
+    </header>
+    <div class="ms-essentials">
+      {%- for essential in (1..3) -%}
+        {%- case forloop.index -%}
+          {%- when 1 -%}{%- assign piece = signature_bag -%}{%- assign piece_label = 'home.essential_bag' | t -%}
+          {%- when 2 -%}{%- assign piece = signature_wallet -%}{%- assign piece_label = 'home.essential_wallet' | t -%}
+          {%- else -%}{%- assign piece = signature_card -%}{%- assign piece_label = 'home.essential_card' | t -%}
+        {%- endcase -%}
+        {%- if piece != blank -%}
+          {% render 'essential-card', product: piece, label: piece_label %}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {% render 'make-it-yours', personalize_url: personalize_url, image: section.settings.personal_image %}
+
+  {%- comment -%} ── The three collections ── {%- endcomment -%}
+  <section class="ms-section ms-wrap" aria-labelledby="HomeCategoriesTitle">
+    <header class="ms-section__head ms-section__head--center">
+      <p class="ms-eyebrow">{{ 'home.shop_by_category' | t }}</p>
+      <h2 id="HomeCategoriesTitle" class="ms-heading">{{ 'home.collections_title' | t }}</h2>
+    </header>
+    <div class="ms-cats ms-cats--three">
+      <a class="ms-cat" href="{{ bags.url | default: routes.all_products_collection_url }}">
+        <img src="{{ 'collection-bag-bordeaux.webp' | asset_url }}" alt="{{ 'home.cat_bags_alt' | t | escape }}" width="1023" height="1537" loading="lazy" decoding="async">
+        <span class="ms-cat__copy"><strong>{{ 'navigation.bags' | t }}</strong><span class="ms-cat__link">{{ 'home.shop_now' | t }} {% render 'icon', name: 'arrow-right' %}</span></span>
+      </a>
+      <a class="ms-cat" href="{{ wallets.url | default: routes.all_products_collection_url }}">
+        <img src="{{ 'women-leather-wallet-model.webp' | asset_url }}" alt="{{ 'home.cat_wallets_alt' | t | escape }}" width="1023" height="1537" loading="lazy" decoding="async">
+        <span class="ms-cat__copy"><strong>{{ 'navigation.wallets_short' | t }}</strong><span class="ms-cat__link">{{ 'home.shop_now' | t }} {% render 'icon', name: 'arrow-right' %}</span></span>
+      </a>
+      <a class="ms-cat" href="{{ cards_url }}">
+        {%- if signature_card.featured_image -%}
+          {{ signature_card.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '480,720,900', sizes: '(max-width: 900px) 46vw, 30vw', alt: signature_card.featured_image.alt | default: signature_card.title }}
+        {%- else -%}
+          <img src="{{ 'collection-hero-cardholders.webp' | asset_url }}" alt="" width="1888" height="833" loading="lazy" decoding="async">
+        {%- endif -%}
+        <span class="ms-cat__copy"><strong>{{ 'navigation.card_holders' | t }}</strong><span class="ms-cat__link">{{ 'home.shop_now' | t }} {% render 'icon', name: 'arrow-right' %}</span></span>
+      </a>
+    </div>
+    <p class="ms-cats__more">
+      {{ 'home.also_in_shop' | t }}
+      {%- if collections['phone-cases'].products_count > 0 %} <a href="{{ collections['phone-cases'].url }}">{{ 'navigation.phone_cases' | t }}</a>{% endif %}
+      {%- if collections['accessories'].products_count > 0 %} · <a href="{{ collections['accessories'].url }}">{{ 'navigation.accessories' | t }}</a>{% endif %}
+    </p>
+  </section>
+
   {%- comment -%}
-    ── Deals ──
-    Only products with a compare-at price above their price. The section
-    disappears when nothing is reduced. During a live campaign the heading
-    becomes "<campaign name> deals" (assets/mavelania-shop.js).
+    ── Deals ── only products with a compare-at price above their price.
+    Absent when nothing is reduced.
   {%- endcomment -%}
   {%- assign deal_count = 0 -%}
   {%- capture deal_cards -%}
@@ -89,9 +195,7 @@
           <a class="ms-link" href="{{ routes.all_products_collection_url }}">{{ 'home.view_all_products' | t }} {% render 'icon', name: 'arrow-right' %}</a>
         </header>
         <div class="ms-carousel" data-carousel>
-          <div class="ms-carousel__track" data-carousel-track>
-            {{ deal_cards }}
-          </div>
+          <div class="ms-carousel__track" data-carousel-track>{{ deal_cards }}</div>
           <button class="ms-carousel__arrow ms-carousel__arrow--prev" type="button" data-carousel-prev aria-label="{{ 'general.previous' | t | escape }}">{% render 'icon', name: 'arrow-left' %}</button>
           <button class="ms-carousel__arrow ms-carousel__arrow--next" type="button" data-carousel-next aria-label="{{ 'general.next' | t | escape }}">{% render 'icon', name: 'arrow-right' %}</button>
         </div>
@@ -99,224 +203,30 @@
     </section>
   {%- endif -%}
 
-  {%- comment -%} ── Shop by category ── {%- endcomment -%}
-  <section class="ms-section ms-wrap" aria-labelledby="HomeCategoriesTitle">
-    <header class="ms-section__head ms-section__head--center">
-      <p class="ms-eyebrow">{{ 'home.shop_by_category' | t }}</p>
-      <h1 id="HomeCategoriesTitle" class="ms-heading">{{ 'general.brand_signature' | t }}</h1>
-    </header>
-
-    <div class="ms-cats">
-      {%- if bags.products_count > 0 -%}
-        {%- assign cat_from = bags.products | map: 'price_min' | sort | first | money -%}
-        <a class="ms-cat" href="{{ bags.url }}">
-          <img src="{{ 'collection-bag-bordeaux.webp' | asset_url }}" alt="Woman carrying a bordeaux leather bag" width="1023" height="1537" loading="lazy" decoding="async">
-          <span class="ms-cat__copy">
-            <strong>{{ 'collections.bags.card_title' | t }}</strong>
-            <span>{{ 'products.from_price' | t: price: cat_from }}</span>
-            <span class="ms-cat__link">{{ 'home.shop_now' | t }} {% render 'icon', name: 'arrow-right' %}</span>
-          </span>
-        </a>
-      {%- endif -%}
-      {%- if wallets.products_count > 0 -%}
-        {%- assign cat_from = wallets.products | map: 'price_min' | sort | first | money -%}
-        <a class="ms-cat" href="{{ wallets.url }}">
-          <img src="{{ 'women-leather-wallet-model.webp' | asset_url }}" alt="Woman holding a leather wallet" width="1023" height="1537" loading="lazy" decoding="async">
-          <span class="ms-cat__copy">
-            <strong>{{ 'collections.wallets.card_title' | t }}</strong>
-            <span>{{ 'products.from_price' | t: price: cat_from }}</span>
-            <span class="ms-cat__link">{{ 'home.shop_now' | t }} {% render 'icon', name: 'arrow-right' %}</span>
-          </span>
-        </a>
-      {%- endif -%}
-      {%- if cases.products_count > 0 -%}
-        {%- assign cat_from = cases.products | map: 'price_min' | sort | first | money -%}
-        <a class="ms-cat" href="{{ cases.url }}">
-          <img src="{{ 'phone-case-model-new.webp' | asset_url }}" alt="Woman holding a leather phone case with card slots" width="1086" height="1448" loading="lazy" decoding="async">
-          <span class="ms-cat__copy">
-            <strong>{{ 'collections.phone_cases.card_title' | t }}</strong>
-            <span>{{ 'products.from_price' | t: price: cat_from }}</span>
-            <span class="ms-cat__link">{{ 'home.shop_now' | t }} {% render 'icon', name: 'arrow-right' %}</span>
-          </span>
-        </a>
-      {%- endif -%}
-      {%- if accessories.products_count > 0 -%}
-        {%- assign cat_from = accessories.products | map: 'price_min' | sort | first | money -%}
-        <a class="ms-cat" href="{{ accessories.url }}">
-          <img src="{{ 'home-accessories-card.webp' | asset_url }}" alt="Mavelania bag styled with leather accessories" width="1086" height="1448" loading="lazy" decoding="async">
-          <span class="ms-cat__copy">
-            <strong>{{ 'collections.accessories.card_title' | t }}</strong>
-            <span>{{ 'products.from_price' | t: price: cat_from }}</span>
-            <span class="ms-cat__link">{{ 'home.shop_now' | t }} {% render 'icon', name: 'arrow-right' %}</span>
-          </span>
-        </a>
-      {%- endif -%}
-    </div>
-  </section>
-
-  {%- comment -%}
-    ── Featured products ──
-    A collection picked in the theme editor wins. With none selected the
-    carousel takes in-stock pieces from each category so it is never empty.
-  {%- endcomment -%}
-  <section class="ms-section ms-section--tight ms-wrap" aria-labelledby="HomeFeaturedTitle">
-    <header class="ms-section__head">
-      <div>
-        <p class="ms-eyebrow">{{ 'home.featured_eyebrow' | t }}</p>
-        <h2 id="HomeFeaturedTitle" class="ms-heading">{{ section.settings.featured_heading | default: 'Featured pieces' }}</h2>
-      </div>
-      <a class="ms-link" href="{% if featured != blank and featured.products_count > 0 %}{{ featured.url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">{{ 'home.view_all_products' | t }} {% render 'icon', name: 'arrow-right' %}</a>
-    </header>
-
-    <div class="ms-carousel" data-carousel>
-      <div class="ms-carousel__track" data-carousel-track>
-        {%- if featured != blank and featured.products_count > 0 -%}
-          {%- for product in featured.products limit: featured_count -%}
-            {% render 'product-card', product: product, heading: 'h3' %}
-          {%- endfor -%}
-        {%- else -%}
-          {%- assign per_category = featured_count | divided_by: 4 | at_least: 1 -%}
-          {%- for handle in catalog_handles -%}
-            {%- comment -%} In-stock pieces only: a sold-out product should not lead the home page. {%- endcomment -%}
-            {%- assign shown = 0 -%}
-            {%- for product in collections[handle].products limit: 24 -%}
-              {%- if product.available and shown < per_category -%}
-                {% render 'product-card', product: product, heading: 'h3' %}
-                {%- assign shown = shown | plus: 1 -%}
-              {%- endif -%}
-            {%- endfor -%}
-          {%- endfor -%}
-        {%- endif -%}
-      </div>
-      <button class="ms-carousel__arrow ms-carousel__arrow--prev" type="button" data-carousel-prev aria-label="{{ 'general.previous' | t | escape }}">{% render 'icon', name: 'arrow-left' %}</button>
-      <button class="ms-carousel__arrow ms-carousel__arrow--next" type="button" data-carousel-next aria-label="{{ 'general.next' | t | escape }}">{% render 'icon', name: 'arrow-right' %}</button>
-    </div>
-  </section>
-
-  {%- comment -%} ── Wallet spotlight ── {%- endcomment -%}
-  {%- if wallets.products_count > 0 -%}
-    <section class="ms-section ms-wrap ms-spot" aria-labelledby="HomeSpotTitle">
-      <a class="ms-spot__media" href="{{ wallets.url }}" tabindex="-1" aria-hidden="true">
-        <img src="{{ 'men-leather-bag-model.webp' | asset_url }}" alt="" width="1023" height="1537" loading="lazy" decoding="async">
-      </a>
-      <div class="ms-spot__body">
-        <p class="ms-eyebrow">{% render 'icon', name: 'rfid' %} {{ 'home.tile_wallets_eyebrow' | t }}</p>
-        <h2 id="HomeSpotTitle" class="ms-heading">{{ 'collections.wallets.card_title' | t }}</h2>
-        <p class="ms-spot__copy">{{ 'home.spot_wallets_copy' | t }}</p>
-        <div class="ms-spot__products">
-          {%- assign shown = 0 -%}
-          {%- for product in wallets.products limit: 12 -%}
-            {%- if product.available and shown < 2 -%}
-              {% render 'product-card', product: product, heading: 'h3', sizes: '(max-width: 700px) 46vw, 20vw' %}
-              {%- assign shown = shown | plus: 1 -%}
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
-        <a class="ms-button ms-button--outline" href="{{ wallets.url }}">{{ 'home.view_all_in' | t: title: wallets.title }} {% render 'icon', name: 'arrow-right' %}</a>
-      </div>
-    </section>
-  {%- endif -%}
-
-  {%- comment -%}
-    ── How a piece is made ──
-    Four steps, each one a line the About page and the collection pages
-    already state.
-  {%- endcomment -%}
-  <section class="ms-craft" aria-labelledby="HomeCraftTitle">
-    <div class="ms-wrap">
-      <header class="ms-section__head ms-section__head--center">
-        <p class="ms-eyebrow">{{ 'home.craft_eyebrow' | t }}</p>
-        <h2 id="HomeCraftTitle" class="ms-heading">{{ 'home.craft_title' | t }}</h2>
-      </header>
-      <ol class="ms-craft__steps">
-        <li class="ms-craft__step">
-          <span class="ms-craft__icon">{% render 'icon', name: 'scissors' %}</span>
-          <span class="ms-craft__num" aria-hidden="true">01</span>
-          <h3>{{ 'home.craft_1_title' | t }}</h3>
-          <p>{{ 'home.craft_1_copy' | t }}</p>
-        </li>
-        <li class="ms-craft__step">
-          <span class="ms-craft__icon">{% render 'icon', name: 'needle' %}</span>
-          <span class="ms-craft__num" aria-hidden="true">02</span>
-          <h3>{{ 'home.craft_2_title' | t }}</h3>
-          <p>{{ 'home.craft_2_copy' | t }}</p>
-        </li>
-        <li class="ms-craft__step">
-          <span class="ms-craft__icon">{% render 'icon', name: 'burnish' %}</span>
-          <span class="ms-craft__num" aria-hidden="true">03</span>
-          <h3>{{ 'home.craft_3_title' | t }}</h3>
-          <p>{{ 'home.craft_3_copy' | t }}</p>
-        </li>
-        <li class="ms-craft__step">
-          <span class="ms-craft__icon">{% render 'icon', name: 'clock' %}</span>
-          <span class="ms-craft__num" aria-hidden="true">04</span>
-          <h3>{{ 'home.craft_4_title' | t }}</h3>
-          <p>{{ 'home.craft_4_copy' | t }}</p>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  {%- comment -%} ── Products by category (tabs) ── {%- endcomment -%}
-  <section class="ms-section ms-section--tint" aria-labelledby="HomeTabsTitle" data-tabs>
-    <div class="ms-wrap">
-      <header class="ms-section__head ms-section__head--center">
-        <p class="ms-eyebrow">{{ 'home.collection_heading' | t }}</p>
-        <h2 id="HomeTabsTitle" class="ms-heading">{{ 'home.tabs_heading' | t }}</h2>
-        <div class="ms-tabs" role="tablist" aria-label="{{ 'home.shop_by_category' | t | escape }}">
-          {%- assign tab_index = 0 -%}
-          {%- for handle in catalog_handles -%}
-            {%- assign tab_collection = collections[handle] -%}
-            {%- if tab_collection.products_count > 0 -%}
-              <button type="button" role="tab" id="HomeTab-{{ handle }}" aria-controls="HomePanel-{{ handle }}" aria-selected="{% if tab_index == 0 %}true{% else %}false{% endif %}"{% if tab_index > 0 %} tabindex="-1"{% endif %} data-tab>
-                {{ tab_collection.title }}
-              </button>
-              {%- assign tab_index = tab_index | plus: 1 -%}
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
-      </header>
-
-      {%- assign tab_index = 0 -%}
-      {%- for handle in catalog_handles -%}
-        {%- assign tab_collection = collections[handle] -%}
-        {%- if tab_collection.products_count > 0 -%}
-          <div class="ms-tabpanel" role="tabpanel" id="HomePanel-{{ handle }}" aria-labelledby="HomeTab-{{ handle }}" tabindex="0" data-tab-panel{% if tab_index > 0 %} hidden{% endif %}>
-            <div class="ms-carousel" data-carousel>
-              <div class="ms-carousel__track" data-carousel-track>
-                {%- for product in tab_collection.products limit: 8 -%}
-                  {% render 'product-card', product: product, heading: 'h3', within: tab_collection %}
-                {%- endfor -%}
-                {%- if tab_collection.products_count > 8 -%}
-                  <a class="ms-carousel__more" href="{{ tab_collection.url }}">
-                    <span>{{ 'home.view_all_in' | t: title: tab_collection.title }}</span>
-                    {% render 'icon', name: 'arrow-right' %}
-                  </a>
-                {%- endif -%}
-              </div>
-              <button class="ms-carousel__arrow ms-carousel__arrow--prev" type="button" data-carousel-prev aria-label="{{ 'general.previous' | t | escape }}">{% render 'icon', name: 'arrow-left' %}</button>
-              <button class="ms-carousel__arrow ms-carousel__arrow--next" type="button" data-carousel-next aria-label="{{ 'general.next' | t | escape }}">{% render 'icon', name: 'arrow-right' %}</button>
-            </div>
-            <p class="ms-tabpanel__foot">
-              <a class="ms-button ms-button--outline" href="{{ tab_collection.url }}">{{ 'home.view_all_in' | t: title: tab_collection.title }} {% render 'icon', name: 'arrow-right' %}</a>
-            </p>
-          </div>
-          {%- assign tab_index = tab_index | plus: 1 -%}
-        {%- endif -%}
-      {%- endfor -%}
-    </div>
-  </section>
-
 </div>
 {% schema %}
 {
-  "name": "Home: shop",
+  "name": "Home: brand",
   "settings": [
-    { "type": "header", "content": "Featured products" },
-    { "type": "collection", "id": "featured_collection", "label": "Collection to feature", "info": "Leave empty to show in-stock pieces from every category." },
-    { "type": "text", "id": "featured_heading", "label": "Heading", "default": "Featured pieces" },
-    { "type": "range", "id": "featured_count", "min": 4, "max": 12, "step": 4, "default": 8, "label": "Number of products" }
+    { "type": "header", "content": "Hero slides", "info": "The bag is always the first slide. Each slide links to its collection." },
+    { "type": "text", "id": "slide_bag_title", "label": "Slide 1 (bag) headline", "default": "Crafted to Be Remembered." },
+    { "type": "text", "id": "slide_bag_cta", "label": "Slide 1 button", "default": "Discover bags" },
+    { "type": "text", "id": "slide_wallet_title", "label": "Slide 2 (wallet) headline", "default": "Everyday Essentials. Thoughtfully Crafted." },
+    { "type": "text", "id": "slide_wallet_cta", "label": "Slide 2 button", "default": "Explore wallets" },
+    { "type": "text", "id": "slide_card_title", "label": "Slide 3 headline, when the card holder can be personalized", "default": "Your Initials. Your Identity." },
+    { "type": "text", "id": "slide_card_cta", "label": "Slide 3 button, when the card holder can be personalized", "default": "Personalize your piece" },
+    { "type": "text", "id": "slide_card_title_plain", "label": "Slide 3 headline, otherwise", "default": "Small in Size. Considered in Detail.", "info": "Shown while the signature card holder has no personalization in its product data." },
+    { "type": "text", "id": "slide_card_cta_plain", "label": "Slide 3 button, otherwise", "default": "Explore card holders" },
+    { "type": "header", "content": "Brand line" },
+    { "type": "text", "id": "intro_title", "label": "Headline", "default": "Crafted with Intention. Made Personal." },
+    { "type": "textarea", "id": "intro_text", "label": "Text", "default": "Discover thoughtfully crafted leather goods, personalized to reflect your individual style." },
+    { "type": "header", "content": "Selected essentials", "info": "Exactly three pieces: a bag, a wallet and a card holder. Choose pieces that are in stock." },
+    { "type": "product", "id": "signature_bag", "label": "Signature bag" },
+    { "type": "product", "id": "signature_wallet", "label": "Everyday wallet" },
+    { "type": "product", "id": "signature_card", "label": "Card holder", "info": "Also used for slide 3 on phones." },
+    { "type": "header", "content": "Make It Yours" },
+    { "type": "image_picker", "id": "personal_image", "label": "Photo of a personalized piece", "info": "Use a real photo of initials or a name on one of your products. Until one is set, the section shows a live preview of the customer's own text instead." }
   ],
-  "presets": [{ "name": "Home: shop" }]
+  "presets": [{ "name": "Home: brand" }]
 }
 {% endschema %}

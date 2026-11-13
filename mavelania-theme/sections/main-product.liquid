@@ -13,6 +13,20 @@
   assign low_stock_limit = section.settings.low_stock_threshold | default: 5
   assign rv_price = product.price | money
 -%}
+{%- comment -%} Personalization, only as the product's own data states it. {%- endcomment -%}
+{%- capture pers_info -%}{% render 'personalization-info', product: product %}{%- endcapture -%}
+{%- liquid
+  assign pers_info = pers_info | strip
+  assign pers_on = false
+  assign pers_methods = ''
+  assign pers_colors = ''
+  if pers_info != blank
+    assign pers_on = true
+    assign pers_parts = pers_info | split: '|'
+    assign pers_methods = pers_parts[1] | split: ','
+    assign pers_colors = pers_parts[2] | split: ','
+  endif
+-%}
 <section
   class="mv-product ms-product"
   data-product-root
@@ -124,6 +138,10 @@
         </span>
       </p>
 
+      {%- if pers_on -%}
+        <a class="ms-pers-flag" href="#personalize">{% render 'icon', name: 'pen' %}<span>{{ 'personalize.available' | t }}</span></a>
+      {%- endif -%}
+
       {%- comment -%} First bullet points of the description, so the essentials sit next to the price. {%- endcomment -%}
       {%- assign highlight_parts = product.description | split: '<p>---' | first | split: '<li>' -%}
       {%- if highlight_parts.size > 2 -%}
@@ -153,6 +171,10 @@
         {% endunless %}
 
         <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
+
+        {%- if pers_on -%}
+          {% render 'personalization-form', product: product, methods: pers_methods, colors: pers_colors, max_chars: section.settings.pers_max_chars, note: section.settings.pers_note %}
+        {%- endif -%}
 
         {%- if section.settings.show_addons -%}
           {%- assign addon_collection = section.settings.addons_collection -%}
@@ -225,10 +247,17 @@
             <span>{% if settings.delivery_note != blank %}{{ settings.delivery_note }}{% else %}{{ 'trust.shipping_copy' | t }}{% endif %}</span>
           </div>
         </li>
-        <li>
-          {% render 'icon', name: 'leather' %}
-          <div><strong>{{ 'trust.leather_title' | t }}</strong><span>{{ 'trust.leather_copy' | t }}</span></div>
-        </li>
+        {%- if pers_on -%}
+          <li>
+            {% render 'icon', name: 'pen' %}
+            <div><strong>{{ 'personalize.label' | t }}</strong><span>{{ 'personalize.assure' | t }}</span></div>
+          </li>
+        {%- else -%}
+          <li>
+            {% render 'icon', name: 'mail' %}
+            <div><strong>{{ 'service.support_title' | t }}</strong><span>{{ settings.contact_email | default: 'info@mavelania.com' }}</span></div>
+          </li>
+        {%- endif -%}
       </ul>
 
       {% render 'payment-icons' %}
@@ -254,7 +283,7 @@
     {% render 'product-bundle', product: product, bundle_code: section.settings.bundle_code, bundle_text: section.settings.bundle_text %}
   {%- endif -%}
 
-  {% render 'product-info', product: product %}
+  {% render 'product-info', product: product, pers_on: pers_on, pers_methods: pers_methods, pers_colors: pers_colors %}
 
   {% assign related_collection = product.collections.first %}
   {% if related_collection != blank and related_collection.products_count > 1 %}
@@ -354,6 +383,9 @@
     { "type": "header", "content": "Stock" },
     { "type": "checkbox", "id": "show_low_stock", "label": "Show \"Only X left\" when stock is low", "default": true, "info": "Uses the real tracked inventory of the selected variant. Nothing is shown for untracked products." },
     { "type": "range", "id": "low_stock_threshold", "min": 1, "max": 10, "step": 1, "default": 5, "label": "Low stock threshold" },
+    { "type": "header", "content": "Personalization", "info": "Shown only on products whose data states personalization: a product metafield custom.personalization, a \"Personalization: ...\" line in the description, or the tag \"personalizable\". Only the methods and colours named there are offered." },
+    { "type": "range", "id": "pers_max_chars", "min": 2, "max": 24, "step": 1, "default": 12, "label": "Maximum characters" },
+    { "type": "text", "id": "pers_note", "label": "How personalized pieces are prepared", "default": "Personalized pieces are prepared after your order is placed. The text is applied exactly as entered." },
     { "type": "header", "content": "Add-ons", "info": "Optional extras with an on/off switch inside the buy box. To choose them per product, create a product metafield custom.addons (list of products)." },
     { "type": "checkbox", "id": "show_addons", "label": "Show add-ons", "default": true },
     { "type": "collection", "id": "addons_collection", "label": "Add-on collection", "info": "Used when a product has no custom.addons metafield. Leave empty to use Accessories. The cheapest in-stock pieces are offered." },

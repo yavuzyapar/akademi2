@@ -1,57 +1,52 @@
-<article class="mv-about">
-  <header class="mv-about-hero">
-    <p class="mv-eyebrow">{{ 'about.eyebrow' | t }}</p>
-    <h1>{{ 'about.title' | t }}</h1>
-    <p class="mv-about-lede">{{ 'about.lede' | t }}</p>
+{%- liquid
+  assign personalize_url = routes.all_products_collection_url | append: '?view=personalize'
+  if pages['personalize'].url != blank
+    assign personalize_url = pages['personalize'].url
+  endif
+  assign cards_url = routes.root_url | append: 'collections/types?q=Card%20Holder'
+  if collections['card-holders'].url != blank
+    assign cards_url = collections['card-holders'].url
+  endif
+-%}
+<article class="mv-about ms-about">
+  <header class="ms-about__hero">
+    <p class="ms-eyebrow">{{ 'story.eyebrow' | t }}</p>
+    <h1 class="ms-heading">{{ 'about.brand_title' | t }}</h1>
+    <p class="ms-about__lede">{{ 'story.p1' | t }}</p>
   </header>
 
-  <figure class="mv-about-figure">
-    <img
-      src="{{ 'hero-wallets.webp' | asset_url }}"
-      alt="{{ 'about.figure_leather_alt' | t | escape }}"
-      width="1810"
-      height="869"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-    >
+  <figure class="ms-about__figure">
+    <img src="{{ 'before-footer.webp' | asset_url }}" alt="{{ 'home.slide_bag_alt' | t | escape }}" width="1400" height="622" loading="eager" fetchpriority="high" decoding="async">
   </figure>
 
-  <section class="mv-about-block" aria-labelledby="aboutMaterial">
-    <h2 id="aboutMaterial">{{ 'about.material_title' | t }}</h2>
-    <p>{{ 'about.material_body' | t }}</p>
+  <section class="ms-about__statement" aria-labelledby="AboutStatementTitle">
+    <h2 id="AboutStatementTitle" class="mv-visually-hidden">{{ 'about.statement_title' | t }}</h2>
+    <p>{{ 'story.p2' | t }}</p>
+    <p>{{ 'story.p3' | t }}</p>
+    <p>{{ 'story.p4' | t }}</p>
+    <p class="ms-about__signature">{{ 'story.signature' | t }}</p>
   </section>
 
-  <section class="mv-about-block" aria-labelledby="aboutCraft">
-    <h2 id="aboutCraft">{{ 'about.craft_title' | t }}</h2>
-    <p>{{ 'about.craft_body' | t }}</p>
+  <section class="ms-about__principles" aria-labelledby="AboutPrinciplesTitle">
+    <h2 id="AboutPrinciplesTitle" class="ms-heading">{{ 'philosophy.title' | t }}</h2>
+    <div>
+      <article><span>01</span><h3>{{ 'philosophy.craft_title' | t }}</h3><p>{{ 'philosophy.craft_text' | t }}</p></article>
+      <article><span>02</span><h3>{{ 'philosophy.simplicity_title' | t }}</h3><p>{{ 'philosophy.simplicity_text' | t }}</p></article>
+      <article><span>03</span><h3>{{ 'philosophy.personal_title' | t }}</h3><p>{{ 'philosophy.personal_text' | t }}</p></article>
+    </div>
   </section>
 
-  <figure class="mv-about-figure">
-    <img
-      src="{{ 'collection-bag-bordeaux.webp' | asset_url }}"
-      alt="{{ 'about.figure_craft_alt' | t | escape }}"
-      width="1023"
-      height="1537"
-      loading="lazy"
-      decoding="async"
-    >
-  </figure>
-
-  <section class="mv-about-block" aria-labelledby="aboutRfid">
-    <h2 id="aboutRfid">{{ 'about.rfid_title' | t }}</h2>
-    <p>{{ 'about.rfid_body' | t }}</p>
-  </section>
-
-  <section class="mv-about-block" aria-labelledby="aboutMake">
-    <h2 id="aboutMake">{{ 'about.make_title' | t }}</h2>
-    <p>{{ 'about.make_body' | t }}</p>
-    <nav class="mv-about-links" aria-label="{{ 'about.make_title' | t | escape }}">
-      {%- assign nav_count = collections['bags'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/bags">{{ 'collections.bags.card_title' | t }}</a>{%- endif -%}
-      {%- assign nav_count = collections['wallets-purses'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/wallets-purses">{{ 'collections.wallets.card_title' | t }}</a>{%- endif -%}
-      {%- assign nav_count = collections['phone-cases'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/phone-cases">{{ 'collections.phone_cases.card_title' | t }}</a>{%- endif -%}
-      <a href="{{ routes.root_url }}collections/accessories">{{ 'collections.accessories.card_title' | t }}</a>
+  <section class="ms-about__make" aria-labelledby="AboutMakeTitle">
+    <h2 id="AboutMakeTitle" class="ms-heading">{{ 'about.make_title' | t }}</h2>
+    <p>{{ 'about.make_body_new' | t }}</p>
+    <nav class="ms-catnav" aria-label="{{ 'about.make_title' | t | escape }}">
+      {%- if collections['bags'].url != blank -%}<a href="{{ collections['bags'].url }}">{{ 'navigation.bags' | t }}</a>{%- endif -%}
+      {%- if collections['wallets-purses'].url != blank -%}<a href="{{ collections['wallets-purses'].url }}">{{ 'navigation.wallets_short' | t }}</a>{%- endif -%}
+      <a href="{{ cards_url }}">{{ 'navigation.card_holders' | t }}</a>
+      {%- if collections['phone-cases'].products_count > 0 -%}<a href="{{ collections['phone-cases'].url }}">{{ 'navigation.phone_cases' | t }}</a>{%- endif -%}
+      {%- if collections['accessories'].products_count > 0 -%}<a href="{{ collections['accessories'].url }}">{{ 'navigation.accessories' | t }}</a>{%- endif -%}
     </nav>
+    <a class="ms-button ms-button--primary" href="{{ personalize_url }}">{% render 'icon', name: 'pen' %} {{ 'home.cta_personalize' | t }}</a>
   </section>
 
   <section class="mv-about-block mv-about-company" aria-labelledby="aboutCompany">

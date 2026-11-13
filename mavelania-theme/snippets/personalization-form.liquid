@@ -1,0 +1,91 @@
+{%- comment -%}
+  Personalization area inside the product form. Rendered only for products
+  that personalization-info reports as personalizable, and only with the
+  methods and colours that product lists.
+
+  The choices travel with the item as line item properties, so they appear
+  in the bag, at checkout and on the order in the Shopify admin.
+
+  Params: product, methods (array), colors (array), max_chars, note
+{%- endcomment -%}
+{%- assign pers_max = max_chars | default: 12 -%}
+{%- assign pers_note = note -%}
+{%- if pers_note == blank -%}{%- assign pers_note = 'personalize.prepared_note' | t -%}{%- endif -%}
+<div class="ms-pers" id="personalize" data-pers data-max="{{ pers_max }}" data-required="{{ 'personalize.error_empty' | t | escape }}" data-invalid="{{ 'personalize.error_chars' | t | escape }}">
+  <label class="ms-pers__switch">
+    <input type="checkbox" data-pers-toggle aria-controls="PersFields-{{ product.id }}">
+    <span class="ms-toggle__track" aria-hidden="true"></span>
+    <span class="ms-pers__switch-text">
+      <strong>{{ 'personalize.add' | t }}</strong>
+      <span>{{ 'personalize.add_sub' | t }}</span>
+    </span>
+  </label>
+
+  <div class="ms-pers__fields" id="PersFields-{{ product.id }}" data-pers-fields hidden>
+    <div class="ms-pers__field">
+      <label for="PersText-{{ product.id }}">{{ 'personalize.text_label' | t }}</label>
+      <input
+        id="PersText-{{ product.id }}"
+        type="text"
+        name="properties[Personalization]"
+        maxlength="{{ pers_max }}"
+        autocomplete="off"
+        autocapitalize="characters"
+        spellcheck="false"
+        placeholder="{{ 'personalize.text_placeholder' | t | escape }}"
+        aria-describedby="PersHelp-{{ product.id }}"
+        data-pers-text
+        disabled
+      >
+      <p class="ms-pers__help" id="PersHelp-{{ product.id }}">
+        {{ 'personalize.text_help' | t: max: pers_max }} <span class="ms-pers__count" data-pers-count>0/{{ pers_max }}</span>
+      </p>
+      <p class="ms-pers__error" data-pers-error role="alert" hidden></p>
+    </div>
+
+    {%- if methods.size > 1 -%}
+      <fieldset class="ms-pers__field">
+        <legend>{{ 'personalize.method_label' | t }}</legend>
+        <div class="ms-pers__choices">
+          {%- for method in methods -%}
+            <label class="ms-pers__choice">
+              <input type="radio" name="properties[Personalization method]" value="{{ method | escape }}"{% if forloop.first %} checked{% endif %} data-pers-method disabled>
+              <span>{{ method }}</span>
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+    {%- elsif methods.size == 1 -%}
+      <input type="hidden" name="properties[Personalization method]" value="{{ methods.first | escape }}" data-pers-method disabled>
+      <p class="ms-pers__fixed"><span>{{ 'personalize.method_label' | t }}:</span> {{ methods.first }}</p>
+    {%- endif -%}
+
+    {%- if colors.size > 0 -%}
+      <fieldset class="ms-pers__field">
+        <legend>{{ 'personalize.color_label' | t }} <span data-pers-color-name>{{ colors.first }}</span></legend>
+        <div class="ms-pers__choices ms-pers__choices--colors">
+          {%- for color in colors -%}
+            {%- assign color_key = color | downcase -%}
+            <label class="ms-pers__color" title="{{ color | escape }}">
+              <input type="radio" name="properties[Personalization colour]" value="{{ color | escape }}"{% if forloop.first %} checked{% endif %} data-pers-color data-tone="{{ color_key }}" disabled>
+              <span class="ms-pers__dot ms-pers__dot--{{ color_key }}" aria-hidden="true"></span>
+              <span class="mv-visually-hidden">{{ color }}</span>
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+    {%- endif -%}
+
+    <div class="ms-pers__preview" aria-hidden="true">
+      <span class="ms-pers__plate" data-pers-plate data-tone="{{ colors.first | downcase | default: 'transparent' }}">
+        <span data-pers-preview>{{ 'personalize.preview_sample' | t }}</span>
+      </span>
+      <span class="ms-pers__preview-note">{{ 'personalize.preview_note' | t }}</span>
+    </div>
+
+    <ul class="ms-pers__notes">
+      <li>{% render 'icon', name: 'clock' %}<span>{{ pers_note }}</span></li>
+      <li>{% render 'icon', name: 'return' %}<span>{{ 'personalize.returns_note' | t }}{% if shop.refund_policy.url != blank %} <a href="{{ shop.refund_policy.url }}">{{ 'faq.refund_link' | t }}</a>{% endif %}</span></li>
+    </ul>
+  </div>
+</div>

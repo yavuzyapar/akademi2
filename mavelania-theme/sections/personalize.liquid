@@ -1,0 +1,94 @@
+{%- comment -%}
+  "Personalize Your Piece": how personalization works, the options the
+  catalogue really offers, and every piece that can be personalized today.
+
+  Served at /collections/all?view=personalize, so it works without creating
+  a page. If a page with the handle "personalize" is created and given the
+  "personalize" template, the menu links to that page instead.
+{%- endcomment -%}
+{%- liquid
+  assign pz_methods = ''
+  assign pz_colors = ''
+  assign pz_count = 0
+  assign contact_email = settings.contact_email | default: 'info@mavelania.com'
+-%}
+{%- capture pz_cards -%}
+  {%- for pz_product in collections.all.products limit: 250 -%}
+    {%- capture pz_info -%}{% render 'personalization-info', product: pz_product %}{%- endcapture -%}
+    {%- assign pz_info = pz_info | strip -%}
+    {%- if pz_info != blank -%}
+      {%- assign pz_parts = pz_info | split: '|' -%}
+      {%- assign pz_methods = pz_methods | append: pz_parts[1] -%}
+      {%- assign pz_colors = pz_colors | append: pz_parts[2] -%}
+      {%- assign pz_count = pz_count | plus: 1 -%}
+      {% render 'product-card', product: pz_product, heading: 'h3' %}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- assign pz_methods = pz_methods | split: ',' | uniq | compact -%}
+{%- assign pz_colors = pz_colors | split: ',' | uniq | compact -%}
+
+<div class="ms-pz">
+  <nav class="ms-breadcrumb ms-wrap" aria-label="{{ 'general.breadcrumb' | t | escape }}">
+    <a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{{ 'navigation.personalize' | t }}</span>
+  </nav>
+
+  <header class="ms-pz__hero ms-wrap">
+    <p class="ms-eyebrow">{{ 'personalize.eyebrow' | t }}</p>
+    <h1 class="ms-heading">{{ 'personalize.title' | t }}</h1>
+    <p class="ms-pz__lede">{{ 'personalize.lede' | t }}</p>
+    <p class="ms-pz__line">{{ 'home.personal_line' | t }}</p>
+  </header>
+
+  <section class="ms-section ms-wrap" aria-labelledby="PzStepsTitle">
+    <h2 id="PzStepsTitle" class="mv-visually-hidden">{{ 'personalize.steps_title' | t }}</h2>
+    <ol class="ms-pz__steps">
+      <li><span>01</span><h3>{{ 'personalize.step1_title' | t }}</h3><p>{{ 'personalize.step1_text' | t }}</p></li>
+      <li><span>02</span><h3>{{ 'personalize.step2_title' | t }}</h3><p>{{ 'personalize.step2_text' | t }}</p></li>
+      <li><span>03</span><h3>{{ 'personalize.step3_title' | t }}</h3><p>{{ 'personalize.step3_text' | t }}</p></li>
+    </ol>
+
+    <dl class="ms-personal__facts ms-pz__facts">
+      <div><dt>{{ 'personalize.what_label' | t }}</dt><dd>{{ 'personalize.what_value' | t }}</dd></div>
+      {%- if pz_methods.size > 0 -%}<div><dt>{{ 'personalize.method_label' | t }}</dt><dd>{{ pz_methods | join: ' · ' }}</dd></div>{%- endif -%}
+      {%- if pz_colors.size > 0 -%}
+        <div>
+          <dt>{{ 'personalize.color_label' | t }}</dt>
+          <dd class="ms-personal__colors">
+            {%- for color in pz_colors -%}<span class="ms-personal__color">{%- assign color_key = color | downcase -%}<span class="ms-pers__dot ms-pers__dot--{{ color_key }}" aria-hidden="true"></span>{{ color }}</span>{%- endfor -%}
+          </dd>
+        </div>
+      {%- endif -%}
+      <div><dt>{{ 'personalize.which_label' | t }}</dt><dd>{{ 'personalize.which_value' | t }}</dd></div>
+    </dl>
+  </section>
+
+  <section class="ms-section ms-section--tint" aria-labelledby="PzProductsTitle">
+    <div class="ms-wrap">
+      <header class="ms-section__head ms-section__head--center">
+        <p class="ms-eyebrow">{{ 'personalize.label' | t }}</p>
+        <h2 id="PzProductsTitle" class="ms-heading">{{ 'personalize.products_title' | t }}</h2>
+      </header>
+      {%- if pz_count > 0 -%}
+        <div class="ms-grid">{{ pz_cards }}</div>
+      {%- else -%}
+        <p class="ms-pz__empty">{{ 'personalize.none' | t }}</p>
+      {%- endif -%}
+    </div>
+  </section>
+
+  <section class="ms-section ms-wrap ms-pz__policy" aria-labelledby="PzPolicyTitle">
+    <h2 id="PzPolicyTitle" class="ms-heading">{{ 'personalize.policy_title' | t }}</h2>
+    <ul>
+      <li>{% render 'icon', name: 'check' %}<span>{{ 'personalize.policy_spelling' | t }}</span></li>
+      <li>{% render 'icon', name: 'clock' %}<span>{{ 'personalize.prepared_note' | t }}</span></li>
+      <li>{% render 'icon', name: 'return' %}<span>{{ 'personalize.returns_note' | t }}{% if shop.refund_policy.url != blank %} <a href="{{ shop.refund_policy.url }}">{{ 'faq.refund_link' | t }}</a>{% endif %}</span></li>
+      <li>{% render 'icon', name: 'mail' %}<span>{{ 'personalize.questions' | t }} <a href="mailto:{{ contact_email | escape }}">{{ contact_email }}</a></span></li>
+    </ul>
+  </section>
+</div>
+{% schema %}
+{ "name": "Personalize page", "settings": [] }
+{% endschema %}

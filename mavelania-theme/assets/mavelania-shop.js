@@ -429,6 +429,16 @@
       if (item.variant_title && !item.product_has_only_default_variant && item.variant_title !== 'Default Title') {
         info.appendChild(el('p', 'ms-line__variant', item.variant_title));
       }
+      // Personalization and other line item properties (keys starting with
+      // "_" are private and stay hidden, as in Shopify's own templates).
+      Object.keys(item.properties || {}).forEach(function (key) {
+        var value = item.properties[key];
+        if (!value || key.charAt(0) === '_') return;
+        var line = el('p', 'ms-line__prop');
+        line.appendChild(el('span', null, key + ': '));
+        line.appendChild(el('strong', null, value));
+        info.appendChild(line);
+      });
 
       var controls = el('div', 'ms-line__controls');
       var qty = el('div', 'ms-qty ms-qty--small');
@@ -993,6 +1003,100 @@
     timer = window.setInterval(tick, 1000);
   })();
 
+  /* ── Personalization ───────────────────────────────────────────────
+     Product page: a switch reveals the fields (they stay disabled, and so
+     are not submitted, while it is off), a preview shows the text in the
+     chosen colour, and the text is checked before anything is added.
+     Exposed as window.MvPers for the add-to-bag and buy-now paths. */
+  (function () {
+    var box = $('[data-pers]');
+    if (!box) return;
+    var toggle = $('[data-pers-toggle]', box);
+    var fields = $('[data-pers-fields]', box);
+    var text = $('[data-pers-text]', box);
+    var count = $('[data-pers-count]', box);
+    var error = $('[data-pers-error]', box);
+    var plate = $('[data-pers-plate]', box);
+    var preview = $('[data-pers-preview]', box);
+    var colorName = $('[data-pers-color-name]', box);
+    var max = Number(box.dataset.max) || 12;
+    var sample = preview ? preview.textContent : '';
+    // Letters (any alphabet), digits, spaces and . & - ' only.
+    var allowed = /^[\p{L}\p{N} .&'\-]*$/u;
+
+    function inputs() { return $$('input', fields); }
+    function setOn(on) {
+      fields.hidden = !on;
+      inputs().forEach(function (input) { input.disabled = !on; });
+      box.classList.toggle('is-on', on);
+      if (on) window.setTimeout(function () { text.focus(); }, 30);
+      else showError('');
+    }
+    function showError(message) {
+      error.textContent = message;
+      error.hidden = !message;
+      text.setAttribute('aria-invalid', message ? 'true' : 'false');
+    }
+    function sync() {
+      var value = text.value;
+      count.textContent = value.length + '/' + max;
+      if (preview) preview.textContent = value.trim() || sample;
+      var color = $('[data-pers-color]:checked', box);
+      if (color && plate) plate.dataset.tone = color.dataset.tone;
+      if (color && colorName) colorName.textContent = color.value;
+      if (value && !allowed.test(value)) showError(box.dataset.invalid);
+      else if (!error.hidden && value.trim()) showError('');
+    }
+    toggle.addEventListener('change', function () { setOn(toggle.checked); });
+    box.addEventListener('input', sync);
+    box.addEventListener('change', sync);
+    setOn(false);
+    sync();
+
+    // Arriving at #personalize (from the home page or a card) opens the area.
+    if (window.location.hash === '#personalize') {
+      toggle.checked = true;
+      setOn(true);
+      box.scrollIntoView({ block: 'center' });
+    }
+
+    window.MvPers = {
+      active: function () { return toggle.checked; },
+      // Returns the properties, false when the text needs fixing, or null when off.
+      read: function () {
+        if (!toggle.checked) return null;
+        var value = text.value.trim();
+        if (!value) { showError(box.dataset.required); text.focus(); return false; }
+        if (!allowed.test(value)) { showError(box.dataset.invalid); text.focus(); return false; }
+        showError('');
+        var props = {};
+        inputs().forEach(function (input) {
+          if (input.disabled || !/^properties\[/.test(input.name)) return;
+          if ((input.type === 'radio' || input.type === 'checkbox') && !input.checked) return;
+          props[input.name.slice(11, -1)] = input.name === 'properties[Personalization]' ? value : input.value;
+        });
+        return props;
+      }
+    };
+  })();
+
+  /* Live preview in "Make It Yours" (home page) */
+  $$('[data-personal-demo]').forEach(function (demo) {
+    var input = $('[data-demo-input]', demo);
+    var plateText = $('[data-demo-text]', demo);
+    var plate = $('[data-demo-plate]', demo);
+    if (input && plateText) input.addEventListener('input', function () { plateText.textContent = input.value.trim() || 'M.A.'; });
+    $$('[data-demo-tone]', demo).forEach(function (button) {
+      button.addEventListener('click', function () {
+        $$('[data-demo-tone]', demo).forEach(function (other) {
+          other.classList.toggle('is-active', other === button);
+          other.setAttribute('aria-pressed', String(other === button));
+        });
+        if (plate) plate.dataset.tone = button.dataset.demoTone;
+      });
+    });
+  });
+
   /* ── Product page: add-ons, buy now, bundle ────────────────────────── */
   (function () {
     var root = $('[data-product-root]');
@@ -1042,10 +1146,14 @@
         orderTotalValue.textContent = money(sum);
       }
     }
+    // null when the personalization text needs fixing (the message is shown).
     function orderItems() {
       var variant = currentVariant();
       if (!variant) return [];
+      var personal = window.MvPers ? window.MvPers.read() : null;
+      if (personal === false) return null;
       var items = [{ id: variant.id, quantity: quantity() }];
+      if (personal) items[0].properties = personal;
       selectedAddons().forEach(function (extra) { items.push({ id: extra.id, quantity: 1 }); });
       return items;
     }
@@ -1058,6 +1166,7 @@
     if (window.MvCart) {
       window.MvCart.addProductForm = function (productForm, button) {
         var items = orderItems();
+        if (items === null) return Promise.resolve(null);
         if (!items.length) return Promise.reject(new Error('No variant selected'));
         return window.MvCart.add({ items: items }, button);
       };
@@ -1073,9 +1182,27 @@
       };
       buyNow.addEventListener('click', function () {
         var items = orderItems();
-        if (!items.length) return;
+        if (!items || !items.length) return;
         buyNow.classList.add('is-loading');
-        window.location.href = (root.dataset.rootUrl || rootUrl) + 'cart/' + items.map(function (item) { return item.id + ':' + item.quantity; }).join(',');
+        var base = root.dataset.rootUrl || rootUrl;
+        // A cart permalink cannot carry personalization, so a personalized
+        // piece is added to the bag first and the shopper goes to checkout.
+        if (items.some(function (item) { return item.properties; })) {
+          fetch(cartAddUrl + '.js', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({ items: items })
+          }).then(function (response) {
+            if (!response.ok) throw new Error('Add failed');
+            window.location.href = base + 'checkout';
+          }).catch(function () {
+            buyNow.classList.remove('is-loading');
+            showToast(data.cartError);
+          });
+          return;
+        }
+        window.location.href = base + 'cart/' + items.map(function (item) { return item.id + ':' + item.quantity; }).join(',');
       });
       // Coming back with the browser's back button must not leave the spinner on.
       window.addEventListener('pageshow', function () { buyNow.classList.remove('is-loading'); });

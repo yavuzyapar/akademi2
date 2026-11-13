@@ -1,11 +1,10 @@
 {%- comment -%}
-  Header: category navigation with mega menus on the left, the brand mark in
-  the centre and the shopper's tools on the right. The brand lockup (emblem
-  above the "Mavelania" script) is the original one and is not restyled here.
+  Header, two rows. Top: search and market on the left, the original brand
+  lockup (emblem above the "Mavelania" script, unchanged) in the centre,
+  account / favourites / bag on the right. Below: Home, Shop (with the
+  collection menu), Personalize Your Piece, About Mavelania, Contact.
 {%- endcomment -%}
 {%- liquid
-  # The FAQ page handle can change in the admin (it was the Turkish "sss").
-  # Resolve it rather than hard-coding a URL that would 404 after a rename.
   assign faq_page = pages['faq']
   if faq_page == blank
     assign faq_page = pages['sss']
@@ -15,12 +14,28 @@
     assign about_page = pages['about-us']
   endif
   assign contact_page = pages['contact']
+  assign contact_email = settings.contact_email | default: 'info@mavelania.com'
+  assign contact_url = 'mailto:' | append: contact_email
+  if contact_page != blank
+    assign contact_url = contact_page.url
+  endif
+  assign personalize_url = routes.all_products_collection_url | append: '?view=personalize'
+  if pages['personalize'].url != blank
+    assign personalize_url = pages['personalize'].url
+  endif
+  assign cards_url = routes.root_url | append: 'collections/types?q=Card%20Holder'
+  if collections['card-holders'].url != blank
+    assign cards_url = collections['card-holders'].url
+  endif
   assign show_country = false
   if section.settings.show_country_selector and localization.available_countries.size > 1
     assign show_country = true
   endif
   assign current_path = request.path
-  assign nav_handles = 'bags,wallets-purses,phone-cases,accessories' | split: ','
+  assign on_personalize = false
+  if request.page_type == 'collection' and template.suffix == 'personalize'
+    assign on_personalize = true
+  endif
 -%}
 <header class="ms-header" data-header>
   <div class="ms-header__bar">
@@ -29,83 +44,7 @@
         <span class="mv-menu-toggle-lines" aria-hidden="true"><i></i><i></i><i></i></span>
       </button>
       <button class="ms-tool ms-tool--search-mobile" type="button" aria-label="{{ 'general.search' | t | escape }}" aria-expanded="false" aria-controls="SearchPanel" data-search-open>{% render 'icon', name: 'search' %}</button>
-
-      <nav class="ms-nav" aria-label="{{ 'general.main_menu' | t | escape }}">
-        <ul>
-          {%- for handle in nav_handles -%}
-            {%- liquid
-              assign nav_collection = collections[handle]
-              assign nav_count = nav_collection.products_count | default: 0
-              case handle
-                when 'bags'
-                  assign nav_label = 'navigation.bags' | t
-                  assign nav_copy = 'collections.bags.description' | t
-                when 'wallets-purses'
-                  assign nav_label = 'navigation.wallets_purses' | t
-                  assign nav_copy = 'collections.wallets.description' | t
-                when 'phone-cases'
-                  assign nav_label = 'navigation.phone_cases' | t
-                  assign nav_copy = 'collections.phone_cases.description' | t
-                else
-                  assign nav_label = 'navigation.accessories' | t
-                  assign nav_copy = 'collections.accessories.description' | t
-              endcase
-              assign nav_url = routes.root_url | append: 'collections/' | append: handle
-              assign nav_path = '/collections/' | append: handle
-            -%}
-            {%- if nav_count > 0 -%}
-              <li class="ms-nav__item ms-nav__item--mega" data-mega>
-                <a href="{{ nav_url }}" data-nav-collection{% if current_path contains nav_path %} aria-current="page"{% endif %}>{{ nav_label }}</a>
-                <div class="ms-mega" data-mega-panel>
-                  <div class="ms-mega__inner">
-                    <div class="ms-mega__intro">
-                      <p class="ms-eyebrow">{{ 'collections.eyebrow' | t }}</p>
-                      <p class="ms-mega__title">{{ nav_label }}</p>
-                      <p class="ms-mega__copy">{{ nav_copy }}</p>
-                      <a class="ms-button ms-button--primary" href="{{ nav_url }}">{{ 'home.view_all_in' | t: title: nav_label }} {% render 'icon', name: 'arrow-right' %}</a>
-                    </div>
-
-                    <ul class="ms-mega__list">
-                      {%- for nav_product in nav_collection.products limit: 8 -%}
-                        <li><a href="{{ nav_product.url | within: nav_collection }}">{{ nav_product.title }}</a></li>
-                      {%- endfor -%}
-                    </ul>
-
-                    <div class="ms-mega__products">
-                      {%- assign mega_shown = 0 -%}
-                      {%- for nav_product in nav_collection.products limit: 12 -%}
-                        {%- if nav_product.available and nav_product.featured_image and mega_shown < 3 -%}
-                          <a class="ms-mega__product" href="{{ nav_product.url | within: nav_collection }}">
-                            <span class="ms-mega__image">{{ nav_product.featured_image | image_url: width: 480 | image_tag: loading: 'lazy', widths: '240,360,480', sizes: '220px', alt: '' }}</span>
-                            <span class="ms-mega__name">{{ nav_product.title }}</span>
-                            <span class="ms-mega__price">{% if nav_product.price_varies %}{% assign nav_from = nav_product.price_min | money %}{{ 'products.from_price' | t: price: nav_from }}{% else %}{{ nav_product.price | money }}{% endif %}</span>
-                          </a>
-                          {%- assign mega_shown = mega_shown | plus: 1 -%}
-                        {%- endif -%}
-                      {%- endfor -%}
-                    </div>
-                  </div>
-                </div>
-              </li>
-            {%- elsif handle == 'accessories' -%}
-              <li class="ms-nav__item"><a href="{{ nav_url }}" data-nav-collection>{{ nav_label }}</a></li>
-            {%- endif -%}
-          {%- endfor -%}
-          {%- if about_page != blank -%}
-            <li class="ms-nav__item ms-nav__item--minor"><a href="{{ about_page.url }}"{% if current_path == about_page.url %} aria-current="page"{% endif %}>{{ 'navigation.about' | t }}</a></li>
-          {%- endif -%}
-        </ul>
-      </nav>
-    </div>
-
-    <a class="mv-brand" href="{{ routes.root_url }}" aria-label="{{ shop.name }} — {{ 'general.home' | t | escape }}">
-      <span class="brandlock">
-        <span class="em"><img src="{{ 'mavelania-logo-original-transparent.png' | asset_url }}" alt="" width="54" height="54"></span>
-        <span class="script">Mavelania</span>
-      </span>
-    </a>
-
-    <div class="ms-tools" aria-label="{{ 'general.customer_links' | t | escape }}">
+      <button class="ms-tool ms-tool--search ms-tool--labelled" type="button" aria-expanded="false" aria-controls="SearchPanel" data-search-open>{% render 'icon', name: 'search' %}<span>{{ 'general.search' | t }}</span></button>
       {%- if show_country -%}
         {% form 'localization', id: 'HeaderCountryForm', class: 'ms-country' %}
           <label class="mv-visually-hidden" for="HeaderCountrySelect">{{ 'general.country_region' | t }}</label>
@@ -117,28 +56,81 @@
           <noscript><button type="submit">{{ 'general.apply' | t }}</button></noscript>
         {% endform %}
       {%- endif -%}
+    </div>
 
-      {%- if faq_page != blank -%}
-        <a class="ms-tools__link" href="{{ faq_page.url }}">{{ 'navigation.faq' | t }}</a>
-      {%- endif -%}
+    <a class="mv-brand" href="{{ routes.root_url }}" aria-label="{{ shop.name }} — {{ 'general.home' | t | escape }}">
+      <span class="brandlock">
+        <span class="em"><img src="{{ 'mavelania-logo-original-transparent.png' | asset_url }}" alt="" width="54" height="54"></span>
+        <span class="script">Mavelania</span>
+      </span>
+    </a>
 
-      <button class="ms-tool ms-tool--search" type="button" aria-label="{{ 'general.search' | t | escape }}" aria-expanded="false" aria-controls="SearchPanel" data-search-open>{% render 'icon', name: 'search' %}</button>
-
+    <div class="ms-tools" aria-label="{{ 'general.customer_links' | t | escape }}">
       {%- if shop.customer_accounts_enabled -%}
         <a class="ms-tool ms-tool--account" href="{{ routes.account_url }}" aria-label="{{ 'general.account' | t | escape }}">{% render 'icon', name: 'user' %}</a>
       {%- endif -%}
-
       <button class="ms-tool ms-tool--favorites" type="button" aria-label="{{ 'favorites.open' | t | escape }}" data-favorites-toggle>
         {% render 'icon', name: 'star' %}<span class="ms-tool__count is-empty" data-favorites-count>0</span>
       </button>
-
       <a class="ms-tool ms-tool--cart" href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t | escape }}" data-cart-toggle>
         {% render 'icon', name: 'bag' %}<span class="ms-tool__count{% if cart.item_count == 0 %} is-empty{% endif %}" data-cart-count>{{ cart.item_count }}</span>
       </a>
     </div>
   </div>
 
-  {%- comment -%} Search opens as a panel under the header instead of taking a permanent row. {%- endcomment -%}
+  <nav class="ms-nav" aria-label="{{ 'general.main_menu' | t | escape }}">
+    <ul>
+      <li class="ms-nav__item"><a href="{{ routes.root_url }}"{% if request.page_type == 'index' %} aria-current="page"{% endif %}>{{ 'general.home' | t }}</a></li>
+      <li class="ms-nav__item ms-nav__item--mega" data-mega>
+        <a href="{{ routes.all_products_collection_url }}"{% if request.page_type == 'collection' and on_personalize == false %} aria-current="page"{% endif %}>{{ 'navigation.shop' | t }}</a>
+        <div class="ms-mega" data-mega-panel>
+          <div class="ms-mega__inner ms-mega__inner--shop">
+            <div class="ms-mega__cats">
+              {%- for i in (1..3) -%}
+                {%- liquid
+                  case i
+                    when 1
+                      assign mega_url = collections['bags'].url | default: routes.all_products_collection_url
+                      assign mega_label = 'navigation.bags' | t
+                      assign mega_img = 'collection-bag-bordeaux.webp'
+                    when 2
+                      assign mega_url = collections['wallets-purses'].url | default: routes.all_products_collection_url
+                      assign mega_label = 'navigation.wallets_short' | t
+                      assign mega_img = 'women-leather-wallet-model.webp'
+                    else
+                      assign mega_url = cards_url
+                      assign mega_label = 'navigation.card_holders' | t
+                      assign mega_img = 'collection-hero-cardholders.webp'
+                  endcase
+                -%}
+                <a class="ms-mega__cat" href="{{ mega_url }}">
+                  <span class="ms-mega__image"><img src="{{ mega_img | asset_url }}" alt="" loading="lazy" decoding="async" width="600" height="750"></span>
+                  <span class="ms-mega__name">{{ mega_label }}</span>
+                </a>
+              {%- endfor -%}
+            </div>
+            <ul class="ms-mega__list">
+              <li><a href="{{ routes.all_products_collection_url }}">{{ 'navigation.shop_all' | t }}</a></li>
+              {%- if collections['phone-cases'].products_count > 0 -%}<li><a href="{{ collections['phone-cases'].url }}">{{ 'navigation.phone_cases' | t }}</a></li>{%- endif -%}
+              {%- if collections['accessories'].products_count > 0 -%}<li><a href="{{ collections['accessories'].url }}">{{ 'navigation.accessories' | t }}</a></li>{%- endif -%}
+            </ul>
+            <a class="ms-mega__promo" href="{{ personalize_url }}">
+              {% render 'icon', name: 'pen' %}
+              <strong>{{ 'personalize.title' | t }}</strong>
+              <span>{{ 'home.personal_line' | t }}</span>
+            </a>
+          </div>
+        </div>
+      </li>
+      <li class="ms-nav__item"><a href="{{ personalize_url }}"{% if on_personalize %} aria-current="page"{% endif %}>{{ 'navigation.personalize' | t }}</a></li>
+      {%- if about_page != blank -%}
+        <li class="ms-nav__item"><a href="{{ about_page.url }}"{% if current_path == about_page.url %} aria-current="page"{% endif %}>{{ 'navigation.about_brand' | t }}</a></li>
+      {%- endif -%}
+      <li class="ms-nav__item"><a href="{{ contact_url }}"{% if contact_page != blank and current_path == contact_page.url %} aria-current="page"{% endif %}>{{ 'footer.contact' | t }}</a></li>
+    </ul>
+  </nav>
+
+  {%- comment -%} Search opens as a panel under the header. {%- endcomment -%}
   <div class="ms-searchpanel" id="SearchPanel" data-search-panel hidden>
     <div class="ms-searchpanel__inner">
       <form class="ms-searchform" action="{{ routes.search_url }}" method="get" role="search" data-smart-search>
@@ -149,16 +141,13 @@
         <button class="ms-searchform__close" type="button" aria-label="{{ 'general.close' | t | escape }}" data-search-close>{% render 'icon', name: 'close' %}</button>
         <div class="mv-search-suggestions" role="listbox" aria-label="{{ 'general.search_suggestions' | t | escape }}" hidden data-search-suggestions></div>
       </form>
-
       <div class="ms-searchpanel__quick">
         <p class="ms-eyebrow">{{ 'home.shop_by_category' | t }}</p>
         <div class="ms-catnav">
-          {%- for handle in nav_handles -%}
-            {%- assign quick_collection = collections[handle] -%}
-            {%- if quick_collection.products_count > 0 -%}
-              <a href="{{ quick_collection.url }}">{{ quick_collection.title }}</a>
-            {%- endif -%}
-          {%- endfor -%}
+          {%- if collections['bags'].url != blank -%}<a href="{{ collections['bags'].url }}">{{ 'navigation.bags' | t }}</a>{%- endif -%}
+          {%- if collections['wallets-purses'].url != blank -%}<a href="{{ collections['wallets-purses'].url }}">{{ 'navigation.wallets_short' | t }}</a>{%- endif -%}
+          <a href="{{ cards_url }}">{{ 'navigation.card_holders' | t }}</a>
+          <a href="{{ personalize_url }}">{{ 'navigation.personalize' | t }}</a>
           <a href="{{ routes.all_products_collection_url }}">{{ 'navigation.shop_all' | t }}</a>
         </div>
       </div>
@@ -166,7 +155,7 @@
   </div>
 </header>
 
-{%- comment -%} Kept outside <header> so the header can slide away on scroll without moving this full-screen menu. {%- endcomment -%}
+{%- comment -%} Kept outside <header> so it does not move with the header. {%- endcomment -%}
 <nav id="MavelaniaMenu" class="mv-mobile-menu" role="dialog" aria-modal="true" aria-label="{{ 'general.mobile_menu' | t | escape }}" aria-hidden="true" tabindex="-1">
   <div class="mv-mobile-menu-head">
     <a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a>
@@ -182,11 +171,15 @@
 
   <div class="mv-mobile-menu-links">
     <span class="mv-mobile-menu-space" aria-hidden="true"></span>
-    <a href="{{ routes.all_products_collection_url }}"><span>{{ 'navigation.shop_all' | t }}</span><span aria-hidden="true">›</span></a>
-    {%- assign nav_count = collections['bags'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/bags"><span>{{ 'navigation.bags' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
-    {%- assign nav_count = collections['wallets-purses'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/wallets-purses"><span>{{ 'navigation.wallets_purses' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
-    {%- assign nav_count = collections['phone-cases'].products_count | default: 0 -%}{%- if nav_count > 0 -%}<a href="{{ routes.root_url }}collections/phone-cases"><span>{{ 'navigation.phone_cases' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
-    <a href="{{ routes.root_url }}collections/accessories"><span>{{ 'navigation.accessories' | t }}</span><span aria-hidden="true">›</span></a>
+    <a href="{{ routes.all_products_collection_url }}"><span>{{ 'navigation.shop' | t }}</span><span aria-hidden="true">›</span></a>
+    {%- if collections['bags'].url != blank -%}<a class="mv-mobile-menu-sub" href="{{ collections['bags'].url }}"><span>{{ 'navigation.bags' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
+    {%- if collections['wallets-purses'].url != blank -%}<a class="mv-mobile-menu-sub" href="{{ collections['wallets-purses'].url }}"><span>{{ 'navigation.wallets_short' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
+    <a class="mv-mobile-menu-sub" href="{{ cards_url }}"><span>{{ 'navigation.card_holders' | t }}</span><span aria-hidden="true">›</span></a>
+    {%- if collections['phone-cases'].products_count > 0 -%}<a class="mv-mobile-menu-sub" href="{{ collections['phone-cases'].url }}"><span>{{ 'navigation.phone_cases' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
+    {%- if collections['accessories'].products_count > 0 -%}<a class="mv-mobile-menu-sub" href="{{ collections['accessories'].url }}"><span>{{ 'navigation.accessories' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
+    <a href="{{ personalize_url }}"><span>{{ 'navigation.personalize' | t }}</span><span aria-hidden="true">›</span></a>
+    {%- if about_page != blank -%}<a href="{{ about_page.url }}"><span>{{ 'navigation.about_brand' | t }}</span><span aria-hidden="true">›</span></a>{%- endif -%}
+    <a href="{{ contact_url }}"><span>{{ 'footer.contact' | t }}</span><span aria-hidden="true">›</span></a>
   </div>
 
   <div class="mv-mobile-menu-footer">
@@ -208,10 +201,8 @@
       <a href="{{ routes.account_login_url }}">{{ 'navigation.sign_in_register' | t }}</a>
     {%- endif -%}
     <button class="mv-mobile-action" type="button" data-favorites-toggle>{{ 'favorites.title' | t }} <span data-favorites-count>0</span></button>
-    {%- if about_page != blank -%}<a href="{{ about_page.url }}">{{ 'navigation.about' | t }}</a>{%- endif -%}
     {%- if faq_page != blank -%}<a href="{{ faq_page.url }}">{{ 'navigation.faq' | t }}</a>{%- endif -%}
-    {%- if contact_page != blank -%}<a href="{{ contact_page.url }}">{{ 'footer.contact' | t }}</a>{%- endif -%}
-    <a href="mailto:{{ settings.contact_email | default: 'info@mavelania.com' | escape }}">{{ 'navigation.customer_support' | t }}</a>
+    <a href="mailto:{{ contact_email | escape }}">{{ contact_email }}</a>
   </div>
 </nav>
 {% schema %}

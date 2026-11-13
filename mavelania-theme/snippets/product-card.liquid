@@ -108,8 +108,12 @@
   </div>
 
   <div class="ms-card__body">
-    {%- if product.type != blank -%}
-      <p class="ms-card__type">{{ product.type }}</p>
+    {%- capture card_pers -%}{% render 'personalization-info', product: product %}{%- endcapture -%}
+    {%- if product.type != blank or card_pers != blank -%}
+      <p class="ms-card__type">
+        {%- if product.type != blank -%}{{ product.type }}{%- endif -%}
+        {%- if card_pers != blank -%}<span class="ms-card__pers">{% render 'icon', name: 'pen' %}{{ 'personalize.label' | t }}</span>{%- endif -%}
+      </p>
     {%- endif -%}
     <{{ heading_tag }} class="ms-card__title"><a href="{{ card_url }}" data-card-link>{{ product.title }}</a></{{ heading_tag }}>
 

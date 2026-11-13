@@ -1,10 +1,7 @@
 {%- comment -%}
-  Lower half of the home page: why buy here, a lifestyle banner, the most
-  asked questions and the shopper's recently viewed products.
-
-  The copy reuses what the About and FAQ pages already state, and the company
-  line reads the registered-company settings, so nothing is claimed here that
-  the store does not document elsewhere.
+  Home page, second half: our philosophy, the brand story, the service
+  promises (each one taken from the store's policies and contact page),
+  questions and recently viewed pieces.
 {%- endcomment -%}
 {%- liquid
   assign faq_page = pages['faq']
@@ -16,123 +13,172 @@
     assign about_page = pages['about-us']
   endif
   assign contact_page = pages['contact']
-  assign legal_name = settings.legal_name | default: shop.name
+  assign contact_email = settings.contact_email | default: 'info@mavelania.com'
 -%}
 <div class="ms-home">
 
-  {%- if section.settings.show_why -%}
-    <section class="ms-section ms-wrap ms-why" aria-labelledby="HomeWhyTitle">
-      <div class="ms-why__image">
-        <img src="{{ 'men-leather-briefcase-model.webp' | asset_url }}" alt="Man carrying a brown leather briefcase" width="1023" height="1537" loading="lazy" decoding="async">
+  {%- comment -%} ── Our philosophy ── {%- endcomment -%}
+  <section class="ms-section ms-wrap ms-philosophy" aria-labelledby="HomePhilosophyTitle">
+    <header class="ms-section__head ms-section__head--center">
+      <p class="ms-eyebrow">{{ 'philosophy.eyebrow' | t }}</p>
+      <h2 id="HomePhilosophyTitle" class="ms-heading">{{ 'philosophy.title' | t }}</h2>
+    </header>
+    <div class="ms-philosophy__grid">
+      {%- for i in (1..3) -%}
+        {%- liquid
+          case i
+            when 1
+              assign ph_image = section.settings.philosophy_image_1
+              assign ph_asset = 'collection-hero-wallets.webp'
+              assign ph_w = 1886
+              assign ph_h = 834
+              assign ph_title = 'philosophy.craft_title' | t
+              assign ph_text = 'philosophy.craft_text' | t
+            when 2
+              assign ph_image = section.settings.philosophy_image_2
+              assign ph_asset = 'collection-hero-bags.webp'
+              assign ph_w = 1886
+              assign ph_h = 834
+              assign ph_title = 'philosophy.simplicity_title' | t
+              assign ph_text = 'philosophy.simplicity_text' | t
+            else
+              assign ph_image = section.settings.philosophy_image_3
+              assign ph_asset = 'women-leather-wallet-model.webp'
+              assign ph_w = 1023
+              assign ph_h = 1537
+              assign ph_title = 'philosophy.personal_title' | t
+              assign ph_text = 'philosophy.personal_text' | t
+          endcase
+        -%}
+        <article class="ms-philosophy__item">
+          <div class="ms-philosophy__media">
+            {%- if ph_image != blank -%}
+              {{ ph_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360,540,720,900', sizes: '(max-width: 900px) 92vw, 30vw', alt: ph_image.alt | default: '' }}
+            {%- else -%}
+              <img src="{{ ph_asset | asset_url }}" alt="" width="{{ ph_w }}" height="{{ ph_h }}" loading="lazy" decoding="async">
+            {%- endif -%}
+          </div>
+          <span class="ms-philosophy__num" aria-hidden="true">0{{ i }}</span>
+          <h3>{{ ph_title }}</h3>
+          <p>{{ ph_text }}</p>
+        </article>
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} ── Brand story ── {%- endcomment -%}
+  <section class="ms-story" aria-labelledby="HomeStoryTitle">
+    <div class="ms-wrap ms-story__grid">
+      <div class="ms-story__media">
+        <img src="{{ 'men-leather-briefcase-model.webp' | asset_url }}" alt="{{ 'story.image_alt' | t | escape }}" width="1023" height="1537" loading="lazy" decoding="async">
       </div>
-      <div class="ms-why__copy">
-        <p class="ms-eyebrow">{{ 'home.why_eyebrow' | t }}</p>
-        <h2 id="HomeWhyTitle" class="ms-heading">{{ 'home.why_heading' | t }}</h2>
-        <p class="ms-why__lede">{{ 'about.lede' | t }}</p>
-
-        <ul class="ms-why__list">
-          <li>
-            {% render 'icon', name: 'leather' %}
-            <div><strong>{{ 'home.why_leather_title' | t }}</strong><span>{{ 'home.why_leather_copy' | t }}</span></div>
-          </li>
-          <li>
-            {% render 'icon', name: 'needle' %}
-            <div><strong>{{ 'home.why_craft_title' | t }}</strong><span>{{ 'home.why_craft_copy' | t }}</span></div>
-          </li>
-          <li>
-            {% render 'icon', name: 'rfid' %}
-            <div><strong>{{ 'home.why_rfid_title' | t }}</strong><span>{{ 'home.why_rfid_copy' | t }}</span></div>
-          </li>
-          <li>
-            {% render 'icon', name: 'building' %}
-            <div>
-              <strong>{{ 'home.why_company_title' | t }}</strong>
-              <span>
-                {%- if settings.legal_jurisdiction != blank -%}
-                  {{ 'home.why_company_copy' | t: name: legal_name, place: settings.legal_jurisdiction }}
-                {%- else -%}
-                  {{ 'home.why_company_copy_short' | t: name: legal_name }}
-                {%- endif -%}
-              </span>
-            </div>
-          </li>
-        </ul>
-
+      <div class="ms-story__copy">
+        <p class="ms-eyebrow">{{ 'story.eyebrow' | t }}</p>
+        <h2 id="HomeStoryTitle" class="ms-heading">{{ 'story.title' | t }}</h2>
+        <p class="ms-story__lead">{{ 'story.p1' | t }}</p>
+        <p>{{ 'story.p2' | t }}</p>
+        <p>{{ 'story.p3' | t }}</p>
         {%- if about_page != blank -%}
-          <a class="ms-button ms-button--outline" href="{{ about_page.url }}">{{ 'home.about_link' | t }} {% render 'icon', name: 'arrow-right' %}</a>
+          <a class="ms-button ms-button--outline" href="{{ about_page.url }}">{{ 'story.cta' | t }} {% render 'icon', name: 'arrow-right' %}</a>
         {%- endif -%}
       </div>
-    </section>
-  {%- endif -%}
+    </div>
+  </section>
 
-  {%- if section.settings.show_banner -%}
-    <section class="ms-banner" aria-labelledby="HomeBannerTitle">
-      <picture>
-        <source media="(max-width:700px)" srcset="{{ 'before-footer-mobile.webp' | asset_url }}" width="900" height="1599">
-        <img src="{{ 'before-footer.webp' | asset_url }}" alt="Woman carrying a brown leather shoulder bag" width="1881" height="836" loading="lazy" decoding="async">
-      </picture>
-      <div class="ms-banner__copy">
-        <p class="ms-eyebrow">{{ 'collections.bags.card_title' | t }}</p>
-        <h2 id="HomeBannerTitle" class="ms-heading">{{ 'home.banner_heading' | t }}</h2>
-        <p>{{ 'home.banner_copy' | t }}</p>
-        <a class="ms-button ms-button--primary" href="{{ routes.root_url }}collections/bags">{{ 'home.shop_bags' | t }} {% render 'icon', name: 'arrow-right' %}</a>
-      </div>
-    </section>
-  {%- endif -%}
+  {%- comment -%} ── Service promises ── {%- endcomment -%}
+  <section class="ms-section ms-wrap ms-service" aria-labelledby="HomeServiceTitle">
+    <header class="ms-section__head ms-section__head--center">
+      <p class="ms-eyebrow">{{ 'service.eyebrow' | t }}</p>
+      <h2 id="HomeServiceTitle" class="ms-heading">{{ 'service.title' | t }}</h2>
+    </header>
+    <ul class="ms-service__grid">
+      <li>
+        {% render 'icon', name: 'globe' %}
+        <h3>{{ 'service.shipping_title' | t }}</h3>
+        <p>{{ 'service.shipping_text' | t }}</p>
+        {%- if shop.shipping_policy.url != blank -%}<a class="ms-link" href="{{ shop.shipping_policy.url }}">{{ 'faq.shipping_link' | t }}</a>{%- endif -%}
+      </li>
+      <li>
+        {% render 'icon', name: 'return' %}
+        <h3>{{ 'service.returns_title' | t }}</h3>
+        <p>{% if settings.return_window_days > 0 %}{{ 'service.returns_text' | t: days: settings.return_window_days }}{% else %}{{ 'faq.a_returns' | t }}{% endif %}</p>
+        {%- if shop.refund_policy.url != blank -%}<a class="ms-link" href="{{ shop.refund_policy.url }}">{{ 'faq.refund_link' | t }}</a>{%- endif -%}
+      </li>
+      <li>
+        {% render 'icon', name: 'pen' %}
+        <h3>{{ 'service.personal_title' | t }}</h3>
+        <p>{{ 'service.personal_text' | t }}</p>
+      </li>
+      <li>
+        {% render 'icon', name: 'lock' %}
+        <h3>{{ 'service.secure_title' | t }}</h3>
+        <p>{{ 'service.secure_text' | t }}</p>
+      </li>
+      <li>
+        {% render 'icon', name: 'leather' %}
+        <h3>{{ 'service.materials_title' | t }}</h3>
+        <p>{{ 'service.materials_text' | t }}</p>
+      </li>
+      <li>
+        {% render 'icon', name: 'mail' %}
+        <h3>{{ 'service.support_title' | t }}</h3>
+        <p>{{ 'service.support_text' | t }}</p>
+        <a class="ms-link" href="mailto:{{ contact_email | escape }}">{{ contact_email }}</a>
+      </li>
+    </ul>
+  </section>
 
-  {%- if section.settings.show_faq -%}
-    <section class="ms-section ms-wrap ms-faq" aria-labelledby="HomeFaqTitle">
-      <header class="ms-faq__head">
-        <p class="ms-eyebrow">{{ 'home.faq_eyebrow' | t }}</p>
-        <h2 id="HomeFaqTitle" class="ms-heading">{{ 'home.faq_heading' | t }}</h2>
-        <p>{{ 'faq.intro' | t }}</p>
-        <div class="ms-faq__actions">
-          {%- if faq_page != blank -%}
-            <a class="ms-button ms-button--outline" href="{{ faq_page.url }}">{{ 'home.faq_all' | t }}</a>
-          {%- endif -%}
-          {%- if contact_page != blank -%}
-            <a class="ms-link" href="{{ contact_page.url }}">{% render 'icon', name: 'mail' %} {{ 'home.contact_us' | t }}</a>
-          {%- else -%}
-            <a class="ms-link" href="mailto:{{ settings.contact_email | default: 'info@mavelania.com' | escape }}">{% render 'icon', name: 'mail' %} {{ settings.contact_email | default: 'info@mavelania.com' }}</a>
-          {%- endif -%}
-        </div>
-      </header>
-      <div class="ms-accordion">
-        <details open>
-          <summary>{{ 'faq.q_handmade' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
-          <p>{{ 'faq.a_handmade' | t }}</p>
-        </details>
-        <details>
-          <summary>{{ 'faq.q_shipping' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
-          <p>{{ 'faq.a_shipping' | t }}</p>
-        </details>
-        <details>
-          <summary>{{ 'faq.q_returns' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
-          <p>{{ 'faq.a_returns' | t }}{% if shop.refund_policy.url != blank %} <a href="{{ shop.refund_policy.url }}">{{ 'faq.refund_link' | t }}</a>{% endif %}</p>
-        </details>
-        <details>
-          <summary>{{ 'faq.q_payment' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
-          <p>{{ 'faq.a_payment' | t }}</p>
-        </details>
-        <details>
-          <summary>{{ 'faq.q_international' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
-          <p>{{ 'faq.a_international' | t }}</p>
-        </details>
+  {%- comment -%} ── Questions ── {%- endcomment -%}
+  <section class="ms-section ms-wrap ms-faq" aria-labelledby="HomeFaqTitle">
+    <header class="ms-faq__head">
+      <p class="ms-eyebrow">{{ 'home.faq_eyebrow' | t }}</p>
+      <h2 id="HomeFaqTitle" class="ms-heading">{{ 'home.faq_heading' | t }}</h2>
+      <p>{{ 'faq.intro' | t }}</p>
+      <div class="ms-faq__actions">
+        {%- if faq_page != blank -%}
+          <a class="ms-button ms-button--outline" href="{{ faq_page.url }}">{{ 'home.faq_all' | t }}</a>
+        {%- endif -%}
+        {%- if contact_page != blank -%}
+          <a class="ms-link" href="{{ contact_page.url }}">{% render 'icon', name: 'mail' %} {{ 'home.contact_us' | t }}</a>
+        {%- endif -%}
       </div>
-    </section>
-  {%- endif -%}
+    </header>
+    <div class="ms-accordion">
+      <details open>
+        <summary>{{ 'personalize.faq_q' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
+        <p>{{ 'personalize.faq_a' | t }}</p>
+      </details>
+      <details>
+        <summary>{{ 'faq.q_shipping' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
+        <p>{{ 'faq.a_shipping' | t }}</p>
+      </details>
+      <details>
+        <summary>{{ 'faq.q_returns' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
+        <p>{{ 'faq.a_returns' | t }}{% if shop.refund_policy.url != blank %} <a href="{{ shop.refund_policy.url }}">{{ 'faq.refund_link' | t }}</a>{% endif %}</p>
+      </details>
+      <details>
+        <summary>{{ 'faq.q_payment' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
+        <p>{{ 'faq.a_payment' | t }}</p>
+      </details>
+      <details>
+        <summary>{{ 'faq.q_international' | t }}{% render 'icon', name: 'chevron-down' %}</summary>
+        <p>{{ 'faq.a_international' | t }}</p>
+      </details>
+    </div>
+  </section>
 
   {% render 'recently-viewed' %}
 
 </div>
 {% schema %}
 {
-  "name": "Home: trust and help",
+  "name": "Home: story",
   "settings": [
-    { "type": "checkbox", "id": "show_why", "label": "Show \"Why Mavelania\"", "default": true },
-    { "type": "checkbox", "id": "show_banner", "label": "Show the lifestyle banner", "default": true },
-    { "type": "checkbox", "id": "show_faq", "label": "Show the questions block", "default": true }
+    { "type": "header", "content": "Our philosophy photos", "info": "Use authentic product or workshop photos. Empty fields use the theme's own photos." },
+    { "type": "image_picker", "id": "philosophy_image_1", "label": "Thoughtful Craftsmanship" },
+    { "type": "image_picker", "id": "philosophy_image_2", "label": "Refined Simplicity" },
+    { "type": "image_picker", "id": "philosophy_image_3", "label": "Personal Expression" }
   ],
-  "presets": [{ "name": "Home: trust and help" }]
+  "presets": [{ "name": "Home: story" }]
 }
 {% endschema %}
