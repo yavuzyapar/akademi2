@@ -10,7 +10,7 @@
     {%- for handle in notfound_handles -%}
       {%- assign notfound_collection = collections[handle] -%}
       {%- if notfound_collection.products_count > 0 -%}
-        <a href="{{ notfound_collection.url }}">{{ notfound_collection.title }} <span>{{ notfound_collection.products_count }}</span></a>
+        <a href="{{ notfound_collection.url }}">{{ notfound_collection.title }}</a>
       {%- endif -%}
     {%- endfor -%}
   </nav>

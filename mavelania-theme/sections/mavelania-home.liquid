@@ -113,7 +113,7 @@
           <img src="{{ 'collection-bag-bordeaux.webp' | asset_url }}" alt="Woman carrying a bordeaux leather bag" width="1023" height="1537" loading="lazy" decoding="async">
           <span class="ms-cat__copy">
             <strong>{{ 'collections.bags.card_title' | t }}</strong>
-            <span>{{ 'home.product_count' | t: count: bags.products_count }} · {{ 'products.from_price' | t: price: cat_from }}</span>
+            <span>{{ 'products.from_price' | t: price: cat_from }}</span>
             <span class="ms-cat__link">{{ 'home.shop_now' | t }} {% render 'icon', name: 'arrow-right' %}</span>
           </span>
         </a>
@@ -124,7 +124,7 @@
           <img src="{{ 'women-leather-wallet-model.webp' | asset_url }}" alt="Woman holding a leather wallet" width="1023" height="1537" loading="lazy" decoding="async">
           <span class="ms-cat__copy">
             <strong>{{ 'collections.wallets.card_title' | t }}</strong>
-            <span>{{ 'home.product_count' | t: count: wallets.products_count }} · {{ 'products.from_price' | t: price: cat_from }}</span>
+            <span>{{ 'products.from_price' | t: price: cat_from }}</span>
             <span class="ms-cat__link">{{ 'home.shop_now' | t }} {% render 'icon', name: 'arrow-right' %}</span>
           </span>
         </a>
@@ -135,7 +135,7 @@
           <img src="{{ 'phone-case-model-new.webp' | asset_url }}" alt="Woman holding a leather phone case with card slots" width="1086" height="1448" loading="lazy" decoding="async">
           <span class="ms-cat__copy">
             <strong>{{ 'collections.phone_cases.card_title' | t }}</strong>
-            <span>{{ 'home.product_count' | t: count: cases.products_count }} · {{ 'products.from_price' | t: price: cat_from }}</span>
+            <span>{{ 'products.from_price' | t: price: cat_from }}</span>
             <span class="ms-cat__link">{{ 'home.shop_now' | t }} {% render 'icon', name: 'arrow-right' %}</span>
           </span>
         </a>
@@ -146,7 +146,7 @@
           <img src="{{ 'home-accessories-card.webp' | asset_url }}" alt="Mavelania bag styled with leather accessories" width="1086" height="1448" loading="lazy" decoding="async">
           <span class="ms-cat__copy">
             <strong>{{ 'collections.accessories.card_title' | t }}</strong>
-            <span>{{ 'home.product_count' | t: count: accessories.products_count }} · {{ 'products.from_price' | t: price: cat_from }}</span>
+            <span>{{ 'products.from_price' | t: price: cat_from }}</span>
             <span class="ms-cat__link">{{ 'home.shop_now' | t }} {% render 'icon', name: 'arrow-right' %}</span>
           </span>
         </a>
@@ -289,7 +289,7 @@
                 {%- endfor -%}
                 {%- if tab_collection.products_count > 8 -%}
                   <a class="ms-carousel__more" href="{{ tab_collection.url }}">
-                    <span>{{ 'home.view_all_count' | t: count: tab_collection.products_count }}</span>
+                    <span>{{ 'home.view_all_in' | t: title: tab_collection.title }}</span>
                     {% render 'icon', name: 'arrow-right' %}
                   </a>
                 {%- endif -%}

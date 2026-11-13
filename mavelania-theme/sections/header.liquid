@@ -62,7 +62,7 @@
                       <p class="ms-eyebrow">{{ 'collections.eyebrow' | t }}</p>
                       <p class="ms-mega__title">{{ nav_label }}</p>
                       <p class="ms-mega__copy">{{ nav_copy }}</p>
-                      <a class="ms-button ms-button--primary" href="{{ nav_url }}">{{ 'home.view_all_count' | t: count: nav_count }} {% render 'icon', name: 'arrow-right' %}</a>
+                      <a class="ms-button ms-button--primary" href="{{ nav_url }}">{{ 'home.view_all_in' | t: title: nav_label }} {% render 'icon', name: 'arrow-right' %}</a>
                     </div>
 
                     <ul class="ms-mega__list">
@@ -156,7 +156,7 @@
           {%- for handle in nav_handles -%}
             {%- assign quick_collection = collections[handle] -%}
             {%- if quick_collection.products_count > 0 -%}
-              <a href="{{ quick_collection.url }}">{{ quick_collection.title }} <span>{{ quick_collection.products_count }}</span></a>
+              <a href="{{ quick_collection.url }}">{{ quick_collection.title }}</a>
             {%- endif -%}
           {%- endfor -%}
           <a href="{{ routes.all_products_collection_url }}">{{ 'navigation.shop_all' | t }}</a>

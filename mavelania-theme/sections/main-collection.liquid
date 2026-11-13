@@ -85,7 +85,6 @@
       <p class="ms-eyebrow">{{ 'collections.eyebrow' | t }}</p>
       <h1 class="ms-heading">{{ hero_title }}</h1>
       {% if hero_description != blank %}<p class="ms-collection-hero__intro">{{ hero_description }}</p>{% endif %}
-      <p class="ms-collection-hero__count">{{ 'home.product_count' | t: count: collection.products_count }}</p>
     </div>
     <div class="ms-collection-hero__image">
       {% if hero_metafield != blank %}
@@ -107,7 +106,7 @@
     {%- for catnav_handle in catnav_handles -%}
       {%- assign catnav_collection = collections[catnav_handle] -%}
       {%- if catnav_collection.products_count > 0 -%}
-        <a href="{{ catnav_collection.url }}"{% if collection.handle == catnav_handle %} aria-current="page"{% endif %}>{{ catnav_collection.title }} <span>{{ catnav_collection.products_count }}</span></a>
+        <a href="{{ catnav_collection.url }}"{% if collection.handle == catnav_handle %} aria-current="page"{% endif %}>{{ catnav_collection.title }}</a>
       {%- endif -%}
     {%- endfor -%}
   </nav>

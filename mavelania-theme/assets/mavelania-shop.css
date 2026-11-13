@@ -639,6 +639,7 @@
 }
 
 .ms-hero__slides { position: absolute; inset: 0; }
+.ms-hero__fill { display: none; }
 
 .ms-hero__slide {
   position: absolute;
@@ -746,10 +747,19 @@
 .ms-hero__pause[aria-pressed="true"] .ms-hero__pause-on { display: none; }
 
 @media (max-width: 760px) {
-  /* The phone photographs are portrait (about 9:17). Anchored to the top so
-     the lettering and faces at the top of each one are never cut. */
-  .ms-hero__frame { aspect-ratio: 1 / 2; max-height: 900px; }
-  .ms-hero__slide img { object-position: center top; }
+  /* Phones: the hero fills the screen below the header, edge to edge, and
+     the photograph is shown whole. A blurred copy of the same photograph
+     fills the space at the sides. */
+  .ms-hero { margin-top: 0; padding-inline: 0; }
+  .ms-hero__frame {
+    aspect-ratio: auto;
+    height: calc(100vh - var(--ms-hero-top, 160px));
+    height: calc(100svh - var(--ms-hero-top, 160px));
+    min-height: 460px;
+    border-radius: 0;
+  }
+  .ms-hero__slide > picture:not(.ms-hero__fill) { position: absolute; z-index: 1; inset: 0; }
+  .ms-hero__slide > picture:not(.ms-hero__fill) img { object-fit: contain; object-position: center; }
   .ms-hero__arrow { display: none; }
   .ms-hero__cta { left: 16px; bottom: 18px; min-height: 46px; padding-inline: 20px; }
   .ms-hero__controls { right: 14px; bottom: 18px; padding-left: 8px; }
@@ -2343,15 +2353,19 @@ details[open] > summary .ms-accordion__toggle::after { transform: translate(-50%
 
   .ms-hero__pause { width: 28px; height: 28px; }
 
-  /* A soft shade behind the controls keeps them readable on light photos. */
-  .ms-hero__frame::after {
+  .ms-hero__fill { position: absolute; inset: 0; display: block; overflow: hidden; }
+  .ms-hero__fill img { object-fit: cover; filter: blur(24px) saturate(1.05) brightness(.7); transform: scale(1.18); }
+
+  /* A soft shade behind the controls keeps them readable on light photos.
+     It sits inside the slide, under the button, so the button stays white. */
+  .ms-hero__slide::after {
     position: absolute;
     z-index: 1;
     right: 0;
     bottom: 0;
     left: 0;
-    height: 140px;
-    background: linear-gradient(180deg, rgba(20, 14, 10, 0), rgba(20, 14, 10, .42));
+    height: 150px;
+    background: linear-gradient(180deg, rgba(20, 14, 10, 0), rgba(20, 14, 10, .45));
     content: "";
     pointer-events: none;
   }
@@ -2602,14 +2616,9 @@ details[open] > summary .ms-accordion__toggle::after { transform: translate(-50%
   pointer-events: none;
 }
 
-/* ── Scroll reveal (added by mavelania-shop.js, so nothing hides without it) */
-.ms-reveal { opacity: 0; transform: translateY(22px); }
-.ms-reveal.is-in { opacity: 1; transform: none; transition: opacity .7s ease var(--ms-delay, 0s), transform .8s var(--ms-ease) var(--ms-delay, 0s); }
-
 @media (prefers-reduced-motion: reduce) {
   .ms-ribbon__track { animation: none; }
   .ms-ribbon { overflow-x: auto; }
-  .ms-reveal { opacity: 1; transform: none; }
   .ms-craft__step:hover .ms-craft__icon,
   .ms-card:hover .ms-card__media { transform: none; }
 }

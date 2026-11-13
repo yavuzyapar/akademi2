@@ -102,6 +102,9 @@
     var root = document.documentElement;
     var lastY = window.pageYOffset;
     var ticking = false;
+    // On phones and tablets the header simply stays put: hiding and showing
+    // it on every change of scroll direction made the page appear to jump.
+    var compact = window.matchMedia('(max-width: 900px)');
     var panel = $('[data-search-panel]', header);
     var searchInput = panel && $('[data-search-input]', panel);
     var searchLastFocused = null;
@@ -119,6 +122,7 @@
       var y = window.pageYOffset;
       header.classList.toggle('is-stuck', y > 8);
       var locked = searchOpen() || body.classList.contains('mv-mobile-menu-open') || header.contains(document.activeElement);
+      if (compact.matches) locked = true;
       if (y > 220 && y > lastY + 6 && !locked) setHidden(true);
       else if (y < lastY - 6 || y <= 220) setHidden(false);
       lastY = y;
@@ -240,6 +244,28 @@
     var timer = 0;
     var userPaused = reducedMotion;
     var hydrated = false;
+
+    slides.forEach(function (slide) {
+      var picture = $('picture', slide);
+      if (!picture) return;
+      var fill = picture.cloneNode(true);
+      fill.className = 'ms-hero__fill';
+      fill.setAttribute('aria-hidden', 'true');
+      $$('img', fill).forEach(function (img) { img.alt = ''; img.removeAttribute('fetchpriority'); });
+      slide.insertBefore(fill, picture);
+    });
+
+    // The frame on phones fills the screen below the header.
+    var frame = hero;
+    var lastWidth = 0;
+    function placeFrame() {
+      if (window.innerWidth === lastWidth) return; // the URL bar showing or hiding is not a reason to move
+      lastWidth = window.innerWidth;
+      frame.style.setProperty('--ms-hero-top', Math.round(frame.getBoundingClientRect().top + window.pageYOffset) + 'px');
+    }
+    placeFrame();
+    window.addEventListener('resize', placeFrame, { passive: true });
+    window.addEventListener('load', function () { lastWidth = 0; placeFrame(); }, { once: true });
 
     // Slides after the first keep their images in data-src until the page
     // has loaded, so they never compete with the LCP image.
@@ -1138,37 +1164,6 @@
       }
       syncBundle();
     }
-  })();
-
-  /* ── Scroll reveal ─────────────────────────────────────────────────
-     Sections and cards fade up as they enter the screen, staggered within
-     each row. Added here, so without JS (or with reduced motion) nothing is
-     ever hidden. */
-  (function () {
-    if (reducedMotion || !('IntersectionObserver' in window)) return;
-    var selectors = [
-      '.ms-section__head', '.ms-cats > .ms-cat', '.ms-carousel__track > .ms-card',
-      '.ms-grid > .ms-card', '.ms-spot__media', '.ms-spot__body', '.ms-craft__step',
-      '.ms-promo__copy', '.ms-promo__media', '.ms-why__image', '.ms-why__copy',
-      '.ms-banner', '.ms-faq__head', '.ms-accordion', '.ms-bundle', '.ms-info__grid > *'
-    ];
-    var items = $$(selectors.join(','));
-    var viewport = window.innerHeight;
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-in');
-        observer.unobserve(entry.target);
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-    items.forEach(function (item) {
-      // Anything already on screen at load stays as it is: no flash.
-      if (item.getBoundingClientRect().top < viewport * 0.92) return;
-      var index = item.parentNode ? Array.prototype.indexOf.call(item.parentNode.children, item) : 0;
-      item.style.setProperty('--ms-delay', Math.min(index, 6) * 0.07 + 's');
-      item.classList.add('ms-reveal');
-      observer.observe(item);
-    });
   })();
 
   /* ── Recently viewed ───────────────────────────────────────────────── */
