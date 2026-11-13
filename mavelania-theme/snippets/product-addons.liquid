@@ -31,12 +31,12 @@
   {%- endif -%}
 {%- endcapture -%}
 {%- if addon_shown > 0 -%}
-  <fieldset class="ms-addons" data-addons>
-    <legend>{% render 'icon', name: 'plus' %} {{ 'products.addons_title' | t }}</legend>
+  <div class="ms-addons" role="group" aria-labelledby="AddonsTitle" data-addons>
+    <p class="ms-addons__title" id="AddonsTitle">{{ 'products.addons_title' | t }}</p>
     {{ addon_rows }}
     <p class="ms-addons__total" data-order-total hidden>
       <span>{{ 'products.order_total' | t }}</span>
       <strong data-order-total-value></strong>
     </p>
-  </fieldset>
+  </div>
 {%- endif -%}

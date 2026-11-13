@@ -18,7 +18,8 @@
 <div class="ms-home">
 
   {%- comment -%} ── Hero ── {%- endcomment -%}
-  <section class="ms-hero" aria-label="{{ 'home.hero_label' | t | escape }}" data-hero aria-roledescription="carousel">
+  <section class="ms-hero ms-wrap" aria-label="{{ 'home.hero_label' | t | escape }}">
+   <div class="ms-hero__frame" data-hero aria-roledescription="carousel">
     <div class="ms-hero__slides">
       <a class="ms-hero__slide is-active" href="{{ routes.root_url }}collections/phone-cases" data-hero-slide>
         <picture><source media="(max-width:760px)" srcset="{{ 'mobile-hero-phone-cases-20260919-v2.webp' | asset_url }}"><img width="1774" height="887" src="{{ 'hero-phone-cases-20260919.webp' | asset_url }}" alt="Mavelania leather phone cases" fetchpriority="high" decoding="sync"></picture>
@@ -56,10 +57,13 @@
         <span class="ms-hero__pause-off">{% render 'icon', name: 'play' %}</span>
       </button>
     </div>
+   </div>
   </section>
 
   {%- comment -%} ── Reassurance strip ── {%- endcomment -%}
-  {% render 'trust-strip', modifier: 'band' %}
+  <div class="ms-wrap">
+    {% render 'trust-strip' %}
+  </div>
 
   {%- comment -%}
     ── Deals ──
@@ -195,7 +199,7 @@
   {%- if wallets.products_count > 0 -%}
     <section class="ms-section ms-wrap ms-spot" aria-labelledby="HomeSpotTitle">
       <a class="ms-spot__media" href="{{ wallets.url }}" tabindex="-1" aria-hidden="true">
-        <img src="{{ 'collection-hero-wallets.webp' | asset_url }}" alt="" width="1886" height="834" loading="lazy" decoding="async">
+        <img src="{{ 'men-leather-bag-model.webp' | asset_url }}" alt="" width="1023" height="1537" loading="lazy" decoding="async">
       </a>
       <div class="ms-spot__body">
         <p class="ms-eyebrow">{% render 'icon', name: 'rfid' %} {{ 'home.tile_wallets_eyebrow' | t }}</p>
