@@ -2,10 +2,6 @@
   {% liquid
     assign hero_title = collection.title
     assign hero_description = collection.description | strip_html
-    assign hero_asset = blank
-    assign hero_variant = collection.handle
-    assign hero_width = 1886
-    assign hero_height = 834
 
     # English-only store: match the collection by its handle or title.
     # A renamed collection falls back to the default hero image.
@@ -14,41 +10,24 @@
     # Order of preference: collection metafield > collection image > the word
     # match below. This keeps the hero image from changing silently when a
     # collection is renamed.
-    assign hero_metafield = collection.metafields.custom.hero_image
 
     if coll_key contains 'phone case'
-      assign hero_asset = 'collection-hero-phone-cases.webp'
-      assign hero_variant = 'phone-cases'
-      assign hero_width = 1662
-      assign hero_height = 946
       if hero_description == blank
         assign hero_description = 'collections.phone_cases.description' | t
       endif
     elsif coll_key contains 'accessor'
-      assign hero_asset = 'collection-hero-accessories.webp'
-      assign hero_variant = 'accessories'
-      assign hero_width = 1651
-      assign hero_height = 953
       if hero_description == blank
         assign hero_description = 'collections.accessories.description' | t
       endif
     elsif coll_key contains 'card'
-      assign hero_asset = 'collection-hero-cardholders.webp'
-      assign hero_variant = 'card-holders'
-      assign hero_width = 1888
-      assign hero_height = 833
       if hero_description == blank
         assign hero_description = 'collections.card_holders.description' | t
       endif
     elsif coll_key contains 'wallet' or coll_key contains 'purse'
-      assign hero_asset = 'collection-hero-wallets.webp'
-      assign hero_variant = 'wallets'
       if hero_description == blank
         assign hero_description = 'collections.wallets.description' | t
       endif
     elsif coll_key contains 'bag'
-      assign hero_asset = 'collection-hero-bags.webp'
-      assign hero_variant = 'bags'
       if hero_description == blank
         assign hero_description = 'collections.bags.description' | t
       endif
@@ -73,30 +52,13 @@
       endif
     endif
   %}
-  {%- if hero_metafield != blank -%}{%- assign hero_asset = blank -%}{%- endif -%}
-  <nav class="ms-breadcrumb" aria-label="{{ 'general.breadcrumb' | t | escape }}">
-    <a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a>
-    <span aria-hidden="true">/</span>
-    <span aria-current="page">{{ hero_title }}</span>
-  </nav>
-
-  <header class="ms-collection-hero ms-collection-hero--{{ hero_variant }}">
-    <div class="ms-collection-hero__copy">
-      <p class="ms-eyebrow">{{ 'collections.eyebrow' | t }}</p>
-      <h1 class="ms-heading">{{ hero_title }}</h1>
-      {% if hero_description != blank %}<p class="ms-collection-hero__intro">{{ hero_description }}</p>{% endif %}
-    </div>
-    <div class="ms-collection-hero__image">
-      {% if hero_metafield != blank %}
-        {{ hero_metafield | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '600,900,1200,1600', sizes: '(max-width: 900px) 100vw, 58vw', alt: hero_title }}
-      {% elsif hero_asset != blank %}
-        <img src="{{ hero_asset | asset_url }}" alt="{{ hero_title | escape }}" width="{{ hero_width }}" height="{{ hero_height }}" loading="eager" fetchpriority="high" decoding="async">
-      {% elsif collection.image %}
-        {{ collection.image | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '600,900,1200,1600', sizes: '(max-width: 900px) 100vw, 58vw', alt: collection.title }}
-      {% else %}
-        <img src="{{ 'collection-hero-bags.webp' | asset_url }}" alt="{{ hero_title | escape }}" width="1886" height="834" loading="eager" fetchpriority="high" decoding="async">
-      {% endif %}
-    </div>
+  <header class="ms-shophead">
+    <nav class="ms-breadcrumb" aria-label="{{ 'general.breadcrumb' | t | escape }}">
+      <a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{{ hero_title }}</span>
+    </nav>
+    <h1 class="ms-shophead__title">{{ hero_title }}</h1>
   </header>
 
   {%- comment -%} Jump straight to another category without going back to the menu. {%- endcomment -%}

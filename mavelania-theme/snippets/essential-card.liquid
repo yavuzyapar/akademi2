@@ -12,15 +12,10 @@
     assign ess_on_sale = true
   endif
 -%}
-{%- capture ess_pers -%}{% render 'personalization-info', product: product %}{%- endcapture -%}
-{%- assign ess_pers = ess_pers | strip -%}
 <article class="ms-essential">
   <a class="ms-essential__media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
     {%- if product.featured_image -%}
       {{ product.featured_image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '360,540,720,1000', sizes: '(max-width: 900px) 88vw, 31vw', alt: '' }}
-    {%- endif -%}
-    {%- if ess_pers != blank -%}
-      <span class="ms-tag ms-tag--pers">{% render 'icon', name: 'pen' %} {{ 'personalize.label' | t }}</span>
     {%- endif -%}
   </a>
   <div class="ms-essential__body">

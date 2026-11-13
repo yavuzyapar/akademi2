@@ -1,0 +1,26 @@
+{%- comment -%}
+  Monogram: the visitor types their initials once and sees them stamped on
+  every product photo in the shop (a preview, kept in this browser only).
+  The same initials are filled in when they personalize a piece.
+  Driven by assets/mavelania-shop.js.
+{%- endcomment -%}
+<div class="ms-mono" data-monogram>
+  <button class="ms-mono__pill" type="button" aria-expanded="false" aria-controls="MonogramPanel" data-monogram-toggle>
+    <span class="ms-mono__seal" aria-hidden="true" data-monogram-seal>Aa</span>
+    <span class="ms-mono__label" data-monogram-label>{{ 'monogram.open' | t }}</span>
+  </button>
+  <div class="ms-mono__panel" id="MonogramPanel" role="dialog" aria-labelledby="MonogramTitle" hidden data-monogram-panel>
+    <button class="ms-mono__close" type="button" aria-label="{{ 'monogram.close' | t | escape }}" data-monogram-close>{% render 'icon', name: 'close' %}</button>
+    <p class="ms-mono__title" id="MonogramTitle">{{ 'monogram.title' | t }}</p>
+    <p class="ms-mono__text">{{ 'monogram.text' | t }}</p>
+    <form class="ms-mono__form" data-monogram-form>
+      <label class="mv-visually-hidden" for="MonogramInput">{{ 'monogram.label' | t }}</label>
+      <input id="MonogramInput" type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="E.K." data-monogram-input>
+      <button class="ms-button ms-button--primary" type="submit">{{ 'monogram.save' | t }}</button>
+    </form>
+    <div class="ms-mono__foot">
+      <span>{{ 'monogram.note' | t }}</span>
+      <button type="button" data-monogram-clear>{{ 'monogram.clear' | t }}</button>
+    </div>
+  </div>
+</div>

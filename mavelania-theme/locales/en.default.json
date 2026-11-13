@@ -235,7 +235,9 @@
     "collections_title": "Bags, Wallets and Card Holders",
     "cat_bags_alt": "Woman carrying a bordeaux leather shoulder bag",
     "cat_wallets_alt": "Woman holding a bordeaux leather wallet",
-    "also_in_shop": "Also in the shop:"
+    "also_in_shop": "Also in the shop:",
+    "atelier_eyebrow": "The atelier",
+    "atelier_title": "Every piece, ready to be made yours"
   },
   "navigation": {
     "accessories": "Accessories",
@@ -363,7 +365,7 @@
     "office_note": "This is the company’s registered office address for legal correspondence. It is not a shop or a collection point — orders are shipped, and enquiries are handled by email.",
     "brand_title": "Crafted with Intention. Made Personal.",
     "statement_title": "Our statement",
-    "make_body_new": "Bags, wallets and card holders, with phone cases and small accessories alongside. Selected pieces can be personalized with initials or a name."
+    "make_body_new": "Bags, wallets and card holders, with phone cases and small accessories alongside — handmade from genuine leather, and every piece can be personalized."
   },
   "contact": {
     "eyebrow": "Mavelania",
@@ -390,7 +392,7 @@
   "trust": {
     "label": "Why shop with Mavelania",
     "leather_title": "Genuine leather",
-    "leather_copy": "Cut and finished by hand",
+    "leather_copy": "Handmade, piece by piece",
     "payment_title": "Secure checkout",
     "payment_copy": "Encrypted payments through Shopify",
     "returns_copy": "Conditions are set out in our refund policy.",
@@ -430,7 +432,7 @@
     "title": "Make It Yours.",
     "lede": "Every detail tells a story. Add your initials, name, or a personal touch to selected leather pieces and create something that feels uniquely yours.",
     "label": "Personalizable",
-    "available": "Personalization available on this piece",
+    "available": "Personalize this piece",
     "assure": "Add initials or a name before adding to bag",
     "cta": "Create your personal piece",
     "try_label": "Try your initials",
@@ -440,7 +442,7 @@
     "method_label": "Method",
     "color_label": "Colour",
     "which_label": "Which pieces",
-    "which_value": "Only the pieces shown below. Each product page lists the methods and colours available for it.",
+    "which_value": "Every piece. Each product page lists the methods and colours offered.",
     "add": "Add personalization",
     "add_sub": "Initials or a short name",
     "text_label": "Your text",
@@ -452,7 +454,7 @@
     "returns_note": "Clearly personalized pieces may be excluded from change-of-mind returns where the law allows. This does not apply to items that are defective, damaged or not as described.",
     "error_empty": "Please enter the text you would like added, or switch personalization off.",
     "error_chars": "Please use letters, numbers, spaces and . & - only.",
-    "info_intro": "This piece can be personalized with initials or a short name. Add it in the form above, before adding the piece to your bag; it is shown in your bag and on your order.",
+    "info_intro": "Every Mavelania piece can be personalized with initials or a short name. Add it in the form above, before adding the piece to your bag; it is shown in your bag and on your order.",
     "steps_title": "How personalization works",
     "step1_title": "Choose your piece",
     "step1_text": "Pick one of the pieces below. Personalization is offered only where the product page says so.",
@@ -466,10 +468,16 @@
     "policy_spelling": "Please check spelling and spacing: the text is applied exactly as entered.",
     "questions": "Questions about personalization? Write to",
     "faq_q": "Can I personalize my piece?",
-    "faq_a": "Selected pieces can carry your initials or a short name. Where personalization is available, the product page shows it with the methods and colours offered for that piece, and you add your text before adding the piece to your bag."
+    "faq_a": "Yes. Every Mavelania piece can carry your initials or a short name, applied by laser engraving or embossing. Add your text on the product page before adding the piece to your bag, or write to info@mavelania.com for a special request.",
+    "mail_title": "A special request?",
+    "mail_text": "Write to {{ email }} with your text, a sketch or the placement you have in mind.",
+    "mail_subject": "Personalization: {{ title }}",
+    "mail_body": "Hello Mavelania, I would like to personalize the {{ title }}."
   },
   "ribbon": {
-    "personal": "Personalization on selected pieces"
+    "personal": "Personalization on every piece",
+    "leather": "Genuine leather",
+    "handmade": "Handmade"
   },
   "philosophy": {
     "eyebrow": "Our philosophy",
@@ -479,7 +487,7 @@
     "simplicity_title": "Refined Simplicity",
     "simplicity_text": "Forms are kept clean and purposeful, in colours that sit easily with what you already wear and carry. Nothing is added that the piece does not need.",
     "personal_title": "Personal Expression",
-    "personal_text": "Selected pieces can carry your initials or a name, so an everyday object becomes unmistakably yours."
+    "personal_text": "Every piece can carry your initials or a name, so an everyday object becomes unmistakably yours."
   },
   "story": {
     "eyebrow": "About Mavelania",
@@ -500,12 +508,23 @@
     "returns_title": "Returns and exchanges",
     "returns_text": "Return unused items within {{ days }} days of delivery. Personalized pieces may be excluded from change-of-mind returns where the law allows.",
     "personal_title": "Personalization",
-    "personal_text": "Available on selected pieces only, with the methods and colours shown on their product pages.",
+    "personal_text": "Every piece can be personalized by laser engraving or embossing, in the colours shown on its product page.",
     "secure_title": "Secure checkout",
     "secure_text": "Payments are processed through Shopify. Mavelania does not store your card details.",
     "materials_title": "Materials and care",
-    "materials_text": "Each product page lists the material, dimensions and care details we can confirm for that piece.",
+    "materials_text": "Every piece is handmade from genuine leather. Each product page lists its dimensions and care details.",
     "support_title": "Customer support",
     "support_text": "Questions about a piece or an order? We reply within two business days."
+  },
+  "monogram": {
+    "open": "Your initials",
+    "try": "See your initials on every piece",
+    "title": "Your monogram",
+    "text": "Type your initials once and see them on every piece in the shop. They are filled in for you when you personalize a piece.",
+    "label": "Initials",
+    "save": "Show on every piece",
+    "clear": "Remove",
+    "close": "Close",
+    "note": "Preview only. Kept on this device."
   }
 }

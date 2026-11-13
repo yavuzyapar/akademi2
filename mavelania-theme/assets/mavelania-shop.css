@@ -3107,6 +3107,374 @@ button.ms-personal__color:disabled { cursor: default; }
 
 @media (max-width: 900px) { .ms-about__principles > div { grid-template-columns: 1fr; } }
 
+/* ── 18 Atelier ledger ─────────────────────────────────────────────────
+   The house style: each piece is presented like an entry in an atelier
+   ledger and a hang tag on the bench. Serial numbers and prices set in a
+   typewriter mono, stitched seams, an eyelet on every tag, and the
+   visitor's own monogram stamped on every photo. Products come first. */
+:root {
+  --ms-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --ms-tag: #f6efe3;
+  --ms-seam: rgba(107, 74, 52, .38);
+}
+
+/* Paper grain over the whole page, very light. */
+body::after {
+  position: fixed;
+  z-index: 2000;
+  inset: 0;
+  display: block !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .14 0 0 0 0 .1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: .05;
+  content: "";
+  pointer-events: none;
+}
+
+/* Typewriter labels */
+.ms-eyebrow,
+.ms-breadcrumb,
+.ms-card__type,
+.ms-essential__label,
+.ms-hero__eyebrow,
+.ms-philosophy__num,
+.ms-badge {
+  font-family: var(--ms-mono) !important;
+  letter-spacing: .08em !important;
+}
+
+.ms-eyebrow { font-size: 11.5px; font-weight: 500; }
+.ms-section__head:not(.ms-section__head--center) .ms-eyebrow::before { width: 18px; background: var(--ms-burgundy); }
+
+/* Ledger headings: the title runs into a hairline */
+.ms-section__head:not(.ms-section__head--center) { align-items: flex-end; border-bottom: 1px solid var(--ms-line); padding-bottom: 12px; }
+.ms-section__head:not(.ms-section__head--center) .ms-heading { font-size: clamp(1.6rem, 2.4vw, 2.3rem); }
+
+/* ── Product card as a hang tag */
+.ms-grid,
+.ms-carousel__track,
+.ms-essentials { counter-reset: piece; }
+
+.ms-card {
+  counter-increment: piece;
+  overflow: hidden;
+  border: 1px solid var(--ms-line);
+  border-radius: 14px;
+  background: var(--ms-surface);
+  transition: border-color .25s ease, box-shadow .3s ease, transform .3s var(--ms-ease);
+}
+
+.ms-card__media { border-radius: 0; background: #f2ece3; }
+.ms-card .ms-card__img { object-fit: cover; }
+
+.ms-card__body {
+  position: relative;
+  gap: 4px;
+  padding: 12px 12px 14px;
+  border-top: 1px dashed var(--ms-seam);
+  background: var(--ms-tag);
+}
+
+/* serial and eyelet */
+.ms-card__body::before {
+  display: block;
+  color: var(--ms-muted);
+  font: 500 10.5px/1 var(--ms-mono);
+  letter-spacing: .12em;
+  content: "Nº " counter(piece, decimal-leading-zero);
+}
+
+.ms-card__body::after {
+  position: absolute;
+  top: 11px;
+  right: 12px;
+  width: 9px;
+  height: 9px;
+  border: 1.5px solid var(--ms-seam);
+  border-radius: 50%;
+  background: var(--ms-bg);
+  box-shadow: inset 0 1px 2px rgba(43, 29, 21, .25);
+  content: "";
+}
+
+.ms-card__type { margin-top: 2px; font-size: 10.5px; color: var(--ms-leather); }
+.ms-card__title { font: 500 14.5px/1.35 var(--ms-sans); }
+.ms-card__price { font-family: var(--ms-mono); font-size: 15px; font-weight: 500; letter-spacing: -.01em; }
+.ms-card__price s { font-size: 12.5px; }
+.ms-card__saving { font-family: var(--ms-mono); font-size: 11.5px; }
+.ms-card__swatches { margin-top: 4px; }
+
+/* stitched frame on hover */
+.ms-card__media::after {
+  position: absolute;
+  z-index: 1;
+  inset: 8px;
+  border: 1px dashed rgba(255, 255, 255, .75);
+  border-radius: 8px;
+  opacity: 0;
+  content: "";
+  pointer-events: none;
+  transition: opacity .3s ease, inset .3s var(--ms-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ms-card:hover { border-color: var(--ms-seam); box-shadow: 0 18px 36px rgba(43, 29, 21, .12); transform: translateY(-3px); }
+  .ms-card:hover .ms-card__media { box-shadow: none; transform: none; }
+  .ms-card:hover .ms-card__media::after { inset: 10px; opacity: 1; }
+}
+
+.ms-card__quick { right: 10px; bottom: 10px; left: 10px; border-radius: 999px; background: var(--ms-espresso); font-family: var(--ms-sans); }
+/* Touch: the round quick-add sits bottom right, the monogram stamp bottom left. */
+@media (hover: none), (pointer: coarse), (max-width: 700px) { .ms-card__quick { left: auto; } }
+.ms-card__quick:hover { background: var(--ms-burgundy); }
+.ms-badge { border-radius: 4px; font-size: 10.5px !important; }
+
+/* ── The monogram stamp on photos */
+.ms-stamp {
+  position: absolute;
+  z-index: 2;
+  bottom: 12px;
+  left: 12px;
+  display: grid;
+  min-width: 46px;
+  height: 30px;
+  place-items: center;
+  padding: 0 9px;
+  border-radius: 6px;
+  background: radial-gradient(120% 140% at 30% 20%, #8a5a3c, #4a2b1b);
+  color: #e3c37f;
+  font: 500 13px/1 var(--ms-serif);
+  letter-spacing: .16em;
+  text-shadow: 0 1px 0 #f3dc9a, 0 -1px 0 #5a3a16;
+  box-shadow: 0 4px 10px rgba(43, 29, 21, .3);
+  outline: 1px dashed rgba(240, 214, 170, .55);
+  outline-offset: -4px;
+  pointer-events: none;
+  animation: ms-stamp-in .45s var(--ms-ease) both;
+}
+
+.ms-essential__media .ms-stamp,
+.mv-product-main-media .ms-stamp { bottom: 16px; left: 16px; height: 38px; min-width: 60px; font-size: 16px; }
+
+@keyframes ms-stamp-in { from { opacity: 0; transform: scale(1.4) rotate(-8deg); } to { opacity: 1; transform: none; } }
+
+@media (hover: hover) and (pointer: fine) {
+  .ms-card:hover .ms-stamp { opacity: 0; transition: opacity .2s ease; }
+}
+
+/* ── Monogram pill and panel */
+.ms-mono { position: fixed; z-index: 1250; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); font-family: var(--ms-sans); }
+body[data-page="product"] .ms-mono { bottom: calc(92px + env(safe-area-inset-bottom)); }
+@media (min-width: 901px) { body[data-page="product"] .ms-mono { bottom: calc(96px + env(safe-area-inset-bottom)); } }
+
+.ms-mono__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 5px 16px 5px 5px;
+  border: 1px solid rgba(240, 214, 170, .35);
+  border-radius: 999px;
+  background: var(--ms-espresso) url("leather-bg.webp") 0 0 / 420px auto;
+  background-blend-mode: multiply;
+  color: #f3e7d3;
+  font: 500 13px/1 var(--ms-sans);
+  letter-spacing: .03em;
+  box-shadow: 0 12px 28px rgba(43, 29, 21, .3);
+  cursor: pointer;
+  transition: transform .2s var(--ms-ease);
+}
+
+.ms-mono__pill:hover { transform: translateY(-2px); }
+.ms-mono__pill:focus-visible { outline: 2px solid var(--ms-espresso); outline-offset: 3px; }
+
+.ms-mono__seal {
+  display: grid;
+  min-width: 38px;
+  height: 38px;
+  place-items: center;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: radial-gradient(120% 140% at 30% 20%, #8a5a3c, #4a2b1b);
+  color: #e3c37f;
+  font: 500 14px/1 var(--ms-serif);
+  letter-spacing: .1em;
+  text-shadow: 0 1px 0 #f3dc9a, 0 -1px 0 #5a3a16;
+  outline: 1px dashed rgba(240, 214, 170, .55);
+  outline-offset: -4px;
+}
+
+.ms-mono__panel {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 0;
+  display: grid;
+  gap: 10px;
+  width: min(340px, calc(100vw - 32px));
+  padding: 20px;
+  border: 1px solid var(--ms-line);
+  border-radius: 16px;
+  background: var(--ms-bg);
+  box-shadow: 0 24px 50px rgba(43, 29, 21, .22);
+  outline: 1px dashed var(--ms-seam);
+  outline-offset: -7px;
+}
+
+.ms-mono__panel[hidden] { display: none; }
+.ms-mono__close { position: absolute; top: 8px; right: 8px; display: grid; width: 36px; height: 36px; place-items: center; border-radius: 50%; cursor: pointer; }
+.ms-mono__close .ms-icon { width: 18px; height: 18px; }
+.ms-mono__title { margin: 0; padding-right: 30px; color: var(--ms-espresso); font: 500 1.4rem/1.1 var(--ms-serif); }
+.ms-mono__text { margin: 0; color: var(--ms-ink-soft); font: 400 13.5px/1.55 var(--ms-sans); }
+.ms-mono__form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.ms-mono__form input {
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--ms-line-strong);
+  border-radius: 999px;
+  background: var(--ms-surface);
+  color: var(--ms-ink);
+  font: 500 18px/1 var(--ms-mono);
+  letter-spacing: .2em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ms-mono__form input:focus { border-color: var(--ms-espresso); outline: 2px solid rgba(43, 29, 21, .1); }
+.ms-mono__foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--ms-muted); font: 400 12px/1.4 var(--ms-sans); }
+.ms-mono__foot button { color: var(--ms-ink-soft); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* Phones: a small seal at the bottom right, clear of prices and titles. */
+@media (max-width: 700px) {
+  .ms-mono { right: 12px; left: auto; bottom: calc(12px + env(safe-area-inset-bottom)); }
+  body[data-page="product"] .ms-mono { bottom: calc(84px + env(safe-area-inset-bottom)); }
+  .ms-mono__label { display: none; }
+  .ms-mono__pill { min-height: 0; padding: 4px; }
+  .ms-mono__seal { min-width: 40px; height: 40px; font-size: 13px; }
+  .ms-mono__panel { right: 0; left: auto; }
+}
+
+/* ── Home: products first */
+.ms-atelier { padding-top: clamp(20px, 2.6vw, 34px); }
+.ms-atelier__mono { cursor: pointer; }
+.ms-atelier__mono .ms-icon { width: 16px; height: 16px; }
+
+.ms-tabs--bar {
+  position: relative;
+  gap: 0;
+  margin: 0 0 18px;
+  border-bottom: 1px solid var(--ms-line);
+}
+
+.ms-tabs--bar button {
+  min-height: 46px;
+  padding: 10px 16px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ms-muted);
+  font: 500 12.5px/1 var(--ms-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.ms-tabs--bar button:hover { border-color: transparent; color: var(--ms-ink); }
+.ms-tabs--bar button[aria-selected="true"] { border-color: var(--ms-espresso); background: transparent; color: var(--ms-espresso); }
+
+.ms-grid--atelier { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+
+@media (max-width: 1240px) { .ms-grid--atelier { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 900px) {
+  .ms-grid--atelier { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ms-tabs--bar { margin-inline: calc(var(--ms-gutter) * -1); padding-inline: var(--ms-gutter); }
+}
+
+/* Trendyol density on phones: two columns, tight gaps, everything legible */
+@media (max-width: 700px) {
+  .ms-grid,
+  .ms-grid--atelier { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .ms-card { border-radius: 12px; }
+  .ms-card__body { padding: 10px 10px 12px; }
+  .ms-card__title { font-size: 13.5px; }
+  .ms-card__price { font-size: 14px; }
+  .ms-card__swatches { gap: 5px; }
+  .ms-swatch { width: 15px; height: 15px; }
+  .ms-stamp { bottom: 8px; left: 8px; height: 26px; min-width: 40px; font-size: 11.5px; }
+}
+
+/* Selected essentials: whole square photos, numbered like the ledger */
+.ms-essential { counter-increment: piece; }
+.ms-essential__media { aspect-ratio: 1; }
+.ms-essential__media img { object-fit: cover; }
+.ms-essential__label::before { margin-right: 8px; color: var(--ms-burgundy); content: counter(piece, decimal-leading-zero) " /"; }
+.ms-essential__price { font-family: var(--ms-mono); font-weight: 500; }
+
+/* ── Collection: products first */
+.ms-shophead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 20px;
+  padding: 6px 0 12px;
+  border-bottom: 1px solid var(--ms-line);
+}
+
+.ms-shophead .ms-breadcrumb { order: 2; margin: 0; }
+.ms-shophead__title { margin: 0; color: var(--ms-espresso); font: 500 clamp(1.8rem, 3vw, 2.6rem)/1.05 var(--ms-serif); }
+.ms-collection .ms-catnav { margin: 12px 0; }
+.ms-collection .ms-catnav a { font-family: var(--ms-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+.ms-collection .mv-collection-toolbar { padding-bottom: 10px; }
+
+@media (max-width: 700px) {
+  .ms-shophead { padding-top: 2px; }
+  .ms-shophead__title { font-size: 1.9rem; }
+}
+
+/* ── Hero */
+.ms-hero__title { font-weight: 400; }
+.ms-hero__eyebrow { font-size: 11.5px; }
+
+@media (max-width: 760px) {
+  /* Phones: 9:16 frame, the size of the phone photos, so they show whole. */
+  .ms-hero__frame { aspect-ratio: 9 / 16; max-height: none; }
+  .ms-hero__slide > picture img { object-position: center; }
+
+  /* Card holder: its square photo whole on top, the text on a leather panel. */
+  .ms-hero__slide--split { display: flex; flex-direction: column; background: var(--ms-espresso) url("leather-bg.webp") 0 0 / 420px auto; background-blend-mode: multiply; }
+  .ms-hero__slide--split::after { display: none; }
+  .ms-hero__slide--split > picture { position: static; flex: none; height: auto; }
+  .ms-hero__slide--split > picture img { height: auto; aspect-ratio: 1; object-fit: cover; }
+  .ms-hero__slide.ms-hero__slide--split .ms-hero__text { position: static; flex: 1; align-content: center; padding: 18px 18px 70px; }
+}
+
+/* ── Personalization: special request by mail */
+.ms-pers__mail {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--ms-tag);
+  color: var(--ms-ink-soft);
+  font: 400 13.5px/1.5 var(--ms-sans);
+  transition: background-color .2s ease;
+}
+
+.ms-pers__mail:hover { background: var(--ms-tint-2); }
+.ms-pers__mail .ms-icon { width: 20px; height: 20px; margin-top: 1px; color: var(--ms-burgundy); }
+.ms-pers__mail strong { color: var(--ms-ink); font-weight: 600; }
+.ms-pers-flag { font-family: var(--ms-mono); font-size: 12px; letter-spacing: .04em; }
+
+/* Prices on the product page in the ledger mono */
+.ms-price,
+.ms-stickybar__price,
+.mv-mobile-buybar > [data-mobile-price],
+.ms-line__price,
+.ms-cart__line { font-family: var(--ms-mono) !important; letter-spacing: -.01em; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-stamp { animation: none; }
+}
+
 /* ── 14 Motion & print safety ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .ms-hero__slide,

@@ -34,6 +34,15 @@
   if p_source == blank and product.tags contains 'personalizable'
     assign p_source = 'yes'
   endif
+  # The owner confirmed that every piece can be personalized by laser or
+  # embossing; pieces with no data of their own get the catalogue's
+  # standard options. Tag a product "no-personalization" to leave it out.
+  if p_source == blank
+    assign p_source = 'Laser and Embossed (Silver | Gold | Transparent | Black | Red)'
+  endif
+  if product.tags contains 'no-personalization'
+    assign p_source = ''
+  endif
 
   assign p_methods = ''
   assign p_colors = ''

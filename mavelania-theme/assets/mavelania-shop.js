@@ -1271,6 +1271,95 @@
     }
   })();
 
+  /* ── Monogram ──────────────────────────────────────────────────────
+     The visitor types their initials once; every product photo then shows
+     them as a small stamped leather tab (a preview, stored in this browser
+     only), and the personalization form starts with them. */
+  (function () {
+    var root = $('[data-monogram]');
+    if (!root) return;
+    var key = 'mv-monogram';
+    var pill = $('[data-monogram-toggle]', root);
+    var panel = $('[data-monogram-panel]', root);
+    var input = $('[data-monogram-input]', root);
+    var seal = $('[data-monogram-seal]', root);
+    var label = $('[data-monogram-label]', root);
+    var defaultLabel = label ? label.textContent : '';
+    var lastFocus = null;
+
+    function read() { try { return (localStorage.getItem(key) || '').slice(0, 6); } catch (error) { return ''; } }
+    function write(value) { try { if (value) localStorage.setItem(key, value); else localStorage.removeItem(key); } catch (error) {} }
+    function clean(value) { return String(value || '').toUpperCase().replace(/[^\p{L}\p{N} .&'\-]/gu, '').trim().slice(0, 6); }
+
+    function paint(value) {
+      root.classList.toggle('is-set', !!value);
+      if (seal) seal.textContent = value || 'Aa';
+      if (label) label.textContent = value ? value : defaultLabel;
+      $$('[data-monogram-target], .ms-essential__media, .mv-product-main-media').forEach(function (target) {
+        var stamp = $(':scope > .ms-stamp', target);
+        if (!value) { if (stamp) stamp.remove(); return; }
+        if (!stamp) {
+          stamp = el('span', 'ms-stamp');
+          stamp.setAttribute('aria-hidden', 'true');
+          target.appendChild(stamp);
+        }
+        stamp.textContent = value;
+      });
+      var personal = $('[data-pers-text]');
+      if (personal && value && !personal.value) {
+        personal.value = value;
+        personal.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }
+
+    function open() {
+      lastFocus = document.activeElement;
+      panel.hidden = false;
+      pill.setAttribute('aria-expanded', 'true');
+      root.classList.add('is-open');
+      input.value = read();
+      window.setTimeout(function () { input.focus(); input.select(); }, 30);
+    }
+    function close() {
+      if (panel.hidden) return;
+      panel.hidden = true;
+      pill.setAttribute('aria-expanded', 'false');
+      root.classList.remove('is-open');
+      if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+    }
+
+    pill.addEventListener('click', function () { if (panel.hidden) open(); else close(); });
+    $('[data-monogram-close]', root).addEventListener('click', close);
+    $('[data-monogram-form]', root).addEventListener('submit', function (event) {
+      event.preventDefault();
+      var value = clean(input.value);
+      write(value);
+      paint(value);
+      close();
+    });
+    input.addEventListener('input', function () { if (seal) seal.textContent = clean(input.value) || 'Aa'; });
+    $('[data-monogram-clear]', root).addEventListener('click', function () { input.value = ''; write(''); paint(''); close(); });
+    document.addEventListener('click', function (event) {
+      if (event.target.closest('[data-monogram-open]')) { event.preventDefault(); open(); return; }
+      if (!panel.hidden && !root.contains(event.target)) close();
+    });
+    document.addEventListener('keydown', function (event) { if (event.key === 'Escape') close(); });
+    paint(read());
+  })();
+
+  /* Personalization: the "special request" mail carries the product and the
+     text typed so far. */
+  $$('[data-pers-mail]').forEach(function (link) {
+    var box = link.closest('[data-pers]');
+    var text = box && $('[data-pers-text]', box);
+    function sync() {
+      var body = link.dataset.body + (text && text.value.trim() ? '\n\nText: ' + text.value.trim() : '');
+      link.href = 'mailto:' + link.dataset.email + '?subject=' + encodeURIComponent(link.dataset.subject) + '&body=' + encodeURIComponent(body);
+    }
+    if (text) text.addEventListener('input', sync);
+    sync();
+  });
+
   /* ── Recently viewed ───────────────────────────────────────────────── */
   function readRecent() {
     try {

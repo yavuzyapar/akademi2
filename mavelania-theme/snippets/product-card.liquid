@@ -61,7 +61,7 @@
   assign fav_price = product.price | money
 -%}
 <article class="ms-card{% unless product.available %} is-sold-out{% endunless %}" data-product-card>
-  <div class="ms-card__media">
+  <div class="ms-card__media" data-monogram-target>
     <a class="ms-card__image" href="{{ card_url }}" tabindex="-1" aria-hidden="true" data-card-link>
       {%- if product.featured_image -%}
         {%- if eager -%}
@@ -108,12 +108,8 @@
   </div>
 
   <div class="ms-card__body">
-    {%- capture card_pers -%}{% render 'personalization-info', product: product %}{%- endcapture -%}
-    {%- if product.type != blank or card_pers != blank -%}
-      <p class="ms-card__type">
-        {%- if product.type != blank -%}{{ product.type }}{%- endif -%}
-        {%- if card_pers != blank -%}<span class="ms-card__pers">{% render 'icon', name: 'pen' %}{{ 'personalize.label' | t }}</span>{%- endif -%}
-      </p>
+    {%- if product.type != blank -%}
+      <p class="ms-card__type">{{ product.type }}</p>
     {%- endif -%}
     <{{ heading_tag }} class="ms-card__title"><a href="{{ card_url }}" data-card-link>{{ product.title }}</a></{{ heading_tag }}>
 

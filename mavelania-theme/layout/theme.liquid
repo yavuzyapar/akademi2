@@ -49,12 +49,12 @@
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@200;300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@200;300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
     >
 
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@200;300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@200;300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
     >
 
     <link
@@ -138,15 +138,6 @@
         as="image"
         href="{{ 'hero-phone-cases-20260919.webp' | asset_url }}"
         media="(min-width: 761px)"
-        fetchpriority="high"
-      >
-    {%- elsif request.page_type == 'collection' and collection.image != blank -%}
-      <link
-        rel="preload"
-        as="image"
-        href="{{ collection.image | image_url: width: 1600 }}"
-        imagesrcset="{{ collection.image | image_url: width: 600 }} 600w, {{ collection.image | image_url: width: 900 }} 900w, {{ collection.image | image_url: width: 1200 }} 1200w, {{ collection.image | image_url: width: 1600 }} 1600w"
-        imagesizes="(max-width: 900px) 100vw, 58vw"
         fetchpriority="high"
       >
     {%- elsif request.page_type == 'product' and product.featured_media != blank -%}
@@ -290,6 +281,8 @@
       aria-label="{{ 'favorites.close' | t | escape }}"
       hidden
     ></button>
+
+    {% render 'monogram' %}
 
     {% render 'cart-drawer' %}
 

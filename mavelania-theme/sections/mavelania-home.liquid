@@ -48,7 +48,7 @@
 
       <div class="ms-hero__slide ms-hero__slide--top" data-hero-slide aria-hidden="true">
         <picture>
-          <source media="(max-width:760px)" data-srcset="{{ 'women-leather-wallet-model.webp' | asset_url }}" width="1023" height="1537">
+          <source media="(max-width:760px)" data-srcset="{{ 'mobile-hero-wallets.webp' | asset_url }}" width="900" height="1687">
           <img data-src="{{ 'collection-hero-wallets.webp' | asset_url }}" width="1886" height="834" alt="{{ 'home.slide_wallet_alt' | t | escape }}" decoding="async" style="--pos-m: center 30%">
         </picture>
         <div class="ms-hero__text">
@@ -58,7 +58,7 @@
         </div>
       </div>
 
-      <div class="ms-hero__slide ms-hero__slide--top" data-hero-slide aria-hidden="true">
+      <div class="ms-hero__slide ms-hero__slide--top ms-hero__slide--split" data-hero-slide aria-hidden="true">
         <picture>
           {%- if signature_card.featured_image -%}
             <source media="(max-width:760px)" data-srcset="{{ signature_card.featured_image | image_url: width: 900 }}" width="{{ signature_card.featured_image.width }}" height="{{ signature_card.featured_image.height }}">
@@ -110,15 +110,96 @@
     </div>
     <div class="ms-intro__actions">
       <a class="ms-button ms-button--primary" href="{{ routes.all_products_collection_url }}">{{ 'home.cta_discover' | t }}</a>
-      <a class="ms-button ms-button--outline" href="{{ personalize_url }}">{% render 'icon', name: 'pen' %} {{ 'home.cta_personalize' | t }}</a>
+      <button class="ms-button ms-button--outline" type="button" data-monogram-open>{% render 'icon', name: 'pen' %} {{ 'home.cta_personalize' | t }}</button>
       <p class="ms-intro__personal">{{ 'home.personal_line' | t }}</p>
     </div>
   </section>
 
   {% render 'ribbon' %}
 
+  {%- comment -%}
+    ── The atelier: products first ──
+    Every piece, sorted by category in tabs, straight after the hero.
+  {%- endcomment -%}
+  {%- liquid
+    assign tab_keys = 'all,bags,wallets-purses,card-holders,phone-cases,accessories' | split: ','
+    assign shop_limit = section.settings.shop_count | default: 10
+  -%}
+  <section class="ms-section ms-atelier" aria-labelledby="HomeShopTitle" data-tabs>
+    <div class="ms-wrap">
+      <header class="ms-section__head">
+        <div>
+          <p class="ms-eyebrow">{{ 'home.atelier_eyebrow' | t }}</p>
+          <h2 id="HomeShopTitle" class="ms-heading">{{ 'home.atelier_title' | t }}</h2>
+        </div>
+        <button class="ms-link ms-atelier__mono" type="button" data-monogram-open>{% render 'icon', name: 'pen' %} {{ 'monogram.try' | t }}</button>
+      </header>
+
+      <div class="ms-tabs ms-tabs--bar" role="tablist" aria-label="{{ 'home.shop_by_category' | t | escape }}">
+        {%- assign tab_index = 0 -%}
+        {%- for key in tab_keys -%}
+          {%- liquid
+            case key
+              when 'all'
+                assign tab_label = 'navigation.shop_all' | t
+                assign tab_size = collections.all.products_count
+              when 'card-holders'
+                assign tab_label = 'navigation.card_holders' | t
+                assign tab_size = 1
+              when 'wallets-purses'
+                assign tab_label = 'navigation.wallets_short' | t
+                assign tab_size = collections[key].products_count
+              else
+                assign tab_label = collections[key].title
+                assign tab_size = collections[key].products_count
+            endcase
+          -%}
+          {%- if tab_size > 0 -%}
+            <button type="button" role="tab" id="ShopTab-{{ key }}" aria-controls="ShopPanel-{{ key }}" aria-selected="{% if tab_index == 0 %}true{% else %}false{% endif %}"{% if tab_index > 0 %} tabindex="-1"{% endif %} data-tab>{{ tab_label }}</button>
+            {%- assign tab_index = tab_index | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- assign tab_index = 0 -%}
+      {%- for key in tab_keys -%}
+        {%- liquid
+          assign panel_url = routes.all_products_collection_url
+          assign panel_count = 0
+          case key
+            when 'all'
+              assign panel_products = collections.all.products
+            when 'card-holders'
+              assign panel_products = collections.all.products
+              assign panel_url = cards_url
+            else
+              assign panel_products = collections[key].products
+              assign panel_url = collections[key].url
+          endcase
+        -%}
+        {%- capture panel_cards -%}
+          {%- for product in panel_products limit: 250 -%}
+            {%- if key == 'card-holders' and product.type != 'Card Holder' -%}{%- continue -%}{%- endif -%}
+            {%- if key == 'all' and product.available == false -%}{%- continue -%}{%- endif -%}
+            {%- if panel_count < shop_limit -%}
+              {% render 'product-card', product: product, heading: 'h3' %}
+              {%- assign panel_count = panel_count | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+        {%- if panel_count > 0 -%}
+          <div class="ms-tabpanel" role="tabpanel" id="ShopPanel-{{ key }}" aria-labelledby="ShopTab-{{ key }}" tabindex="0" data-tab-panel{% if tab_index > 0 %} hidden{% endif %}>
+            <div class="ms-grid ms-grid--atelier">{{ panel_cards }}</div>
+            <p class="ms-tabpanel__foot"><a class="ms-button ms-button--outline" href="{{ panel_url }}">{{ 'home.view_all_products' | t }} {% render 'icon', name: 'arrow-right' %}</a></p>
+          </div>
+          {%- assign tab_index = tab_index | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+
   {%- comment -%} ── Selected essentials: exactly three pieces ── {%- endcomment -%}
-  <section class="ms-section ms-wrap" aria-labelledby="HomeEssentialsTitle">
+  <section class="ms-section ms-wrap ms-essentials-wrap" aria-labelledby="HomeEssentialsTitle">
     <header class="ms-section__head ms-section__head--center">
       <p class="ms-eyebrow">{{ 'home.essentials_eyebrow' | t }}</p>
       <h2 id="HomeEssentialsTitle" class="ms-heading">{{ 'home.essentials_title' | t }}</h2>
@@ -136,39 +217,6 @@
         {%- endif -%}
       {%- endfor -%}
     </div>
-  </section>
-
-  {% render 'make-it-yours', personalize_url: personalize_url, image: section.settings.personal_image %}
-
-  {%- comment -%} ── The three collections ── {%- endcomment -%}
-  <section class="ms-section ms-wrap" aria-labelledby="HomeCategoriesTitle">
-    <header class="ms-section__head ms-section__head--center">
-      <p class="ms-eyebrow">{{ 'home.shop_by_category' | t }}</p>
-      <h2 id="HomeCategoriesTitle" class="ms-heading">{{ 'home.collections_title' | t }}</h2>
-    </header>
-    <div class="ms-cats ms-cats--three">
-      <a class="ms-cat" href="{{ bags.url | default: routes.all_products_collection_url }}">
-        <img src="{{ 'collection-bag-bordeaux.webp' | asset_url }}" alt="{{ 'home.cat_bags_alt' | t | escape }}" width="1023" height="1537" loading="lazy" decoding="async">
-        <span class="ms-cat__copy"><strong>{{ 'navigation.bags' | t }}</strong><span class="ms-cat__link">{{ 'home.shop_now' | t }} {% render 'icon', name: 'arrow-right' %}</span></span>
-      </a>
-      <a class="ms-cat" href="{{ wallets.url | default: routes.all_products_collection_url }}">
-        <img src="{{ 'women-leather-wallet-model.webp' | asset_url }}" alt="{{ 'home.cat_wallets_alt' | t | escape }}" width="1023" height="1537" loading="lazy" decoding="async">
-        <span class="ms-cat__copy"><strong>{{ 'navigation.wallets_short' | t }}</strong><span class="ms-cat__link">{{ 'home.shop_now' | t }} {% render 'icon', name: 'arrow-right' %}</span></span>
-      </a>
-      <a class="ms-cat" href="{{ cards_url }}">
-        {%- if signature_card.featured_image -%}
-          {{ signature_card.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '480,720,900', sizes: '(max-width: 900px) 46vw, 30vw', alt: signature_card.featured_image.alt | default: signature_card.title }}
-        {%- else -%}
-          <img src="{{ 'collection-hero-cardholders.webp' | asset_url }}" alt="" width="1888" height="833" loading="lazy" decoding="async">
-        {%- endif -%}
-        <span class="ms-cat__copy"><strong>{{ 'navigation.card_holders' | t }}</strong><span class="ms-cat__link">{{ 'home.shop_now' | t }} {% render 'icon', name: 'arrow-right' %}</span></span>
-      </a>
-    </div>
-    <p class="ms-cats__more">
-      {{ 'home.also_in_shop' | t }}
-      {%- if collections['phone-cases'].products_count > 0 %} <a href="{{ collections['phone-cases'].url }}">{{ 'navigation.phone_cases' | t }}</a>{% endif %}
-      {%- if collections['accessories'].products_count > 0 %} · <a href="{{ collections['accessories'].url }}">{{ 'navigation.accessories' | t }}</a>{% endif %}
-    </p>
   </section>
 
   {%- comment -%}
@@ -224,8 +272,8 @@
     { "type": "product", "id": "signature_bag", "label": "Signature bag" },
     { "type": "product", "id": "signature_wallet", "label": "Everyday wallet" },
     { "type": "product", "id": "signature_card", "label": "Card holder", "info": "Also used for slide 3 on phones." },
-    { "type": "header", "content": "Make It Yours" },
-    { "type": "image_picker", "id": "personal_image", "label": "Photo of a personalized piece", "info": "Use a real photo of initials or a name on one of your products. Until one is set, the section shows a live preview of the customer's own text instead." }
+    { "type": "header", "content": "Products" },
+    { "type": "range", "id": "shop_count", "min": 4, "max": 20, "step": 2, "default": 10, "label": "Products per tab" }
   ],
   "presets": [{ "name": "Home: brand" }]
 }
