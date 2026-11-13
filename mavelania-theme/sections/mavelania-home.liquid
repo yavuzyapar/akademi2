@@ -60,10 +60,8 @@
    </div>
   </section>
 
-  {%- comment -%} ── Reassurance strip ── {%- endcomment -%}
-  <div class="ms-wrap">
-    {% render 'trust-strip' %}
-  </div>
+  {%- comment -%} ── Moving ribbon of what the store commits to ── {%- endcomment -%}
+  {% render 'ribbon' %}
 
   {%- comment -%}
     ── Deals ──
@@ -218,6 +216,46 @@
       </div>
     </section>
   {%- endif -%}
+
+  {%- comment -%}
+    ── How a piece is made ──
+    Four steps, each one a line the About page and the collection pages
+    already state.
+  {%- endcomment -%}
+  <section class="ms-craft" aria-labelledby="HomeCraftTitle">
+    <div class="ms-wrap">
+      <header class="ms-section__head ms-section__head--center">
+        <p class="ms-eyebrow">{{ 'home.craft_eyebrow' | t }}</p>
+        <h2 id="HomeCraftTitle" class="ms-heading">{{ 'home.craft_title' | t }}</h2>
+      </header>
+      <ol class="ms-craft__steps">
+        <li class="ms-craft__step">
+          <span class="ms-craft__icon">{% render 'icon', name: 'scissors' %}</span>
+          <span class="ms-craft__num" aria-hidden="true">01</span>
+          <h3>{{ 'home.craft_1_title' | t }}</h3>
+          <p>{{ 'home.craft_1_copy' | t }}</p>
+        </li>
+        <li class="ms-craft__step">
+          <span class="ms-craft__icon">{% render 'icon', name: 'needle' %}</span>
+          <span class="ms-craft__num" aria-hidden="true">02</span>
+          <h3>{{ 'home.craft_2_title' | t }}</h3>
+          <p>{{ 'home.craft_2_copy' | t }}</p>
+        </li>
+        <li class="ms-craft__step">
+          <span class="ms-craft__icon">{% render 'icon', name: 'burnish' %}</span>
+          <span class="ms-craft__num" aria-hidden="true">03</span>
+          <h3>{{ 'home.craft_3_title' | t }}</h3>
+          <p>{{ 'home.craft_3_copy' | t }}</p>
+        </li>
+        <li class="ms-craft__step">
+          <span class="ms-craft__icon">{% render 'icon', name: 'clock' %}</span>
+          <span class="ms-craft__num" aria-hidden="true">04</span>
+          <h3>{{ 'home.craft_4_title' | t }}</h3>
+          <p>{{ 'home.craft_4_copy' | t }}</p>
+        </li>
+      </ol>
+    </div>
+  </section>
 
   {%- comment -%} ── Products by category (tabs) ── {%- endcomment -%}
   <section class="ms-section ms-section--tint" aria-labelledby="HomeTabsTitle" data-tabs>

@@ -4,6 +4,7 @@
    is prefixed .ms- so it never collides with the older .mv- rules.
 
    1 Tokens & primitives     6 Product cards, carousel 11 Bag page                 15 Conversion layer
+                                                               16 Fixes & detail layer
    2 Top bar                 7 Home sections           12 Bag drawer & quick add
    3 Header, mega, search    8 Collection page         13 Footer & newsletter
    4 Home hero               9 Product page            14 Motion & print safety
@@ -2312,6 +2313,314 @@ details[open] > summary .ms-accordion__toggle::after { transform: translate(-50%
   .ms-buyform__row { grid-template-columns: 1fr; }
   .ms-buyform__row .ms-qty { justify-self: start; }
   .ms-accordion--boxed details > div { padding-left: 14px; }
+}
+
+/* ── 16 Fixes and the detail layer ────────────────────────────────────
+   Fixes: mobile hero controls, mobile buy bar with long prices (e.g. TL),
+   trust strip on phones. Detail: tooled-leather texture, stitched edges,
+   heading ornaments, the moving ribbon, the craft section, scroll reveal
+   and card depth. */
+
+/* Mobile hero: the call to action and the slide controls stack in the
+   centre instead of sharing one line, so they never meet. */
+@media (max-width: 760px) {
+  .ms-hero__cta {
+    left: 50%;
+    bottom: 58px;
+    max-width: calc(100% - 32px);
+    white-space: nowrap;
+    transform: translateX(-50%);
+  }
+
+  .ms-hero__controls {
+    right: auto;
+    left: 50%;
+    bottom: 14px;
+    gap: 4px;
+    padding: 2px 4px 2px 10px;
+    transform: translateX(-50%);
+  }
+
+  .ms-hero__pause { width: 28px; height: 28px; }
+
+  /* A soft shade behind the controls keeps them readable on light photos. */
+  .ms-hero__frame::after {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 140px;
+    background: linear-gradient(180deg, rgba(20, 14, 10, 0), rgba(20, 14, 10, .42));
+    content: "";
+    pointer-events: none;
+  }
+}
+
+/* Mobile buy bar: the price takes the room it needs, whatever the currency.
+   On narrow phones the quantity stays in the form above and the bar shows
+   price + button only. */
+@media (max-width: 900px) {
+  body .mv-mobile-buybar {
+    grid-template-columns: auto auto minmax(0, 1fr);
+    justify-content: stretch;
+    gap: 10px;
+  }
+
+  body .mv-mobile-buybar > [data-mobile-price] {
+    font: 600 18px/1.1 var(--ms-sans);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  body .mv-mobile-buybar > [data-mobile-add] { width: 100%; min-width: 0; }
+  body .mv-mobile-quantity { border-radius: 999px; }
+}
+
+@media (max-width: 480px) {
+  body .mv-mobile-buybar { grid-template-columns: auto minmax(0, 1fr); grid-template-rows: 48px; gap: 12px; }
+  body .mv-mobile-buybar > .mv-mobile-quantity { display: none; }
+  body .mv-mobile-buybar > [data-mobile-price] { font-size: clamp(16px, 4.6vw, 19px); }
+  body .mv-mobile-buybar > [data-mobile-add] { height: 48px; font-size: 12.5px; letter-spacing: .1em; }
+}
+
+/* Trust strip on phones: icon over title, centred, one even grid. */
+@media (max-width: 560px) {
+  .ms-trust li { flex-direction: column; justify-content: flex-start; gap: 6px; padding: 14px 8px; text-align: center; }
+  .ms-trust li div { justify-items: center; }
+  .ms-trust span { display: none; }
+  .ms-trust strong { font-size: 13px; line-height: 1.25; }
+}
+
+/* ── Tooled leather texture: the embossed hide pattern that ships with the
+   theme, laid under the tinted sections. */
+.ms-section--tint,
+.ms-deals,
+.ms-promo__copy,
+.ms-craft,
+.ms-footer {
+  background-image: url("leather-bg.webp");
+  background-size: 560px auto;
+  background-blend-mode: multiply;
+}
+
+/* ── Stitched edges: a dashed seam just inside the panel, like the stitch
+   line on a leather piece. */
+.ms-promo__copy,
+.ms-bundle,
+.ms-addons,
+.ms-cart__summary,
+.ms-trust,
+.ms-assure,
+.ms-specs dl,
+.ms-accordion--boxed details {
+  outline: 1px dashed rgba(107, 74, 52, .32);
+  outline-offset: -6px;
+}
+
+.ms-accordion--boxed details { outline-offset: -5px; }
+
+/* ── Heading details. Centred headings carry the brand's diamond ornament,
+   left-aligned ones a short rule before the eyebrow. */
+.ms-section__head--center .ms-heading::after {
+  display: block;
+  width: 132px;
+  height: 14px;
+  margin: 10px auto 0;
+  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 14'%3E%3Cpath d='M0 7h52M80 7h52' stroke='%236b4a34' stroke-width='1'/%3E%3Cpath d='M66 1l6 6-6 6-6-6z' fill='none' stroke='%236b4a34' stroke-width='1.2'/%3E%3Ccircle cx='66' cy='7' r='1.6' fill='%23f27a1a'/%3E%3C/svg%3E");
+  content: "";
+}
+
+.ms-section__head:not(.ms-section__head--center) .ms-eyebrow::before,
+.ms-why__copy > .ms-eyebrow::before,
+.ms-faq__head > .ms-eyebrow::before,
+.ms-spot__body > .ms-eyebrow::before {
+  display: inline-block;
+  width: 22px;
+  height: 1px;
+  margin-right: 10px;
+  background: var(--ms-cta);
+  vertical-align: middle;
+  content: "";
+}
+
+/* ── Moving ribbon */
+.ms-ribbon {
+  position: relative;
+  overflow: hidden;
+  margin-top: clamp(10px, 1.2vw, 18px);
+  border-block: 1px solid #120c08;
+  background: #2b1d15 url("leather-bg.webp") 0 0 / 560px auto;
+  background-blend-mode: multiply;
+  color: #f3e7d3;
+}
+
+.ms-ribbon::before,
+.ms-ribbon::after {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  content: "";
+  pointer-events: none;
+}
+
+.ms-ribbon::before { left: 0; background: linear-gradient(90deg, #2b1d15, rgba(43, 29, 21, 0)); }
+.ms-ribbon::after { right: 0; background: linear-gradient(270deg, #2b1d15, rgba(43, 29, 21, 0)); }
+
+/* Stitch lines along both edges of the ribbon */
+.ms-ribbon__track { display: flex; width: max-content; border-block: 1px dashed rgba(199, 170, 114, .38); margin-block: 4px; animation: ms-marquee 46s linear infinite; }
+.ms-ribbon:hover .ms-ribbon__track { animation-play-state: paused; }
+.ms-ribbon__list { display: flex; flex: none; margin: 0; padding: 0; list-style: none; }
+
+.ms-ribbon__list li {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 0 11px 28px;
+  font: 500 12.5px/1.2 var(--ms-sans);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ms-ribbon__list li::after { margin-left: 28px; color: #c7aa72; font-size: 11px; content: "\2756"; }
+.ms-ribbon .ms-icon { width: 18px; height: 18px; color: #c7aa72; }
+
+@keyframes ms-marquee { to { transform: translateX(-50%); } }
+
+/* ── Craft section: dark hide, gold numerals, a stitch line joining the steps */
+.ms-craft {
+  margin-top: clamp(26px, 3.4vw, 46px);
+  padding-block: clamp(34px, 4.5vw, 64px);
+  background-color: #3a281d;
+  background-blend-mode: multiply;
+  color: #f3e7d3;
+}
+
+.ms-craft .ms-heading { color: #fff; }
+.ms-craft .ms-eyebrow { color: #c7aa72; }
+.ms-craft .ms-section__head--center .ms-heading::after { filter: brightness(2.6) saturate(.6); }
+
+.ms-craft__steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 36px);
+  margin: clamp(10px, 1.6vw, 22px) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+/* The seam that runs behind the icons */
+.ms-craft__steps::before {
+  position: absolute;
+  top: 34px;
+  right: 12%;
+  left: 12%;
+  border-top: 1.5px dashed rgba(199, 170, 114, .55);
+  content: "";
+}
+
+.ms-craft__step { position: relative; display: grid; align-content: start; justify-items: center; gap: 8px; text-align: center; }
+
+.ms-craft__icon {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 68px;
+  height: 68px;
+  place-items: center;
+  border: 1px solid rgba(199, 170, 114, .5);
+  border-radius: 50%;
+  background: #2b1d15;
+  box-shadow: 0 0 0 6px #3a281d, inset 0 0 0 5px #2b1d15, inset 0 0 0 6px rgba(199, 170, 114, .35);
+  color: #f0d9a8;
+  transition: transform .4s var(--ms-ease), background-color .3s ease;
+}
+
+.ms-craft__icon .ms-icon { width: 28px; height: 28px; }
+.ms-craft__step:hover .ms-craft__icon { background: var(--ms-cta); color: var(--ms-cta-ink); transform: rotate(-8deg) scale(1.06); }
+.ms-craft__num { color: #c7aa72; font: 500 13px/1 var(--ms-sans); letter-spacing: .2em; }
+.ms-craft__step h3 { margin: 0; color: #fff; font: 500 clamp(1.25rem, 1.6vw, 1.5rem)/1.15 var(--ms-serif); }
+.ms-craft__step p { max-width: 30ch; margin: 0; color: rgba(243, 231, 211, .78); font: 400 14.5px/1.6 var(--ms-sans); }
+
+@media (max-width: 900px) {
+  .ms-craft__steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 30px; }
+  .ms-craft__steps::before { display: none; }
+}
+
+@media (max-width: 480px) {
+  .ms-craft__step p { font-size: 13.5px; }
+  .ms-craft__icon { width: 58px; height: 58px; }
+}
+
+/* ── Category tiles: a stitched frame appears on hover, the count sits in a
+   small glass tag. */
+.ms-cat::before {
+  position: absolute;
+  z-index: 2;
+  inset: 10px;
+  border: 1px dashed rgba(255, 255, 255, .7);
+  border-radius: 8px;
+  opacity: 0;
+  content: "";
+  pointer-events: none;
+  transition: opacity .35s ease, inset .35s var(--ms-ease);
+}
+
+.ms-cat:hover::before,
+.ms-cat:focus-visible::before { inset: 8px; opacity: 1; }
+
+/* ── Cards: lift on hover, the photo frame gains a soft shadow */
+.ms-card__media { transition: transform .35s var(--ms-ease), box-shadow .35s ease; }
+
+@media (hover: hover) and (pointer: fine) {
+  .ms-card:hover .ms-card__media { box-shadow: 0 16px 34px rgba(43, 29, 21, .16); transform: translateY(-4px); }
+}
+
+.ms-badge--sale { box-shadow: 0 4px 10px rgba(198, 40, 40, .28); }
+
+/* ── Spotlight and "why" photos sit on a stitched mat */
+.ms-spot__media,
+.ms-why__image,
+.ms-promo__media {
+  box-shadow: 0 0 0 1px var(--ms-line), 0 22px 44px rgba(43, 29, 21, .12);
+}
+
+/* ── Newsletter band: a stitched seam inside the dark band */
+.ms-newsband { position: relative; }
+
+.ms-newsband::before {
+  position: absolute;
+  inset: 10px;
+  border: 1px dashed rgba(199, 170, 114, .4);
+  border-radius: 10px;
+  content: "";
+  pointer-events: none;
+}
+
+/* ── Scroll reveal (added by mavelania-shop.js, so nothing hides without it) */
+.ms-reveal { opacity: 0; transform: translateY(22px); }
+.ms-reveal.is-in { opacity: 1; transform: none; transition: opacity .7s ease var(--ms-delay, 0s), transform .8s var(--ms-ease) var(--ms-delay, 0s); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-ribbon__track { animation: none; }
+  .ms-ribbon { overflow-x: auto; }
+  .ms-reveal { opacity: 1; transform: none; }
+  .ms-craft__step:hover .ms-craft__icon,
+  .ms-card:hover .ms-card__media { transform: none; }
+}
+
+/* Campaign bar on phones: two compact lines instead of three. */
+@media (max-width: 560px) {
+  .ms-campaign__inner { gap: 4px 8px; padding-block: 7px; font-size: 13px; }
+  .ms-campaign__name { padding: 3px 8px; font-size: 10.5px; }
+  .ms-campaign__clock span { padding: 2px 6px; font-size: 11px; }
+  .ms-campaign__clock b { font-size: 13px; }
+  .ms-campaign__link { font-size: 13px; }
 }
 
 /* ── 14 Motion & print safety ──────────────────────────────────────── */

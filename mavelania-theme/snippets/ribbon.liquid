@@ -1,0 +1,21 @@
+{%- comment -%}
+  Moving ribbon of what the store commits to. The list is printed twice so
+  the loop is seamless; the copy is hidden from screen readers so they read
+  it once. Every line is a promise made elsewhere on the site.
+{%- endcomment -%}
+{%- capture ribbon_items -%}
+  <li>{% render 'icon', name: 'leather' %}<span>{{ 'trust.leather_title' | t }}</span></li>
+  <li>{% render 'icon', name: 'needle' %}<span>{{ 'trust.leather_copy' | t }}</span></li>
+  <li>{% render 'icon', name: 'rfid' %}<span>{{ 'home.tile_wallets_eyebrow' | t }}</span></li>
+  {%- if settings.return_window_days > 0 -%}
+    <li>{% render 'icon', name: 'return' %}<span>{{ 'products.returns_within' | t: days: settings.return_window_days }}</span></li>
+  {%- endif -%}
+  <li>{% render 'icon', name: 'lock' %}<span>{{ 'trust.secure_checkout_short' | t }}</span></li>
+  <li>{% render 'icon', name: 'globe' %}<span>{{ 'trust.shipping_title' | t }}</span></li>
+{%- endcapture -%}
+<div class="ms-ribbon" role="region" aria-label="{{ 'trust.label' | t | escape }}">
+  <div class="ms-ribbon__track">
+    <ul class="ms-ribbon__list">{{ ribbon_items }}</ul>
+    <ul class="ms-ribbon__list" aria-hidden="true">{{ ribbon_items }}</ul>
+  </div>
+</div>

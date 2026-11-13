@@ -208,7 +208,17 @@
     "shop_now": "Shop now",
     "spot_wallets_copy": "Cut from genuine leather and kept deliberately slim, with card slots sized to hold without stretching and edges finished so they do not fray in a pocket.",
     "deals_eyebrow": "Reduced now",
-    "deals_title": "Deals"
+    "deals_title": "Deals",
+    "craft_eyebrow": "How a piece is made",
+    "craft_title": "From hide to hand",
+    "craft_1_title": "Cut by hand",
+    "craft_1_copy": "Panels are cut by hand so the grain runs the way it should across the front.",
+    "craft_2_title": "Stitched to carry",
+    "craft_2_copy": "Seams are stitched to hold under daily load, not just to close a shape.",
+    "craft_3_title": "Edges burnished",
+    "craft_3_copy": "Edges are sealed and burnished rather than left raw, so they stay smooth in a pocket.",
+    "craft_4_title": "Ages with you",
+    "craft_4_copy": "Genuine leather darkens and softens along the lines where it is handled most."
   },
   "navigation": {
     "accessories": "Accessories",

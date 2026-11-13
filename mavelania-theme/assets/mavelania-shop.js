@@ -1140,6 +1140,37 @@
     }
   })();
 
+  /* ── Scroll reveal ─────────────────────────────────────────────────
+     Sections and cards fade up as they enter the screen, staggered within
+     each row. Added here, so without JS (or with reduced motion) nothing is
+     ever hidden. */
+  (function () {
+    if (reducedMotion || !('IntersectionObserver' in window)) return;
+    var selectors = [
+      '.ms-section__head', '.ms-cats > .ms-cat', '.ms-carousel__track > .ms-card',
+      '.ms-grid > .ms-card', '.ms-spot__media', '.ms-spot__body', '.ms-craft__step',
+      '.ms-promo__copy', '.ms-promo__media', '.ms-why__image', '.ms-why__copy',
+      '.ms-banner', '.ms-faq__head', '.ms-accordion', '.ms-bundle', '.ms-info__grid > *'
+    ];
+    var items = $$(selectors.join(','));
+    var viewport = window.innerHeight;
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    items.forEach(function (item) {
+      // Anything already on screen at load stays as it is: no flash.
+      if (item.getBoundingClientRect().top < viewport * 0.92) return;
+      var index = item.parentNode ? Array.prototype.indexOf.call(item.parentNode.children, item) : 0;
+      item.style.setProperty('--ms-delay', Math.min(index, 6) * 0.07 + 's');
+      item.classList.add('ms-reveal');
+      observer.observe(item);
+    });
+  })();
+
   /* ── Recently viewed ───────────────────────────────────────────────── */
   function readRecent() {
     try {
