@@ -245,18 +245,6 @@
     var userPaused = reducedMotion;
     var hydrated = false;
 
-    // The frame on phones fills the screen below the header.
-    var frame = hero;
-    var lastWidth = 0;
-    function placeFrame() {
-      if (window.innerWidth === lastWidth) return; // the URL bar showing or hiding is not a reason to move
-      lastWidth = window.innerWidth;
-      frame.style.setProperty('--ms-hero-top', Math.round(frame.getBoundingClientRect().top + window.pageYOffset) + 'px');
-    }
-    placeFrame();
-    window.addEventListener('resize', placeFrame, { passive: true });
-    window.addEventListener('load', function () { lastWidth = 0; placeFrame(); }, { once: true });
-
     // Slides after the first keep their images in data-src until the page
     // has loaded, so they never compete with the LCP image.
     function hydrate() {

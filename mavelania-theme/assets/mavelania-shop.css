@@ -746,28 +746,10 @@
 .ms-hero__pause[aria-pressed="true"] .ms-hero__pause-on { display: none; }
 
 @media (max-width: 760px) {
-  /* Phones: the banner fits the visible screen below the header, so it is
-     seen whole without scrolling on any phone. The photo keeps its own
-     proportions: it takes the full height and is centred; on screens wider
-     than the photo the page background shows at the sides. */
-  .ms-hero { margin-top: 0; padding-inline: 0; }
-  .ms-hero__frame {
-    aspect-ratio: auto;
-    height: calc(100vh - var(--ms-hero-top, 160px) - 10px);
-    height: calc(100svh - var(--ms-hero-top, 160px) - 10px);
-    min-height: 380px;
-    margin-top: 6px;
-    border-radius: 0;
-    background: transparent;
-  }
-  .ms-hero__slide > picture { display: flex; align-items: center; justify-content: center; }
-  .ms-hero__slide > picture img {
-    width: auto;
-    max-width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border-radius: 0;
-  }
+  /* The phone photographs are portrait (about 9:17). Anchored to the top so
+     the lettering and faces at the top of each one are never cut. */
+  .ms-hero__frame { aspect-ratio: 1 / 2; max-height: 900px; }
+  .ms-hero__slide img { object-position: center top; }
   .ms-hero__arrow { display: none; }
   .ms-hero__cta { left: 16px; bottom: 18px; min-height: 46px; padding-inline: 20px; }
   .ms-hero__controls { right: 14px; bottom: 18px; padding-left: 8px; }
@@ -2360,6 +2342,20 @@ details[open] > summary .ms-accordion__toggle::after { transform: translate(-50%
   }
 
   .ms-hero__pause { width: 28px; height: 28px; }
+
+  /* A soft shade behind the controls keeps them readable on light photos.
+     It sits inside the slide, under the button, so the button stays white. */
+  .ms-hero__slide::after {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 140px;
+    background: linear-gradient(180deg, rgba(20, 14, 10, 0), rgba(20, 14, 10, .42));
+    content: "";
+    pointer-events: none;
+  }
 }
 
 /* Mobile buy bar: the price takes the room it needs, whatever the currency.
