@@ -245,16 +245,6 @@
     var userPaused = reducedMotion;
     var hydrated = false;
 
-    slides.forEach(function (slide) {
-      var picture = $('picture', slide);
-      if (!picture) return;
-      var fill = picture.cloneNode(true);
-      fill.className = 'ms-hero__fill';
-      fill.setAttribute('aria-hidden', 'true');
-      $$('img', fill).forEach(function (img) { img.alt = ''; img.removeAttribute('fetchpriority'); });
-      slide.insertBefore(fill, picture);
-    });
-
     // The frame on phones fills the screen below the header.
     var frame = hero;
     var lastWidth = 0;
