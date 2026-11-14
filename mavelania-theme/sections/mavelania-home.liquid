@@ -36,8 +36,10 @@
           {%- if section.settings.open_video != blank -%}
             {{ section.settings.open_video | video_tag: autoplay: true, muted: true, loop: true, playsinline: true, preload: 'auto', class: 'ms-open__video', image_size: '1600x', data-hero-video: '' }}
           {%- else -%}
-            <video class="ms-open__video" autoplay muted loop playsinline preload="auto" poster="{{ 'hero-film-poster.webp' | asset_url }}" width="854" height="480" aria-label="{{ 'home.film_alt' | t | escape }}" data-hero-video>
-              <source src="{{ 'hero-film.mp4' | asset_url }}" type="video/mp4">
+            {%- comment -%} Wide screens get the 1080p film, phones a 4:5 film framed on the model. Browsers that ignore media on <source> take the first (wide) film, which the phone layout frames with object-position. {%- endcomment -%}
+            <video class="ms-open__video" autoplay muted loop playsinline preload="auto" poster="{{ 'hero-film-poster.webp' | asset_url }}" width="1920" height="1080" aria-label="{{ 'home.film_alt' | t | escape }}" data-hero-video>
+              <source src="{{ 'hero-film.mp4' | asset_url }}" type="video/mp4" media="(min-width: 761px)">
+              <source src="{{ 'hero-film-mobile.mp4' | asset_url }}" type="video/mp4">
             </video>
           {%- endif -%}
           <button class="ms-film__toggle ms-open__toggle" type="button" data-hero-toggle data-label-pause="{{ 'film.pause' | t | escape }}" data-label-play="{{ 'film.play' | t | escape }}" aria-label="{{ 'film.pause' | t | escape }}">

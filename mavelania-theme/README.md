@@ -66,8 +66,10 @@ Sitede tek iletişim adresi vardır: `contact_email` ayarı (info@mavelania.com)
 
 ## Ana ekran videosu (banner)
 
-Açılışta `assets/hero-film.mp4` oynar (sessiz, döngülü; sonu başına yumuşak bir geçişle bağlanır, kesinti
-görünmez). Kapak görseli `hero-film-poster.webp`, video yüklenene kadar görünür.
+Açılışta sessiz, döngülü bir video oynar (sonu başına yumuşak bir geçişle bağlanır, kesinti görünmez):
+bilgisayar ve tablette `assets/hero-film.mp4` (1920×1080), telefonda modele odaklı dikey `assets/hero-film-mobile.mp4`
+(864×1080). Kaynak video 480p olduğu için ikisi de gürültü temizleme, yüksek kaliteli büyütme ve keskinleştirme ile
+hazırlandı. Kapak görseli `hero-film-poster.webp`, video yüklenene kadar görünür.
 
 - **Masaüstü:** video çerçeveyi doldurur; yazılar soldaki tarlanın üzerinde, model sağda.
 - **Tablet:** videonun tamamı, yazılar altında.
