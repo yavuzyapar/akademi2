@@ -11,9 +11,16 @@
     <p class="ms-about__lede">{{ 'story.p1' | t }}</p>
   </header>
 
-  <figure class="ms-about__figure" data-chapter="cream">
-    <img src="{{ 'before-footer-hd.webp' | asset_url }}" srcset="{{ 'before-footer.webp' | asset_url }} 1400w, {{ 'before-footer-hd.webp' | asset_url }} 2400w" sizes="100vw" alt="{{ 'home.slide_bag_alt' | t | escape }}" width="2400" height="1066" loading="eager" fetchpriority="high" decoding="async">
-  </figure>
+  {%- assign reel_label = 'film.reel_title' | t -%}
+  <section class="ms-reel" aria-labelledby="ReelTitle" data-chapter="cream">
+    <h2 id="ReelTitle" class="mv-visually-hidden">{{ 'film.reel_title' | t }}</h2>
+    <div class="ms-reel__track">
+      {% render 'film', name: 'film-studio', w: 480, h: 854, label: reel_label %}
+      {% render 'film', name: 'film-amelie-brown', w: 480, h: 854, label: reel_label %}
+      {% render 'film', name: 'film-paris', w: 720, h: 1280, label: reel_label %}
+      {% render 'film', name: 'film-amelie-bordeaux', w: 720, h: 1280, label: reel_label %}
+    </div>
+  </section>
 
   {%- comment -%} Three beliefs, each with its photograph, alternating sides. {%- endcomment -%}
   {%- for i in (1..3) -%}
@@ -34,18 +41,18 @@
           assign ab_title = 'philosophy.simplicity_title' | t
           assign ab_text = 'philosophy.simplicity_text' | t
           assign ab_quote = 'story.p4' | t
-          assign ab_img = 'collection-bag-bordeaux-hd.webp'
-          assign ab_w = 1536
-          assign ab_h = 2308
+          assign ab_img = 'collection-bag-bordeaux.webp'
+          assign ab_w = 1023
+          assign ab_h = 1537
         else
           assign ab_tone = 'green'
           assign ab_num = 'III'
           assign ab_title = 'philosophy.personal_title' | t
           assign ab_text = 'philosophy.personal_text' | t
           assign ab_quote = 'story.p3' | t
-          assign ab_img = 'women-leather-wallet-model-hd.webp'
-          assign ab_w = 1536
-          assign ab_h = 2308
+          assign ab_img = 'women-leather-wallet-model.webp'
+          assign ab_w = 1023
+          assign ab_h = 1537
       endcase
     -%}
     <section class="ms-belief ms-belief--{{ ab_tone }}{% cycle '', ' ms-belief--flip', '' %}" aria-labelledby="Belief{{ i }}" data-chapter="{{ ab_tone }}">

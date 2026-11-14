@@ -1,0 +1,36 @@
+{%- comment -%}
+  "In motion" on the product page. Shows, in this order:
+    1) videos uploaded to the product in the Shopify admin (product media);
+    2) the theme films that show this very product.
+  Nothing is rendered for products without a film.
+
+  Params: product
+{%- endcomment -%}
+{%- liquid
+  assign pf_native = product.media | where: 'media_type', 'video'
+  assign pf_films = ''
+  case product.handle
+    when 'amelie-suede-leather-tote-bag'
+      assign pf_films = 'film-amelie-bordeaux:720:1280,film-amelie-brown:480:854'
+  endcase
+  assign pf_films = pf_films | split: ','
+-%}
+{%- if pf_native.size > 0 or pf_films.size > 0 -%}
+  <section class="ms-section ms-pfilm" aria-labelledby="ProductFilmTitle">
+    <header class="ms-section__head">
+      <div>
+        <p class="ms-eyebrow">{{ shop.name }}</p>
+        <h2 id="ProductFilmTitle" class="ms-heading">{{ 'film.product_title' | t }}</h2>
+      </div>
+    </header>
+    <div class="ms-pfilm__row">
+      {%- for media in pf_native -%}
+        <div class="ms-film ms-film--native">{{ media | video_tag: controls: true, muted: true, loop: true, playsinline: true, preload: 'none', image_size: '900x' }}</div>
+      {%- endfor -%}
+      {%- for film in pf_films -%}
+        {%- assign pf_parts = film | split: ':' -%}
+        {% render 'film', name: pf_parts[0], w: pf_parts[1], h: pf_parts[2], label: product.title %}
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endif -%}

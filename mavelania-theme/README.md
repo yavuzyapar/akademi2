@@ -51,10 +51,27 @@ Sitede tek iletişim adresi vardır: `contact_email` ayarı (info@mavelania.com)
 - **Renk akışı:** krem → kahve (Cüzdanlar) → yeşil (Kartlıklar) → doğrudan krem. Yeşilden sonra kahveye dönüş yok.
 - **Az ürün, ön planda kalite:** her bölümde 4 ürün (masaüstünde tek sıra, telefonda 2×2). Tema düzenleyicide
   **Home: chapters → Products per chapter** ile 2–8 arası ayarlanabilir.
-- **Fotoğraf kalitesi:** tema içindeki fotoğrafların netleştirilmiş, yüksek çözünürlüklü kopyaları (`*-hd.webp`)
-  kullanılır. En iyi sonuç için tema düzenleyicide **Home: chapters** altında açılış ve bölüm fotoğraflarının
-  **orijinal, büyük boyutlu** hallerini yükleyin; Shopify onları her ekrana uygun boyutta keskin gösterir.
+- **Fotoğraflar:** temadaki fotoğraflar orijinal halleriyle kullanılır (yapay netleştirme yok). Daha keskin
+  sonuç için tema düzenleyicide **Home: chapters** altından açılış ve bölüm fotoğraflarının orijinal, büyük
+  boyutlu hallerini yükleyebilirsiniz.
 - Görseller hiçbir yerde kaymaz, yakınlaşmaz ve gölge bırakmaz.
+
+## Videolar
+
+Dört kısa, sessiz video tema dosyalarındadır (`assets/film-*.mp4`, her birinin `-poster.webp` kapak görseli var).
+Ekrana gelince oynar, ekrandan çıkınca durur; sağ alttaki düğmeyle durdurulur. Ekrana gelmeden indirilmez.
+
+| Video | Nerede |
+| --- | --- |
+| `film-amelie-bordeaux` | Ana sayfa, I Çantalar bölümü (altında videodaki ürün: Amelie Suede Leather Tote Bag) · Amelie ürün sayfası · Hakkımızda |
+| `film-amelie-brown` | Amelie ürün sayfası · Hakkımızda |
+| `film-studio`, `film-paris` | Hakkımızda |
+
+- Ana sayfadaki videoyu kapatıp fotoğrafa dönmek için: **Home: chapters → Play the film instead of a photo**.
+- Videonun altındaki ürün: **Piece shown under the film**.
+- Başka bir ürün sayfasına video eklemek için videoyu Shopify'da o ürünün medyasına yükleyin; "See it in motion"
+  bölümü otomatik görünür. Tema videolarını bir ürüne bağlamak için `snippets/product-film.liquid` içindeki listeye
+  ürünün handle'ını ekleyin.
 
 ## Kişiselleştirme nasıl çalışır
 

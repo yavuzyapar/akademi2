@@ -552,5 +552,12 @@
     "fact3_title": "Yours alone",
     "fact3_text": "Initials, a name or a date.",
     "sign": "Genuine leather · Made by hand"
+  },
+  "film": {
+    "play": "Play film",
+    "pause": "Pause film",
+    "in_this_film": "In this film",
+    "reel_title": "Mavelania in motion",
+    "product_title": "See it in motion"
   }
 }

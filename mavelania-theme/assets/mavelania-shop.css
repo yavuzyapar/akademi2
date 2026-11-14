@@ -3790,6 +3790,52 @@ html:not(.ms-tones) [data-chapter="green"]:is(.ms-seal, .ms-bespoke) { --tone-bg
 
 @media (max-width: 420px) { .ms-belief__title { font-size: 1.75rem; overflow-wrap: break-word; } }
 
+/* ── 22 Films (v15) ───────────────────────────────────────────────────────
+   Short silent films in portrait: the bags chapter on the home page, a
+   reel on About, and "in motion" on the product page. */
+.ms-film { position: relative; overflow: hidden; aspect-ratio: var(--film-ratio, 9 / 16); border-radius: var(--ms-radius); background: #1d1714; }
+.ms-film__video,
+.ms-film video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ms-film__toggle { position: absolute; right: 12px; bottom: 12px; display: grid; width: 40px; height: 40px; place-items: center; border-radius: 50%; background: rgba(20, 14, 10, .55); color: #fff; cursor: pointer; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background .2s ease; }
+.ms-film__toggle:hover { background: rgba(20, 14, 10, .8); }
+.ms-film__toggle:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.ms-film__icon { display: grid; place-items: center; }
+.ms-film__icon .ms-icon { width: 16px; height: 16px; }
+.ms-film__icon--pause,
+.ms-film.is-playing .ms-film__icon--play { display: none; }
+.ms-film.is-playing .ms-film__icon--pause { display: grid; }
+
+/* Home, chapter I: the film, and under it the piece it shows. */
+.ms-chapter__film { display: grid; gap: 12px; width: min(100%, 420px); margin-inline: auto; }
+@media (min-width: 901px) {
+  .ms-chapter__film { width: calc(min(68vh, 640px) * 9 / 16); margin-inline: 0; }
+}
+.ms-filmtag { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 8px 14px 8px 8px; border: 1px solid var(--tone-line); border-radius: var(--ms-radius); background: rgba(255, 255, 255, .5); color: var(--tone-ink); transition: border-color .25s ease, background .25s ease; }
+.ms-filmtag:hover { border-color: var(--tone-ink); background: rgba(255, 255, 255, .8); }
+.ms-filmtag__img { display: block; width: 72px; height: 72px; border-radius: max(4px, calc(var(--ms-radius) - 6px)); object-fit: cover; }
+.ms-filmtag__copy { display: grid; gap: 2px; min-width: 0; }
+.ms-filmtag__copy small { color: var(--tone-accent); font: 500 10.5px/1.3 var(--ms-mono, monospace); letter-spacing: .12em; text-transform: uppercase; }
+.ms-filmtag__copy strong { overflow: hidden; color: var(--tone-ink); font: 500 14.5px/1.3 var(--ms-sans); text-overflow: ellipsis; white-space: nowrap; }
+.ms-filmtag__copy > span { color: var(--tone-soft); font: 500 13.5px/1.3 var(--ms-mono, monospace); }
+.ms-filmtag > .ms-icon { width: 18px; height: 18px; transition: transform .25s var(--ms-ease); }
+.ms-filmtag:hover > .ms-icon { transform: translateX(3px); }
+
+/* About: four films side by side; a swipe row on phones. */
+.ms-reel { max-width: var(--ms-max, 1480px); margin-inline: auto; padding: 0 var(--ms-gutter) clamp(28px, 4vw, 56px); }
+.ms-reel__track { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(10px, 1.4vw, 20px); }
+@media (max-width: 900px) {
+  .ms-reel { padding-inline: 0; }
+  .ms-reel__track { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(62vw, 300px); overflow-x: auto; padding-inline: var(--ms-gutter); scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .ms-reel__track::-webkit-scrollbar { display: none; }
+  .ms-reel__track > .ms-film { scroll-snap-align: start; }
+}
+
+/* Product page: in motion. */
+.ms-pfilm__row { display: flex; flex-wrap: wrap; gap: clamp(10px, 1.4vw, 20px); }
+.ms-pfilm__row > .ms-film { flex: 0 1 300px; width: 300px; max-width: calc(50% - 8px); }
+.ms-film--native { aspect-ratio: auto; }
+.ms-film--native video { height: auto; }
+
 /* ── 14 Motion & print safety ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .ms-hero__slide,

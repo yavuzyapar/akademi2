@@ -1,0 +1,18 @@
+{%- comment -%}
+  A short silent film from the theme assets (assets/<name>.mp4 with
+  assets/<name>-poster.webp). It loads nothing until it scrolls into view,
+  then plays muted in a loop and pauses when it leaves the screen
+  (assets/mavelania-shop.js). Visitors who prefer reduced motion get the
+  poster and a play button instead.
+
+  Params: name, w, h, label
+{%- endcomment -%}
+<div class="ms-film" data-film style="--film-ratio: {{ w | default: 9 }} / {{ h | default: 16 }};">
+  <video class="ms-film__video" muted loop playsinline preload="none" poster="{{ name | append: '-poster.webp' | asset_url }}" width="{{ w | default: 720 }}" height="{{ h | default: 1280 }}" aria-label="{{ label | escape }}" data-film-video>
+    <source src="{{ name | append: '.mp4' | asset_url }}" type="video/mp4">
+  </video>
+  <button class="ms-film__toggle" type="button" data-film-toggle data-label-pause="{{ 'film.pause' | t | escape }}" data-label-play="{{ 'film.play' | t | escape }}" aria-label="{{ 'film.play' | t | escape }}">
+    <span class="ms-film__icon ms-film__icon--play">{% render 'icon', name: 'play' %}</span>
+    <span class="ms-film__icon ms-film__icon--pause">{% render 'icon', name: 'pause' %}</span>
+  </button>
+</div>

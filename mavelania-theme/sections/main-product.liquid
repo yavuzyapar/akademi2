@@ -283,6 +283,8 @@
     {% render 'product-bundle', product: product, bundle_code: section.settings.bundle_code, bundle_text: section.settings.bundle_text %}
   {%- endif -%}
 
+  {% render 'product-film', product: product %}
+
   {% render 'product-info', product: product, pers_on: pers_on, pers_methods: pers_methods, pers_colors: pers_colors %}
 
   {% assign related_collection = product.collections.first %}
