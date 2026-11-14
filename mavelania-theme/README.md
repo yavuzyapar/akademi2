@@ -44,12 +44,17 @@ Sitede tek iletişim adresi vardır: `contact_email` ayarı (info@mavelania.com)
 ## Marka kurgusu: "Genuine leather. Nothing else."
 
 - **Navigasyon:** Home · Shop (Bags / Wallets / Card Holders menüsü) · Personalize Your Piece · About Mavelania · Contact.
-- **Ana sayfa:** açılış görseli (telefonda kırpılmadan, ekrana sığacak boyutta; yazılar görselin altında)
-  → kayan şerit (açılıştan ayrı) → I Çantalar → **deri mührü** ("Genuine leather. Nothing else.",
-  yavaşça dönen MAVELANIA · GENUINE LEATHER · MADE BY HAND mührü) → II Cüzdanlar → III Kartlıklar
-  → **e-posta ile kişiselleştirme** → diğer ürünler → (indirim varsa) fırsatlar → marka ve güven → SSS.
-- **Ürün kartları:** tür satırının yanında / altında her zaman "Genuine leather" yazar.
-- Görseller hiçbir yerde kaymaz ya da yakınlaşmaz; telefonda ve tablette her fotoğraf kendi oranıyla gösterilir.
+- **Ana sayfa:** açılış fotoğrafı (her ekranda kırpılmadan, tam; geniş ekranda yazılar fotoğrafın sol boş
+  duvarında, dar ekranda fotoğrafın altında) → kayan şerit → I Çantalar → **Mavelania imzası** (sizin logonuz ve
+  "Mavelania" yazınız + "Genuine leather. Nothing else.") → II Cüzdanlar → III Kartlıklar → e-posta ile
+  kişiselleştirme → diğer ürünler → marka ve güven → SSS.
+- **Renk akışı:** krem → kahve (Cüzdanlar) → yeşil (Kartlıklar) → doğrudan krem. Yeşilden sonra kahveye dönüş yok.
+- **Az ürün, ön planda kalite:** her bölümde 4 ürün (masaüstünde tek sıra, telefonda 2×2). Tema düzenleyicide
+  **Home: chapters → Products per chapter** ile 2–8 arası ayarlanabilir.
+- **Fotoğraf kalitesi:** tema içindeki fotoğrafların netleştirilmiş, yüksek çözünürlüklü kopyaları (`*-hd.webp`)
+  kullanılır. En iyi sonuç için tema düzenleyicide **Home: chapters** altında açılış ve bölüm fotoğraflarının
+  **orijinal, büyük boyutlu** hallerini yükleyin; Shopify onları her ekrana uygun boyutta keskin gösterir.
+- Görseller hiçbir yerde kaymaz, yakınlaşmaz ve gölge bırakmaz.
 
 ## Kişiselleştirme nasıl çalışır
 

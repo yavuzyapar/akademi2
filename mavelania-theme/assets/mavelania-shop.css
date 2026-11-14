@@ -3391,8 +3391,7 @@ body { background-color: var(--tone-bg) !important; }
 
 /* Without JS each chapter paints itself. */
 html:not(.ms-tones) .ms-chapter--coffee,
-html:not(.ms-tones) .ms-belief--coffee,
-html:not(.ms-tones) .ms-house { --tone-bg: #3a2a21; --tone-ink: #f4ebdf; --tone-soft: #d9c9b6; --tone-muted: #b39f8b; --tone-line: rgba(244, 235, 223, .16); --tone-accent: #e3c37f; background: var(--tone-bg); }
+html:not(.ms-tones) .ms-belief--coffee { --tone-bg: #3a2a21; --tone-ink: #f4ebdf; --tone-soft: #d9c9b6; --tone-muted: #b39f8b; --tone-line: rgba(244, 235, 223, .16); --tone-accent: #e3c37f; background: var(--tone-bg); }
 html:not(.ms-tones) .ms-chapter--green,
 html:not(.ms-tones) .ms-belief--green,
 html:not(.ms-tones) .ms-also { --tone-bg: #2f3b32; --tone-ink: #eef1e8; --tone-soft: #cfd6c7; --tone-muted: #a5b0a0; --tone-line: rgba(238, 241, 232, .16); --tone-accent: #d5c08a; background: var(--tone-bg); }
@@ -3637,11 +3636,6 @@ html:not(.ms-tones) .ms-also { --tone-bg: #2f3b32; --tone-ink: #eef1e8; --tone-s
 /* ── The leather seal */
 .ms-seal { padding-block: clamp(56px, 8vw, 120px); color: var(--tone-ink); }
 .ms-seal__grid { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); align-items: center; gap: clamp(28px, 5vw, 90px); }
-.ms-seal__mark { position: relative; width: min(100%, 320px); aspect-ratio: 1; margin-inline: auto; color: var(--tone-accent); }
-.ms-seal__ring { display: block; width: 100%; height: 100%; overflow: visible; transform-origin: 50% 50%; animation: ms-seal-turn 70s linear infinite; }
-.ms-seal__ring text { fill: currentColor; font: 500 12.5px var(--ms-mono, monospace); letter-spacing: .14em; }
-.ms-seal__m { position: absolute; inset: 0; display: grid; place-items: center; color: var(--tone-ink); font: 400 clamp(4rem, 8vw, 6.4rem)/1 var(--ms-serif); }
-@keyframes ms-seal-turn { to { transform: rotate(360deg); } }
 .ms-seal .ms-eyebrow,
 .ms-bespoke .ms-eyebrow { color: var(--tone-accent); }
 .ms-seal__title { margin: 8px 0 0; color: var(--tone-ink); font: 400 clamp(2.5rem, 5.6vw, 5rem)/1 var(--ms-serif); letter-spacing: -.015em; }
@@ -3654,7 +3648,6 @@ html:not(.ms-tones) .ms-also { --tone-bg: #2f3b32; --tone-ink: #eef1e8; --tone-s
 
 @media (max-width: 760px) {
   .ms-seal__grid { grid-template-columns: 1fr; gap: 26px; text-align: center; }
-  .ms-seal__mark { width: 210px; }
   .ms-seal__text { margin-inline: auto; }
   .ms-seal__facts { grid-template-columns: 1fr; text-align: left; }
   .ms-seal__facts li { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); align-items: baseline; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--tone-line); }
@@ -3699,7 +3692,103 @@ html:not(.ms-tones) .ms-also { --tone-bg: #2f3b32; --tone-ink: #eef1e8; --tone-s
 html:not(.ms-tones) [data-chapter="coffee"]:is(.ms-seal, .ms-bespoke) { --tone-bg: #3a2a21; --tone-ink: #f4ebdf; --tone-soft: #d9c9b6; --tone-muted: #b39f8b; --tone-line: rgba(244, 235, 223, .16); --tone-accent: #e3c37f; --tone-seam: rgba(227, 195, 127, .4); background: var(--tone-bg); }
 html:not(.ms-tones) [data-chapter="green"]:is(.ms-seal, .ms-bespoke) { --tone-bg: #2f3b32; --tone-ink: #eef1e8; --tone-soft: #cfd6c7; --tone-muted: #a5b0a0; --tone-line: rgba(238, 241, 232, .16); --tone-accent: #d5c08a; --tone-seam: rgba(213, 192, 138, .4); background: var(--tone-bg); }
 
-@media (prefers-reduced-motion: reduce) { .ms-seal__ring { animation: none; } }
+
+/* ── 21 Quiet home (v14) ─────────────────────────────────────────────────
+   Whole photographs at full quality, four pieces per chapter, the house
+   lockup (logo and script) as the brand moment, and a single return to
+   cream after the green chapter. */
+
+/* Opening: the photograph is shown whole (never cropped or scaled up); on
+   wide screens the words sit on the plain wall to the left of the model. */
+.ms-open { display: block; min-height: 0; aspect-ratio: auto; overflow: hidden; background: #8d847b; }
+.ms-open__media { position: relative; inset: auto; width: 100%; height: auto; }
+.ms-open__media picture,
+.ms-open__media img { position: static; display: block; width: 100%; height: auto; }
+.ms-open__media img { object-fit: initial; transform: none; animation: none; }
+.ms-open::after { display: none; }
+
+@media (min-width: 1100px) {
+  .ms-open__media::after { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(28, 22, 18, .5) 0%, rgba(28, 22, 18, .22) 32%, rgba(28, 22, 18, 0) 46%); content: ""; }
+  .ms-open__copy { position: absolute; z-index: 2; top: 50%; left: 0; width: 40%; max-width: none; margin: 0; padding: 0 0 0 clamp(36px, 5.2vw, 96px); transform: translateY(-50%); gap: clamp(8px, .9vw, 14px); }
+  .ms-open__title { font-size: clamp(2.1rem, 3.5vw, 4.3rem); }
+  .ms-open__text { font-size: clamp(14.5px, 1.1vw, 17px); }
+}
+
+/* Below 1100px the words follow the photograph, on the page colour. */
+@media (max-width: 1099px) {
+  .ms-open { overflow: visible; margin-inline: 8px; border-radius: 0; background: transparent; color: var(--tone-ink); isolation: auto; }
+  .ms-open__media { width: 100%; overflow: hidden; border-radius: var(--ms-radius); aspect-ratio: auto; box-shadow: none; }
+  .ms-open__copy { position: static; padding: 22px 8px 0; gap: 10px; transform: none; }
+  .ms-open .ms-eyebrow { color: var(--tone-accent); }
+  .ms-open__title { color: var(--tone-ink); text-shadow: none; }
+  .ms-open__text { color: var(--tone-soft); }
+  .ms-open .ms-button--primary { border-color: var(--ms-espresso); background: var(--ms-espresso); color: #fff; }
+  .ms-open .ms-button--outline { border-color: var(--tone-ink); color: var(--tone-ink); }
+}
+@media (max-width: 760px) {
+  .ms-open__media { width: 100%; aspect-ratio: 1350 / 2398; }
+  .ms-open__media picture,
+  .ms-open__media img { width: 100%; height: 100%; object-fit: cover; }
+  .ms-open__actions .ms-button { flex: 1 1 100%; }
+}
+
+/* Photographs sit flat: no drop shadows, no hover zoom. */
+.ms-chapter__media,
+.ms-house__media,
+.ms-belief__media,
+.ms-about .ms-about__figure img { box-shadow: none; }
+.ms-chapter__media img,
+.ms-chapter__media:hover img { transform: none; transition: none; }
+
+/* Chapters: a balanced head (photo and words share the width) and one
+   row of four pieces. */
+.ms-chapter__head { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.ms-grid--chapter { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .ms-grid--chapter { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 900px) {
+  .ms-chapter__head { grid-template-columns: 1fr; }
+  .ms-grid--chapter { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 901px) {
+  .ms-chapter__head { grid-template-columns: auto minmax(320px, 1fr); }
+  .ms-chapter__media { justify-self: start; }
+  .ms-chapter__media img { width: auto; height: auto; max-width: 50vw; max-height: min(68vh, 640px); }
+  .ms-house__grid { grid-template-columns: auto minmax(320px, 1fr); }
+  .ms-house__media img { width: auto; height: auto; max-width: 44vw; max-height: min(68vh, 620px); }
+  .ms-belief__media { justify-self: center; }
+  .ms-belief__media img { width: auto; height: auto; max-width: 100%; max-height: min(72vh, 660px); }
+}
+
+/* The house lockup */
+.ms-seal__mark { display: grid; justify-items: center; gap: 18px; padding: clamp(30px, 4vw, 54px) 20px; border-radius: var(--ms-radius); background: rgba(255, 255, 255, .45); outline: 1px dashed var(--tone-seam); outline-offset: -10px; }
+.ms-seal__lockup { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; }
+.ms-seal__em { display: block; width: clamp(92px, 9vw, 128px); aspect-ratio: 1; overflow: hidden; }
+.ms-seal__em img { display: block; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
+.ms-seal__script { color: var(--ms-ink, #050505); font-family: Allura, 'Pinyon Script', 'Snell Roundhand', 'Apple Chancery', 'Segoe Script', serif; font-size: clamp(3rem, 5.4vw, 4.8rem); line-height: 1.05; letter-spacing: .005em; }
+.ms-seal__sign { color: var(--tone-muted); font: 500 11.5px/1.4 var(--ms-mono, monospace); letter-spacing: .16em; text-align: center; text-transform: uppercase; }
+.ms-seal__title { font-size: clamp(2.3rem, 4.6vw, 4.2rem); }
+@media (max-width: 760px) {
+  .ms-seal__mark { width: 100%; }
+}
+
+/* About: the page uses the full shop width, words aligned to the left. */
+.ms-about.mv-about.ms-chapters { width: auto; max-width: none; margin: 0; }
+.ms-about .ms-about__hero,
+.ms-about .ms-about__make,
+.ms-about .mv-about-company { max-width: var(--ms-max, 1320px); }
+.ms-about .ms-about__hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: end; justify-items: start; gap: 14px clamp(24px, 5vw, 90px); padding-block: clamp(20px, 3vw, 44px) clamp(24px, 3vw, 40px); text-align: left; }
+.ms-about .ms-about__hero .ms-eyebrow { grid-column: 1 / -1; }
+.ms-about .ms-about__hero .ms-about__title { max-width: 16ch; }
+.ms-about .ms-about__hero .ms-about__lede { max-width: 48ch; }
+.ms-about .ms-about__figure { max-width: var(--ms-max, 1320px); }
+.ms-belief { max-width: var(--ms-max, 1320px); grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.ms-about .ms-about__make { text-align: left; }
+@media (max-width: 900px) {
+  .ms-about .ms-about__hero { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 420px) { .ms-belief__title { font-size: 1.75rem; overflow-wrap: break-word; } }
 
 /* ── 14 Motion & print safety ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {

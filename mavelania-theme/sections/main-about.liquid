@@ -12,7 +12,7 @@
   </header>
 
   <figure class="ms-about__figure" data-chapter="cream">
-    <img src="{{ 'before-footer.webp' | asset_url }}" alt="{{ 'home.slide_bag_alt' | t | escape }}" width="1400" height="622" loading="eager" fetchpriority="high" decoding="async">
+    <img src="{{ 'before-footer-hd.webp' | asset_url }}" srcset="{{ 'before-footer.webp' | asset_url }} 1400w, {{ 'before-footer-hd.webp' | asset_url }} 2400w" sizes="100vw" alt="{{ 'home.slide_bag_alt' | t | escape }}" width="2400" height="1066" loading="eager" fetchpriority="high" decoding="async">
   </figure>
 
   {%- comment -%} Three beliefs, each with its photograph, alternating sides. {%- endcomment -%}
@@ -34,18 +34,18 @@
           assign ab_title = 'philosophy.simplicity_title' | t
           assign ab_text = 'philosophy.simplicity_text' | t
           assign ab_quote = 'story.p4' | t
-          assign ab_img = 'collection-bag-bordeaux.webp'
-          assign ab_w = 1023
-          assign ab_h = 1537
+          assign ab_img = 'collection-bag-bordeaux-hd.webp'
+          assign ab_w = 1536
+          assign ab_h = 2308
         else
           assign ab_tone = 'green'
           assign ab_num = 'III'
           assign ab_title = 'philosophy.personal_title' | t
           assign ab_text = 'philosophy.personal_text' | t
           assign ab_quote = 'story.p3' | t
-          assign ab_img = 'women-leather-wallet-model.webp'
-          assign ab_w = 1023
-          assign ab_h = 1537
+          assign ab_img = 'women-leather-wallet-model-hd.webp'
+          assign ab_w = 1536
+          assign ab_h = 2308
       endcase
     -%}
     <section class="ms-belief ms-belief--{{ ab_tone }}{% cycle '', ' ms-belief--flip', '' %}" aria-labelledby="Belief{{ i }}" data-chapter="{{ ab_tone }}">
@@ -58,6 +58,8 @@
       </div>
     </section>
   {%- endfor -%}
+
+  {% render 'bespoke', tone: 'green' %}
 
   <section class="ms-about__make" aria-labelledby="AboutMakeTitle" data-chapter="cream">
     <p class="ms-about__signature">{{ 'story.signature' | t }}</p>
@@ -72,7 +74,6 @@
     </nav>
   </section>
 
-  {% render 'bespoke', tone: 'coffee' %}
 
   <section class="mv-about-block mv-about-company" aria-labelledby="aboutCompany" data-chapter="cream">
     <h2 id="aboutCompany">{{ 'about.company_title' | t }}</h2>

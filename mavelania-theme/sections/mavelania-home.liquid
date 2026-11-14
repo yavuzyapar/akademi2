@@ -23,16 +23,28 @@
   if collections['card-holders'].url != blank
     assign cards_url = collections['card-holders'].url
   endif
-  assign per_chapter = section.settings.products_per_chapter | default: 6
+  assign per_chapter = section.settings.products_per_chapter | default: 4
 -%}
 <div class="ms-home ms-chapters" data-chapters>
 
   {%- comment -%} ── Opening: the brand in one line, over the bag photograph ── {%- endcomment -%}
   <section class="ms-open" aria-labelledby="HomeOpenTitle" data-chapter="cream">
     <div class="ms-open__media">
+      {%- liquid
+        assign open_img = section.settings.open_image
+        assign open_img_m = section.settings.open_image_mobile | default: open_img
+      -%}
       <picture>
-        <source media="(max-width:760px)" srcset="{{ 'before-footer-mobile.webp' | asset_url }}" width="900" height="1599">
-        <img src="{{ 'before-footer.webp' | asset_url }}" width="1400" height="622" alt="{{ 'home.slide_bag_alt' | t | escape }}" fetchpriority="high" decoding="sync">
+        {%- if open_img_m != blank -%}
+          <source media="(max-width:760px)" srcset="{{ open_img_m | image_url: width: 750 }} 750w, {{ open_img_m | image_url: width: 1100 }} 1100w, {{ open_img_m | image_url: width: 1500 }} 1500w" sizes="100vw" width="{{ open_img_m.width }}" height="{{ open_img_m.height }}">
+        {%- else -%}
+          <source media="(max-width:760px)" srcset="{{ 'before-footer-mobile.webp' | asset_url }} 900w, {{ 'before-footer-mobile-hd.webp' | asset_url }} 1350w" sizes="100vw" width="1350" height="2398">
+        {%- endif -%}
+        {%- if open_img != blank -%}
+          <img src="{{ open_img | image_url: width: 1800 }}" srcset="{{ open_img | image_url: width: 1200 }} 1200w, {{ open_img | image_url: width: 1800 }} 1800w, {{ open_img | image_url: width: 2400 }} 2400w, {{ open_img | image_url: width: 3000 }} 3000w" sizes="100vw" width="{{ open_img.width }}" height="{{ open_img.height }}" alt="{{ open_img.alt | default: 'home.slide_bag_alt' | t | escape }}" fetchpriority="high">
+        {%- else -%}
+          <img src="{{ 'before-footer-hd.webp' | asset_url }}" srcset="{{ 'before-footer.webp' | asset_url }} 1400w, {{ 'before-footer-hd.webp' | asset_url }} 2400w" sizes="100vw" width="2400" height="1066" alt="{{ 'home.slide_bag_alt' | t | escape }}" fetchpriority="high">
+        {%- endif -%}
       </picture>
     </div>
     <div class="ms-open__copy ms-wrap">
@@ -43,11 +55,6 @@
         <a class="ms-button ms-button--primary" href="#chapter-bags">{{ 'home.cta_discover' | t }}</a>
         <a class="ms-button ms-button--outline" href="#bespoke">{% render 'icon', name: 'pen' %} {{ 'home.cta_personalize' | t }}</a>
       </div>
-      <ol class="ms-open__index" aria-label="{{ 'home.chapters_label' | t | escape }}">
-        <li><a href="#chapter-bags"><span>I</span>{{ 'navigation.bags' | t }}</a></li>
-        <li><a href="#chapter-wallets"><span>II</span>{{ 'navigation.wallets_short' | t }}</a></li>
-        <li><a href="#chapter-cards"><span>III</span>{{ 'navigation.card_holders' | t }}</a></li>
-      </ol>
     </div>
   </section>
 
@@ -67,9 +74,10 @@
           assign ch_url = bags.url | default: routes.all_products_collection_url
           assign ch_products = bags.products
           assign ch_type = ''
-          assign ch_img = 'collection-bag-bordeaux.webp'
-          assign ch_img_w = 1023
-          assign ch_img_h = 1537
+          assign ch_img = 'collection-bag-bordeaux-hd.webp'
+          assign ch_pick = section.settings.bags_image
+          assign ch_img_w = 1536
+          assign ch_img_h = 2308
           assign ch_alt = 'home.cat_bags_alt' | t
         when 2
           assign ch_id = 'chapter-wallets'
@@ -81,9 +89,10 @@
           assign ch_url = wallets.url | default: routes.all_products_collection_url
           assign ch_products = wallets.products
           assign ch_type = ''
-          assign ch_img = 'women-leather-wallet-model.webp'
-          assign ch_img_w = 1023
-          assign ch_img_h = 1537
+          assign ch_img = 'women-leather-wallet-model-hd.webp'
+          assign ch_pick = section.settings.wallets_image
+          assign ch_img_w = 1536
+          assign ch_img_h = 2308
           assign ch_alt = 'home.cat_wallets_alt' | t
         else
           assign ch_id = 'chapter-cards'
@@ -96,6 +105,7 @@
           assign ch_products = collections.all.products
           assign ch_type = 'Card Holder'
           assign ch_img = 'collection-hero-cardholders.webp'
+          assign ch_pick = section.settings.cards_image
           assign ch_img_w = 1888
           assign ch_img_h = 833
           assign ch_alt = 'home.slide_card_alt' | t
@@ -115,7 +125,11 @@
       <section class="ms-chapter ms-chapter--{{ ch_tone }}" id="{{ ch_id }}" aria-labelledby="{{ ch_id }}-title" data-chapter="{{ ch_tone }}">
         <div class="ms-wrap ms-chapter__head">
           <a class="ms-chapter__media" href="{{ ch_url }}" tabindex="-1">
-            <img src="{{ ch_img | asset_url }}" alt="{{ ch_alt | escape }}" width="{{ ch_img_w }}" height="{{ ch_img_h }}" loading="lazy" decoding="async">
+            {%- if ch_pick != blank -%}
+              {{ ch_pick | image_url: width: 1600 | image_tag: widths: '600,900,1200,1600', sizes: '(min-width: 901px) 45vw, 100vw', loading: 'lazy', alt: ch_alt }}
+            {%- else -%}
+              <img src="{{ ch_img | asset_url }}" alt="{{ ch_alt | escape }}" width="{{ ch_img_w }}" height="{{ ch_img_h }}" loading="lazy" decoding="async">
+            {%- endif -%}
           </a>
           <div class="ms-chapter__copy">
             <p class="ms-chapter__num" aria-hidden="true">{{ ch_num }}</p>
@@ -130,7 +144,7 @@
         </div>
       </section>
     {%- endif -%}
-    {%- if i == 1 -%}{% render 'leather-seal', tone: 'coffee' %}{%- endif -%}
+    {%- if i == 1 -%}{% render 'leather-seal', tone: 'cream' %}{%- endif -%}
   {%- endfor -%}
 
   {% render 'bespoke', tone: 'green' %}
@@ -184,19 +198,24 @@
   "name": "Home: chapters",
   "settings": [
     { "type": "header", "content": "Opening" },
+    { "type": "image_picker", "id": "open_image", "label": "Photo (desktop)", "info": "Upload the original, full-size photo for the sharpest result. Wide, about 2400 × 1066 px." },
+    { "type": "image_picker", "id": "open_image_mobile", "label": "Photo (phones)", "info": "Portrait, about 1350 × 2400 px." },
     { "type": "text", "id": "intro_title", "label": "Headline", "default": "Crafted with Intention. Made Personal." },
     { "type": "textarea", "id": "intro_text", "label": "Text", "default": "Genuine leather bags, wallets and card holders, made by hand at Mavelania and ready to carry your name." },
     { "type": "header", "content": "Chapter I — Bags" },
+    { "type": "image_picker", "id": "bags_image", "label": "Photo", "info": "Optional. Upload the original photo for the sharpest result." },
     { "type": "text", "id": "bags_title", "label": "Headline", "default": "Crafted to Be Remembered." },
     { "type": "textarea", "id": "bags_text", "label": "Text", "default": "Totes, shoulder bags and briefcases, built to carry weight and to soften where your hands rest." },
     { "type": "header", "content": "Chapter II — Wallets" },
+    { "type": "image_picker", "id": "wallets_image", "label": "Photo", "info": "Optional. Upload the original photo for the sharpest result." },
     { "type": "text", "id": "wallets_title", "label": "Headline", "default": "Everyday Essentials. Thoughtfully Crafted." },
     { "type": "textarea", "id": "wallets_text", "label": "Text", "default": "Slim profiles, sized card slots and edges finished so they stay smooth in a pocket." },
     { "type": "header", "content": "Chapter III — Card holders" },
+    { "type": "image_picker", "id": "cards_image", "label": "Photo", "info": "Optional. Upload the original photo for the sharpest result." },
     { "type": "text", "id": "cards_title", "label": "Headline", "default": "Your Initials. Your Identity." },
     { "type": "textarea", "id": "cards_text", "label": "Text", "default": "The smallest piece in the range, and the one most often made personal." },
     { "type": "header", "content": "Products" },
-    { "type": "range", "id": "products_per_chapter", "min": 3, "max": 12, "step": 3, "default": 6, "label": "Products per chapter" }
+    { "type": "range", "id": "products_per_chapter", "min": 2, "max": 8, "step": 2, "default": 4, "label": "Products per chapter" }
   ],
   "presets": [{ "name": "Home: chapters" }]
 }

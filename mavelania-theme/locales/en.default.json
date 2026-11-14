@@ -543,7 +543,6 @@
     "step3_text": "We confirm the details with you before your piece is made."
   },
   "seal": {
-    "ring": "MAVELANIA · GENUINE LEATHER · MADE BY HAND · ",
     "title_html": "Genuine leather.<br><em>Nothing else.</em>",
     "text": "Every bag, wallet and card holder Mavelania makes is cut from genuine leather and finished by hand. It is made to be carried every day, to soften where you hold it and to keep your initials for years.",
     "fact1_title": "Genuine leather",
@@ -551,6 +550,7 @@
     "fact2_title": "Made by hand",
     "fact2_text": "Cut, stitched and edged by hand.",
     "fact3_title": "Yours alone",
-    "fact3_text": "Initials, a name or a date."
+    "fact3_text": "Initials, a name or a date.",
+    "sign": "Genuine leather · Made by hand"
   }
 }

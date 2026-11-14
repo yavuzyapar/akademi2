@@ -1,21 +1,19 @@
 {%- comment -%}
-  The house mark: a leather seal that turns slowly, and one sentence the
-  visitor should leave with: Mavelania is genuine leather, made by hand.
-  Params: tone (data-chapter tone, default coffee)
+  The house mark: Mavelania's own logo and script wordmark (the same
+  lockup as the header and footer), and the one line the visitor should
+  leave with: genuine leather, made by hand.
+  Params: tone (data-chapter tone, default cream)
 {%- endcomment -%}
-<section class="ms-seal" aria-labelledby="SealTitle" data-chapter="{{ tone | default: 'coffee' }}">
+<section class="ms-seal" aria-labelledby="SealTitle" data-chapter="{{ tone | default: 'cream' }}">
   <div class="ms-wrap ms-seal__grid">
-    <div class="ms-seal__mark" aria-hidden="true">
-      <svg class="ms-seal__ring" viewBox="0 0 200 200" focusable="false">
-        <defs><path id="SealPath" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"></path></defs>
-        <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4"></circle>
-        <circle cx="100" cy="100" r="60" fill="none" stroke="currentColor" stroke-width="1"></circle>
-        <text><textPath href="#SealPath" textLength="485">{{ 'seal.ring' | t }}</textPath></text>
-      </svg>
-      <span class="ms-seal__m">M</span>
+    <div class="ms-seal__mark">
+      <span class="ms-seal__lockup" aria-hidden="true">
+        <span class="ms-seal__em"><img src="{{ 'mavelania-logo-original-transparent.png' | asset_url }}" alt="" width="640" height="360" loading="lazy"></span>
+        <span class="ms-seal__script">Mavelania</span>
+      </span>
+      <span class="ms-seal__sign">{{ 'seal.sign' | t }}</span>
     </div>
     <div class="ms-seal__copy">
-      <p class="ms-eyebrow">{{ shop.name }}</p>
       <h2 id="SealTitle" class="ms-seal__title">{{ 'seal.title_html' | t }}</h2>
       <p class="ms-seal__text">{{ 'seal.text' | t }}</p>
       <ul class="ms-seal__facts">
