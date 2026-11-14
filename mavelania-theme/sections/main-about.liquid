@@ -11,16 +11,9 @@
     <p class="ms-about__lede">{{ 'story.p1' | t }}</p>
   </header>
 
-  {%- assign reel_label = 'film.reel_title' | t -%}
-  <section class="ms-reel" aria-labelledby="ReelTitle" data-chapter="cream">
-    <h2 id="ReelTitle" class="mv-visually-hidden">{{ 'film.reel_title' | t }}</h2>
-    <div class="ms-reel__track">
-      {% render 'film', name: 'film-studio', w: 480, h: 854, label: reel_label %}
-      {% render 'film', name: 'film-amelie-brown', w: 480, h: 854, label: reel_label %}
-      {% render 'film', name: 'film-paris', w: 720, h: 1280, label: reel_label %}
-      {% render 'film', name: 'film-amelie-bordeaux', w: 720, h: 1280, label: reel_label %}
-    </div>
-  </section>
+  <figure class="ms-about__figure" data-chapter="cream">
+    <img src="{{ 'before-footer.webp' | asset_url }}" alt="{{ 'home.slide_bag_alt' | t | escape }}" width="1400" height="622" loading="eager" fetchpriority="high" decoding="async">
+  </figure>
 
   {%- comment -%} Three beliefs, each with its photograph, alternating sides. {%- endcomment -%}
   {%- for i in (1..3) -%}

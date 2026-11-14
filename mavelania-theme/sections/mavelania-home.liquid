@@ -36,7 +36,7 @@
           {%- if section.settings.open_video != blank -%}
             {{ section.settings.open_video | video_tag: autoplay: true, muted: true, loop: true, playsinline: true, preload: 'auto', class: 'ms-open__video', image_size: '1600x', data-hero-video: '' }}
           {%- else -%}
-            {%- comment -%} Wide screens get the 1080p film, phones a 4:5 film framed on the model. Browsers that ignore media on <source> take the first (wide) film, which the phone layout frames with object-position. {%- endcomment -%}
+            {%- comment -%} Wide screens get the 1080p film, phones a portrait film framed on the model. Browsers that ignore media on <source> take the first (wide) film, which the phone layout frames with object-position. {%- endcomment -%}
             <video class="ms-open__video" autoplay muted loop playsinline preload="auto" poster="{{ 'hero-film-poster.webp' | asset_url }}" width="1920" height="1080" aria-label="{{ 'home.film_alt' | t | escape }}" data-hero-video>
               <source src="{{ 'hero-film.mp4' | asset_url }}" type="video/mp4" media="(min-width: 761px)">
               <source src="{{ 'hero-film-mobile.mp4' | asset_url }}" type="video/mp4">
@@ -143,38 +143,13 @@
     {%- if ch_count > 0 -%}
       <section class="ms-chapter ms-chapter--{{ ch_tone }}" id="{{ ch_id }}" aria-labelledby="{{ ch_id }}-title" data-chapter="{{ ch_tone }}">
         <div class="ms-wrap ms-chapter__head">
-          {%- if i == 1 and section.settings.bags_film and ch_pick == blank -%}
-            {%- liquid
-              assign film_product = section.settings.bags_film_product
-              if film_product == blank
-                assign film_product = all_products['amelie-suede-leather-tote-bag']
-              endif
-            -%}
-            <div class="ms-chapter__film">
-              {% render 'film', name: 'film-amelie-bordeaux', w: 720, h: 1280, label: ch_alt %}
-              {%- if film_product.title != blank -%}
-                <a class="ms-filmtag" href="{{ film_product.url }}">
-                  {%- if film_product.featured_image -%}
-                    {{ film_product.featured_image | image_url: width: 240 | image_tag: loading: 'lazy', alt: '', class: 'ms-filmtag__img' }}
-                  {%- endif -%}
-                  <span class="ms-filmtag__copy">
-                    <small>{{ 'film.in_this_film' | t }}</small>
-                    <strong>{{ film_product.title }}</strong>
-                    <span>{{ film_product.price | money }}</span>
-                  </span>
-                  {% render 'icon', name: 'arrow-right' %}
-                </a>
-              {%- endif -%}
-            </div>
-          {%- else -%}
-            <a class="ms-chapter__media" href="{{ ch_url }}" tabindex="-1">
-              {%- if ch_pick != blank -%}
-                {{ ch_pick | image_url: width: 1600 | image_tag: widths: '600,900,1200,1600', sizes: '(min-width: 901px) 45vw, 100vw', loading: 'lazy', alt: ch_alt }}
-              {%- else -%}
-                <img src="{{ ch_img | asset_url }}" alt="{{ ch_alt | escape }}" width="{{ ch_img_w }}" height="{{ ch_img_h }}" loading="lazy" decoding="async">
-              {%- endif -%}
-            </a>
-          {%- endif -%}
+          <a class="ms-chapter__media" href="{{ ch_url }}" tabindex="-1">
+            {%- if ch_pick != blank -%}
+              {{ ch_pick | image_url: width: 1600 | image_tag: widths: '600,900,1200,1600', sizes: '(min-width: 901px) 38vw, 100vw', loading: 'lazy', alt: ch_alt }}
+            {%- else -%}
+              <img src="{{ ch_img | asset_url }}" alt="{{ ch_alt | escape }}" width="{{ ch_img_w }}" height="{{ ch_img_h }}" loading="lazy" decoding="async">
+            {%- endif -%}
+          </a>
           <div class="ms-chapter__copy">
             <p class="ms-chapter__num" aria-hidden="true">{{ ch_num }}</p>
             <p class="ms-eyebrow">{{ ch_title }}</p>
@@ -249,8 +224,6 @@
     { "type": "text", "id": "intro_title", "label": "Headline", "default": "Crafted with Intention. Made Personal." },
     { "type": "textarea", "id": "intro_text", "label": "Text", "default": "Genuine leather bags, wallets and card holders, made by hand at Mavelania and ready to carry your name." },
     { "type": "header", "content": "Chapter I — Bags" },
-    { "type": "checkbox", "id": "bags_film", "label": "Play the film instead of a photo", "default": true },
-    { "type": "product", "id": "bags_film_product", "label": "Piece shown under the film", "info": "Leave empty for the Amelie Suede Leather Tote Bag, the bag in the film." },
     { "type": "image_picker", "id": "bags_image", "label": "Photo", "info": "Optional. Upload the original photo for the sharpest result." },
     { "type": "text", "id": "bags_title", "label": "Headline", "default": "Crafted to Be Remembered." },
     { "type": "textarea", "id": "bags_text", "label": "Text", "default": "Totes, shoulder bags and briefcases, built to carry weight and to soften where your hands rest." },

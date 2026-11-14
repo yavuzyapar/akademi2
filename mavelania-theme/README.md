@@ -73,28 +73,11 @@ hazırlandı. Kapak görseli `hero-film-poster.webp`, video yüklenene kadar gö
 
 - **Masaüstü:** video çerçeveyi doldurur; yazılar soldaki tarlanın üzerinde, model sağda.
 - **Tablet:** videonun tamamı, yazılar altında.
-- **Telefon:** modeli takip eden dikey (4:5) bir pencere, yazılar altında.
+- **Telefon:** video ekranı doldurur (başlığın altında), yazılar ve düğmeler videonun alt kısmında, hafif bir gölgenin üzerinde.
 - Sağ alttaki düğme videoyu durdurur. "Hareketi azalt" ya da veri tasarrufu açık olan ziyaretçilerde video
   ilk karede bekler, düğmeyle başlatılır.
 - Videoyu değiştirmek için: Tema düzenleyici → **Home: chapters → Film (optional)** alanına yeni videoyu yükleyin.
   Fotoğrafa dönmek için **Play the film in the opening** ayarını kapatın.
-
-## Videolar
-
-Dört kısa, sessiz video tema dosyalarındadır (`assets/film-*.mp4`, her birinin `-poster.webp` kapak görseli var).
-Ekrana gelince oynar, ekrandan çıkınca durur; sağ alttaki düğmeyle durdurulur. Ekrana gelmeden indirilmez.
-
-| Video | Nerede |
-| --- | --- |
-| `film-amelie-bordeaux` | Ana sayfa, I Çantalar bölümü (altında videodaki ürün: Amelie Suede Leather Tote Bag) · Amelie ürün sayfası · Hakkımızda |
-| `film-amelie-brown` | Amelie ürün sayfası · Hakkımızda |
-| `film-studio`, `film-paris` | Hakkımızda |
-
-- Ana sayfadaki videoyu kapatıp fotoğrafa dönmek için: **Home: chapters → Play the film instead of a photo**.
-- Videonun altındaki ürün: **Piece shown under the film**.
-- Başka bir ürün sayfasına video eklemek için videoyu Shopify'da o ürünün medyasına yükleyin; "See it in motion"
-  bölümü otomatik görünür. Tema videolarını bir ürüne bağlamak için `snippets/product-film.liquid` içindeki listeye
-  ürünün handle'ını ekleyin.
 
 ## Kişiselleştirme nasıl çalışır
 
