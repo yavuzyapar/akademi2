@@ -2,11 +2,7 @@
   "sections": {
     "main": {
       "type": "mavelania-home",
-      "settings": {
-        "signature_bag": "odette-leather-tote-bag",
-        "signature_wallet": "everett-leather-zip-wallet",
-        "signature_card": "lior-leather-card-holder"
-      }
+      "settings": {}
     },
     "trust": {
       "type": "home-trust",

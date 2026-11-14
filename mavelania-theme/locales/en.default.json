@@ -237,7 +237,8 @@
     "cat_wallets_alt": "Woman holding a bordeaux leather wallet",
     "also_in_shop": "Also in the shop:",
     "atelier_eyebrow": "The atelier",
-    "atelier_title": "Every piece, ready to be made yours"
+    "atelier_title": "Every piece, ready to be made yours",
+    "chapters_label": "Chapters"
   },
   "navigation": {
     "accessories": "Accessories",
@@ -526,5 +527,16 @@
     "clear": "Remove",
     "close": "Close",
     "note": "Preview only. Kept on this device."
+  },
+  "house": {
+    "made_label": "Made",
+    "made_value": "By hand, from genuine leather",
+    "personal_label": "Personalization",
+    "personal_value": "Initials or a short name on every piece",
+    "returns_label": "Returns",
+    "shipping_label": "Shipping",
+    "shipping_value": "Worldwide; options and costs at checkout",
+    "company_label": "Company",
+    "contact_label": "Contact"
   }
 }

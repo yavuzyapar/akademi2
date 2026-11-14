@@ -1,42 +1,66 @@
 {%- liquid
-  assign personalize_url = routes.all_products_collection_url | append: '?view=personalize'
-  if pages['personalize'].url != blank
-    assign personalize_url = pages['personalize'].url
-  endif
   assign cards_url = routes.root_url | append: 'collections/types?q=Card%20Holder'
   if collections['card-holders'].url != blank
     assign cards_url = collections['card-holders'].url
   endif
 -%}
-<article class="mv-about ms-about">
-  <header class="ms-about__hero">
+<article class="mv-about ms-about ms-chapters" data-chapters>
+  <header class="ms-about__hero" data-chapter="cream">
     <p class="ms-eyebrow">{{ 'story.eyebrow' | t }}</p>
-    <h1 class="ms-heading">{{ 'about.brand_title' | t }}</h1>
+    <h1 class="ms-about__title">{{ 'about.brand_title' | t }}</h1>
     <p class="ms-about__lede">{{ 'story.p1' | t }}</p>
   </header>
 
-  <figure class="ms-about__figure">
+  <figure class="ms-about__figure" data-chapter="cream">
     <img src="{{ 'before-footer.webp' | asset_url }}" alt="{{ 'home.slide_bag_alt' | t | escape }}" width="1400" height="622" loading="eager" fetchpriority="high" decoding="async">
   </figure>
 
-  <section class="ms-about__statement" aria-labelledby="AboutStatementTitle">
-    <h2 id="AboutStatementTitle" class="mv-visually-hidden">{{ 'about.statement_title' | t }}</h2>
-    <p>{{ 'story.p2' | t }}</p>
-    <p>{{ 'story.p3' | t }}</p>
-    <p>{{ 'story.p4' | t }}</p>
+  {%- comment -%} Three beliefs, each with its photograph, alternating sides. {%- endcomment -%}
+  {%- for i in (1..3) -%}
+    {%- liquid
+      case i
+        when 1
+          assign ab_tone = 'cream'
+          assign ab_num = 'I'
+          assign ab_title = 'philosophy.craft_title' | t
+          assign ab_text = 'philosophy.craft_text' | t
+          assign ab_quote = 'story.p2' | t
+          assign ab_img = 'collection-hero-wallets.webp'
+          assign ab_w = 1886
+          assign ab_h = 834
+        when 2
+          assign ab_tone = 'coffee'
+          assign ab_num = 'II'
+          assign ab_title = 'philosophy.simplicity_title' | t
+          assign ab_text = 'philosophy.simplicity_text' | t
+          assign ab_quote = 'story.p4' | t
+          assign ab_img = 'collection-bag-bordeaux.webp'
+          assign ab_w = 1023
+          assign ab_h = 1537
+        else
+          assign ab_tone = 'green'
+          assign ab_num = 'III'
+          assign ab_title = 'philosophy.personal_title' | t
+          assign ab_text = 'philosophy.personal_text' | t
+          assign ab_quote = 'story.p3' | t
+          assign ab_img = 'women-leather-wallet-model.webp'
+          assign ab_w = 1023
+          assign ab_h = 1537
+      endcase
+    -%}
+    <section class="ms-belief ms-belief--{{ ab_tone }}{% cycle '', ' ms-belief--flip', '' %}" aria-labelledby="Belief{{ i }}" data-chapter="{{ ab_tone }}">
+      <div class="ms-belief__media"><img src="{{ ab_img | asset_url }}" alt="" width="{{ ab_w }}" height="{{ ab_h }}" loading="lazy" decoding="async"></div>
+      <div class="ms-belief__copy">
+        <p class="ms-chapter__num" aria-hidden="true">{{ ab_num }}</p>
+        <h2 id="Belief{{ i }}" class="ms-belief__title">{{ ab_title }}</h2>
+        <p class="ms-belief__text">{{ ab_text }}</p>
+        <blockquote class="ms-belief__quote">{{ ab_quote }}</blockquote>
+      </div>
+    </section>
+  {%- endfor -%}
+
+  <section class="ms-about__make" aria-labelledby="AboutMakeTitle" data-chapter="cream">
     <p class="ms-about__signature">{{ 'story.signature' | t }}</p>
-  </section>
-
-  <section class="ms-about__principles" aria-labelledby="AboutPrinciplesTitle">
-    <h2 id="AboutPrinciplesTitle" class="ms-heading">{{ 'philosophy.title' | t }}</h2>
-    <div>
-      <article><span>01</span><h3>{{ 'philosophy.craft_title' | t }}</h3><p>{{ 'philosophy.craft_text' | t }}</p></article>
-      <article><span>02</span><h3>{{ 'philosophy.simplicity_title' | t }}</h3><p>{{ 'philosophy.simplicity_text' | t }}</p></article>
-      <article><span>03</span><h3>{{ 'philosophy.personal_title' | t }}</h3><p>{{ 'philosophy.personal_text' | t }}</p></article>
-    </div>
-  </section>
-
-  <section class="ms-about__make" aria-labelledby="AboutMakeTitle">
     <h2 id="AboutMakeTitle" class="ms-heading">{{ 'about.make_title' | t }}</h2>
     <p>{{ 'about.make_body_new' | t }}</p>
     <nav class="ms-catnav" aria-label="{{ 'about.make_title' | t | escape }}">
@@ -46,10 +70,10 @@
       {%- if collections['phone-cases'].products_count > 0 -%}<a href="{{ collections['phone-cases'].url }}">{{ 'navigation.phone_cases' | t }}</a>{%- endif -%}
       {%- if collections['accessories'].products_count > 0 -%}<a href="{{ collections['accessories'].url }}">{{ 'navigation.accessories' | t }}</a>{%- endif -%}
     </nav>
-    <a class="ms-button ms-button--primary" href="{{ personalize_url }}">{% render 'icon', name: 'pen' %} {{ 'home.cta_personalize' | t }}</a>
+    <button class="ms-button ms-button--primary" type="button" data-monogram-open>{% render 'icon', name: 'pen' %} {{ 'home.cta_personalize' | t }}</button>
   </section>
 
-  <section class="mv-about-block mv-about-company" aria-labelledby="aboutCompany">
+  <section class="mv-about-block mv-about-company" aria-labelledby="aboutCompany" data-chapter="cream">
     <h2 id="aboutCompany">{{ 'about.company_title' | t }}</h2>
     <p class="mv-about-company-lede">{{ 'about.company_lede' | t }}</p>
 

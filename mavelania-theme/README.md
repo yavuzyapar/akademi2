@@ -24,6 +24,23 @@ canlı sitedekiyle aynı (masaüstü: amblem 49×49, yazı 180×47; mobil: 42×4
    kontrol edin, memnunsanız **Publish** deyin. Eski tema listede kalır; istediğiniz
    an geri dönebilirsiniz.
 
+## Görsel kimlik: üç bölüm
+
+Ana sayfa üç bölümden oluşur; her bölüm bir ana ürüne ayrılmıştır ve kendi renk dünyasına sahiptir.
+Kaydırdıkça sayfa zemini bir bölümden diğerine yumuşakça geçer (1,1 sn):
+
+| Bölüm | Ürün | Zemin |
+| --- | --- | --- |
+| I | Çantalar | Krem `#f6f1e8` |
+| II | Cüzdanlar | Kahve `#3a2a21` |
+| III | Kartlıklar | Yeşil `#2f3b32` |
+
+Hakkımızda sayfası da aynı üç renkte üç inançla ilerler. Ürün kartları her zeminde aynı fildişi
+etiket görünümünü korur. Metinler ve bölüm başlıkları tema düzenleyicide **Home: chapters** altındadır.
+
+Sitede tek iletişim adresi vardır: `contact_email` ayarı (info@mavelania.com). Başlık, alt bilgi,
+ürün sayfası, SSS ve Hakkımızda hep bu ayarı okur.
+
 ## Marka kurgusu: "Crafted with Intention. Made Personal."
 
 - **Navigasyon:** Home · Shop (Bags / Wallets / Card Holders menüsü) · Personalize Your Piece · About Mavelania · Contact.

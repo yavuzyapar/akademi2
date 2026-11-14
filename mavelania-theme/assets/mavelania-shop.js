@@ -1271,6 +1271,28 @@
     }
   })();
 
+  /* ── Chapters: the page colour glides with the chapter in view ─────
+     Each [data-chapter] names a tone (cream, coffee, green). The tone of
+     the chapter crossing the middle of the screen is set on <html>, and
+     the CSS eases the background and text colours between tones. */
+  (function () {
+    var chapters = $$('[data-chapter]');
+    if (!chapters.length || !('IntersectionObserver' in window)) return;
+    var root = document.documentElement;
+    var current = '';
+    function apply(tone) {
+      if (!tone || tone === current) return;
+      current = tone;
+      root.setAttribute('data-tone', tone);
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) { if (entry.isIntersecting) apply(entry.target.dataset.chapter); });
+    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+    chapters.forEach(function (chapter) { observer.observe(chapter); });
+    apply(chapters[0].dataset.chapter);
+    root.classList.add('ms-tones');
+  })();
+
   /* ── Monogram ──────────────────────────────────────────────────────
      The visitor types their initials once; every product photo then shows
      them as a small stamped leather tab (a preview, stored in this browser
