@@ -1294,6 +1294,33 @@
     if (window.CSS && CSS.registerProperty) root.classList.add('ms-prop');
   })();
 
+  /* ── Opening film ─────────────────────────────────────────────────
+     Plays muted on a loop. The button pauses it (motion longer than five
+     seconds must be stoppable). With reduced motion or data saver it
+     stays on its first frame until the visitor presses play. */
+  (function () {
+    var box = $('[data-hero-film]');
+    if (!box) return;
+    var video = $('video', box);
+    var button = $('[data-hero-toggle]', box);
+    if (!video || !button) return;
+    video.muted = true;
+    var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      (navigator.connection && navigator.connection.saveData);
+    function sync() {
+      var playing = !video.paused;
+      box.classList.toggle('is-playing', playing);
+      button.setAttribute('aria-label', playing ? button.dataset.labelPause : button.dataset.labelPlay);
+    }
+    function play() { var promise = video.play(); if (promise && promise.catch) promise.catch(sync); }
+    video.addEventListener('play', sync);
+    video.addEventListener('pause', sync);
+    button.addEventListener('click', function () { if (video.paused) play(); else video.pause(); });
+    if (calm) { video.removeAttribute('autoplay'); video.pause(); }
+    else if (video.paused) play();
+    sync();
+  })();
+
   /* ── Films ─────────────────────────────────────────────────────────
      Short silent films. Nothing is downloaded until a film scrolls into
      view; it then plays muted in a loop and pauses when it leaves the

@@ -28,8 +28,24 @@
 <div class="ms-home ms-chapters" data-chapters>
 
   {%- comment -%} ── Opening: the brand in one line, over the bag photograph ── {%- endcomment -%}
-  <section class="ms-open" aria-labelledby="HomeOpenTitle" data-chapter="cream">
+  {%- assign open_film = section.settings.open_film -%}
+  <section class="ms-open{% if open_film %} ms-open--film{% endif %}" aria-labelledby="HomeOpenTitle" data-chapter="cream">
     <div class="ms-open__media">
+      {%- if open_film -%}
+        <div class="ms-open__film" data-hero-film>
+          {%- if section.settings.open_video != blank -%}
+            {{ section.settings.open_video | video_tag: autoplay: true, muted: true, loop: true, playsinline: true, preload: 'auto', class: 'ms-open__video', image_size: '1600x', data-hero-video: '' }}
+          {%- else -%}
+            <video class="ms-open__video" autoplay muted loop playsinline preload="auto" poster="{{ 'hero-film-poster.webp' | asset_url }}" width="854" height="480" aria-label="{{ 'home.film_alt' | t | escape }}" data-hero-video>
+              <source src="{{ 'hero-film.mp4' | asset_url }}" type="video/mp4">
+            </video>
+          {%- endif -%}
+          <button class="ms-film__toggle ms-open__toggle" type="button" data-hero-toggle data-label-pause="{{ 'film.pause' | t | escape }}" data-label-play="{{ 'film.play' | t | escape }}" aria-label="{{ 'film.pause' | t | escape }}">
+            <span class="ms-film__icon ms-film__icon--play">{% render 'icon', name: 'play' %}</span>
+            <span class="ms-film__icon ms-film__icon--pause">{% render 'icon', name: 'pause' %}</span>
+          </button>
+        </div>
+      {%- else -%}
       {%- liquid
         assign open_img = section.settings.open_image
         assign open_img_m = section.settings.open_image_mobile | default: open_img
@@ -46,6 +62,7 @@
           <img src="{{ 'before-footer.webp' | asset_url }}" width="1400" height="622" alt="{{ 'home.slide_bag_alt' | t | escape }}" fetchpriority="high">
         {%- endif -%}
       </picture>
+      {%- endif -%}
     </div>
     <div class="ms-open__copy ms-wrap">
       <p class="ms-eyebrow">{{ 'home.open_eyebrow' | t }}</p>
@@ -223,6 +240,8 @@
   "name": "Home: chapters",
   "settings": [
     { "type": "header", "content": "Opening" },
+    { "type": "checkbox", "id": "open_film", "label": "Play the film in the opening", "default": true, "info": "Off: the photos below are shown instead." },
+    { "type": "video", "id": "open_video", "label": "Film (optional)", "info": "Leave empty to use the film included in the theme. Uploaded films play muted and on a loop." },
     { "type": "image_picker", "id": "open_image", "label": "Photo (desktop)", "info": "Optional. Wide photo, about 2400 × 1066 px." },
     { "type": "image_picker", "id": "open_image_mobile", "label": "Photo (phones)", "info": "Portrait, about 1350 × 2400 px." },
     { "type": "text", "id": "intro_title", "label": "Headline", "default": "Crafted with Intention. Made Personal." },

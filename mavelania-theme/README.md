@@ -64,6 +64,19 @@ Sitede tek iletişim adresi vardır: `contact_email` ayarı (info@mavelania.com)
   boyutlu hallerini yükleyebilirsiniz.
 - Görseller hiçbir yerde kaymaz, yakınlaşmaz ve gölge bırakmaz.
 
+## Ana ekran videosu (banner)
+
+Açılışta `assets/hero-film.mp4` oynar (sessiz, döngülü; sonu başına yumuşak bir geçişle bağlanır, kesinti
+görünmez). Kapak görseli `hero-film-poster.webp`, video yüklenene kadar görünür.
+
+- **Masaüstü:** video çerçeveyi doldurur; yazılar soldaki tarlanın üzerinde, model sağda.
+- **Tablet:** videonun tamamı, yazılar altında.
+- **Telefon:** modeli takip eden dikey (4:5) bir pencere, yazılar altında.
+- Sağ alttaki düğme videoyu durdurur. "Hareketi azalt" ya da veri tasarrufu açık olan ziyaretçilerde video
+  ilk karede bekler, düğmeyle başlatılır.
+- Videoyu değiştirmek için: Tema düzenleyici → **Home: chapters → Film (optional)** alanına yeni videoyu yükleyin.
+  Fotoğrafa dönmek için **Play the film in the opening** ayarını kapatın.
+
 ## Videolar
 
 Dört kısa, sessiz video tema dosyalarındadır (`assets/film-*.mp4`, her birinin `-poster.webp` kapak görseli var).
