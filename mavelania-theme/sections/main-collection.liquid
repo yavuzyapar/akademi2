@@ -117,7 +117,7 @@
                     {% for value in filter.values %}
                       <label{% if value.count == 0 and value.active == false %} class="is-empty"{% endif %}>
                         <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value | escape }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
-                        <span>{{ value.label }} <small>{{ value.count }}</small></span>
+                        <span>{{ value.label }}</span>
                       </label>
                     {% endfor %}
                   </div>

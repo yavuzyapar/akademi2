@@ -1271,6 +1271,14 @@
     }
   })();
 
+  /* Portrait only where the browser allows it (installed web apps on
+     Android). Everywhere else the turn-upright screen covers landscape. */
+  try {
+    if (screen.orientation && screen.orientation.lock && window.matchMedia('(pointer: coarse)').matches) {
+      screen.orientation.lock('portrait').catch(function () {});
+    }
+  } catch (error) {}
+
   /* ── Seams ─────────────────────────────────────────────────────────
      As each section comes into view a stitched seam is sewn across its
      top, once. Nothing is hidden or moved; without the script, or with

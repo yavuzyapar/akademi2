@@ -127,6 +127,13 @@ oluşturmak gerekmez). İsterseniz `personalize` adlı bir sayfa açıp **page.p
 - **Boşluklar** e-ticarete göre sıkılaştırıldı: daha kısa hero, daha küçük bölüm aralıkları,
   geniş ekranda 5'li ürün şeridi.
 
+## Telefonda yalnızca dik kullanım
+
+Tarayıcılar bir web sitesinin ekran yönünü kilitlemesine izin vermez. Bu yüzden telefon yan çevrildiğinde site
+yerine logolu, sakin bir ekran çıkar: "Please turn your phone upright to view Mavelania." Telefon dik tutulunca
+site kaldığı yerden devam eder. Tablet ve bilgisayarlar bu ekranı hiç görmez. Ana ekrana eklenmiş (uygulama gibi
+açılan) sitede Android'de yön gerçekten dik olarak kilitlenir.
+
 ## Sayfa sayfa kurgu
 
 | Alan | İçerik |

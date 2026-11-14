@@ -3816,7 +3816,7 @@ body { background-color: var(--tone-bg) !important; }
 @media (max-width: 760px) {
   .ms-open--film { position: relative; }
   .ms-open--film .ms-open__media { aspect-ratio: auto; height: clamp(480px, calc(100svh - 178px), 760px); }
-  .ms-open--film .ms-open__media::after { position: absolute; z-index: 1; inset: 0; background: linear-gradient(180deg, rgba(20, 14, 10, .18) 0%, rgba(20, 14, 10, 0) 22%, rgba(20, 14, 10, 0) 48%, rgba(20, 14, 10, .45) 68%, rgba(20, 14, 10, .82) 100%); content: ""; pointer-events: none; }
+  .ms-open--film .ms-open__media::after { position: absolute; z-index: 1; inset: 0; background: linear-gradient(180deg, rgba(20, 14, 10, 0) 0%, rgba(20, 14, 10, 0) 56%, rgba(20, 14, 10, .38) 72%, rgba(20, 14, 10, .74) 100%); content: ""; pointer-events: none; }
   .ms-open--film .ms-open__copy { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; gap: 8px; padding: 0 20px 22px; }
   .ms-open--film .ms-eyebrow { color: #f0d9a8; }
   .ms-open--film .ms-open__title { color: #fff; font-size: clamp(1.75rem, 8vw, 2.3rem); text-shadow: 0 2px 18px rgba(0, 0, 0, .3); }
@@ -3983,6 +3983,58 @@ body { background-color: var(--tone-bg) !important; }
   .ms-seams .ms-bespoke::before,
   .ms-seams .ms-belief::before { transform: none; transition: none; }
 }
+
+/* ── 27 Opening words, phones upright, About in words (v21) ──────────────── */
+
+/* The film keeps the warmth of the field: a touch more colour and depth. */
+.ms-open__video { filter: saturate(1.12) contrast(1.06); }
+
+/* Words that sit on the film are light, wherever the film carries them
+   (wide screens and phones). Tablets keep them on the page, in ink. */
+@media (min-width: 1100px), (max-width: 760px) {
+  .ms-chapters .ms-open--film .ms-open__copy .ms-eyebrow { color: #f3dca8; text-shadow: 0 1px 10px rgba(0, 0, 0, .45); }
+  .ms-chapters .ms-open--film .ms-open__title { color: #fff; text-shadow: 0 2px 18px rgba(0, 0, 0, .35); }
+  .ms-chapters .ms-open--film .ms-open__text { color: rgba(255, 255, 255, .92); text-shadow: 0 1px 10px rgba(0, 0, 0, .35); }
+  .ms-chapters .ms-open--film .ms-button--primary { border-color: #fff; background: #fff; color: #2a211b; }
+  .ms-chapters .ms-open--film .ms-button--outline { border-color: rgba(255, 255, 255, .85); background: rgba(20, 14, 10, .22); color: #fff; }
+  .ms-chapters .ms-open--film .ms-button--outline:hover { background: #fff; color: #2a211b; }
+}
+
+/* The film frame is rounded as one piece: no dark corner behind it. */
+.ms-open--film .ms-open__media { overflow: hidden; border-radius: var(--ms-radius); background: transparent; isolation: isolate; }
+.ms-open__film,
+.ms-open__film .ms-open__video { border-radius: inherit; }
+
+/* ── Phones held sideways: a calm screen asking to turn upright */
+.ms-upright { display: none; }
+@media (orientation: landscape) and (max-height: 500px) and (pointer: coarse) {
+  .ms-upright {
+    position: fixed;
+    z-index: 5000;
+    inset: 0;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 14px;
+    padding: 24px;
+    background: #f6f1e7;
+    color: #2a211b;
+    text-align: center;
+  }
+  .ms-upright__em { display: block; width: 64px; height: 64px; overflow: hidden; }
+  .ms-upright__em img { display: block; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
+  .ms-upright__phone { width: 46px; height: 46px; color: #8a4a23; animation: ms-upright-turn 2.4s ease-in-out infinite; }
+  .ms-upright__title { max-width: 30ch; margin: 0; font: 400 1.25rem/1.35 var(--ms-serif); }
+  html:has(.ms-upright) body { overflow: hidden; }
+}
+@keyframes ms-upright-turn { 0%, 30% { transform: rotate(90deg); } 60%, 100% { transform: rotate(0deg); } }
+@media (prefers-reduced-motion: reduce) { .ms-upright__phone { animation: none; } }
+
+/* ── About: words only, in one calm column */
+.ms-about .ms-belief { grid-template-columns: minmax(0, 1fr); max-width: 880px; gap: 0; background: transparent; }
+.ms-about .ms-belief__copy { max-width: 64ch; }
+.ms-about .ms-belief__text { max-width: none; }
+.ms-about .ms-about__hero { padding-bottom: clamp(36px, 5vw, 64px); }
 
 /* ── 14 Motion & print safety ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {

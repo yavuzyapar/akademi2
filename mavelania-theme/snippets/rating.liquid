@@ -15,6 +15,6 @@
 {%- if rating_value != blank and rating_count_n > 0 -%}
   <{% if link != blank %}a href="{{ link }}"{% else %}p{% endif %} class="ms-rating{% if compact %} ms-rating--compact{% endif %}" aria-label="{{ 'products.rating_label' | t: rating: rating_label, max: rating_max, count: rating_count_n | escape }}">
     <span class="ms-rating__stars" style="--rating:{{ rating_pct }}%" aria-hidden="true"></span>
-    <span class="ms-rating__text" aria-hidden="true">{{ rating_label }} <span>({{ rating_count_n }})</span></span>
+    <span class="ms-rating__text" aria-hidden="true">{{ rating_label }}</span>
   </{% if link != blank %}a{% else %}p{% endif %}>
 {%- endif -%}

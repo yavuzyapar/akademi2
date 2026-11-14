@@ -156,7 +156,8 @@
     "search_long_placeholder": "Search bags, wallets, phone cases…",
     "account_short": "Account",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "turn_upright": "Please turn your phone upright to view Mavelania."
   },
   "home": {
     "discover_collection": "Discover the collection",
