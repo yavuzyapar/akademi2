@@ -238,7 +238,8 @@
     "also_in_shop": "Also in the shop:",
     "atelier_eyebrow": "The atelier",
     "atelier_title": "Every piece, ready to be made yours",
-    "chapters_label": "Chapters"
+    "chapters_label": "Chapters",
+    "open_eyebrow": "Mavelania · Genuine leather"
   },
   "navigation": {
     "accessories": "Accessories",
@@ -470,8 +471,8 @@
     "questions": "Questions about personalization? Write to",
     "faq_q": "Can I personalize my piece?",
     "faq_a": "Yes. Every Mavelania piece can carry your initials or a short name, applied by laser engraving or embossing. Add your text on the product page before adding the piece to your bag, or write to info@mavelania.com for a special request.",
-    "mail_title": "A special request?",
-    "mail_text": "Write to {{ email }} with your text, a sketch or the placement you have in mind.",
+    "mail_title": "Have a style in mind?",
+    "mail_text": "Email {{ email }} with the lettering, placement or sketch you would like. We reply within 24 hours.",
     "mail_subject": "Personalization: {{ title }}",
     "mail_body": "Hello Mavelania, I would like to personalize the {{ title }}."
   },
@@ -517,17 +518,6 @@
     "support_title": "Customer support",
     "support_text": "Questions about a piece or an order? We reply within two business days."
   },
-  "monogram": {
-    "open": "Your initials",
-    "try": "See your initials on every piece",
-    "title": "Your monogram",
-    "text": "Type your initials once and see them on every piece in the shop. They are filled in for you when you personalize a piece.",
-    "label": "Initials",
-    "save": "Show on every piece",
-    "clear": "Remove",
-    "close": "Close",
-    "note": "Preview only. Kept on this device."
-  },
   "house": {
     "made_label": "Made",
     "made_value": "By hand, from genuine leather",
@@ -538,5 +528,29 @@
     "shipping_value": "Worldwide; options and costs at checkout",
     "company_label": "Company",
     "contact_label": "Contact"
+  },
+  "bespoke": {
+    "title": "Tell us how you want it. We will make it yours.",
+    "text": "Every Mavelania piece can carry your initials, a name or a date. Email us with the piece you have chosen and the style you have in mind: the lettering, laser or embossed, the colour and where it should sit. A photo or a quick sketch helps.",
+    "promise": "We reply within 24 hours.",
+    "mail_subject": "Personalization request",
+    "mail_body": "Hello Mavelania,\n\nPiece:\nText or initials:\nStyle (lettering, laser or embossed, colour):\nPlacement:\n\nThank you.",
+    "step1_title": "Choose your piece",
+    "step1_text": "A bag, a wallet or a card holder from the shop.",
+    "step2_title": "Email us your idea",
+    "step2_text": "The text, the style and where it should sit.",
+    "step3_title": "We reply within 24 hours",
+    "step3_text": "We confirm the details with you before your piece is made."
+  },
+  "seal": {
+    "ring": "MAVELANIA · GENUINE LEATHER · MADE BY HAND · ",
+    "title_html": "Genuine leather.<br><em>Nothing else.</em>",
+    "text": "Every bag, wallet and card holder Mavelania makes is cut from genuine leather and finished by hand. It is made to be carried every day, to soften where you hold it and to keep your initials for years.",
+    "fact1_title": "Genuine leather",
+    "fact1_text": "In every piece we make.",
+    "fact2_title": "Made by hand",
+    "fact2_text": "Cut, stitched and edged by hand.",
+    "fact3_title": "Yours alone",
+    "fact3_text": "Initials, a name or a date."
   }
 }

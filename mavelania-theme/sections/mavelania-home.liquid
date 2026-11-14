@@ -11,6 +11,9 @@
   its collection photograph and a headline, then shows that category's
   products in the ledger grid.
 
+  After chapter I the leather seal states the house's one promise; after
+  chapter III, personalization by email (reply within 24 hours).
+
   Prices, stock and colours come from the catalogue; nothing is invented.
 {%- endcomment -%}
 {%- liquid
@@ -33,12 +36,12 @@
       </picture>
     </div>
     <div class="ms-open__copy ms-wrap">
-      <p class="ms-eyebrow">{{ 'general.brand_signature' | t }}</p>
+      <p class="ms-eyebrow">{{ 'home.open_eyebrow' | t }}</p>
       <h1 id="HomeOpenTitle" class="ms-open__title">{{ section.settings.intro_title }}</h1>
       <p class="ms-open__text">{{ section.settings.intro_text }}</p>
       <div class="ms-open__actions">
         <a class="ms-button ms-button--primary" href="#chapter-bags">{{ 'home.cta_discover' | t }}</a>
-        <button class="ms-button ms-button--outline" type="button" data-monogram-open>{% render 'icon', name: 'pen' %} {{ 'home.cta_personalize' | t }}</button>
+        <a class="ms-button ms-button--outline" href="#bespoke">{% render 'icon', name: 'pen' %} {{ 'home.cta_personalize' | t }}</a>
       </div>
       <ol class="ms-open__index" aria-label="{{ 'home.chapters_label' | t | escape }}">
         <li><a href="#chapter-bags"><span>I</span>{{ 'navigation.bags' | t }}</a></li>
@@ -127,7 +130,10 @@
         </div>
       </section>
     {%- endif -%}
+    {%- if i == 1 -%}{% render 'leather-seal', tone: 'coffee' %}{%- endif -%}
   {%- endfor -%}
+
+  {% render 'bespoke', tone: 'green' %}
 
   {%- comment -%} ── Also in the shop ── {%- endcomment -%}
   {%- if collections['phone-cases'].products_count > 0 or collections['accessories'].products_count > 0 -%}
@@ -179,7 +185,7 @@
   "settings": [
     { "type": "header", "content": "Opening" },
     { "type": "text", "id": "intro_title", "label": "Headline", "default": "Crafted with Intention. Made Personal." },
-    { "type": "textarea", "id": "intro_text", "label": "Text", "default": "Handmade leather bags, wallets and card holders — each one ready to carry your initials." },
+    { "type": "textarea", "id": "intro_text", "label": "Text", "default": "Genuine leather bags, wallets and card holders, made by hand at Mavelania and ready to carry your name." },
     { "type": "header", "content": "Chapter I — Bags" },
     { "type": "text", "id": "bags_title", "label": "Headline", "default": "Crafted to Be Remembered." },
     { "type": "textarea", "id": "bags_text", "label": "Text", "default": "Totes, shoulder bags and briefcases, built to carry weight and to soften where your hands rest." },

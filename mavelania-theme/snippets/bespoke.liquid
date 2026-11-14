@@ -1,0 +1,33 @@
+{%- comment -%}
+  Personalization by email: the visitor tells Mavelania what they would like
+  (text, lettering, method, colour, placement) and gets an answer within
+  24 hours. One address only: settings.contact_email.
+
+  Params: tone (optional data-chapter tone), heading ('h2' default)
+{%- endcomment -%}
+{%- liquid
+  assign bs_email = settings.contact_email | default: 'info@mavelania.com'
+  assign bs_subject = 'bespoke.mail_subject' | t
+  assign bs_body = 'bespoke.mail_body' | t
+  assign bs_tag = heading | default: 'h2'
+-%}
+<section class="ms-bespoke" id="bespoke" aria-labelledby="BespokeTitle"{% if tone != blank %} data-chapter="{{ tone }}"{% endif %}>
+  <div class="ms-wrap">
+    <div class="ms-bespoke__card">
+      <div class="ms-bespoke__intro">
+        <p class="ms-eyebrow">{{ 'navigation.personalize' | t }}</p>
+        <{{ bs_tag }} id="BespokeTitle" class="ms-bespoke__title">{{ 'bespoke.title' | t }}</{{ bs_tag }}>
+        <p class="ms-bespoke__text">{{ 'bespoke.text' | t }}</p>
+        <a class="ms-button ms-button--primary ms-bespoke__cta" href="mailto:{{ bs_email }}?subject={{ bs_subject | url_encode | replace: '+', '%20' }}&amp;body={{ bs_body | url_encode | replace: '+', '%20' }}">
+          {% render 'icon', name: 'mail' %} {{ bs_email }}
+        </a>
+        <p class="ms-bespoke__promise">{% render 'icon', name: 'clock' %}<span>{{ 'bespoke.promise' | t }}</span></p>
+      </div>
+      <ol class="ms-bespoke__steps">
+        <li><span>01</span><div><strong>{{ 'bespoke.step1_title' | t }}</strong><p>{{ 'bespoke.step1_text' | t }}</p></div></li>
+        <li><span>02</span><div><strong>{{ 'bespoke.step2_title' | t }}</strong><p>{{ 'bespoke.step2_text' | t }}</p></div></li>
+        <li><span>03</span><div><strong>{{ 'bespoke.step3_title' | t }}</strong><p>{{ 'bespoke.step3_text' | t }}</p></div></li>
+      </ol>
+    </div>
+  </div>
+</section>

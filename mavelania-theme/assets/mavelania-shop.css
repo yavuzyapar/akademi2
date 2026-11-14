@@ -3110,8 +3110,8 @@ button.ms-personal__color:disabled { cursor: default; }
 /* ── 18 Atelier ledger ─────────────────────────────────────────────────
    The house style: each piece is presented like an entry in an atelier
    ledger and a hang tag on the bench. Serial numbers and prices set in a
-   typewriter mono, stitched seams, an eyelet on every tag, and the
-   visitor's own monogram stamped on every photo. Products come first. */
+   typewriter mono, stitched seams and an eyelet on every tag. Products
+   come first. */
 :root {
   --ms-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
   --ms-tag: #f6efe3;
@@ -3223,134 +3223,10 @@ body::after {
 }
 
 .ms-card__quick { right: 10px; bottom: 10px; left: 10px; border-radius: 999px; background: var(--ms-espresso); font-family: var(--ms-sans); }
-/* Touch: the round quick-add sits bottom right, the monogram stamp bottom left. */
+/* Touch: the round quick-add sits bottom right. */
 @media (hover: none), (pointer: coarse), (max-width: 700px) { .ms-card__quick { left: auto; } }
 .ms-card__quick:hover { background: var(--ms-burgundy); }
 .ms-badge { border-radius: 4px; font-size: 10.5px !important; }
-
-/* ── The monogram stamp on photos */
-.ms-stamp {
-  position: absolute;
-  z-index: 2;
-  bottom: 12px;
-  left: 12px;
-  display: grid;
-  min-width: 46px;
-  height: 30px;
-  place-items: center;
-  padding: 0 9px;
-  border-radius: 6px;
-  background: radial-gradient(120% 140% at 30% 20%, #8a5a3c, #4a2b1b);
-  color: #e3c37f;
-  font: 500 13px/1 var(--ms-serif);
-  letter-spacing: .16em;
-  text-shadow: 0 1px 0 #f3dc9a, 0 -1px 0 #5a3a16;
-  box-shadow: 0 4px 10px rgba(43, 29, 21, .3);
-  outline: 1px dashed rgba(240, 214, 170, .55);
-  outline-offset: -4px;
-  pointer-events: none;
-  animation: ms-stamp-in .45s var(--ms-ease) both;
-}
-
-.ms-essential__media .ms-stamp,
-.mv-product-main-media .ms-stamp { bottom: 16px; left: 16px; height: 38px; min-width: 60px; font-size: 16px; }
-
-@keyframes ms-stamp-in { from { opacity: 0; transform: scale(1.4) rotate(-8deg); } to { opacity: 1; transform: none; } }
-
-@media (hover: hover) and (pointer: fine) {
-  .ms-card:hover .ms-stamp { opacity: 0; transition: opacity .2s ease; }
-}
-
-/* ── Monogram pill and panel */
-.ms-mono { position: fixed; z-index: 1250; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); font-family: var(--ms-sans); }
-body[data-page="product"] .ms-mono { bottom: calc(92px + env(safe-area-inset-bottom)); }
-@media (min-width: 901px) { body[data-page="product"] .ms-mono { bottom: calc(96px + env(safe-area-inset-bottom)); } }
-
-.ms-mono__pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 48px;
-  padding: 5px 16px 5px 5px;
-  border: 1px solid rgba(240, 214, 170, .35);
-  border-radius: 999px;
-  background: var(--ms-espresso) url("leather-bg.webp") 0 0 / 420px auto;
-  background-blend-mode: multiply;
-  color: #f3e7d3;
-  font: 500 13px/1 var(--ms-sans);
-  letter-spacing: .03em;
-  box-shadow: 0 12px 28px rgba(43, 29, 21, .3);
-  cursor: pointer;
-  transition: transform .2s var(--ms-ease);
-}
-
-.ms-mono__pill:hover { transform: translateY(-2px); }
-.ms-mono__pill:focus-visible { outline: 2px solid var(--ms-espresso); outline-offset: 3px; }
-
-.ms-mono__seal {
-  display: grid;
-  min-width: 38px;
-  height: 38px;
-  place-items: center;
-  padding: 0 7px;
-  border-radius: 999px;
-  background: radial-gradient(120% 140% at 30% 20%, #8a5a3c, #4a2b1b);
-  color: #e3c37f;
-  font: 500 14px/1 var(--ms-serif);
-  letter-spacing: .1em;
-  text-shadow: 0 1px 0 #f3dc9a, 0 -1px 0 #5a3a16;
-  outline: 1px dashed rgba(240, 214, 170, .55);
-  outline-offset: -4px;
-}
-
-.ms-mono__panel {
-  position: absolute;
-  bottom: calc(100% + 12px);
-  right: 0;
-  display: grid;
-  gap: 10px;
-  width: min(340px, calc(100vw - 32px));
-  padding: 20px;
-  border: 1px solid var(--ms-line);
-  border-radius: 16px;
-  background: var(--ms-bg);
-  box-shadow: 0 24px 50px rgba(43, 29, 21, .22);
-  outline: 1px dashed var(--ms-seam);
-  outline-offset: -7px;
-}
-
-.ms-mono__panel[hidden] { display: none; }
-.ms-mono__close { position: absolute; top: 8px; right: 8px; display: grid; width: 36px; height: 36px; place-items: center; border-radius: 50%; cursor: pointer; }
-.ms-mono__close .ms-icon { width: 18px; height: 18px; }
-.ms-mono__title { margin: 0; padding-right: 30px; color: var(--ms-espresso); font: 500 1.4rem/1.1 var(--ms-serif); }
-.ms-mono__text { margin: 0; color: var(--ms-ink-soft); font: 400 13.5px/1.55 var(--ms-sans); }
-.ms-mono__form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
-.ms-mono__form input {
-  height: 48px;
-  padding: 0 16px;
-  border: 1px solid var(--ms-line-strong);
-  border-radius: 999px;
-  background: var(--ms-surface);
-  color: var(--ms-ink);
-  font: 500 18px/1 var(--ms-mono);
-  letter-spacing: .2em;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.ms-mono__form input:focus { border-color: var(--ms-espresso); outline: 2px solid rgba(43, 29, 21, .1); }
-.ms-mono__foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--ms-muted); font: 400 12px/1.4 var(--ms-sans); }
-.ms-mono__foot button { color: var(--ms-ink-soft); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
-
-/* Phones: a small seal at the bottom right, clear of prices and titles. */
-@media (max-width: 700px) {
-  .ms-mono { right: 12px; left: auto; bottom: calc(12px + env(safe-area-inset-bottom)); }
-  body[data-page="product"] .ms-mono { bottom: calc(84px + env(safe-area-inset-bottom)); }
-  .ms-mono__label { display: none; }
-  .ms-mono__pill { min-height: 0; padding: 4px; }
-  .ms-mono__seal { min-width: 40px; height: 40px; font-size: 13px; }
-  .ms-mono__panel { right: 0; left: auto; }
-}
 
 /* ── Home: products first */
 .ms-atelier { padding-top: clamp(20px, 2.6vw, 34px); }
@@ -3398,7 +3274,6 @@ body[data-page="product"] .ms-mono { bottom: calc(92px + env(safe-area-inset-bot
   .ms-card__price { font-size: 14px; }
   .ms-card__swatches { gap: 5px; }
   .ms-swatch { width: 15px; height: 15px; }
-  .ms-stamp { bottom: 8px; left: 8px; height: 26px; min-width: 40px; font-size: 11.5px; }
 }
 
 /* Selected essentials: whole square photos, numbered like the ledger */
@@ -3470,10 +3345,6 @@ body[data-page="product"] .ms-mono { bottom: calc(92px + env(safe-area-inset-bot
 .mv-mobile-buybar > [data-mobile-price],
 .ms-line__price,
 .ms-cart__line { font-family: var(--ms-mono) !important; letter-spacing: -.01em; }
-
-@media (prefers-reduced-motion: reduce) {
-  .ms-stamp { animation: none; }
-}
 
 /* ── 19 Three chapters: cream, coffee, green ───────────────────────────
    The house identity. The page is one continuous surface whose colour
@@ -3707,6 +3578,128 @@ html:not(.ms-tones) .ms-also { --tone-bg: #2f3b32; --tone-ink: #eef1e8; --tone-s
   .ms-tones body { transition: none; }
   .ms-open__media img { animation: none; }
 }
+
+/* ── 20 Genuine leather, personalization by email, whole photographs ───
+   v13: the monogram preview is gone; personalization is arranged by
+   email with a reply within 24 hours. Photographs are never cropped or
+   moved on phones, and the house line (genuine leather, made by hand)
+   is stated once, large, between the first two chapters. */
+
+/* Cards: "Type · Genuine leather"; on narrow cards the leather line drops
+   below the type so nothing is cut. */
+.ms-card__type { display: flex; flex-wrap: wrap; align-items: baseline; }
+.ms-card__leather { color: var(--ms-burgundy, #6e2a35); }
+@media (max-width: 700px) {
+  .ms-card__dot { display: none; }
+  .ms-card__type { flex-direction: column; gap: 1px; }
+}
+
+/* The opening keeps still: no drift, no zoom. */
+.ms-open__media img { transform: none; animation: none; object-position: center 22%; }
+.ms-chapter__media:hover img { transform: none; }
+
+/* The ribbon no longer touches the opening. */
+.ms-open + .ms-ribbon { margin-top: clamp(16px, 2.2vw, 28px); }
+
+/* Phones: the whole photograph first, uncropped, sized to fit the screen;
+   the words follow below it on the page colour. */
+@media (max-width: 760px) {
+  .ms-open { display: block; min-height: 0; aspect-ratio: auto; overflow: visible; margin: 10px 10px 0; border-radius: 0; background: transparent; color: var(--tone-ink); isolation: auto; }
+  .ms-open::after { display: none; }
+  .ms-open__media { position: relative; inset: auto; width: min(100%, calc((100svh - 185px) * 900 / 1599)); aspect-ratio: 900 / 1599; margin-inline: auto; overflow: hidden; border-radius: var(--ms-radius); box-shadow: 0 18px 40px rgba(20, 14, 10, .18); }
+  .ms-open__media picture,
+  .ms-open__media img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .ms-open__media img { object-fit: cover; object-position: center; }
+  .ms-open__copy { padding: 22px 6px 0; gap: 10px; }
+  .ms-open .ms-eyebrow { color: var(--tone-accent); }
+  .ms-open__title { color: var(--tone-ink); text-shadow: none; }
+  .ms-open__text { color: var(--tone-soft); }
+  .ms-open .ms-button--primary { border-color: var(--ms-espresso); background: var(--ms-espresso); color: #fff; }
+  .ms-open .ms-button--outline { border-color: var(--tone-ink); color: var(--tone-ink); }
+  .ms-open__index { padding-right: 0; border-color: var(--tone-line); }
+  .ms-open__index a { color: var(--tone-ink); }
+  .ms-open__index span { color: var(--tone-accent); }
+}
+
+/* Chapter, house and belief photographs keep their own proportions on
+   phones and tablets: nothing is cut. Portrait photos are held to a
+   sensible width on tablets. */
+@media (max-width: 900px) {
+  .ms-chapter__media,
+  .ms-house__media,
+  .ms-belief__media { aspect-ratio: auto; width: min(100%, 520px); margin-inline: auto; }
+  .ms-chapter--green .ms-chapter__media { width: 100%; }
+  .ms-chapter__media img,
+  .ms-house__media img,
+  .ms-belief__media img { height: auto; object-fit: fill; object-position: center; }
+}
+
+/* ── The leather seal */
+.ms-seal { padding-block: clamp(56px, 8vw, 120px); color: var(--tone-ink); }
+.ms-seal__grid { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); align-items: center; gap: clamp(28px, 5vw, 90px); }
+.ms-seal__mark { position: relative; width: min(100%, 320px); aspect-ratio: 1; margin-inline: auto; color: var(--tone-accent); }
+.ms-seal__ring { display: block; width: 100%; height: 100%; overflow: visible; transform-origin: 50% 50%; animation: ms-seal-turn 70s linear infinite; }
+.ms-seal__ring text { fill: currentColor; font: 500 12.5px var(--ms-mono, monospace); letter-spacing: .14em; }
+.ms-seal__m { position: absolute; inset: 0; display: grid; place-items: center; color: var(--tone-ink); font: 400 clamp(4rem, 8vw, 6.4rem)/1 var(--ms-serif); }
+@keyframes ms-seal-turn { to { transform: rotate(360deg); } }
+.ms-seal .ms-eyebrow,
+.ms-bespoke .ms-eyebrow { color: var(--tone-accent); }
+.ms-seal__title { margin: 8px 0 0; color: var(--tone-ink); font: 400 clamp(2.5rem, 5.6vw, 5rem)/1 var(--ms-serif); letter-spacing: -.015em; }
+.ms-seal__title em { color: var(--tone-accent); font-style: italic; }
+.ms-seal__text { max-width: 54ch; margin: 20px 0 0; color: var(--tone-soft); font: 400 16px/1.7 var(--ms-sans); }
+.ms-seal__facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 30px 0 0; padding: 0; border-top: 1px solid var(--tone-line); list-style: none; }
+.ms-seal__facts li { display: grid; gap: 4px; padding: 16px 18px 0 0; }
+.ms-seal__facts strong { color: var(--tone-ink); font: 500 12px/1.3 var(--ms-mono, monospace); letter-spacing: .12em; text-transform: uppercase; }
+.ms-seal__facts span { color: var(--tone-muted); font: 400 14px/1.5 var(--ms-sans); }
+
+@media (max-width: 760px) {
+  .ms-seal__grid { grid-template-columns: 1fr; gap: 26px; text-align: center; }
+  .ms-seal__mark { width: 210px; }
+  .ms-seal__text { margin-inline: auto; }
+  .ms-seal__facts { grid-template-columns: 1fr; text-align: left; }
+  .ms-seal__facts li { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); align-items: baseline; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--tone-line); }
+}
+
+/* ── Personalization by email */
+.ms-bespoke { padding-block: clamp(40px, 6vw, 88px); color: var(--tone-ink); scroll-margin-top: var(--ms-sticky, 90px); }
+.ms-bespoke__card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
+  padding: clamp(28px, 4.4vw, 60px);
+  border-radius: var(--ms-radius);
+  background: rgba(127, 110, 90, .08);
+  background: color-mix(in srgb, var(--tone-ink) 6%, transparent);
+}
+.ms-bespoke__card::before { position: absolute; inset: 10px; border: 1px dashed var(--tone-seam); border-radius: max(4px, calc(var(--ms-radius) - 6px)); content: ""; pointer-events: none; }
+.ms-bespoke__intro,
+.ms-bespoke__steps { position: relative; }
+.ms-bespoke__title { max-width: 18ch; margin: 8px 0 0; color: var(--tone-ink); font: 400 clamp(1.9rem, 3.4vw, 3rem)/1.08 var(--ms-serif); letter-spacing: -.01em; }
+.ms-bespoke__text { max-width: 56ch; margin: 14px 0 22px; color: var(--tone-soft); font: 400 16px/1.7 var(--ms-sans); }
+.ms-bespoke .ms-button--primary { border-color: var(--tone-ink); background: var(--tone-ink); color: var(--tone-bg); box-shadow: none; text-transform: none; letter-spacing: .02em; }
+.ms-bespoke .ms-button--primary:hover { border-color: var(--tone-accent); background: var(--tone-accent); color: #1d1714; }
+.ms-bespoke__promise { display: flex; align-items: center; gap: 8px; margin: 14px 0 0; color: var(--tone-accent); font: 500 13px/1.4 var(--ms-mono, monospace); letter-spacing: .06em; }
+.ms-bespoke__promise .ms-icon { flex: none; width: 18px; height: 18px; }
+.ms-bespoke__steps { display: grid; margin: 0; padding: 0; list-style: none; }
+.ms-bespoke__steps li { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--tone-line); }
+.ms-bespoke__steps li:first-child { border-top: 1px solid var(--tone-line); }
+.ms-bespoke__steps li > span { color: var(--tone-accent); font: 400 1.7rem/1 var(--ms-serif); }
+.ms-bespoke__steps strong { color: var(--tone-ink); font: 500 15px/1.35 var(--ms-sans); }
+.ms-bespoke__steps p { margin: 4px 0 0; color: var(--tone-soft); font: 400 14px/1.55 var(--ms-sans); }
+
+@media (max-width: 900px) { .ms-bespoke__card { grid-template-columns: 1fr; } }
+@media (max-width: 480px) {
+  .ms-bespoke__card { padding: 26px 20px; }
+  .ms-bespoke__cta { width: 100%; justify-content: center; }
+}
+
+/* Without JS the new sections paint their own tone. */
+html:not(.ms-tones) [data-chapter="coffee"]:is(.ms-seal, .ms-bespoke) { --tone-bg: #3a2a21; --tone-ink: #f4ebdf; --tone-soft: #d9c9b6; --tone-muted: #b39f8b; --tone-line: rgba(244, 235, 223, .16); --tone-accent: #e3c37f; --tone-seam: rgba(227, 195, 127, .4); background: var(--tone-bg); }
+html:not(.ms-tones) [data-chapter="green"]:is(.ms-seal, .ms-bespoke) { --tone-bg: #2f3b32; --tone-ink: #eef1e8; --tone-soft: #cfd6c7; --tone-muted: #a5b0a0; --tone-line: rgba(238, 241, 232, .16); --tone-accent: #d5c08a; --tone-seam: rgba(213, 192, 138, .4); background: var(--tone-bg); }
+
+@media (prefers-reduced-motion: reduce) { .ms-seal__ring { animation: none; } }
 
 /* ── 14 Motion & print safety ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {

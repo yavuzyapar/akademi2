@@ -41,34 +41,30 @@ etiket görünümünü korur. Metinler ve bölüm başlıkları tema düzenleyic
 Sitede tek iletişim adresi vardır: `contact_email` ayarı (info@mavelania.com). Başlık, alt bilgi,
 ürün sayfası, SSS ve Hakkımızda hep bu ayarı okur.
 
-## Marka kurgusu: "Crafted with Intention. Made Personal."
+## Marka kurgusu: "Genuine leather. Nothing else."
 
 - **Navigasyon:** Home · Shop (Bags / Wallets / Card Holders menüsü) · Personalize Your Piece · About Mavelania · Contact.
-- **Slider:** 1. çanta (her zaman ilk), 2. cüzdan, 3. kartlık. Telefon kılıfı slider'da yok.
-  3. slayt, seçilen kartlığın ürün verisinde kişiselleştirme varsa "Your Initials. Your Identity." /
-  "Personalize your piece", yoksa "Small in Size. Considered in Detail." / "Explore card holders" gösterir.
-- **Ana sayfa:** slider → marka cümlesi ve iki düğme → kayan şerit → Selected Essentials (tam 3 ürün)
-  → Make It Yours → Bags / Wallets / Card Holders → (indirim varsa) fırsatlar → Our Philosophy
-  → Who is Mavelania? → hizmet bilgileri → SSS → bülten.
-- **Selected Essentials:** tema düzenleyicide **Home: brand** bölümünden üç ürün seçilir
-  (varsayılan: Odette Leather Tote Bag, Everett Leather Zip Wallet, Lior Leather Card Holder).
+- **Ana sayfa:** açılış görseli (telefonda kırpılmadan, ekrana sığacak boyutta; yazılar görselin altında)
+  → kayan şerit (açılıştan ayrı) → I Çantalar → **deri mührü** ("Genuine leather. Nothing else.",
+  yavaşça dönen MAVELANIA · GENUINE LEATHER · MADE BY HAND mührü) → II Cüzdanlar → III Kartlıklar
+  → **e-posta ile kişiselleştirme** → diğer ürünler → (indirim varsa) fırsatlar → marka ve güven → SSS.
+- **Ürün kartları:** tür satırının yanında / altında her zaman "Genuine leather" yazar.
+- Görseller hiçbir yerde kaymaz ya da yakınlaşmaz; telefonda ve tablette her fotoğraf kendi oranıyla gösterilir.
 
 ## Kişiselleştirme nasıl çalışır
 
-Kişiselleştirme **yalnızca ürün verisi bunu söylüyorsa** gösterilir. Kaynak sırası:
+Monogram önizleme penceresi kaldırıldı. Kişiselleştirme iki yoldan yapılır:
 
-1. Ürün metafield'ı `custom.personalization` (metin), örn. `Laser and Embossed (Silver | Gold | Black)`
-2. Ürün açıklamasındaki `Personalization: ...` satırı (bugün katalogda böyle yazılı)
-3. Ürün etiketi `personalizable` (yöntem/renk listelemeden)
+1. **E-posta ile** (`snippets/bespoke.liquid`): ana sayfada, Hakkımızda'da ve Personalize Your Piece
+   sayfasında. Düğme, hazır bir şablonla (ürün, metin, stil, yer) info@mavelania.com'a e-posta açar.
+   Kartta "We reply within 24 hours." sözü yazar; metni `locales/en.default.json` → `bespoke` altından değiştirebilirsiniz.
+2. **Ürün sayfasında**: "Add personalization" anahtarı ile metin alanı, yöntem ve renk. Seçimler
+   sepete, ödeme sayfasına ve Shopify'daki siparişe **satır özelliği** olarak geçer. Altındaki
+   "Have a style in mind?" bağlantısı ürün adıyla birlikte e-posta açar.
 
-Yöntemler (Laser engraving / Embossing / Stamping) ve renkler (Silver, Gold, Transparent, Black,
-Red, White, Blind) yalnızca bu metinde geçiyorsa sunulur. Müşterinin metni, yöntemi ve rengi
-sepete, ödeme sayfasına ve Shopify'daki siparişe **satır özelliği** olarak geçer.
-
-Bugün katalogda kişiselleştirme yazan ürünler: Heart Leather Bag Charm, Markora Bookmark,
-Lined Leather Desk Mat, Amanda Jewelry Box, Sonat ve F360 telefon kılıfları. **Hiçbir çanta,
-cüzdan veya kartlığın** verisinde kişiselleştirme yok; o ürünlerde sunmak istiyorsanız ürüne
-yukarıdaki metafield'ı ya da açıklama satırını ekleyin, tema otomatik gösterir.
+Yöntem ve renk kaynağı: ürün metafield'ı `custom.personalization` → açıklamadaki `Personalization: ...`
+satırı → varsayılan `Laser and Embossed (Silver | Gold | Transparent | Black | Red)`. Bir üründe
+kişiselleştirmeyi kapatmak için ürüne `no-personalization` etiketi ekleyin.
 
 "Personalize Your Piece" sayfası `/collections/all?view=personalize` adresindedir (sayfa
 oluşturmak gerekmez). İsterseniz `personalize` adlı bir sayfa açıp **page.personalize**

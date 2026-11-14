@@ -1,0 +1,28 @@
+{%- comment -%}
+  The house mark: a leather seal that turns slowly, and one sentence the
+  visitor should leave with: Mavelania is genuine leather, made by hand.
+  Params: tone (data-chapter tone, default coffee)
+{%- endcomment -%}
+<section class="ms-seal" aria-labelledby="SealTitle" data-chapter="{{ tone | default: 'coffee' }}">
+  <div class="ms-wrap ms-seal__grid">
+    <div class="ms-seal__mark" aria-hidden="true">
+      <svg class="ms-seal__ring" viewBox="0 0 200 200" focusable="false">
+        <defs><path id="SealPath" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"></path></defs>
+        <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4"></circle>
+        <circle cx="100" cy="100" r="60" fill="none" stroke="currentColor" stroke-width="1"></circle>
+        <text><textPath href="#SealPath" textLength="485">{{ 'seal.ring' | t }}</textPath></text>
+      </svg>
+      <span class="ms-seal__m">M</span>
+    </div>
+    <div class="ms-seal__copy">
+      <p class="ms-eyebrow">{{ shop.name }}</p>
+      <h2 id="SealTitle" class="ms-seal__title">{{ 'seal.title_html' | t }}</h2>
+      <p class="ms-seal__text">{{ 'seal.text' | t }}</p>
+      <ul class="ms-seal__facts">
+        <li><strong>{{ 'seal.fact1_title' | t }}</strong><span>{{ 'seal.fact1_text' | t }}</span></li>
+        <li><strong>{{ 'seal.fact2_title' | t }}</strong><span>{{ 'seal.fact2_text' | t }}</span></li>
+        <li><strong>{{ 'seal.fact3_title' | t }}</strong><span>{{ 'seal.fact3_text' | t }}</span></li>
+      </ul>
+    </div>
+  </div>
+</section>

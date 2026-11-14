@@ -70,8 +70,9 @@
       {%- if collections['phone-cases'].products_count > 0 -%}<a href="{{ collections['phone-cases'].url }}">{{ 'navigation.phone_cases' | t }}</a>{%- endif -%}
       {%- if collections['accessories'].products_count > 0 -%}<a href="{{ collections['accessories'].url }}">{{ 'navigation.accessories' | t }}</a>{%- endif -%}
     </nav>
-    <button class="ms-button ms-button--primary" type="button" data-monogram-open>{% render 'icon', name: 'pen' %} {{ 'home.cta_personalize' | t }}</button>
   </section>
+
+  {% render 'bespoke', tone: 'coffee' %}
 
   <section class="mv-about-block mv-about-company" aria-labelledby="aboutCompany" data-chapter="cream">
     <h2 id="aboutCompany">{{ 'about.company_title' | t }}</h2>
