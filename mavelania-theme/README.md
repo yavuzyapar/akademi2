@@ -24,19 +24,27 @@ canlı sitedekiyle aynı (masaüstü: amblem 49×49, yazı 180×47; mobil: 42×4
    kontrol edin, memnunsanız **Publish** deyin. Eski tema listede kalır; istediğiniz
    an geri dönebilirsiniz.
 
-## Görsel kimlik: üç bölüm
+## Görsel kimlik: üç dünya, tek mağaza
 
-Ana sayfa üç bölümden oluşur; her bölüm bir ana ürüne ayrılmıştır ve kendi renk dünyasına sahiptir.
-Kaydırdıkça sayfa zemini bir bölümden diğerine yumuşakça geçer (1,1 sn):
+Site üç dünyadan oluşur. Bir dünya yalnızca zemin rengi değildir: başlık bandı, yazı renkleri, ürün etiketleri,
+düğmeler ve köşeler de o dünyaya aittir. Kaydırdıkça hepsi birlikte, yumuşakça (1,1 sn) değişir.
 
-| Bölüm | Ürün | Zemin |
-| --- | --- | --- |
-| I | Çantalar | Krem `#f6f1e8` |
-| II | Cüzdanlar | Kahve `#3a2a21` |
-| III | Kartlıklar | Yeşil `#2f3b32` |
+| Dünya | Ürün | Zemin | Ürün etiketi | Yazı | Vurgu | Başlık bandı | Duruş |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| I | Çantalar | Beyaz `#fbfaf7` | `#ffffff` | `#1b1512` | Bordo `#6e2a35` | `#fbfaf7` | Ferah, yuvarlak köşe (18px), ince başlık |
+| II | Cüzdanlar | Deri (taba) `#834a25` | `#6c3b1c` | `#fff6e8` | Altın `#f4d28f` | `#f1dfc7` | Dikişli, italik başlık, 8px köşe |
+| III | Kartlıklar | Şişe yeşili `#25402f` | `#1b3324` | `#f1f4ea` | Altın `#dcc68a` | `#e2ebdd` | Keskin köşe (3px), büyük harf başlık |
 
-Hakkımızda sayfası da aynı üç renkte üç inançla ilerler. Ürün kartları her zeminde aynı fildişi
-etiket görünümünü korur. Metinler ve bölüm başlıkları tema düzenleyicide **Home: chapters** altındadır.
+- **Ana sayfa ve Hakkımızda** kaydırdıkça dünyadan dünyaya geçer: beyaz → deri → yeşil → beyaz.
+- **Ürün ve koleksiyon sayfaları** doğrudan kendi dünyasında açılır (`layout/theme.liquid`): ürün türü ya da
+  koleksiyon adı "wallet/purse" içeriyorsa deri, "card holder" içeriyorsa yeşil, diğerleri beyaz.
+  Ürün sayfasında form, seçenekler ve küçük yazılar okunaklı kalsın diye içerik o dünyanın açık "kâğıt"
+  tonunda bir tabaka üzerinde durur; zemin, başlık bandı ve "Add to bag" düğmesi dünyanın rengindedir.
+- **Logo ve "Mavelania" yazısı hiçbir dünyada değiştirilmez**; başlık bandı her dünyada logonun okunacağı
+  açık bir tona bürünür.
+- **Altın oran:** bölüm başlıklarında görsel/yazı sütunları 38,2 / 61,8; yazı ölçeği 1 : 1,618 : 2,618 : 4,236;
+  bölüm boşlukları aynı adımlarla.
+- Renkleri değiştirmek için: `assets/mavelania-shop.css` → "23 Three worlds" bloğunun başındaki üç renk grubu.
 
 Sitede tek iletişim adresi vardır: `contact_email` ayarı (info@mavelania.com). Başlık, alt bilgi,
 ürün sayfası, SSS ve Hakkımızda hep bu ayarı okur.
@@ -48,7 +56,7 @@ Sitede tek iletişim adresi vardır: `contact_email` ayarı (info@mavelania.com)
   duvarında, dar ekranda fotoğrafın altında) → kayan şerit → I Çantalar → **Mavelania imzası** (sizin logonuz ve
   "Mavelania" yazınız + "Genuine leather. Nothing else.") → II Cüzdanlar → III Kartlıklar → e-posta ile
   kişiselleştirme → diğer ürünler → marka ve güven → SSS.
-- **Renk akışı:** krem → kahve (Cüzdanlar) → yeşil (Kartlıklar) → doğrudan krem. Yeşilden sonra kahveye dönüş yok.
+- **Renk akışı:** beyaz → deri (Cüzdanlar) → yeşil (Kartlıklar) → doğrudan beyaz.
 - **Az ürün, ön planda kalite:** her bölümde 4 ürün (masaüstünde tek sıra, telefonda 2×2). Tema düzenleyicide
   **Home: chapters → Products per chapter** ile 2–8 arası ayarlanabilir.
 - **Fotoğraflar:** temadaki fotoğraflar orijinal halleriyle kullanılır (yapay netleştirme yok). Daha keskin

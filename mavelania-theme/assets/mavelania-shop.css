@@ -3836,6 +3836,213 @@ html:not(.ms-tones) [data-chapter="green"]:is(.ms-seal, .ms-bespoke) { --tone-bg
 .ms-film--native { aspect-ratio: auto; }
 .ms-film--native video { height: auto; }
 
+/* ── 23 Three worlds (v16) ────────────────────────────────────────────────
+   One shop, three worlds. Bags live in white, wallets in saddle leather,
+   card holders in bottle green. A world is more than a ground colour: the
+   header tint, the text, the product tags, the buttons and the corners
+   all belong to it, and each world has its own bearing (airy and round,
+   stitched and italic, sharp and capital).
+
+   The home and About pages glide from world to world while scrolling;
+   product and collection pages open directly in the world of their
+   category (layout/theme.liquid sets data-tone on <html>).
+
+   Proportions follow the golden ratio: 38.2 / 61.8 columns, a type scale
+   of 1 : 1.618 : 2.618 : 4.236, and spacing in the same steps. */
+
+/* Registered so the whole world, not only the ground, eases over. */
+@property --tone-bg { syntax: '<color>'; inherits: true; initial-value: #fbfaf7; }
+@property --tone-surface { syntax: '<color>'; inherits: true; initial-value: #ffffff; }
+@property --tone-ink { syntax: '<color>'; inherits: true; initial-value: #1b1512; }
+@property --tone-soft { syntax: '<color>'; inherits: true; initial-value: #4d423a; }
+@property --tone-muted { syntax: '<color>'; inherits: true; initial-value: #7a6f66; }
+@property --tone-accent { syntax: '<color>'; inherits: true; initial-value: #6e2a35; }
+@property --tone-header { syntax: '<color>'; inherits: true; initial-value: #fbfaf7; }
+@property --tone-line { syntax: '<color>'; inherits: true; initial-value: rgba(27, 21, 18, .12); }
+@property --tone-seam { syntax: '<color>'; inherits: true; initial-value: rgba(27, 21, 18, .22); }
+@property --tone-radius { syntax: '<length>'; inherits: true; initial-value: 18px; }
+
+/* I — Bags: white */
+:root,
+[data-tone="cream"],
+html:not(.ms-tones) [data-chapter="cream"] {
+  --tone-bg: #fbfaf7;
+  --tone-surface: #ffffff;
+  --tone-ink: #1b1512;
+  --tone-soft: #4d423a;
+  --tone-muted: #7a6f66;
+  --tone-line: rgba(27, 21, 18, .12);
+  --tone-accent: #6e2a35;
+  --tone-seam: rgba(27, 21, 18, .22);
+  --tone-header: #fbfaf7;
+  --tone-paper: #ffffff;
+  --tone-sale: #c62828;
+  --tone-radius: 18px;
+}
+
+/* II — Wallets: saddle leather */
+[data-tone="coffee"],
+html:not(.ms-tones) [data-chapter="coffee"] {
+  --tone-bg: #834a25;
+  --tone-surface: #6c3b1c;
+  --tone-ink: #fff6e8;
+  --tone-soft: #f2dfc4;
+  --tone-muted: #ead3b1;
+  --tone-line: rgba(255, 246, 232, .24);
+  --tone-accent: #f4d28f;
+  --tone-seam: rgba(244, 210, 143, .62);
+  --tone-header: #f1dfc7;
+  --tone-paper: #faf0e0;
+  --tone-sale: #f4d28f;
+  --tone-radius: 8px;
+  --ms-cta: #834a25;
+  --ms-burgundy: #834a25;
+}
+
+/* III — Card holders: bottle green */
+[data-tone="green"],
+html:not(.ms-tones) [data-chapter="green"] {
+  --tone-bg: #25402f;
+  --tone-surface: #1b3324;
+  --tone-ink: #f1f4ea;
+  --tone-soft: #d3dccb;
+  --tone-muted: #a9b9a6;
+  --tone-line: rgba(241, 244, 234, .2);
+  --tone-accent: #dcc68a;
+  --tone-seam: rgba(220, 198, 138, .58);
+  --tone-header: #e2ebdd;
+  --tone-paper: #f1f5ec;
+  --tone-sale: #dcc68a;
+  --tone-radius: 3px;
+  --ms-cta: #25402f;
+  --ms-burgundy: #25402f;
+}
+
+html:not(.ms-tones) [data-chapter] { background-color: var(--tone-bg); }
+
+/* The glide: every colour of the world moves together. */
+html.ms-tones.ms-prop {
+  transition:
+    --tone-bg 1.1s cubic-bezier(.4, 0, .2, 1),
+    --tone-surface 1.1s cubic-bezier(.4, 0, .2, 1),
+    --tone-ink 1.1s cubic-bezier(.4, 0, .2, 1),
+    --tone-soft 1.1s cubic-bezier(.4, 0, .2, 1),
+    --tone-muted 1.1s cubic-bezier(.4, 0, .2, 1),
+    --tone-accent 1.1s cubic-bezier(.4, 0, .2, 1),
+    --tone-header 1.1s cubic-bezier(.4, 0, .2, 1),
+    --tone-line 1.1s cubic-bezier(.4, 0, .2, 1),
+    --tone-seam 1.1s cubic-bezier(.4, 0, .2, 1),
+    --tone-radius 1.1s cubic-bezier(.4, 0, .2, 1);
+}
+.ms-prop body,
+.ms-prop .ms-chapters,
+.ms-prop .ms-house,
+.ms-prop .ms-faq,
+.ms-prop .ms-recent,
+.ms-prop .ms-deals,
+.ms-prop .ms-also { transition: none; }
+
+/* ── The header belongs to the world (the logo itself is never altered) */
+.ms-header { background: var(--tone-header); }
+
+/* ── Product tags take the world's surface, ink and corners */
+.ms-card { border-color: var(--tone-line); border-radius: var(--tone-radius); background: var(--tone-surface); }
+.ms-card__body { border-top-color: var(--tone-seam); background: var(--tone-surface); }
+.ms-card__body::before { color: var(--tone-muted); }
+.ms-card__body::after { border-color: var(--tone-seam); background: var(--tone-bg); }
+.ms-card__type { color: var(--tone-muted); }
+.ms-card__leather,
+.ms-card__pers { color: var(--tone-accent); }
+.ms-card__title,
+.ms-card__price { color: var(--tone-ink); }
+.ms-card__price s,
+.ms-card__more,
+.ms-card__meta { color: var(--tone-muted); }
+.ms-card__price.is-sale .ms-card__price-now,
+.ms-card__saving { color: var(--tone-sale); }
+.ms-card:hover { border-color: var(--tone-seam); }
+
+/* Other surfaces that sit on the ground */
+.ms-seal__mark { background: var(--tone-surface); }
+.ms-filmtag { border-color: var(--tone-line); background: var(--tone-surface); }
+.ms-filmtag:hover { border-color: var(--tone-ink); background: var(--tone-surface); }
+
+/* ── Each world's bearing */
+/* I: airy, round, light */
+.ms-chapter--cream .ms-chapter__title { font-weight: 300; }
+.ms-chapter--cream .ms-button { border-radius: 999px; }
+
+/* II: stitched, italic, warm */
+.ms-chapter--coffee .ms-chapter__title,
+.ms-belief--coffee .ms-belief__title { font-style: italic; }
+.ms-chapter--coffee .ms-button { border-radius: 6px; outline: 1px dashed rgba(131, 74, 37, .55); outline-offset: -5px; }
+[data-tone="coffee"] .ms-card__body { border-top-style: dashed; border-top-width: 2px; }
+
+/* III: sharp, capital, exact */
+.ms-chapter--green .ms-chapter__title,
+.ms-belief--green .ms-belief__title { font-weight: 500; font-size: clamp(1.45rem, 2.5vw, 2.3rem); line-height: 1.18; letter-spacing: .07em; text-transform: uppercase; }
+.ms-chapter--green .ms-button { border-radius: 0; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+.ms-chapter--green .ms-card,
+[data-tone="green"] .ms-collection .ms-card { border-color: var(--tone-seam); }
+
+/* ── Golden ratio: columns, type and spacing */
+.ms-chapter { padding-block: clamp(46px, 6.18vw, 100px) clamp(34px, 3.82vw, 62px); }
+.ms-chapter__num { font-size: clamp(2.618rem, 4.6vw, 4.236rem); }
+.ms-chapter--cream .ms-chapter__title,
+.ms-chapter--coffee .ms-chapter__title { font-size: clamp(1.9rem, 3.5vw, 3.1rem); }
+.ms-chapter__text { font-size: 1rem; line-height: 1.618; }
+
+@media (min-width: 901px) {
+  .ms-chapter__head { grid-template-columns: minmax(0, .382fr) minmax(0, .618fr); gap: clamp(28px, 4.6vw, 76px); }
+  .ms-chapter__media,
+  .ms-chapter__film { justify-self: center; }
+  .ms-chapter__media img { max-width: 100%; }
+  .ms-seal__grid,
+  .ms-house__grid { grid-template-columns: minmax(0, .382fr) minmax(0, .618fr); }
+  .ms-house__media { justify-self: center; }
+  .ms-house__media img { max-width: 100%; }
+  .ms-bespoke__card { grid-template-columns: minmax(0, .618fr) minmax(0, .382fr); }
+  .ms-about .ms-about__hero { grid-template-columns: minmax(0, .618fr) minmax(0, .382fr); }
+}
+
+/* ── Collection pages on the world's ground */
+.ms-shophead__title { color: var(--tone-ink); }
+.ms-shophead .ms-breadcrumb,
+.ms-shophead .ms-breadcrumb a { color: var(--tone-muted); }
+.ms-shophead .ms-breadcrumb [aria-current],
+.ms-shophead .ms-breadcrumb a:hover { color: var(--tone-ink); }
+.ms-collection .ms-catnav a { border-color: var(--tone-line); background: transparent; color: var(--tone-ink); }
+.ms-collection .ms-catnav a:hover { border-color: var(--tone-ink); }
+.ms-collection .ms-catnav a[aria-current="page"] { border-color: var(--tone-ink); background: var(--tone-ink); color: var(--tone-bg); }
+
+/* Bag pages keep the dashed seam fine; on dark tags the colour dots get a ring. */
+.ms-card .ms-swatch { box-shadow: 0 0 0 1px var(--tone-line); }
+.ms-collection .mv-sort label,
+.ms-collection .mv-collection-toolbar,
+.ms-collection .mv-collection-toolbar > a,
+.ms-collection .mv-collection-empty,
+.ms-collection .mv-collection-empty a { color: var(--tone-soft); }
+.ms-collection .mv-collection-toolbar { border-color: var(--tone-line); }
+.ms-collection .mv-collection-editorial { color: var(--tone-soft); }
+
+/* ── Product pages: the world frames a sheet of its own paper, so the
+   form, the options and the small print stay as legible as on white. */
+html:is([data-tone="coffee"], [data-tone="green"]) body[data-page="product"] .ms-product.mv-product {
+  --tone-bg: var(--tone-paper);
+  --tone-surface: #ffffff;
+  --tone-ink: #1b1512;
+  --tone-soft: #4d423a;
+  --tone-muted: #7a6f66;
+  --tone-line: rgba(27, 21, 18, .12);
+  --tone-seam: rgba(27, 21, 18, .22);
+  --tone-accent: var(--ms-cta);
+  --tone-sale: #c62828;
+  width: calc(100% - 2 * clamp(8px, 1.6vw, 24px));
+  margin: clamp(10px, 1.6vw, 22px) auto clamp(26px, 3.82vw, 62px);
+  border-radius: clamp(14px, 1.6vw, 24px);
+  background: var(--tone-paper);
+}
+
 /* ── 14 Motion & print safety ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .ms-hero__slide,

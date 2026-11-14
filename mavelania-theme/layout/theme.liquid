@@ -1,5 +1,22 @@
 <!doctype html>
-<html class="no-js" lang="{{ request.locale.iso_code }}">
+{%- liquid
+  # Three worlds, one shop: bags in white, wallets in leather, card holders
+  # in green. Product and collection pages open in the world of their
+  # category; the home and About pages move between them while scrolling.
+  assign world = 'cream'
+  assign world_key = ''
+  if request.page_type == 'product'
+    assign world_key = product.type | downcase
+  elsif request.page_type == 'collection'
+    assign world_key = collection.handle | append: ' ' | append: collection.title | append: ' ' | append: collection.current_type | downcase
+  endif
+  if world_key contains 'wallet' or world_key contains 'purse'
+    assign world = 'coffee'
+  elsif world_key contains 'card holder' or world_key contains 'card-holder'
+    assign world = 'green'
+  endif
+-%}
+<html class="no-js" lang="{{ request.locale.iso_code }}" data-tone="{{ world }}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">

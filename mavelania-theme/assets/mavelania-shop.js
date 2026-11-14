@@ -1291,6 +1291,7 @@
     chapters.forEach(function (chapter) { observer.observe(chapter); });
     apply(chapters[0].dataset.chapter);
     root.classList.add('ms-tones');
+    if (window.CSS && CSS.registerProperty) root.classList.add('ms-prop');
   })();
 
   /* ── Films ─────────────────────────────────────────────────────────
