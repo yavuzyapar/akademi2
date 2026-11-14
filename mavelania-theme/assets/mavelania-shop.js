@@ -1271,27 +1271,26 @@
     }
   })();
 
-  /* ── Chapters: the page colour glides with the chapter in view ─────
-     Each [data-chapter] names a tone (cream, coffee, green). The tone of
-     the chapter crossing the middle of the screen is set on <html>, and
-     the CSS eases the background and text colours between tones. */
+  /* ── Seams ─────────────────────────────────────────────────────────
+     As each section comes into view a stitched seam is sewn across its
+     top, once. Nothing is hidden or moved; without the script, or with
+     reduced motion, the seams are simply there. */
   (function () {
-    var chapters = $$('[data-chapter]');
-    if (!chapters.length || !('IntersectionObserver' in window)) return;
-    var root = document.documentElement;
-    var current = '';
-    function apply(tone) {
-      if (!tone || tone === current) return;
-      current = tone;
-      root.setAttribute('data-tone', tone);
-    }
+    var parts = $$('.ms-chapter, .ms-seal, .ms-house, .ms-bespoke, .ms-belief');
+    if (!parts.length || !('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.documentElement.classList.add('ms-seams');
     var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) { if (entry.isIntersecting) apply(entry.target.dataset.chapter); });
-    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
-    chapters.forEach(function (chapter) { observer.observe(chapter); });
-    apply(chapters[0].dataset.chapter);
-    root.classList.add('ms-tones');
-    if (window.CSS && CSS.registerProperty) root.classList.add('ms-prop');
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-sewn');
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -18% 0px', threshold: 0 });
+    parts.forEach(function (part) {
+      if (part.getBoundingClientRect().top < window.innerHeight * 0.82) part.classList.add('is-sewn');
+      else observer.observe(part);
+    });
   })();
 
   /* ── Opening film ─────────────────────────────────────────────────
