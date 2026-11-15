@@ -71,7 +71,7 @@
     });
     var list = document.querySelector('[data-favorites-list]');
     if (!list) return;
-    if (!favorites.length) { list.innerHTML = '<p>' + favoriteEmptyLabel + '</p>'; return; }
+    if (!favorites.length) { list.textContent = ''; var empty = document.createElement('p'); empty.textContent = favoriteEmptyLabel; list.appendChild(empty); return; }
     function esc(value) {
       return String(value == null ? '' : value)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')

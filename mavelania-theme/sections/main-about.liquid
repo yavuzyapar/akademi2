@@ -12,7 +12,7 @@
   </header>
 
 
-  {%- comment -%} Three beliefs, each with its photograph, alternating sides. {%- endcomment -%}
+  {%- comment -%} Three beliefs, each beside one short film, alternating sides. One film per screen, never a row of them. {%- endcomment -%}
   {%- for i in (1..3) -%}
     {%- liquid
       case i
@@ -22,21 +22,35 @@
           assign ab_title = 'philosophy.craft_title' | t
           assign ab_text = 'philosophy.craft_text' | t
           assign ab_quote = 'story.p2' | t
+          assign ab_film = 'film-leather'
+          assign ab_wide = true
+          assign ab_handle = ''
         when 2
           assign ab_tone = 'coffee'
           assign ab_num = 'II'
           assign ab_title = 'philosophy.simplicity_title' | t
           assign ab_text = 'philosophy.simplicity_text' | t
           assign ab_quote = 'story.p4' | t
+          assign ab_film = 'film-isadora'
+          assign ab_wide = false
+          assign ab_handle = 'isadora-leather-shoulder-bag'
         else
           assign ab_tone = 'green'
           assign ab_num = 'III'
           assign ab_title = 'philosophy.personal_title' | t
           assign ab_text = 'philosophy.personal_text' | t
           assign ab_quote = 'story.p3' | t
+          assign ab_film = 'film-amelie'
+          assign ab_wide = false
+          assign ab_handle = 'amelie-suede-leather-tote-bag'
       endcase
     -%}
-    <section class="ms-belief ms-belief--{{ ab_tone }}" aria-labelledby="Belief{{ i }}" data-chapter="{{ ab_tone }}">
+    <section class="ms-belief ms-belief--{{ ab_tone }}{% if i == 2 %} ms-belief--flip{% endif %}" aria-labelledby="Belief{{ i }}" data-chapter="{{ ab_tone }}">
+      <div class="ms-belief__film{% if ab_wide %} ms-belief__film--wide{% endif %}">
+        {%- assign ab_product = blank -%}
+        {%- if ab_handle != blank -%}{%- assign ab_product = all_products[ab_handle] -%}{%- endif -%}
+        {% render 'film', name: ab_film, label: ab_title, wide: ab_wide, product: ab_product %}
+      </div>
       <div class="ms-belief__copy">
         <p class="ms-chapter__num" aria-hidden="true">{{ ab_num }}</p>
         <h2 id="Belief{{ i }}" class="ms-belief__title">{{ ab_title }}</h2>

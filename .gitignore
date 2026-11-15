@@ -1,0 +1,9 @@
+# Secrets never go into the repository. Put them in .env (see .env.example).
+.env
+.env.*
+!.env.example
+
+# Tooling
+node_modules/
+*.log
+.DS_Store

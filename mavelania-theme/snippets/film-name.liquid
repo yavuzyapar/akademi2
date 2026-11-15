@@ -1,0 +1,28 @@
+{%- comment -%}
+  Which theme film shows this product. Outputs the asset base name
+  (assets/<name>.mp4 + assets/<name>-poster.webp) or nothing.
+  One list for the whole theme: the home chapters, the product page and
+  About all read it, so a film is only ever shown with its own product.
+
+  Usage: {%- capture film -%}{% render 'film-name', handle: product.handle %}{%- endcapture -%}
+{%- endcomment -%}
+{%- liquid
+  case handle
+    when 'valeria-leather-shoulder-bag'
+      echo 'film-valeria'
+    when 'isadora-leather-shoulder-bag'
+      echo 'film-isadora'
+    when 'amelie-suede-leather-tote-bag'
+      echo 'film-amelie'
+    when 'bennett-leather-zip-wallet'
+      echo 'film-bennett'
+    when 'varen-mechanical-leather-card-holder'
+      echo 'film-varen'
+    when 'lior-leather-card-holder'
+      echo 'film-lior'
+    when 'arden-leather-magnetic-card-holder'
+      echo 'film-arden'
+    when 'soren-leather-card-holde'
+      echo 'film-soren'
+  endcase
+-%}

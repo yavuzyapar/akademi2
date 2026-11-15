@@ -4036,6 +4036,100 @@ body { background-color: var(--tone-bg) !important; }
 .ms-about .ms-belief__text { max-width: none; }
 .ms-about .ms-about__hero { padding-bottom: clamp(36px, 5vw, 64px); }
 
+/* ── 28 Films and features (v22) ──────────────────────────────────────────
+   Each home chapter is one composition: a short film of one piece (its
+   hook first), the chapter's words, and four pieces beside it. About sets
+   one film beside each belief. The product page shows the film of that
+   very piece. Films are portrait 9:16 (one is 16:9), silent, and only the
+   one on screen plays. */
+
+.ms-film { position: relative; overflow: hidden; aspect-ratio: 9 / 16; border-radius: var(--tone-radius, 12px); background: #2a211b; isolation: isolate; }
+.ms-film--wide { aspect-ratio: 16 / 9; }
+.ms-film__video,
+.ms-film video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ms-film .ms-film__toggle { z-index: 3; top: 12px; right: 12px; bottom: auto; }
+.ms-film__icon--pause,
+.ms-film.is-playing .ms-film__icon--play { display: none; }
+.ms-film.is-playing .ms-film__icon--pause { display: grid; }
+
+/* The piece in the film, as a link over its foot */
+.ms-film__tag { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 54px 16px 14px; background: linear-gradient(180deg, rgba(20, 14, 10, 0), rgba(20, 14, 10, .74)); color: #fff; }
+.ms-film__tag-copy { display: grid; gap: 2px; min-width: 0; }
+.ms-film__tag small { color: #f3dca8; font: 500 10.5px/1.3 var(--ms-mono, monospace); letter-spacing: .12em; text-transform: uppercase; }
+.ms-film__tag strong { overflow: hidden; font: 500 15px/1.3 var(--ms-sans); text-overflow: ellipsis; white-space: nowrap; }
+.ms-film__tag .ms-icon { flex: none; width: 18px; height: 18px; margin-bottom: 2px; transition: transform .25s var(--ms-ease); }
+.ms-film__tag:hover .ms-icon { transform: translateX(4px); }
+.ms-film__tag:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
+
+/* ── The chapter as a feature */
+.ms-chapter { padding-block: clamp(44px, 6vw, 92px); }
+.ms-feature { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
+.ms-feature__head { display: grid; gap: 14px; }
+.ms-feature__title .ms-chapter__num { margin: 0 0 2px; }
+.ms-feature__title .ms-chapter__title { max-width: 18ch; margin: 6px 0 0; }
+.ms-feature__lede { display: grid; justify-items: start; gap: 16px; }
+.ms-feature__lede .ms-chapter__text { max-width: 46ch; margin: 0; }
+.ms-feature__media .ms-film,
+.ms-feature__media .ms-chapter__media { width: 100%; margin: 0; }
+.ms-feature__media .ms-chapter__media img { width: 100%; max-width: none; height: auto; max-height: none; }
+.ms-feature__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+/* Phones: words, then the film in a 4:5 window, then the pieces */
+@media (max-width: 699px) {
+  .ms-feature--film .ms-feature__media .ms-film { aspect-ratio: 4 / 5; }
+}
+
+/* Tablets: film beside the words, pieces in one row below */
+@media (min-width: 700px) {
+  .ms-feature { grid-template-columns: clamp(220px, 30vw, 300px) minmax(0, 1fr); grid-template-areas: "media head" "grid grid"; align-items: center; column-gap: clamp(24px, 4vw, 56px); row-gap: clamp(22px, 3vw, 34px); }
+  .ms-chapter--flip .ms-feature { grid-template-columns: minmax(0, 1fr) clamp(220px, 30vw, 300px); grid-template-areas: "head media" "grid grid"; }
+  .ms-feature__media { grid-area: media; }
+  .ms-feature__head { grid-area: head; }
+  .ms-feature__grid { grid-area: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(10px, 1.4vw, 18px); }
+}
+
+/* Wide screens: the film runs the full height beside words and pieces */
+@media (min-width: 1180px) {
+  .ms-feature { grid-template-columns: clamp(290px, 25vw, 372px) minmax(0, 1fr); grid-template-areas: "media head" "media grid"; grid-template-rows: auto 1fr; align-items: start; column-gap: clamp(32px, 4vw, 64px); row-gap: clamp(20px, 2.2vw, 30px); }
+  .ms-chapter--flip .ms-feature { grid-template-columns: minmax(0, 1fr) clamp(290px, 25vw, 372px); grid-template-areas: "head media" "grid media"; }
+  .ms-feature__head { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: end; gap: 12px clamp(20px, 3vw, 48px); padding-bottom: clamp(18px, 2vw, 26px); border-bottom: 1px solid var(--tone-line); }
+  .ms-feature__grid { align-self: start; }
+}
+
+/* ── About: one film beside each belief */
+.ms-about .ms-belief { grid-template-columns: minmax(0, 1fr); align-items: center; max-width: 1180px; gap: 26px; padding-block: clamp(40px, 6vw, 96px); }
+.ms-about .ms-belief__film { width: min(100%, 360px); justify-self: center; }
+.ms-about .ms-belief__film--wide { width: 100%; }
+.ms-about .ms-belief__copy { max-width: 54ch; }
+.ms-about .ms-belief__title { font-size: clamp(2rem, 3.6vw, 3.1rem); line-height: 1.06; }
+@media (max-width: 899px) {
+  .ms-about .ms-belief__film:not(.ms-belief__film--wide) .ms-film { aspect-ratio: 4 / 5; }
+  .ms-about .ms-belief__film { width: 100%; }
+}
+@media (min-width: 900px) {
+  .ms-about .ms-belief { grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: clamp(36px, 6vw, 110px); }
+  .ms-about .ms-belief--flip .ms-belief__film { order: 2; }
+}
+
+/* ── Product page: the film of this piece */
+.ms-pfilm { display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; gap: 22px; margin-top: clamp(28px, 4vw, 56px); padding: clamp(16px, 3vw, 40px); border-radius: var(--ms-radius); background: var(--tone-band); }
+.ms-pfilm__media .ms-film { width: 100%; }
+.ms-pfilm__copy { display: grid; justify-items: start; gap: 10px; }
+.ms-pfilm__copy .ms-eyebrow { color: var(--tone-accent); }
+.ms-pfilm__copy .ms-heading { margin: 0; }
+.ms-pfilm__copy > p:not(.ms-eyebrow) { max-width: 48ch; margin: 0; color: var(--tone-soft); font: 400 16px/1.65 var(--ms-sans); }
+.ms-pfilm__points { display: grid; gap: 8px; margin: 8px 0 0; padding: 0; list-style: none; }
+.ms-pfilm__points li { display: flex; align-items: center; gap: 10px; color: var(--tone-ink); font: 500 14.5px/1.4 var(--ms-sans); }
+.ms-pfilm__points .ms-icon { flex: none; width: 20px; height: 20px; color: var(--tone-accent); }
+.ms-film--native { aspect-ratio: auto; }
+.ms-film--native video { height: auto; }
+@media (max-width: 759px) {
+  .ms-pfilm__media .ms-film:not(.ms-film--native) { aspect-ratio: 4 / 5; }
+}
+@media (min-width: 760px) {
+  .ms-pfilm { grid-template-columns: clamp(220px, 24vw, 320px) minmax(0, 1fr); gap: clamp(28px, 5vw, 80px); }
+}
+
 /* ── 14 Motion & print safety ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .ms-hero__slide,

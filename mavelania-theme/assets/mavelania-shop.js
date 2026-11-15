@@ -41,9 +41,7 @@
       return parts.length > 1 ? parts[0] + decimal + parts[1] : parts[0];
     });
     // The format may carry markup (e.g. <span class=money>); show text only.
-    var holder = document.createElement('div');
-    holder.innerHTML = out;
-    return holder.textContent;
+    return new DOMParser().parseFromString(out, 'text/html').body.textContent;
   }
 
   function icon(name) {
@@ -1326,6 +1324,52 @@
     if (calm) { video.removeAttribute('autoplay'); video.pause(); }
     else if (video.paused) play();
     sync();
+  })();
+
+  /* ── Films ─────────────────────────────────────────────────────────
+     Short silent films. Nothing is downloaded until a film scrolls into
+     view; it then plays muted on a loop and pauses when it leaves the
+     screen, so only the film being looked at is running. The button
+     pauses and resumes. With reduced motion, or when the visitor asked to
+     save data, films wait for the button. */
+  (function () {
+    var films = $$('[data-film]');
+    if (!films.length) return;
+    var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      (navigator.connection && navigator.connection.saveData);
+
+    films.forEach(function (film) {
+      var video = $('[data-film-video]', film);
+      var button = $('[data-film-toggle]', film);
+      if (!video || !button) return;
+      var paused = !!calm; // paused by the visitor (or by preference)
+      video.muted = true;
+
+      function sync() {
+        var playing = !video.paused;
+        film.classList.toggle('is-playing', playing);
+        button.setAttribute('aria-label', playing ? button.dataset.labelPause : button.dataset.labelPlay);
+      }
+      function play() {
+        var promise = video.play();
+        if (promise && promise.catch) promise.catch(function () { sync(); });
+      }
+      video.addEventListener('play', sync);
+      video.addEventListener('pause', sync);
+      button.addEventListener('click', function () {
+        if (video.paused) { paused = false; play(); } else { paused = true; video.pause(); }
+      });
+
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.4) { if (!paused) play(); }
+            else if (!video.paused) video.pause();
+          });
+        }, { threshold: [0, 0.4, 0.75] }).observe(film);
+      }
+      sync();
+    });
   })();
 
   /* Personalization: the "special request" mail carries the product and the
