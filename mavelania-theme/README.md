@@ -80,7 +80,7 @@ hazırlandı. Kapak görseli `hero-film-poster.webp`, video yüklenene kadar gö
 
 ## Ürün videoları
 
-Sekiz ürünün ve bir deri yakın çekiminin kısa, sessiz videosu temadadır (`assets/film-*.mp4`, her birinin
+Yedi ürünün ve bir deri yakın çekiminin kısa, sessiz videosu temadadır (`assets/film-*.mp4`, her birinin
 `-poster.webp` kapak görseli var). Videolar ekrana gelmeden indirilmez; yalnızca ekranda olan oynar, ekrandan
 çıkan durur. Sağ üstteki düğme durdurur. "Hareketi azalt" ya da veri tasarrufu açıksa düğmeyle başlar.
 
@@ -91,7 +91,7 @@ Sekiz ürünün ve bir deri yakın çekiminin kısa, sessiz videosu temadadır (
 | `film-varen` | Varen Mechanical Leather Card Holder | Ana sayfa III Kartlıklar · ürün sayfası |
 | `film-isadora` | Isadora Leather Shoulder Bag | Hakkımızda II · ürün sayfası |
 | `film-amelie` | Amelie Suede Leather Tote Bag | Hakkımızda III · ürün sayfası |
-| `film-lior`, `film-arden`, `film-soren` | Lior, Arden, Soren kartlıkları | Yalnızca kendi ürün sayfaları |
+| `film-arden`, `film-soren` | Arden, Soren kartlıkları | Yalnızca kendi ürün sayfaları |
 | `film-leather` | Deri ve dikiş yakın çekimi | Hakkımızda I |
 
 - **Ana sayfa bölümleri:** her bölüm tek bir kompozisyondur: solda (Cüzdanlar'da sağda) o bölümün videosu,
@@ -100,6 +100,8 @@ Sekiz ürünün ve bir deri yakın çekiminin kısa, sessiz videosu temadadır (
   dosyayı `assets/` içine koyup bu listeye ürünün handle'ını ekleyin. Videoyu Shopify'da ürünün medyasına
   yüklerseniz ürün sayfası onu da kendiliğinden gösterir.
 - **Bölümdeki videoyu değiştirmek / kapatmak:** Tema düzenleyici → **Home: chapters → Films**.
+- **Kart ve para yok:** Yapay zekâ videolarında banka kartları bozuk yazı ve sahte kart logosuyla, paralar da sahte
+  üretiliyor. Kart ya da paranın yakından göründüğü bütün anlar videolardan çıkarıldı; yeni video eklerken buna dikkat edin.
 - **Boyut:** Shopify tema paketi sınırı 50 MB'tır. Paket şu an yaklaşık 35 MB (videolar 32 MB). Yeni video
   eklerken toplamı 45 MB'ın altında tutun; tek dosya 20 MB'ı geçemez.
 
