@@ -1,0 +1,4 @@
+Fraunces — Copyright 2020 The Fraunces Project Authors (github.com/undercasetype/Fraunces)
+Martian Mono — Copyright 2020 The Martian Mono Project Authors (github.com/evilmartians/mono)
+
+Her iki yazı tipi de SIL Open Font License 1.1 ile lisanslıdır: https://openfontlicense.org

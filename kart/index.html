@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Sıkı içerik güvenlik politikası: yalnızca bu klasördeki dosyalar yüklenir. Satır içi betik ve stil yok, üçüncü taraf istek yok. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Yavuz Yapar</title>
+<meta name="description" content="Yavuz Yapar — siber güvenlik. Altı savunma katmanı, tek çekirdek: özgeçmiş.">
+<meta name="theme-color" content="#04070a">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Yavuz Yapar">
+<meta property="og:description" content="Altı katman. Tek çekirdek.">
+<!-- Siteyi yayınladıktan sonra aşağıdaki adresi tam adresle değiştir (örn. https://alanadin.com/og.png); bazı platformlar göreli adresi okumaz. -->
+<meta property="og:image" content="og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/martian-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="stil.css">
+</head>
+<body>
+<!-- Kaynağa baktın. Doğru refleks. Gizli bir şey yok: içerik icerik.js, çizim kart.js. -->
+<main class="stage" id="stage">
+  <div class="well">
+    <div class="card-wrap">
+      <article class="card" id="card" aria-label="Yavuz Yapar erişim kartı">
+        <canvas class="eye" id="eye" aria-hidden="true"></canvas>
+        <div class="face">
+          <header class="hud">
+            <p class="hud-id"><span class="mark" aria-hidden="true"></span><span class="hud-a">ERİŞİM KARTI</span><span class="hud-b" id="hud-name">Yavuz Yapar</span></p>
+            <p class="hud-depth"><span>KATMAN</span> <b id="depth-n">01</b><span>/06</span></p>
+          </header>
+
+          <div class="panels" id="panels">
+            <!-- Betik çalışmazsa görünen yalın hâl; betik bu bölümü icerik.js'ten yeniden kurar. -->
+            <section class="panel is-active">
+              <p class="tag"><span class="tag-n">01</span><span class="tag-rule" aria-hidden="true"></span><span>ÇEVRE</span></p>
+              <h1 class="name"><span class="name-a">Yavuz</span> <span class="name-b">Yapar</span></h1>
+              <p class="role">Siber Güvenlik</p>
+              <p class="lede">Altı katman. Tek çekirdek.</p>
+              <div class="actions">
+                <a class="btn primary" href="cv.pdf" download="Yavuz-Yapar-CV.pdf">CV'yi indir</a>
+              </div>
+            </section>
+          </div>
+
+          <div class="eye-slot" id="eye-slot">
+            <button class="eye-btn" id="eye-btn" type="button" aria-label="Bir katman içeri gir"></button>
+          </div>
+
+          <nav class="rail" aria-label="Katmanlar">
+            <div class="rail-list" id="rail" role="tablist" aria-orientation="horizontal"></div>
+          </nav>
+        </div>
+        <div class="sheen" aria-hidden="true"></div>
+      </article>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <p class="foot-l">Çerez yok · İzleyici yok · Üçüncü taraf istek yok</p>
+    <p class="foot-c" id="hint"><i aria-hidden="true"></i><span>Kaydır, içeri gir</span></p>
+    <p class="foot-r" id="foot-r"><span>↑ ↓ ya da 1–6</span></p>
+  </footer>
+</main>
+
+<script src="icerik.js"></script>
+<script src="ornek.js"></script>
+<script src="kart.js"></script>
+</body>
+</html>
