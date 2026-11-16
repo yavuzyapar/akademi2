@@ -41,6 +41,8 @@
   const SRC = window.KART || {};
   const SAMPLE = window.KART_ORNEK || null;
   const PREVIEW = window.KART_ONIZLEME === true;
+  // Yalnızca önizlemede tanımlıdır: dosyayı tarayıcı yerine önizleme penceresinin kendi kaydetme onayına verir.
+  const BRIDGE = typeof window.KART_KAYDET === 'function' ? window.KART_KAYDET : null;
   let useSample = !!SAMPLE && /[?&]ornek\b/.test(location.search);
 
   const str = v => (typeof v === 'string' ? v.trim() : typeof v === 'number' ? String(v) : '');
@@ -123,7 +125,7 @@
   let hasRedaction = [];
   let running = false, raf = 0, last = 0, clock = 0;   // çizim döngüsü
 
-  const cv = { state: 'wait', hex: '', size: 0 };
+  const cv = { state: 'wait', hex: '', size: 0, buf: null };
   let cvRefs = null;
 
   /* ══════════ Paneller ══════════ */
@@ -145,7 +147,20 @@
   function cvName(d) { return str(d.cv && d.cv.indirmeAdi) || 'cv.pdf'; }
   function fullName(d) { return [str(d.ad), str(d.soyad)].filter(Boolean).join(' ') || 'Yavuz Yapar'; }
   function previewNote() {
-    return PREVIEW && h('p', { class: 'fine' }, 'Önizlemede indirme kapalı. Yayındaki sitede çalışır.');
+    return PREVIEW && h('p', { class: 'fine' }, 'Önizlemede .vcf kaydı kapalı. Yayındaki sitede çalışır.');
+  }
+  function cvClick(e, dive) {
+    if (PREVIEW) { e.preventDefault(); previewSave(); }
+    if (dive) setTimeout(() => go(N - 1), 90);   // kart çekirdeğe iner: ziyaretçi indirdiği dosyanın özetini görür
+  }
+  async function previewSave() {
+    const say = t => { if (cvRefs) cvRefs.fine.textContent = t; };
+    if (!BRIDGE || !cv.buf) { say('Önizlemede indirme kullanılamıyor. Yayındaki sitede çalışır.'); return; }
+    say('Kaydetme onayı bekleniyor.');
+    const r = await BRIDGE(cvName(content()), new Blob([cv.buf], { type: 'application/pdf' }));
+    say(r === 'tamam' ? 'Dosya kaydedildi.'
+      : r === 'declined' ? 'Kaydetme iptal edildi.'
+      : 'Önizlemede indirme kullanılamıyor. Yayındaki sitede çalışır.');
   }
 
   const BUILD = [
@@ -160,9 +175,7 @@
         str(d.konum) && h('span', { class: 'role-loc' }, str(d.konum))),
       str(d.slogan) && h('p', { class: 'lede' }, str(d.slogan)),
       h('div', { class: 'actions' },
-        // İndirme başlar, kart da çekirdeğe iner: ziyaretçi indirdiği dosyanın özetini görür.
-        h('a', { class: 'btn primary', href: cvHref(d), download: cvName(d),
-          onclick: e => { if (PREVIEW) e.preventDefault(); setTimeout(() => go(N - 1), 90); } }, 'CV’Yİ İNDİR', icon('down')),
+        h('a', { class: 'btn primary', href: cvHref(d), download: cvName(d), onclick: e => cvClick(e, true) }, 'CV’Yİ İNDİR', icon('down')),
         h('button', { class: 'btn', type: 'button', onclick: () => go(cur + 1) }, 'İÇERİ GİR', icon('dive'))),
     ],
 
@@ -260,18 +273,17 @@
       const code = h('code', { 'aria-label': 'SHA-256 özeti' });
       const state = h('span', { class: 'hash-state', role: 'status' }, 'Özet hesaplanıyor');
       const copyBtn = h('button', { class: 'btn', type: 'button', onclick: copyHash }, h('span', null, 'ÖZETİ KOPYALA'), icon('copy'));
-      cvRefs = { meta, code, state, copyBtn };
+      const fine = h('p', { class: 'fine' }, 'İndirdiğin dosyanın SHA-256 özeti buradakiyle aynıysa dosya yolda değişmemiştir.');
+      cvRefs = { meta, code, state, copyBtn, fine };
       queueMicrotask(paintCv);
       return [
         tagLine(L), head(L),
         h('p', { class: 'file' }, h('span', null, cvName(d)), meta),
         h('dl', { class: 'hash' }, h('dt', { class: 'k' }, 'SHA-256'), h('dd', null, code, state)),
         h('div', { class: 'actions' },
-          h('a', { class: 'btn primary', href: cvHref(d), download: cvName(d) }, 'CV’Yİ İNDİR', icon('down')),
+          h('a', { class: 'btn primary', href: cvHref(d), download: cvName(d), onclick: e => cvClick(e, false) }, 'CV’Yİ İNDİR', icon('down')),
           copyBtn),
-        PREVIEW
-          ? previewNote()
-          : h('p', { class: 'fine' }, 'İndirdiğin dosyanın SHA-256 özeti buradakiyle aynıysa dosya yolda değişmemiştir.'),
+        fine,
       ];
     },
   ];
@@ -330,6 +342,7 @@
       const buf = await res.arrayBuffer();
       const dig = new Uint8Array(await crypto.subtle.digest('SHA-256', buf));
       cv.state = 'ok'; cv.size = buf.byteLength; cv.hex = hex(dig);
+      if (BRIDGE) cv.buf = buf;
       setSigil(dig);
     } catch (_) {
       cv.state = 'none';
@@ -372,6 +385,7 @@
   }
 
   function saveVcard() {
+    if (PREVIEW) return;
     const d = content();
     const esc = s => s.replace(/([\\;,])/g, '\\$1').replace(/\r?\n/g, '\\n');
     const lines = ['BEGIN:VCARD', 'VERSION:3.0',
