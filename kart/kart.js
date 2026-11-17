@@ -18,9 +18,9 @@
   const N = LAYERS.length;
   const TAU = Math.PI * 2;
 
-  const SURF = [10, 14, 19];      // stil.css'teki --surface ile aynı
-  const VOID = [3, 5, 8];
-  const COLD = [157, 178, 198];
+  const SURF = [16, 34, 56];      // stil.css'teki --surface ile aynı
+  const VOID = [5, 12, 22];
+  const COLD = [132, 184, 236];   // stil.css'teki --cold ile aynı
   const AMBER = [255, 180, 84];
   const BONE = [236, 232, 223];
   const DENY = [255, 106, 85];
@@ -171,7 +171,7 @@
     const bg = document.createElementNS(ns, 'rect');
     bg.setAttribute('width', '100%'); bg.setAttribute('height', '100%'); bg.setAttribute('fill', '#ece8df');   // açık zemin, koyu modül: her tarayıcı okur
     const dots = document.createElementNS(ns, 'path');
-    dots.setAttribute('d', path); dots.setAttribute('fill', '#0a0e13');
+    dots.setAttribute('d', path); dots.setAttribute('fill', '#0b1626');
     svg.append(bg, dots);
     const cap = h('span', { class: 'qr-cap' }, 'TELEFONDA AÇ');
     return h('button', {
@@ -1440,7 +1440,7 @@
   stage.addEventListener('wheel', e => {
     if (e.ctrlKey) return;                       // yakınlaştırma tarayıcıya kalsın
     e.preventDefault();
-    const now = performance.now(), gap = now - wLast;
+    const now = e.timeStamp || performance.now(), gap = now - wLast;   // olayın oluştuğu an: çizim gecikse de aralıklar doğru ölçülür
     wLast = now;
     const raw = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
     const d = raw * (e.deltaMode === 1 ? 32 : e.deltaMode === 2 ? 400 : 1);
