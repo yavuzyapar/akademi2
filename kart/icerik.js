@@ -18,6 +18,11 @@ window.KART = {
   konum: "",                          // örn. "İstanbul"
   slogan: "Altı katman. Tek çekirdek.", // tek cümle; kendini anlatan bir cümleyle değiştirebilirsin
 
+  /* ── QR kod ────────────────────────────────────────────── */
+  // Karttaki QR bu adrese götürür. Boş bırakırsan sayfanın o an açık olduğu adresi kullanır;
+  // siteyi yayınladıktan sonra kendi adresini yazman en sağlamı. Örn. "https://yavuzyapar.com"
+  adres: "",
+
   /* ── 06 ÇEKİRDEK · Özgeçmiş ────────────────────────────── */
   cv: {
     dosya: "cv.pdf",                   // bu klasördeki PDF'in adı

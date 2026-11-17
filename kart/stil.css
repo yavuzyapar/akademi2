@@ -97,6 +97,7 @@ body{
   --label:max(9px,.98cqw);
   --pad:4.4cqw;
   --kcol:8.2em;
+  --qr:clamp(58px,8.6cqw,94px);
   position:absolute;inset:0;z-index:1;display:grid;
   grid-template-columns:minmax(0,1.06fr) minmax(0,1fr);
   grid-template-rows:auto minmax(0,1fr) auto;
@@ -117,6 +118,7 @@ body{
     --label:clamp(9px,2.45cqw,11px);
     --pad:6.4cqw;
     --kcol:6.6em;
+    --qr:clamp(62px,23cqw,104px);
     grid-template-columns:minmax(0,1fr);
     grid-template-rows:auto minmax(0,41fr) minmax(0,59fr) auto;
   }
@@ -242,6 +244,42 @@ a.v:hover,a.v:focus-visible{color:var(--amber)}
 :focus-visible{outline:1px solid var(--amber);outline-offset:3px}
 .btn.primary:focus-visible{outline-offset:4px;clip-path:none}
 .fine{margin:0;max-width:62ch;font-size:calc(var(--label)*var(--f));line-height:1.6;color:var(--dim);letter-spacing:.02em}
+
+/* ── Kapak: metin solda, QR etiketi yanında ── */
+.panel.is-cover{
+  display:grid;grid-template-columns:fit-content(calc(100% - var(--qr) - var(--body)*1.5)) auto;justify-content:start;align-content:center;align-items:start;justify-items:start;
+  column-gap:calc(var(--body)*1.5);row-gap:calc(var(--body)*1.15*var(--f));
+  grid-template-areas:"tag tag" "name name" "role qr" "lede qr" "acts qr";   /* geniş kartta QR düğmelerin yanında */
+}
+.is-cover > .tag{grid-area:tag}
+.is-cover > .name{grid-area:name}
+.is-cover > .role{grid-area:role}
+.is-cover > .lede{grid-area:lede}
+.is-cover > .actions{grid-area:acts}
+.is-cover > .qr{grid-area:qr;align-self:end;justify-self:end}
+@container card (max-aspect-ratio:1/1){ /* dik kartta QR ismin yanında, kimlik kartındaki fotoğraf gibi */
+  .panel.is-cover{grid-template-columns:minmax(0,1fr) auto;justify-content:stretch;grid-template-areas:"tag tag" "name qr" "role role" "lede lede" "acts acts"}
+  .is-cover > .qr{align-self:center}
+}
+@container card (min-aspect-ratio:1/1) and (max-height:420px){ /* basık kartta da öyle */
+  .panel.is-cover{grid-template-columns:minmax(0,1fr) auto;justify-content:stretch;grid-template-areas:"tag tag" "name qr" "role role" "lede lede" "acts acts"}
+  .is-cover > .qr{align-self:center}
+}
+
+/* QR etiketi: açık zemin üstünde koyu modüller, her telefon kamerası okusun diye */
+.qr{
+  appearance:none;border:0;background:none;padding:0;margin:0;cursor:pointer;width:var(--qr);
+  display:flex;flex-direction:column;align-items:center;gap:.6em;
+  font:inherit;font-size:calc(var(--label)*.9*var(--f));font-weight:500;font-stretch:75%;letter-spacing:.14em;color:var(--dim);
+  -webkit-tap-highlight-color:transparent;
+}
+.qr-code{
+  display:block;width:var(--qr);height:var(--qr);border-radius:3px;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(236,232,223,.55),0 0 0 4px var(--surface),0 0 0 5px var(--line),0 14px 30px -12px rgba(0,0,0,.9);
+}
+.qr-cap{white-space:nowrap;transition:color .25s}
+.qr:hover .qr-cap,.qr:focus-visible .qr-cap{color:var(--bone)}
+.qr:focus-visible{outline-offset:8px}
 
 /* ── Çekirdek paneli ── */
 .file{

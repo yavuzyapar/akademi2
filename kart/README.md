@@ -14,12 +14,26 @@ Her şey **`icerik.js`** dosyasında. Tırnakların içini doldur, kaydet, sayfa
 
 | Katman | Ne gösterir | `icerik.js` alanı |
 | --- | --- | --- |
-| 01 Çevre | Ad, unvan, tek cümle | `ad`, `soyad`, `unvan`, `konum`, `slogan` |
+| 01 Çevre | Ad, unvan, tek cümle, QR kod | `ad`, `soyad`, `unvan`, `konum`, `slogan`, `adres` |
 | 02 Ağ | İletişim kanalları, rehbere ekle (.vcf) | `baglantilar` |
 | 03 Uç nokta | Yetkinlikler | `yetkinlikler` |
 | 04 Uygulama | Projeler | `calismalar` |
 | 05 Veri | Deneyim, eğitim, sertifika | `kayit` |
 | 06 Çekirdek | CV indirme ve özet | `cv` |
+
+## QR kod
+
+Kapaktaki QR, telefonla okutulunca bu kartı açar. Hangi adrese götüreceği şöyle belirlenir:
+
+1. `icerik.js` içindeki `adres` doluysa o adres.
+2. Boşsa sayfanın o an açık olduğu adres.
+
+Yani siteyi yayınladığında QR kendiliğinden doğru adresi gösterir; yine de `adres` alanına kendi
+adresini yazman en sağlamı (örneğin `https://yavuzyapar.com`). Bilgisayarında `localhost` üzerinden
+açtığında QR da `localhost`u gösterir, bu yüzden başkasının telefonunda çalışmaz.
+
+QR'a tıklamak adresi panoya kopyalar. Kod bu klasördeki `qr.js` ile üretilir (dış kütüphane yok);
+açık zemin üstünde koyu modüller kullanılır ki her telefon kamerası okusun.
 
 ## Sağdaki düzenek
 
@@ -40,7 +54,12 @@ gezegen dişli takımı (diş sayıları 186 / 204 / 9, dönüş oranları buna 
 makettir; site gerçek bir güvenlik duvarı ya da IDS çalıştırmaz. Çerçevenin altındaki yazı o halkanın
 o anki durumunu gösterir.
 
-Kare hızı düşerse tuval çözünürlüğü kendiliğinden bir kademe iner. İşletim sisteminde
+Düzeneğin üzerindeki canlı işaretler: çekirdekten dışa yayılan nabız dalgası, çerçevenin iki yanında
+o halkaya giren ve o halkada düşen paketlerin çubuk grafiği, ağ hatlarında akan trafik, uç noktaların
+yük çizgileri, kepenge çarpan paketten sıçrayan kıvılcım ve IDS'in yakaladığı paketteki hedef kilidi.
+Hepsi maketin o anki durumundan çizilir, rastgele süs değildir.
+
+Kare hızı düşerse önce tuval çözünürlüğü kademe kademe iner, yetmezse çizim sadeleşir. İşletim sisteminde
 "hareketi azalt" açıksa düzenek durağan çizilir.
 
 ## Yerelde açmak

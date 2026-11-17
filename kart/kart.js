@@ -147,6 +147,44 @@
   function cvHref(d) { return safeUrl(str(d.cv && d.cv.dosya)) || 'cv.pdf'; }
   function cvName(d) { return str(d.cv && d.cv.indirmeAdi) || 'cv.pdf'; }
   function fullName(d) { return [str(d.ad), str(d.soyad)].filter(Boolean).join(' ') || 'Yavuz Yapar'; }
+  // QR'ın götürdüğü adres: icerik.js'teki adres, yoksa sayfanın o an açık olduğu adres.
+  function cardUrl(d) {
+    const u = str(d.adres) || str(window.KART_ADRES);
+    if (/^https?:\/\//i.test(u)) return u;
+    return location.href.split(/[?#]/)[0].replace(/index\.html$/, '');
+  }
+  function qrTile(d) {
+    const url = cardUrl(d), m = window.KartQR ? window.KartQR.matrix(url) : null;
+    if (!m) return null;
+    const n = m.length, q = 3, ns = 'http://www.w3.org/2000/svg';   // q: çevredeki boş pay (modül)
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${n + q * 2} ${n + q * 2}`);
+    svg.setAttribute('class', 'qr-code'); svg.setAttribute('shape-rendering', 'crispEdges'); svg.setAttribute('aria-hidden', 'true');
+    let path = '';
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+      if (!m[y][x]) continue;
+      let len = 1;
+      while (x + len < n && m[y][x + len]) len++;
+      path += `M${x + q} ${y + q}h${len}v1h-${len}z`;
+      x += len - 1;
+    }
+    const bg = document.createElementNS(ns, 'rect');
+    bg.setAttribute('width', '100%'); bg.setAttribute('height', '100%'); bg.setAttribute('fill', '#ece8df');   // açık zemin, koyu modül: her tarayıcı okur
+    const dots = document.createElementNS(ns, 'path');
+    dots.setAttribute('d', path); dots.setAttribute('fill', '#0a0e13');
+    svg.append(bg, dots);
+    const cap = h('span', { class: 'qr-cap' }, 'TELEFONDA AÇ');
+    return h('button', {
+      class: 'qr', type: 'button', title: url,
+      'aria-label': 'QR kod: telefonla okutunca bu kart açılır. Tıklayınca adres kopyalanır.',
+      onclick: async () => {
+        let ok = false;
+        try { await navigator.clipboard.writeText(url); ok = true; } catch (_) {}
+        cap.textContent = ok ? 'KOPYALANDI' : 'KOPYALANAMADI';
+        setTimeout(() => { cap.textContent = 'TELEFONDA AÇ'; }, 2000);
+      },
+    }, svg, cap);
+  }
   function previewNote() {
     return PREVIEW && h('p', { class: 'fine' }, 'Önizlemede .vcf kaydı kapalı. Yayındaki sitede çalışır.');
   }
@@ -178,6 +216,7 @@
       h('div', { class: 'actions' },
         h('a', { class: 'btn primary', href: cvHref(d), download: cvName(d), onclick: e => cvClick(e, true) }, 'CV’Yİ İNDİR', icon('down')),
         h('button', { class: 'btn', type: 'button', onclick: () => go(cur + 1) }, 'İÇERİ GİR', icon('dive'))),
+      qrTile(d),
     ],
 
     /* 02 AĞ · Bağlantılar */
@@ -295,6 +334,7 @@
     panels = LAYERS.map((L, i) => {
       const el = h('section', { class: 'panel', id: 'p-' + i, role: 'tabpanel', 'aria-labelledby': 't-' + i });
       el.style.setProperty('--tone', css(RAMP[i]));
+      if (i === 0) el.classList.add('is-cover');
       el.append(...BUILD[i](d, L, (hiddenCount) => { hasRedaction[i] = hiddenCount > 0; }).filter(Boolean));
       el.hidden = i !== cur;
       return el;
@@ -486,7 +526,7 @@
   //   06 kasa              iris diyaframı ve CV dosyasının SHA-256 özeti
   // Halkalar B oranıyla iç içe oturur; kamera daldıkça dıştaki büyüyüp geçer, içteki çerçeveye yerleşir.
   const eye = { cx: 0, cy: 0, R: 0, w: 0, h: 0, ex: 0, ey: 0 };
-  let dpr = 1, dprCap = 2;      // dprCap: yavaş cihazda kademeli düşer (bkz. frame)
+  let dpr = 1, dprCap = 2, lite = false;   // yavaş cihazda önce çözünürlük kademeli düşer, yetmezse sade çizime geçilir (bkz. frame)
   const B = 1.39, Q = 1 / B;   // bir halkanın dış/iç yarıçap oranı
   const ROLL = TAU / 12;       // her katmanda düzenek bir port aralığı kadar döner
 
@@ -513,7 +553,7 @@
     eye.w = w; eye.h = hh;
     canvas.width = Math.round(w * dpr); canvas.height = Math.round(hh * dpr);
     const sw = slot.offsetWidth, sh = slot.offsetHeight;
-    eye.R = Math.max(18, (Math.min(sw, sh) / 2 - 19) / B);   // 19 px: çerçevedeki yazıtların payı
+    eye.R = Math.max(18, (Math.min(sw, sh) / 2 - 22) / B);   // 22 px: çerçevedeki yazıtların ve göstergelerin payı
     eye.cx = slot.offsetLeft + sw / 2;
     eye.cy = slot.offsetTop + sh / 2;
     const d = Math.round(eye.R * B * 2);
@@ -544,12 +584,22 @@
     beam: .9, carrier: 0,
     quar: new Float32Array(NEP), blink: new Float32Array(NEP),
     pin: new Float32Array(NPIN), pinFrom: new Float32Array(NPIN), pinTo: new Float32Array(NPIN),
-    plug: 0, plugFrom: 0, shearFlash: 0,
+    plug: 0, plugFrom: 0, shearFlash: 0, authGlow: 0, beamHot: 0, winFlash: 0,
     rotA: 0, rotAt: 0, rotB: 0, rotBt: 0, rotT: 0,
   };
   const auth = { ph: 0, t: 0, ok: true, idle: 3, pkt: null };   // 0 bekliyor · 1 pimler diziliyor · 2 göbek dönüyor · 3 dağılıyor · 4 reddedildi
   let perm = HEX2.split('');                                  // iç rotorun karışık alfabesi
   let nodes = [[], [], [], []];                               // bölgelerdeki ağ düğümleri
+  const DUTY = [.5, -.7, .9, -.6, .8, -1.1];                  // her halkanın çalışma göstergesi (rad/sn)
+  const WAVE = 3.4;                                           // sistemin nabzı: çekirdekten dışa yayılan dalganın periyodu (sn)
+  let lastBeat = -1;
+  // Telemetri: her halkaya giren ve o halkada düşen paketlerin son saniyelerdeki sayısı. Çerçevenin iki yanındaki çubuklar bunu gösterir.
+  const HB = 26, HSTEP = .45;
+  const tele = { inn: LAYERS.map(() => new Float32Array(HB)), out: LAYERS.map(() => new Float32Array(HB)), i: 0, t: 0 };
+  // Anlık olay efektleri: kıvılcım, geçiş işareti, hedef kilidi, halka darbesi
+  const fx = [];
+  const addFx = o => { if (fx.length < 110) { o.life = 0; fx.push(o); } };
+  const flow = (z, tr, i, t) => mod(t * (.1 + tr * .03 + z * .012) * ((tr + z) % 2 ? 1 : -1) + i * .5 + z * .17 + tr * .31, 1);   // hatlarda akan trafiğin konumu
 
   /* ── Düzeneğin verisi: adın ve CV dosyasının özetinden türetilir ── */
   function seedBytes(s) {
@@ -655,8 +705,8 @@
   function plate(k, r, ro, t) {
     const tone = RAMP[k], base = mix(SURF, tone, .075);
     annulus(r, ro);
-    if (ctx.createConicGradient) {
-      const g = ctx.createConicGradient(SHEEN[k] + t * .025, 0, 0);
+    if (ctx.createConicGradient && !lite) {
+      const g = ctx.createConicGradient(SHEEN[k] + t * .06, 0, 0);
       const hi = css(mix(base, BONE, .1)), md = css(base), lo = css(mix(base, VOID, .6));
       g.addColorStop(0, hi); g.addColorStop(.125, md); g.addColorStop(.25, lo); g.addColorStop(.375, md);
       g.addColorStop(.5, hi); g.addColorStop(.625, md); g.addColorStop(.75, lo); g.addColorStop(.875, md); g.addColorStop(1, hi);
@@ -705,7 +755,7 @@
           ctx.beginPath(); ctx.arc(0, 0, U(.61), a0 + .035, a1 - .035); ctx.stroke();
         }
       }
-      const half = Math.sin(gap / 2) * U(.53) * .84;
+      const half = Math.sin(gap / 2) * U(.53) * .84, chase = Math.floor(t * 7) % 12;   // kural taraması: ışık portları sırayla dolaşır
       for (let i = 0; i < 12; i++) {
         const f = mech.portFlash[i];
         ctx.save(); ctx.rotate(pa(i));
@@ -718,7 +768,11 @@
           const col = mix(c, DENY, f), s0 = U(.45) - f * w * .03, len = w * .15;
           ctx.fillStyle = rgba(col, .5 + .5 * f); ctx.fillRect(s0, -half, len, half * 2);
           ctx.strokeStyle = rgba(col, .95); ctx.lineWidth = lw * .8; ctx.strokeRect(s0, -half, len, half * 2);
-          if (w > 30) { ctx.fillStyle = rgba(c, .45); ctx.beginPath(); ctx.arc(U(.855), 0, Math.max(.7, w * .017), 0, TAU); ctx.fill(); }
+          if (w > 30) {
+            const on = f > .1 ? 2 : i === chase ? 1 : 0;
+            ctx.fillStyle = on === 2 ? rgba(DENY, 1) : on ? rgba(BONE, .95) : rgba(c, .45);
+            ctx.beginPath(); ctx.arc(U(.855), 0, Math.max(.7, w * .017) * (on ? 1.5 : 1), 0, TAU); ctx.fill();
+          }
         }
         ctx.restore();
       }
@@ -736,19 +790,27 @@
       ctx.strokeStyle = rgba(c, .62); ctx.lineWidth = lw * .8;
       if (g.pitch > 2) { ctx.beginPath(); gearPath(g.Rb, NR, g.h, 0, true); ctx.stroke(); } else ring(g.Rb);
       ctx.strokeStyle = rgba(c, .3); ctx.lineWidth = lw * .7; ring(U(.215));
-      for (let z = 0; z < 4; z++) { // bölge panelleri, iletim hatları ve düğümler
+      for (let z = 0; z < 4; z++) { // bölge panelleri, iletim hatları, akan trafik ve düğümler
         const a0 = -TAU / 8 + z * TAU / 4 + .1, a1 = a0 + TAU / 4 - .2;
         sector(U(.31), U(.75), a0 - .035, a1 + .035);
         ctx.fillStyle = rgba(mix(SURF, c, .13), .9); ctx.fill();
         ctx.strokeStyle = rgba(c, .3); ctx.lineWidth = lw * .7; ctx.stroke();
         ctx.strokeStyle = rgba(c, .4); ctx.lineWidth = lw * .8;
         for (const tr of TRACK) { ctx.beginPath(); ctx.arc(0, 0, U(tr), a0, a1); ctx.stroke(); }
+        if (w > 14) for (let tr = 0; tr < 3; tr++) for (let i = 0; i < 2; i++) {
+          const dir = (tr + z) % 2 ? 1 : -1, f = flow(z, tr, i, t), a = a0 + f * (a1 - a0);
+          ctx.strokeStyle = rgba(BONE, .9 * Math.sin(f * Math.PI)); ctx.lineWidth = lw * 1.6;
+          ctx.beginPath(); ctx.arc(0, 0, U(TRACK[tr]), a - dir * .075, a, dir < 0); ctx.stroke();
+        }
         if (w > 16) {
           const s = Math.max(1.1, w * .038);
           for (const nd of nodes[z]) {
             const a = a0 + nd.f * (a1 - a0), rad = U(TRACK[nd.tr]), x = Math.cos(a) * rad, y = Math.sin(a) * rad;
+            const hit = Math.max(0, 1 - Math.min(Math.abs(flow(z, nd.tr, 0, t) - nd.f), Math.abs(flow(z, nd.tr, 1, t) - nd.f)) / .05);   // trafik düğümden geçerken yanar
+            ctx.strokeStyle = rgba(c, .4); ctx.lineWidth = lw * .8;
             if (nd.link && nd.tr < 2) { const r2 = U(TRACK[nd.tr + 1]); ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(Math.cos(a) * r2, Math.sin(a) * r2); ctx.stroke(); }
-            ctx.fillStyle = rgba(c, .92); ctx.fillRect(x - s / 2, y - s / 2, s, s);
+            const sz = s * (1 + hit * .7);
+            ctx.fillStyle = rgba(mix(c, BONE, hit), .92); ctx.fillRect(x - sz / 2, y - sz / 2, sz, sz);
           }
         }
       }
@@ -764,10 +826,10 @@
       ctx.strokeStyle = rgba(c, .34); ctx.lineWidth = lw * .7; ring(U(.27));
       for (let j = 0; j < 18; j++) {
         sector(U(.29), U(.74), bm - (j + 1) * .045, bm - j * .045 + .004);
-        ctx.fillStyle = rgba(c, .22 * (1 - j / 18)); ctx.fill();
+        ctx.fillStyle = rgba(mix(c, DENY, mech.beamHot), (.22 + .2 * mech.beamHot) * (1 - j / 18)); ctx.fill();
       }
       const p0 = P(bm, U(.27)), p1 = P(bm, U(.77));
-      ctx.strokeStyle = rgba(BONE, .95); ctx.lineWidth = lw * 1.4;
+      ctx.strokeStyle = rgba(mix(BONE, DENY, mech.beamHot), .95); ctx.lineWidth = lw * (1.4 + mech.beamHot);
       ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
       ctx.fillStyle = rgba(BONE, 1); ctx.beginPath(); ctx.arc(p0[0], p0[1], Math.max(1, w * .04), 0, TAU); ctx.fill();
       ctx.strokeStyle = rgba(c, .28); ctx.lineWidth = lw * .7; ring(U(.915));
@@ -794,10 +856,20 @@
         sector(U(.17) + off, U(.69) + off, -cell / 2 + g2, cell / 2 - g2);
         ctx.fillStyle = rgba(mix(SURF, col, .2 + .14 * lit), .97); ctx.fill();
         ctx.strokeStyle = rgba(col, .68 + .32 * lit); ctx.lineWidth = lw; ctx.stroke();
-        if (w > 20) {
-          ctx.strokeStyle = rgba(col, .34); ctx.lineWidth = lw * .7;
-          ctx.beginPath(); ctx.arc(0, 0, U(.44) + off, -cell / 2 + g2 * 2.2, cell / 2 - g2 * 2.2); ctx.stroke();
-          ctx.beginPath(); ctx.arc(0, 0, U(.55) + off, -cell / 2 + g2 * 2.2, cell / 2 - g2 * 2.2); ctx.stroke();
+        if (w > 20) { // iki çizgi cihazın anlık yükünü gösterir
+          const b0 = -cell / 2 + g2 * 2.2, b1 = cell / 2 - g2 * 2.2;
+          ctx.strokeStyle = rgba(col, .3); ctx.lineWidth = lw * .7;
+          ctx.beginPath(); ctx.arc(0, 0, U(.44) + off, b0, b1); ctx.stroke();
+          ctx.beginPath(); ctx.arc(0, 0, U(.55) + off, b0, b1); ctx.stroke();
+          if (!s) {
+            const l1 = .5 + .5 * Math.sin(t * (.7 + (i % 7) * .13) + i * 1.9), l2 = .5 + .5 * Math.sin(t * (.45 + (i % 5) * .17) + i * 2.6);
+            ctx.strokeStyle = rgba(mix(col, BONE, .4), .92); ctx.lineWidth = lw * 1.4;
+            ctx.beginPath(); ctx.arc(0, 0, U(.44) + off, b0, b0 + (b1 - b0) * l1); ctx.stroke();
+            ctx.beginPath(); ctx.arc(0, 0, U(.55) + off, b0, b0 + (b1 - b0) * l2); ctx.stroke();
+          } else { // karantina kelepçesi
+            ctx.strokeStyle = rgba(DENY, .55 + .45 * Math.sin(t * 9)); ctx.lineWidth = lw * 1.5;
+            ctx.beginPath(); ctx.arc(0, 0, U(.74) + off, -cell / 2 + g2, cell / 2 - g2); ctx.stroke();
+          }
         }
         ctx.fillStyle = s > 0 ? rgba(DENY, 1) : lit > .05 ? rgba(BONE, .5 + .5 * lit) : rgba(c, .7);
         ctx.beginPath(); ctx.arc(U(.27) + off, 0, Math.max(.8, w * .03) * (1 + lit * .4), 0, TAU); ctx.fill();
@@ -830,7 +902,7 @@
       }
       ctx.save(); // göbek: anahtar pimleri
       ctx.rotate(auth.ph === 2 || auth.ph === 4 ? mech.plug - mech.plugFrom : 0);
-      ctx.fillStyle = rgba(mix(c, AMBER, .4), .96);
+      ctx.fillStyle = rgba(mix(mix(c, AMBER, .4), BONE, mech.authGlow * .7), .96);
       for (let i = 0; i < NPIN; i++) {
         const k0 = U(.17), k1 = U(SHEAR + mech.pin[i] - .014);
         ctx.save(); ctx.rotate(i * cell); ctx.fillRect(k0, -half * .74, k1 - k0, half * 1.48); ctx.restore();
@@ -848,13 +920,17 @@
     },
 
     // 05 VERİ · şifreleme: iç içe iki rotor. Üstteki pencerede dış rotor düz harfi, iç rotor şifreli karşılığını gösterir.
-    (r, w, c) => {
+    (r, w, c, t) => {
       const U = u => r + u * w, lw = Math.max(.6, w / 44), cell = TAU / NCELL, px = w * .2;
       const tracks = [[.52, .85, mech.rotA, HEX2], [.14, .47, mech.rotB, perm]];
       for (const [u0, u1, p, glyphs] of tracks) {
         const mid = U((u0 + u1) / 2);
         ctx.save(); ctx.rotate(p * cell);
         ctx.strokeStyle = rgba(c, .5); ctx.lineWidth = lw * .8; ring(U(u0)); ring(U(u1));
+        if (glyphs === HEX2) { // anahtar akışı: rotorun üzerinde dolaşan ışık
+          const ka = (Math.floor(t * 11) % NCELL) * cell - Math.PI / 2;
+          sector(U(u0), U(u1), ka - cell / 2, ka + cell / 2); ctx.fillStyle = rgba(c, .22); ctx.fill();
+        }
         ctx.strokeStyle = rgba(c, .42); ctx.lineWidth = lw * .7; ctx.beginPath();
         ticks(U(u0), U(u0 + .07), NCELL, -Math.PI / 2 + cell / 2); ticks(U(u1 - .07), U(u1), NCELL, -Math.PI / 2 + cell / 2); ctx.stroke();
         if (px >= 5) {
@@ -867,13 +943,14 @@
         ctx.restore();
       }
       const hw = Math.sin(cell / 2) * U(.5) * 1.3; // okuma penceresi
-      ctx.strokeStyle = rgba(AMBER, .95); ctx.lineWidth = lw * 1.3;
+      if (mech.winFlash > .03) { ctx.fillStyle = rgba(AMBER, .32 * mech.winFlash); ctx.fillRect(-hw, -U(.89), hw * 2, U(.89) - U(.1)); }   // her adımda pencere yanar
+      ctx.strokeStyle = rgba(AMBER, .95); ctx.lineWidth = lw * (1.3 + mech.winFlash * .8);
       ctx.strokeRect(-hw, -U(.89), hw * 2, U(.89) - U(.1));
       ctx.fillStyle = rgba(AMBER, .95); ctx.beginPath(); ctx.moveTo(0, -U(.9)); ctx.lineTo(-w * .05, -U(.99)); ctx.lineTo(w * .05, -U(.99)); ctx.closePath(); ctx.fill();
     },
 
     // 06 ÇEKİRDEK · bütünlük: kasa yuvası. Çizgiler CV dosyasının SHA-256 özetinin 64 basamağı; sürgüler çekirdeğe varınca çekilir.
-    (r, w, c) => {
+    (r, w, c, t) => {
       const U = u => r + u * w, lw = Math.max(.6, w / 44);
       ctx.strokeStyle = rgba(AMBER, .9); ctx.lineWidth = Math.max(.8, w * .03); ctx.beginPath();
       for (let i = 0; i < 64; i++) {
@@ -881,7 +958,15 @@
         ctx.moveTo(cs * a0, sn * a0); ctx.lineTo(cs * a1, sn * a1);
       }
       ctx.stroke();
-      ctx.strokeStyle = rgba(c, .4); ctx.lineWidth = lw * .7; ring(U(.44));
+      const vi = Math.floor(t * 18) % 64; // özetin basamakları sırayla yeniden doğrulanır
+      ctx.strokeStyle = rgba(BONE, .95); ctx.lineWidth = Math.max(1, w * .04); ctx.beginPath();
+      for (let j = 0; j < 3; j++) {
+        const i = (vi + j) % 64, g = i / 64 * TAU - Math.PI / 2, cs = Math.cos(g), sn = Math.sin(g), a0 = U(.07), a1 = U(.12 + sig.nib[i] / 15 * .26);
+        ctx.moveTo(cs * a0, sn * a0); ctx.lineTo(cs * a1, sn * a1);
+      }
+      ctx.stroke();
+      ctx.strokeStyle = rgba(c, .5); ctx.lineWidth = lw * .8;
+      ctx.setLineDash([w * .09, w * .07]); ctx.lineDashOffset = -t * w * .22; ring(U(.44)); ctx.setLineDash([]); ctx.lineDashOffset = 0;
       const ext = 1 - easeInOut(clamp01(pos - (N - 2)));
       for (let j = 0; j < 6; j++) {
         const b0 = U(.5), b1 = U(.66 + .28 * ext), hh = w * .13;
@@ -927,7 +1012,7 @@
     ctx.fillStyle = g; ctx.fillRect(-b - 2, -b - 2, b * 2 + 4, b * 2 + 4);
     if (lvl < .01) return;
     const rc = b * .92;
-    const K = clamp(Math.round(rc / 5), 6, 26), SEG = clamp(Math.round(rc * 1.1), 56, 200);
+    const K = clamp(Math.round(rc / 5), 6, lite ? 14 : 26), SEG = clamp(Math.round(rc * 1.1), 56, 200);
     const breathe = 1 + Math.sin(t * 1.15) * .018;
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
@@ -1002,7 +1087,7 @@
     } else if (A.ph === 2) {
       const p = clamp01(A.t / .5);
       mech.plug = mech.plugFrom + TAU / NPIN * easeInOut(p);
-      if (p >= 1) { if (A.pkt) { mech.ok++; A.pkt.hold = false; } scatter(); }
+      if (p >= 1) { if (A.pkt) { mech.ok++; A.pkt.hold = false; } mech.authGlow = 1; addFx({ type: 'ringp', k: 3, u: SHEAR, ttl: .6, col: AMBER }); scatter(); }
     } else if (A.ph === 4) {
       const p = clamp01(A.t / .45);
       mech.plug = mech.plugFrom + Math.sin(p * Math.PI * 5) * .03 * (1 - p);
@@ -1018,10 +1103,24 @@
     mech.carrier += dt * .05;
     mech.led *= Math.exp(-dt * 3);
     mech.shearFlash *= Math.exp(-dt * 2.6);
+    mech.authGlow *= Math.exp(-dt * 2.2);
+    mech.beamHot *= Math.exp(-dt * 2.4);
+    mech.winFlash *= Math.exp(-dt * 5);
     for (let i = 0; i < 12; i++) mech.portFlash[i] *= Math.exp(-dt * 3.4);
-    for (let i = 0; i < NEP; i++) { mech.blink[i] *= Math.exp(-dt * 5); if (mech.quar[i] > 0) mech.quar[i] = Math.max(0, mech.quar[i] - dt); }
+    for (let i = 0; i < NEP; i++) {
+      mech.blink[i] *= Math.exp(-dt * 5);
+      if (mech.quar[i] > 0) { mech.quar[i] -= dt; if (mech.quar[i] <= 0) { mech.quar[i] = 0; mech.blink[i] = 1; } }   // karantinadan çıkan cihaz bir kez yanar
+    }
     mech.rotT += dt;
-    if (mech.rotT > .9) { mech.rotT = 0; mech.rotAt += 1; if (mech.rotAt % 8 === 0) mech.rotBt -= 1; }
+    if (mech.rotT > .9) { mech.rotT = 0; mech.rotAt += 1; mech.winFlash = 1; if (mech.rotAt % 8 === 0) mech.rotBt -= 1; }
+    tele.t += dt;
+    if (tele.t >= HSTEP) { tele.t -= HSTEP; tele.i = (tele.i + 1) % HB; for (let k = 0; k < N; k++) { tele.inn[k][tele.i] = 0; tele.out[k][tele.i] = 0; } }
+    for (let i = fx.length - 1; i >= 0; i--) {
+      const f = fx[i];
+      f.life += dt;
+      if (f.type === 'spark') { f.x += f.vx * dt; f.y += f.vy * dt; f.vx *= Math.exp(-dt * 4); f.vy *= Math.exp(-dt * 4); }
+      if (f.life >= f.ttl) fx.splice(i, 1);
+    }
     const kr = 1 - Math.exp(-dt * 16);
     mech.rotA += (mech.rotAt - mech.rotA) * kr; mech.rotB += (mech.rotBt - mech.rotB) * kr;
     stepAuth(dt);
@@ -1031,7 +1130,7 @@
   const pk = [];
   let spawnAcc = 0, scanT = 5;
   const scanQ = [];
-  function kill(p, denied) { p.st = denied ? 1 : 2; p.life = 0; p.hold = false; }
+  function kill(p, denied) { p.st = denied ? 1 : 2; p.life = 0; p.hold = false; if (denied || p.k === N - 1) tele.out[p.k][tele.i]++; }
   function spawnPacket(port, fast) {
     const k0 = clamp(Math.ceil(pos - .3), 0, N - 1);
     const p = { k: k0, u: 1.05, a: Math.random() * TAU, v: fast ? 2.4 : 1.05 + Math.random() * .35, fate: 9, st: 0, life: 0, hold: false, enc: false, port: -1, seen: false, ping: 0, authd: false, fast: !!fast };
@@ -1043,6 +1142,7 @@
     else if (fast) p.fate = 1;                             // tarama, açık portu bulsa da IDS'e yakalanır
     else for (let j = Math.max(1, k0); j <= 3; j++) if (Math.random() < DROP[j]) { p.fate = j; break; }
     pk.push(p);
+    tele.inn[k0][tele.i]++;
   }
   function stepPackets(dt) {
     const k0 = clamp(Math.ceil(pos - .3), 0, N - 1);
@@ -1064,7 +1164,7 @@
       if (p.k === 1) {
         if (p.fate === 1 && !p.fast) v = Math.min(v, .45);
         if (p.u < .8 && p.u > .24 && Math.abs(angDiff(beam, p.a)) < .08) { // ışın paketin üzerinden geçti
-          if (p.fate === 1) { mech.alerts++; kill(p, true); continue; }
+          if (p.fate === 1) { mech.alerts++; mech.beamHot = 1; addFx({ type: 'lock', k: 1, u: p.u, a: p.a, ttl: .7 }); kill(p, true); continue; }
           if (!p.seen) { p.seen = true; p.ping = 1; }
         }
         if (p.fate === 1 && p.u < .36) v = 0;              // şüpheli paket taranana kadar bekletilir
@@ -1073,19 +1173,26 @@
       const u0 = p.u;
       p.u -= v * dt;
       if (p.k === 0) {
-        if (p.fate === 0 && p.u <= .62) { p.u = .62; mech.portFlash[p.port] = 1; mech.denied++; kill(p, true); continue; }
+        if (p.fate === 0 && p.u <= .62) {
+          p.u = .62; mech.portFlash[p.port] = 1; mech.denied++;
+          const r0 = rIn(0), w0 = r0 * (B - 1), rad = r0 + .62 * w0, sp = w0 * 2.2;   // kepenge çarpan paketten kıvılcım
+          for (let j = 0; j < 5; j++) { const a = p.a + (Math.random() - .5) * 1.5, v = sp * (.5 + Math.random()); addFx({ type: 'spark', x: Math.cos(p.a) * rad, y: Math.sin(p.a) * rad, vx: Math.cos(a) * v, vy: Math.sin(a) * v, ttl: .3 + Math.random() * .3 }); }
+          kill(p, true); continue;
+        }
         if (p.port === OPEN && u0 > .5 && p.u <= .5) mech.led = 1;
       } else if (p.k === 2 && u0 > .45 && p.u <= .45) {
         const m = mod(Math.round((p.a - r2) / cell), NEP);
         mech.blink[m] = 1;
-        if (p.fate === 2) { mech.quar[m] = QT; kill(p, true); continue; }
+        if (p.fate === 2) { mech.quar[m] = QT; addFx({ type: 'lock', k: 2, u: .45, a: p.a, ttl: .7 }); kill(p, true); continue; }
       } else if (p.k === 3 && !p.authd && p.u <= SHEAR + .1) {
         p.u = SHEAR + .1;                                  // kilit meşgulse sırada bekler
         if (auth.ph === 0) { p.authd = true; p.hold = true; startAuth(p.fate !== 3, p); }
-      } else if (p.k === 4 && u0 > .5 && p.u <= .5) { p.enc = true; mech.rotAt += 3; }
+      } else if (p.k === 4 && u0 > .5 && p.u <= .5) { p.enc = true; mech.rotAt += 3; mech.winFlash = 1; }
       if (p.u <= 0) {
         if (p.k >= N - 1) { pulse = Math.min(1, pulse + .4); kill(p, false); continue; }   // kasaya ulaştı
         p.k++; p.u = 1;
+        tele.inn[p.k][tele.i]++;
+        addFx({ type: 'arc', k: p.k, a: p.a, ttl: .45 });   // bir halkayı geçti
       }
     }
   }
@@ -1116,8 +1223,74 @@
     ctx.restore();
   }
 
+  function drawFx() {
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (const f of fx) {
+      const q = f.life / f.ttl, a = 1 - q;
+      if (f.type === 'spark') {
+        ctx.strokeStyle = rgba(mix(DENY, BONE, a * .5), a); ctx.lineWidth = 1.1;
+        ctx.beginPath(); ctx.moveTo(f.x, f.y); ctx.lineTo(f.x - f.vx * .045, f.y - f.vy * .045); ctx.stroke();
+        continue;
+      }
+      const rel = f.k - pos;
+      if (rel < -.5) continue;
+      const r = rIn(f.k), w = r * (B - 1), al = ringAlpha(rel) * a;
+      if (f.type === 'arc') { // geçiş işareti: paketin aştığı sınırda kısa bir yay
+        ctx.strokeStyle = rgba(BONE, .85 * al); ctx.lineWidth = Math.max(1, w * .035);
+        ctx.beginPath(); ctx.arc(0, 0, r * B, f.a - .09 - q * .1, f.a + .09 + q * .1); ctx.stroke();
+      } else if (f.type === 'ringp') { // kilit açıldı: kesme hattından iki yana yayılan halka
+        const rad = r + f.u * w;
+        ctx.strokeStyle = rgba(f.col, .75 * al); ctx.lineWidth = Math.max(1, w * .045) * (1 - q * .6);
+        ring(rad + q * w * .12); ring(rad - q * w * .12);
+      } else { // hedef kilidi: yakalanan paketin çevresinde daralan köşeler
+        const rad = r + f.u * w, x = Math.cos(f.a) * rad, y = Math.sin(f.a) * rad;
+        const s = (15 - 9 * easeOut(Math.min(1, q * 2.4))) * clamp(w / 40, .45, 1.2), c2 = s * .45;
+        ctx.strokeStyle = rgba(DENY, al); ctx.lineWidth = 1.2; ctx.beginPath();
+        for (const sx of [-1, 1]) for (const sy of [-1, 1]) {
+          ctx.moveTo(x + sx * s, y + sy * (s - c2)); ctx.lineTo(x + sx * s, y + sy * s); ctx.lineTo(x + sx * (s - c2), y + sy * s);
+        }
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+  // Her halkanın iç kenarında dönen çalışma göstergesi
+  function duty(k, r, w, t) {
+    const a = DUTY[k] * t + k * 1.3, dir = DUTY[k] > 0 ? 1 : -1, rad = r + Math.max(1.2, w * .022), col = mix(RAMP[k], BONE, .55);
+    ctx.lineWidth = Math.max(1, w * .03);
+    for (let s = 0; s < 6; s++) {
+      const a0 = a - dir * s * .1, a1 = a - dir * (s + 1) * .1;
+      ctx.strokeStyle = rgba(col, .9 * (1 - s / 6));
+      ctx.beginPath(); ctx.arc(0, 0, rad, Math.min(a0, a1), Math.max(a0, a1)); ctx.stroke();
+    }
+  }
+  // Çerçevenin iki yanındaki canlı çubuklar: solda bu halkaya giren, sağda bu halkada düşen paketler (çekirdekte: ulaşanlar)
+  function drawTelemetry(k, ro, px, al) {
+    const base = ro + 5, hmax = Math.max(7, px * 1.2), span = .5, frac = tele.t / HSTEP, core = k === N - 1;
+    const sides = [[Math.PI, tele.inn[k], RAMP[k], 'GELEN'], [0, tele.out[k], core ? AMBER : DENY, core ? 'ULAŞAN' : 'DÜŞEN']];
+    let mx = 3;
+    for (const sd of sides) for (let i = 0; i < HB; i++) mx = Math.max(mx, sd[1][i]);
+    for (const [mid, arr, col, name] of sides) {
+      const left = mid !== 0;
+      ctx.strokeStyle = rgba(col, .3 * al); ctx.lineWidth = .8;
+      ctx.beginPath(); ctx.arc(0, 0, base, mid - span, mid + span); ctx.stroke();
+      ctx.strokeStyle = rgba(col, .92 * al); ctx.lineWidth = Math.max(1.2, ro * .0078); ctx.beginPath();
+      for (let j = 0; j < HB - 1; j++) { // en yeni çubuk üst uçta; zamanla aşağı kayar
+        const v = arr[mod(tele.i - j, HB)];
+        if (!v) continue;
+        const f = (j + frac) / (HB - 1), a = left ? Math.PI + span - f * span * 2 : -span + f * span * 2;
+        const cs = Math.cos(a), sn = Math.sin(a), r1 = base + 2 + v / mx * hmax;
+        ctx.moveTo(cs * (base + 2), sn * (base + 2)); ctx.lineTo(cs * r1, sn * r1);
+      }
+      ctx.stroke();
+      if (ro > 150) arcText(name, base + hmax * .55, left ? Math.PI + span + .115 : -span - .115, px * .72, col, .62 * al, false);
+    }
+  }
+
   const LABEL = LAYERS.map(L => `${L.n} · ${L.name} · ${L.ctl}`);
   function readout(k) { // çerçevenin altındaki canlı gösterge: o halkanın şu anki durumu
+    if (intro < 1) return `DÜZENEK BAŞLATILIYOR · ${Math.min(N, Math.floor(intro * (N + 1.5)))}/${N} HALKA`;
     switch (k) {
       case 0: return `1 PORT AÇIK · 11 KAPALI · ${mech.denied} RET`;
       case 1: return `4 BÖLGE · IDS TARIYOR · ${mech.alerts} UYARI`;
@@ -1135,7 +1308,8 @@
     ctx.clearRect(0, 0, w, hh);
     const lvl = coreLevel * (1 + pulse * .4);
     const near = Math.pow(Q, N - 1 - pos);                 // çekirdeğe yakınlık (çekirdekte 1)
-    const iris = clamp01(irisAt(pos) * easeOut(clamp01((intro - .62) / .38)) + pulse * .025);
+    const hunt = RM ? 0 : Math.sin(t * 1.7) * .011 + Math.sin(t * 4.3) * .004;   // diyafram hafifçe ayar arar
+    const iris = clamp01(irisAt(pos) * easeOut(clamp01((intro - .62) / .38)) + pulse * .025 + hunt * coreLevel);
     ctx.save();
     ctx.translate(cx, cy);
 
@@ -1155,8 +1329,9 @@
       const rot = (k === 2 ? ring2Rot() : rotOf(k)) + spin;
       ctx.save();
       ctx.globalAlpha = al;
-      halo(r * B);
+      if (!lite) halo(r * B);
       plate(k, r, r * B, t);
+      if (!RM) duty(k, r, r * (B - 1), t);
       ctx.rotate(rot);
       RING[k](r, r * (B - 1), RAMP[k], t, rot);
       ctx.restore();
@@ -1164,7 +1339,7 @@
     }
 
     // 3) paketler
-    if (!RM) drawPackets();
+    if (!RM) { drawPackets(); drawFx(); }
 
     // 4) çekirdeğin ışığı: iristen sızar, iç halkalara vurur; çekirdeğe yaklaştıkça karta taşar
     if (lvl > .01) {
@@ -1182,6 +1357,16 @@
       ctx.globalCompositeOperation = 'source-over';
     }
 
+    // nabız: çekirdekten dışa yayılan dalga, sistemin saat vuruşu
+    const ws = (t % WAVE) / 1.5;
+    if (!RM && ws < 1 && lvl > .01) {
+      const r0 = r5 * .85, rw = r0 * Math.pow(R * B / r0, easeOut(ws));
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.strokeStyle = `rgba(255,196,120,${(.5 * (1 - ws) * lvl).toFixed(3)})`; ctx.lineWidth = Math.max(1, rw * .011); ring(rw);
+      ctx.strokeStyle = `rgba(255,170,80,${(.1 * (1 - ws) * lvl).toFixed(3)})`; ctx.lineWidth = rw * .08; ring(rw * .955);
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
     // 5) çerçevedeki yazıtlar: üstte katman ve kontrol, altta o halkanın canlı durumu
     const veil = easeOut(clamp01(intro * 1.8));
     for (let k = 0; k < N; k++) {
@@ -1190,6 +1375,7 @@
       const ro = rIn(k) * B, px = clamp(ro * .05, 7.5, 10.5), al = a * a * veil * asm[k], rr = ro + px * 1.2;
       arcText(LABEL[k], rr, -Math.PI / 2 + rel * .5, px, RAMP[k], .95 * al, false);
       arcText(readout(k), rr, Math.PI / 2 + rel * .5, px * .9, mix(RAMP[k], BONE, .2), .72 * al, true);
+      if (!RM && intro >= 1) drawTelemetry(k, ro, px, al);
     }
     ctx.restore();
   }
@@ -1209,6 +1395,8 @@
     for (let k = 0; k < N; k++) asm[k] = easeOut(clamp01((intro * (N + 2.4) - k) / 2.4));   // halkalar dıştan içe yerine oturur
     coreLevel = easeOut(clamp01((intro - .6) / .4));
     pulse *= Math.exp(-dt * 2.4);
+    const beat = Math.floor(clock / WAVE);
+    if (beat !== lastBeat) { lastBeat = beat; if (intro >= 1) pulse = Math.min(1, pulse + .28); }   // nabız atarken çekirdek parlar
     stepMech(dt);
     stepPackets(dt);
 
@@ -1228,9 +1416,12 @@
     last = now; clock += dt;
     // Kare süresi uzun süre 38 ms'nin üstünde kalırsa (yaklaşık 26 kare/sn altı) tuval çözünürlüğü bir kademe düşer.
     emaMs += (Math.min(raw, 120) - emaMs) * .06;
-    if (emaMs > 38 && intro >= 1 && !cam && dprCap > 1) {
+    if (emaMs > 38 && intro >= 1 && !cam && !lite) {
       slowFor += dt;
-      if (slowFor > 2) { dprCap = Math.max(1, dprCap - .5); slowFor = 0; emaMs = 20; measure(); }
+      if (slowFor > 2) {
+        slowFor = 0; emaMs = 20;
+        if (dprCap > 1) { dprCap = Math.max(1, dprCap - .5); measure(); } else lite = true;   // son çare: fırça izi ve ince desen kapanır
+      }
     } else slowFor = 0;
     step(dt, now);
     draw(clock);
