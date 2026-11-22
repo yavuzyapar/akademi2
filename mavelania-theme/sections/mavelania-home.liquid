@@ -95,7 +95,7 @@
           assign ch_type = ''
           assign ch_img = 'collection-bag-bordeaux.webp'
           assign ch_pick = section.settings.bags_image
-          assign ch_film_handle = section.settings.bags_film_product.handle | default: 'margaux-suede-leather-tote-bag'
+          assign ch_film_handle = section.settings.bags_film_product.handle | default: 'alicia-leather-handbag'
           assign ch_own_film = 'home-bags'
           if section.settings.bags_film_product != blank
             assign ch_own_film = ''
@@ -266,7 +266,7 @@
     { "type": "header", "content": "Films" },
     { "type": "checkbox", "id": "chapter_films", "label": "Play a short film in each chapter", "default": true, "info": "Off, or when a chapter photo is chosen below: the photo is shown instead." },
     { "type": "header", "content": "Chapter I — Bags" },
-    { "type": "product", "id": "bags_film_product", "label": "Piece whose film plays", "info": "Leave empty for the theme's own film of the Margaux Suede Leather Tote Bag. Only pieces that have a film can be used." },
+    { "type": "product", "id": "bags_film_product", "label": "Piece whose film plays", "info": "Leave empty for the theme's own film of the Alicia Leather Handbag. Only pieces that have a film can be used." },
     { "type": "image_picker", "id": "bags_image", "label": "Photo", "info": "Optional. Upload the original photo for the sharpest result." },
     { "type": "text", "id": "bags_title", "label": "Headline", "default": "Crafted to Be Remembered." },
     { "type": "textarea", "id": "bags_text", "label": "Text", "default": "Totes, shoulder bags and briefcases, built to carry weight and to soften where your hands rest." },

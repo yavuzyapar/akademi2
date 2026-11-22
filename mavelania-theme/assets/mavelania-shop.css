@@ -4074,8 +4074,7 @@ body { background-color: var(--tone-bg) !important; }
 .ms-feature__media .ms-chapter__media img { width: 100%; max-width: none; height: auto; max-height: none; }
 .ms-feature__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 
-/* The chapter film sits in a 4:5 window on every screen */
-.ms-feature--film .ms-feature__media .ms-film { aspect-ratio: 4 / 5; }
+/* Chapter films are 9:16. On wide screens they stretch to match the words and pieces beside them (block 14b). */
 
 /* Tablets: film beside the words, pieces in one row below */
 @media (min-width: 700px) {
@@ -4092,6 +4091,10 @@ body { background-color: var(--tone-bg) !important; }
   .ms-chapter--flip .ms-feature { grid-template-columns: minmax(0, 1fr) clamp(290px, 25vw, 372px); grid-template-areas: "head media" "grid media"; }
   .ms-feature__head { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: end; gap: 12px clamp(20px, 3vw, 48px); padding-bottom: clamp(18px, 2vw, 26px); border-bottom: 1px solid var(--tone-line); }
   .ms-feature__grid { align-self: start; }
+  /* 14b: the film runs from the chapter number to the foot of the pieces */
+  .ms-feature--film .ms-feature__media { align-self: stretch; display: flex; min-height: 0; }
+  .ms-feature--film .ms-feature__media .ms-film { flex: 1; aspect-ratio: auto; height: auto; min-height: 460px; }
+  .ms-feature--film .ms-feature__media .ms-film video { position: absolute; inset: 0; }
 }
 
 /* ── About: one film beside each belief */
