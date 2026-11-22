@@ -92,10 +92,10 @@ geçişle bağlıdır.
   bölüm hiç görünmez. Shopify'da ürüne video yüklerseniz bölüm önce onu gösterir.
 - **Koleksiyon kartları:** imleç karta gelince ürünün ilk günlük yaşam fotoğrafı açılır (yoksa ürünün
   ikinci görseli).
-- **Ana sayfa bölümleri:** her bölümün kendi sakin, tek sahnelik videosu var (insan yüzü, kart ya da para
-  görünmez; 4:5 pencere): Çantalar `home-bags` (Isadora, bankta gün batımı), Cüzdanlar `home-wallets`
-  (Bennett, fermuar ve deri dokusu), Kartlıklar `home-cards` (Varen, masada). Tema düzenleyici →
-  **Home: chapters → Films** altında başka bir ürün seçilirse o ürünün videosu oynar.
+- **Ana sayfa bölümleri:** her bölümün kendi sakin videosu var (insan yüzü, kart ya da para görünmez;
+  4:5 pencere): Çantalar `home-bags` (Margaux, ışıklı odada traverten blok üzerinde), Cüzdanlar
+  `home-wallets` (Conrad, güneşli masada), Kartlıklar `home-cards` (Soren, cepten avuca, sonra kahvenin
+  yanına). Tema düzenleyici → **Home: chapters → Films** altında başka bir ürün seçilirse o ürünün videosu oynar.
 - **Hakkımızda:** I `film-atelier` (dikiş yakın çekimi), II `film-isadora`, III `film-amelie`.
 - **Tek liste:** hangi ürünün hangi video ve fotoğrafları gösterdiği `snippets/film-name.liquid`
   dosyasındadır (`video|kısa ad|fotoğraf sayısı`). Yeni medya eklemek için dosyayı `assets/` içine
