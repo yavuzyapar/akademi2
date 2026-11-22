@@ -95,7 +95,11 @@
           assign ch_type = ''
           assign ch_img = 'collection-bag-bordeaux.webp'
           assign ch_pick = section.settings.bags_image
-          assign ch_film_handle = section.settings.bags_film_product.handle | default: 'valeria-leather-shoulder-bag'
+          assign ch_film_handle = section.settings.bags_film_product.handle | default: 'isadora-leather-shoulder-bag'
+          assign ch_own_film = 'home-bags'
+          if section.settings.bags_film_product != blank
+            assign ch_own_film = ''
+          endif
           assign ch_img_w = 1023
           assign ch_img_h = 1537
           assign ch_alt = 'home.cat_bags_alt' | t
@@ -112,6 +116,10 @@
           assign ch_img = 'women-leather-wallet-model.webp'
           assign ch_pick = section.settings.wallets_image
           assign ch_film_handle = section.settings.wallets_film_product.handle | default: 'bennett-leather-zip-wallet'
+          assign ch_own_film = 'home-wallets'
+          if section.settings.wallets_film_product != blank
+            assign ch_own_film = ''
+          endif
           assign ch_img_w = 1023
           assign ch_img_h = 1537
           assign ch_alt = 'home.cat_wallets_alt' | t
@@ -128,6 +136,10 @@
           assign ch_img = 'collection-hero-cardholders.webp'
           assign ch_pick = section.settings.cards_image
           assign ch_film_handle = section.settings.cards_film_product.handle | default: 'varen-mechanical-leather-card-holder'
+          assign ch_own_film = 'home-cards'
+          if section.settings.cards_film_product != blank
+            assign ch_own_film = ''
+          endif
           assign ch_img_w = 1888
           assign ch_img_h = 833
           assign ch_alt = 'home.slide_card_alt' | t
@@ -149,10 +161,16 @@
         assign ch_film_product = blank
         if section.settings.chapter_films and ch_pick == blank
           assign ch_film_product = all_products[ch_film_handle]
-          capture ch_film
-            render 'film-name', handle: ch_film_product.handle
-          endcapture
-          assign ch_film = ch_film | strip | split: '|' | first
+          if ch_own_film != blank
+            # The chapter's own calm film (assets/home-*.mp4): one scene of
+            # the piece, no cuts between people.
+            assign ch_film = ch_own_film
+          else
+            capture ch_film
+              render 'film-name', handle: ch_film_product.handle
+            endcapture
+            assign ch_film = ch_film | strip | split: '|' | first
+          endif
         endif
       -%}
       <section class="ms-chapter ms-chapter--{{ ch_tone }}{% if i == 2 %} ms-chapter--flip{% endif %}" id="{{ ch_id }}" aria-labelledby="{{ ch_id }}-title" data-chapter="{{ ch_tone }}">
@@ -248,17 +266,17 @@
     { "type": "header", "content": "Films" },
     { "type": "checkbox", "id": "chapter_films", "label": "Play a short film in each chapter", "default": true, "info": "Off, or when a chapter photo is chosen below: the photo is shown instead." },
     { "type": "header", "content": "Chapter I — Bags" },
-    { "type": "product", "id": "bags_film_product", "label": "Piece whose film plays", "info": "Leave empty for the Valeria Leather Shoulder Bag. Only pieces that have a film can be used." },
+    { "type": "product", "id": "bags_film_product", "label": "Piece whose film plays", "info": "Leave empty for the theme's own film of the Isadora Leather Shoulder Bag. Only pieces that have a film can be used." },
     { "type": "image_picker", "id": "bags_image", "label": "Photo", "info": "Optional. Upload the original photo for the sharpest result." },
     { "type": "text", "id": "bags_title", "label": "Headline", "default": "Crafted to Be Remembered." },
     { "type": "textarea", "id": "bags_text", "label": "Text", "default": "Totes, shoulder bags and briefcases, built to carry weight and to soften where your hands rest." },
     { "type": "header", "content": "Chapter II — Wallets" },
-    { "type": "product", "id": "wallets_film_product", "label": "Piece whose film plays", "info": "Leave empty for the Bennett Leather Wallet." },
+    { "type": "product", "id": "wallets_film_product", "label": "Piece whose film plays", "info": "Leave empty for the theme's own film of the Bennett Leather Wallet." },
     { "type": "image_picker", "id": "wallets_image", "label": "Photo", "info": "Optional. Upload the original photo for the sharpest result." },
     { "type": "text", "id": "wallets_title", "label": "Headline", "default": "Everyday Essentials. Thoughtfully Crafted." },
     { "type": "textarea", "id": "wallets_text", "label": "Text", "default": "Slim profiles, sized card slots and edges finished so they stay smooth in a pocket." },
     { "type": "header", "content": "Chapter III — Card holders" },
-    { "type": "product", "id": "cards_film_product", "label": "Piece whose film plays", "info": "Leave empty for the Varen Mechanical Leather Card Holder." },
+    { "type": "product", "id": "cards_film_product", "label": "Piece whose film plays", "info": "Leave empty for the theme's own film of the Varen Mechanical Leather Card Holder." },
     { "type": "image_picker", "id": "cards_image", "label": "Photo", "info": "Optional. Upload the original photo for the sharpest result." },
     { "type": "text", "id": "cards_title", "label": "Headline", "default": "Your Initials. Your Identity." },
     { "type": "textarea", "id": "cards_text", "label": "Text", "default": "The smallest piece in the range, and the one most often made personal." },

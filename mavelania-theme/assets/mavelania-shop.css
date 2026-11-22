@@ -4074,10 +4074,8 @@ body { background-color: var(--tone-bg) !important; }
 .ms-feature__media .ms-chapter__media img { width: 100%; max-width: none; height: auto; max-height: none; }
 .ms-feature__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 
-/* Phones: words, then the film in a 4:5 window, then the pieces */
-@media (max-width: 699px) {
-  .ms-feature--film .ms-feature__media .ms-film { aspect-ratio: 4 / 5; }
-}
+/* The chapter film sits in a 4:5 window on every screen */
+.ms-feature--film .ms-feature__media .ms-film { aspect-ratio: 4 / 5; }
 
 /* Tablets: film beside the words, pieces in one row below */
 @media (min-width: 700px) {
