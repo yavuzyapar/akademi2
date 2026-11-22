@@ -267,6 +267,25 @@
 
     {% render 'cart-drawer' %}
 
+    {%- comment -%}
+      Pages a visitor is about to open are fetched ahead: on desktop when the
+      pointer rests on a link, on phones as the finger touches it. Cart,
+      checkout, account and search are never fetched ahead.
+    {%- endcomment -%}
+    <script type="speculationrules">
+      {
+        "prefetch": [{
+          "source": "document",
+          "where": { "and": [
+            { "href_matches": "/*" },
+            { "not": { "href_matches": ["/cart*", "/checkout*", "/account*", "/search*", "/apps/*", "/services/*", "/localization*", "/*/cart*", "/*/checkout*", "/*/account*", "/*/search*"] } },
+            { "not": { "selector_matches": "[target=_blank], [download], [data-no-prefetch]" } }
+          ] },
+          "eagerness": "moderate"
+        }]
+      }
+    </script>
+
     {% render 'turn-upright' %}
 
     <div

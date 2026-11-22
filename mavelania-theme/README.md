@@ -108,6 +108,19 @@ geçişle bağlıdır.
 - **Boyut:** Shopify tema paketi sınırı 50 MB'tır. Tema şu an yaklaşık 41 MB (videolar 34 MB, fotoğraflar
   5 MB). Yeni medya eklerken toplamı 48 MB'ın altında tutun; tek dosya 20 MB'ı geçemez.
 
+## Hız
+
+- **Açılış videosu** sayfa yüklendikten sonra inmeye başlar; o ana kadar ilk karesi (kapak görseli) görünür.
+  Böylece video, sayfanın kendi görselleri ve stilleriyle yarışmaz. Telefonda ilk 6 saniyede inen veri
+  6 MB'tan yaklaşık 2,7 MB'a indi. Veri tasarrufu açıksa ya da bağlantı çok yavaşsa (2G) video düğmeyle başlar.
+- **Sayfa geçişleri:** her tıklamada ekranı kaplayan beyaz, bulanık yükleme perdesi kaldırıldı. Ziyaretçinin
+  açmak üzere olduğu sayfa önceden getirilir (bilgisayarda imleç linkin üzerinde durunca, telefonda parmak
+  değince; `layout/theme.liquid` içindeki speculation rules). Sayfalar tarayıcının kendi yumuşak geçişiyle
+  açılır. Sepet, ödeme, hesap ve arama önceden getirilmez. Perde yalnızca ülke/para birimi değişiminde görünür.
+- **Ürün kartları:** telefonlar, kartın üzerine gelince açılan ikinci fotoğrafı hiç indirmez (dokunmatik
+  ekranda gösterilemez). Koleksiyon sayfasında telefonda inen veri yaklaşık %40 azaldı.
+- **Kapalı çekmeceler** (favoriler) ekran dışındayken çizilmez; kaydırma sırasında boşuna işlemci harcamaz.
+
 ## Güvenlik
 
 - Depoda ve git geçmişinde API anahtarı, token ya da şifre **yoktur** (dosyalar ve tüm geçmiş tarandı).

@@ -1300,9 +1300,12 @@
   })();
 
   /* ── Opening film ─────────────────────────────────────────────────
-     Plays muted on a loop. The button pauses it (motion longer than five
-     seconds must be stoppable). With reduced motion or data saver it
-     stays on its first frame until the visitor presses play. */
+     Plays muted on a loop. Its poster (the first frame) paints at once;
+     the film itself starts downloading only after the page has loaded,
+     so it never competes with the page's own images and styles. The
+     button pauses it (motion longer than five seconds must be stoppable).
+     With reduced motion, data saver or a very slow connection it stays
+     on its first frame until the visitor presses play. */
   (function () {
     var box = $('[data-hero-film]');
     if (!box) return;
@@ -1310,8 +1313,9 @@
     var button = $('[data-hero-toggle]', box);
     if (!video || !button) return;
     video.muted = true;
+    var net = navigator.connection;
     var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-      (navigator.connection && navigator.connection.saveData);
+      (net && (net.saveData || /(^|-)2g$/.test(net.effectiveType || '')));
     function sync() {
       var playing = !video.paused;
       box.classList.toggle('is-playing', playing);
@@ -1321,8 +1325,9 @@
     video.addEventListener('play', sync);
     video.addEventListener('pause', sync);
     button.addEventListener('click', function () { if (video.paused) play(); else video.pause(); });
-    if (calm) { video.removeAttribute('autoplay'); video.pause(); }
-    else if (video.paused) play();
+    function start() { if (!calm && video.paused) play(); }
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
     sync();
   })();
 

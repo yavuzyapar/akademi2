@@ -4161,6 +4161,23 @@ body { background-color: var(--tone-bg) !important; }
 /* Product cards: the lifestyle photograph appears on hover */
 .ms-card__img--look { object-fit: cover; }
 
+/* ── 30 Speed and smoothness ─────────────────────────────────────────
+   Page changes cross-fade natively (no veil, no spinner). Phones never
+   download the hover photographs of product cards, which they cannot show.
+   Closed drawers leave the compositor, so their blur costs nothing while
+   the page scrolls. */
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: .2s; animation-timing-function: ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
+@media (hover: none) {
+  .ms-card__img--hover { display: none; }
+}
+.mv-favorites-drawer:not(.is-open) { visibility: hidden; transition: transform .36s var(--e), visibility 0s linear .36s; }
+
 /* ── 14 Motion & print safety ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .ms-hero__slide,

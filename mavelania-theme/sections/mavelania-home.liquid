@@ -34,10 +34,10 @@
       {%- if open_film -%}
         <div class="ms-open__film" data-hero-film>
           {%- if section.settings.open_video != blank -%}
-            {{ section.settings.open_video | video_tag: autoplay: true, muted: true, loop: true, playsinline: true, preload: 'auto', class: 'ms-open__video', image_size: '1600x', data-hero-video: '' }}
+            {{ section.settings.open_video | video_tag: muted: true, loop: true, playsinline: true, preload: 'none', class: 'ms-open__video', image_size: '1600x', data-hero-video: '' }}
           {%- else -%}
             {%- comment -%} Wide screens get the 1080p film, phones a portrait film framed on the model. Browsers that ignore media on <source> take the first (wide) film, which the phone layout frames with object-position. {%- endcomment -%}
-            <video class="ms-open__video" autoplay muted loop playsinline preload="auto" poster="{{ 'hero-film-poster.webp' | asset_url }}" width="1920" height="1080" aria-label="{{ 'home.film_alt' | t | escape }}" data-hero-video>
+            <video class="ms-open__video" muted loop playsinline preload="none" poster="{{ 'hero-film-poster.webp' | asset_url }}" width="1920" height="1080" aria-label="{{ 'home.film_alt' | t | escape }}" data-hero-video>
               <source src="{{ 'hero-film.mp4' | asset_url }}" type="video/mp4" media="(min-width: 761px)">
               <source src="{{ 'hero-film-mobile.mp4' | asset_url }}" type="video/mp4">
             </video>

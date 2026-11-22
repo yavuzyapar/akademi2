@@ -118,44 +118,16 @@
  
   var transition = document.getElementById('pageTransition');
   if (transition) {
-    var transitionActive = false;
-    var transitionTimer = 0;
-    function hideTransition() {
+    /* The veil is kept only for the country switcher, which reloads every
+       price. Ordinary links navigate untouched: the next page is fetched
+       ahead (speculation rules in layout/theme.liquid) and cross-fades in
+       with a view transition (mavelania-shop.css, block 30). */
+    var hideTransition = function () {
       transition.classList.remove('on');
       transition.setAttribute('aria-hidden', 'true');
-      transitionActive = false;
-      if (transitionTimer) window.clearTimeout(transitionTimer);
-      transitionTimer = 0;
-    }
-    function showTransition() {
-      transition.classList.add('on');
-      transition.setAttribute('aria-hidden', 'false');
-    }
+    };
     transition.addEventListener('click', hideTransition);
-    /* Onceki surum her ic linkte preventDefault edip gezinmeyi transitionDuration
-       kadar bekletiyordu; bu her tiklamaya sabit bir gecikme ekliyordu. Artik
-       tarayici gezinmeyi normal hizinda baslatiyor, biz yalnizca ortu
-       animasyonunu ustune bindiriyoruz. */
-    document.addEventListener('click', function (event) {
-      if (event.defaultPrevented || event.button > 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      var link = event.target.closest('a[href]');
-      if (!link || link.hasAttribute('download') || link.target === '_blank') return;
-      var href = link.getAttribute('href');
-      if (!href || href.charAt(0) === '#' || /^(mailto:|tel:|javascript:)/i.test(href)) return;
-      var destination;
-      try { destination = new URL(link.href, window.location.href); } catch (error) { return; }
-      if (destination.origin !== window.location.origin) return;
-      if (destination.pathname === window.location.pathname && destination.search === window.location.search && destination.hash) return;
-      if (transitionActive) return;
-      transitionActive = true;
-      showTransition();
-      /* Gezinme herhangi bir nedenle gerceklesmezse (indirme, iptal edilen
-         istek) ortu ekranda takili kalmasin. */
-      transitionTimer = window.setTimeout(hideTransition, 2500);
-    });
     window.addEventListener('pageshow', function () { window.setTimeout(hideTransition, 80); });
-    window.addEventListener('pagehide', showTransition);
-    window.addEventListener('focus', function () { if (!transitionActive) hideTransition(); });
   }
  
   document.querySelectorAll('[data-product-root]').forEach(function (root) {
