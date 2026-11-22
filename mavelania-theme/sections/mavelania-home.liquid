@@ -152,7 +152,7 @@
           capture ch_film
             render 'film-name', handle: ch_film_product.handle
           endcapture
-          assign ch_film = ch_film | strip
+          assign ch_film = ch_film | strip | split: '|' | first
         endif
       -%}
       <section class="ms-chapter ms-chapter--{{ ch_tone }}{% if i == 2 %} ms-chapter--flip{% endif %}" id="{{ ch_id }}" aria-labelledby="{{ ch_id }}-title" data-chapter="{{ ch_tone }}">

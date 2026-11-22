@@ -78,32 +78,35 @@ hazırlandı. Kapak görseli `hero-film-poster.webp`, video yüklenene kadar gö
 - Videoyu değiştirmek için: Tema düzenleyici → **Home: chapters → Film (optional)** alanına yeni videoyu yükleyin.
   Fotoğrafa dönmek için **Play the film in the opening** ayarını kapatın.
 
-## Ürün videoları
+## Ürün videoları ve fotoğrafları
 
-Yedi ürünün ve bir deri yakın çekiminin kısa, sessiz videosu temadadır (`assets/film-*.mp4`, her birinin
-`-poster.webp` kapak görseli var). Videolar ekrana gelmeden indirilmez; yalnızca ekranda olan oynar, ekrandan
-çıkan durur. Sağ üstteki düğme durdurur. "Hareketi azalt" ya da veri tasarrufu açıksa düğmeyle başlar.
+Higgsfield hesabındaki 157 video ve 312 görselin hepsi tek tek incelendi; ürünle birebir eşleşen,
+temiz (kart, para, bozuk logo, garip yüz içermeyen) olanlar temaya alındı: **23 ürün videosu**
+(`assets/film-*.mp4`, her birinin `-poster.webp` kapağı var) ve **85 günlük yaşam fotoğrafı**
+(`assets/look-<ürün>-<n>.webp`, 900×900). Videolar sessiz, dikey, 24 kare/sn; sonları başlarına yumuşak
+geçişle bağlıdır.
 
-| Video | Ürün | Nerede |
-| --- | --- | --- |
-| `film-valeria` | Valeria Leather Shoulder Bag | Ana sayfa I Çantalar · ürün sayfası |
-| `film-bennett` | Bennett Leather Wallet | Ana sayfa II Cüzdanlar · ürün sayfası |
-| `film-varen` | Varen Mechanical Leather Card Holder | Ana sayfa III Kartlıklar · ürün sayfası |
-| `film-isadora` | Isadora Leather Shoulder Bag | Hakkımızda II · ürün sayfası |
-| `film-amelie` | Amelie Suede Leather Tote Bag | Hakkımızda III · ürün sayfası |
-| `film-arden`, `film-soren` | Arden, Soren kartlıkları | Yalnızca kendi ürün sayfaları |
-| `film-leather` | Deri ve dikiş yakın çekimi | Hakkımızda I |
-
-- **Ana sayfa bölümleri:** her bölüm tek bir kompozisyondur: solda (Cüzdanlar'da sağda) o bölümün videosu,
-  yanında başlık ve dört ürün. Videonun altındaki etiket videodaki ürüne gider.
-- **Hangi ürün hangi videoyu gösterir:** tek liste `snippets/film-name.liquid`. Yeni bir video eklemek için
-  dosyayı `assets/` içine koyup bu listeye ürünün handle'ını ekleyin. Videoyu Shopify'da ürünün medyasına
-  yüklerseniz ürün sayfası onu da kendiliğinden gösterir.
-- **Bölümdeki videoyu değiştirmek / kapatmak:** Tema düzenleyici → **Home: chapters → Films**.
-- **Kart ve para yok:** Yapay zekâ videolarında banka kartları bozuk yazı ve sahte kart logosuyla, paralar da sahte
-  üretiliyor. Kart ya da paranın yakından göründüğü bütün anlar videolardan çıkarıldı; yeni video eklerken buna dikkat edin.
-- **Boyut:** Shopify tema paketi sınırı 50 MB'tır. Paket şu an yaklaşık 35 MB (videolar 32 MB). Yeni video
-  eklerken toplamı 45 MB'ın altında tutun; tek dosya 20 MB'ı geçemez.
+- **Ürün sayfası, "See it carried" bölümü:** her ürün sayfasında ürün bilgilerinin hemen üstünde.
+  Bilgisayarda solda ürünün videosu, sağda dört fotoğraf; telefonda önce yazı, sonra video, sonra
+  kaydırılabilir fotoğraf şeridi. Videosu olmayan üründe yalnızca fotoğraflar, ikisi de olmayan üründe
+  bölüm hiç görünmez. Shopify'da ürüne video yüklerseniz bölüm önce onu gösterir.
+- **Koleksiyon kartları:** imleç karta gelince ürünün ilk günlük yaşam fotoğrafı açılır (yoksa ürünün
+  ikinci görseli).
+- **Ana sayfa bölümleri:** Çantalar `film-valeria`, Cüzdanlar `film-bennett`, Kartlıklar `film-varen`
+  (Tema düzenleyici → **Home: chapters → Films**).
+- **Hakkımızda:** I `film-atelier` (dikiş yakın çekimi), II `film-isadora`, III `film-amelie`.
+- **Tek liste:** hangi ürünün hangi video ve fotoğrafları gösterdiği `snippets/film-name.liquid`
+  dosyasındadır (`video|kısa ad|fotoğraf sayısı`). Yeni medya eklemek için dosyayı `assets/` içine
+  koyup bu listeye satır eklemek yeterlidir.
+- **Medyası olmayanlar:** Elena Leather Shoulder Bag için Higgsfield'da güvenle eşleşen görsel yok.
+  Varen ve Arden'de yalnızca video, Marlow, Conrad, Rowan, Lior, F360 ve Ultimate Jacket'ta yalnızca
+  fotoğraf var.
+- **Yüklenme:** videolar ekrana gelmeden indirilmez, yalnızca ekrandaki oynar; fotoğraflar tembel yüklenir.
+  "Hareketi azalt" ya da veri tasarrufu açıksa video düğmeyle başlar.
+- **Kart ve para yok:** yapay zekâ videolarındaki banka kartı, para, kart makinesi ve cebinden cüzdan çıkarma
+  anları çıkarıldı; yeni medya eklerken buna dikkat edin.
+- **Boyut:** Shopify tema paketi sınırı 50 MB'tır. Tema şu an yaklaşık 41 MB (videolar 34 MB, fotoğraflar
+  5 MB). Yeni medya eklerken toplamı 48 MB'ın altında tutun; tek dosya 20 MB'ı geçemez.
 
 ## Güvenlik
 

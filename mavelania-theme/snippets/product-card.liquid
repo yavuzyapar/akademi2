@@ -58,6 +58,14 @@
   assign rating = product.metafields.reviews.rating.value
   assign rating_count = product.metafields.reviews.rating_count.value | default: product.metafields.reviews.rating_count
   assign second_image = product.images[1]
+  capture card_media
+    render 'film-name', handle: product.handle
+  endcapture
+  assign card_media = card_media | strip | split: '|'
+  assign card_look = ''
+  if card_media[2] != blank and card_media[2] != '0'
+    assign card_look = 'look-' | append: card_media[1] | append: '-1.webp'
+  endif
   assign fav_price = product.price | money
 -%}
 <article class="ms-card{% unless product.available %} is-sold-out{% endunless %}" data-product-card>
@@ -69,7 +77,9 @@
         {%- else -%}
           {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '240,360,480,640,900', sizes: img_sizes, alt: '', class: 'ms-card__img' }}
         {%- endif -%}
-        {%- if second_image -%}
+        {%- if card_look != blank -%}
+          <img class="ms-card__img ms-card__img--hover ms-card__img--look" src="{{ card_look | asset_url }}" alt="" width="900" height="900" loading="lazy" decoding="async">
+        {%- elsif second_image -%}
           {{ second_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '240,360,480,640,900', sizes: img_sizes, alt: '', class: 'ms-card__img ms-card__img--hover' }}
         {%- endif -%}
       {%- endif -%}

@@ -1,26 +1,77 @@
 {%- comment -%}
-  Which theme film shows this product. Outputs the asset base name
-  (assets/<name>.mp4 + assets/<name>-poster.webp) or nothing.
-  One list for the whole theme: the home chapters, the product page and
-  About all read it, so a film is only ever shown with its own product.
+  The theme's own media for a product, from one list (the home chapters,
+  the product page, product cards and About all read it).
 
-  Usage: {%- capture film -%}{% render 'film-name', handle: product.handle %}{%- endcapture -%}
+  Outputs "film|short|looks":
+    film   asset base name of the product's film (assets/<film>.mp4 and
+           assets/<film>-poster.webp), or empty
+    short  short name used by its lookbook images
+    looks  number of lookbook images: assets/look-<short>-1.webp … -<looks>.webp
+
+  Usage:
+    {%- capture media -%}{% render 'film-name', handle: product.handle %}{%- endcapture -%}
+    {%- assign media = media | strip | split: '|' -%}
+    media[0] film · media[1] short · media[2] looks
 {%- endcomment -%}
 {%- liquid
   case handle
     when 'valeria-leather-shoulder-bag'
-      echo 'film-valeria'
+      echo 'film-valeria|valeria|4'
     when 'isadora-leather-shoulder-bag'
-      echo 'film-isadora'
+      echo 'film-isadora|isadora|4'
     when 'amelie-suede-leather-tote-bag'
-      echo 'film-amelie'
+      echo 'film-amelie|amelie|4'
+    when 'margaux-suede-leather-tote-bag'
+      echo 'film-margaux|margaux|4'
+    when 'evelin-leather-bag'
+      echo 'film-evelin|evelin|4'
+    when 'odette-leather-tote-bag'
+      echo 'film-odette|odette|4'
+    when 'lucienne-leather-shoulder-bag'
+      echo 'film-lucienne|lucienne|4'
+    when 'vivienne-suede-leather-shoulder-bag'
+      echo 'film-vivienne|vivienne|4'
+    when 'elara-leather-bag'
+      echo 'film-elara|elara|4'
+    when 'alicia-leather-handbag'
+      echo 'film-alicia|alicia|4'
+    when 'celeste-leather-handbag'
+      echo 'film-celeste|celeste|4'
+    when 'alden-leather-clutch-bag'
+      echo 'film-alden|alden|4'
+    when 'marlow-leather-clutch-bag'
+      echo '|marlow|4'
+    when 'wellington-leather-business-briefcase'
+      echo 'film-wellington|wellington|4'
     when 'bennett-leather-zip-wallet'
-      echo 'film-bennett'
+      echo 'film-bennett|bennett|2'
+    when 'everett-leather-zip-wallet'
+      echo 'film-everett|everett|3'
+    when 'conrad-leather-wallet'
+      echo '|conrad|3'
+    when 'products-rowan-leather-wallet'
+      echo '|rowan|3'
     when 'varen-mechanical-leather-card-holder'
-      echo 'film-varen'
-    when 'arden-leather-magnetic-card-holder'
-      echo 'film-arden'
+      echo 'film-varen|varen|0'
     when 'soren-leather-card-holde'
-      echo 'film-soren'
+      echo 'film-soren|soren|1'
+    when 'arden-leather-magnetic-card-holder'
+      echo 'film-arden|arden|0'
+    when 'lior-leather-card-holder'
+      echo '|lior|2'
+    when 'heart-leather-bag-charm'
+      echo 'film-heart|heart|3'
+    when 'markora-stitched-leather-bookmark'
+      echo 'film-markora|markora|2'
+    when 'lined-leather-desk-mat-medium-size'
+      echo 'film-deskmat|deskmat|2'
+    when 'amanda-leather-jewelry-box-medium'
+      echo 'film-jewelry|jewelry|2'
+    when 'sonat-leather-iphone-17-folio-case'
+      echo 'film-sonat|sonat|2'
+    when 'f360-leather-iphone-18-pro-17-pro-case'
+      echo '|f360|2'
+    when 'ultimate-jacket-leather-iphone-18-pro-max-case'
+      echo '|ultimate|2'
   endcase
 -%}

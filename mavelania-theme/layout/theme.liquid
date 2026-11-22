@@ -120,26 +120,9 @@
 
     {%- if request.page_type == 'index' -%}
       {%- comment -%}
-        LCP image: the first active slide on the home page
-        (.hero-slide.is-active in sections/mavelania-home.liquid). If the slide
-        order changes, update both file names below or the wrong image is
-        preloaded.
+        LCP: the opening film's first frame (sections/mavelania-home.liquid).
       {%- endcomment -%}
-      <link
-        rel="preload"
-        as="image"
-        href="{{ 'mobile-hero-phone-cases-20260919-v2.webp' | asset_url }}"
-        media="(max-width: 760px)"
-        fetchpriority="high"
-      >
-
-      <link
-        rel="preload"
-        as="image"
-        href="{{ 'hero-phone-cases-20260919.webp' | asset_url }}"
-        media="(min-width: 761px)"
-        fetchpriority="high"
-      >
+      <link rel="preload" as="image" href="{{ 'hero-film-poster.webp' | asset_url }}" fetchpriority="high">
     {%- elsif request.page_type == 'product' and product.featured_media != blank -%}
       <link
         rel="preload"

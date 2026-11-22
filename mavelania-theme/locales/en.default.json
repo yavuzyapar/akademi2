@@ -559,8 +559,10 @@
     "play": "Play film",
     "pause": "Pause film",
     "in_this_film": "In this film",
-    "product_eyebrow": "In motion",
-    "product_title": "See it in daily life",
-    "product_text": "A short film of the {{ title }} as it is carried and used, in natural light."
+    "product_eyebrow": "In daily life",
+    "product_title": "See it carried",
+    "product_text": "The {{ title }} in natural light: how it sits, opens and moves through an ordinary day.",
+    "look_label": "Photograph {{ n }} of the {{ title }} in use",
+    "look_hint": "Swipe for more"
   }
 }
