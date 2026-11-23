@@ -77,6 +77,7 @@
   {%- comment -%} ── The three chapters ── {%- endcomment -%}
   {%- for i in (1..3) -%}
     {%- liquid
+      assign ch_bare = false
       case i
         when 1
           assign ch_id = 'chapter-bags'
@@ -90,10 +91,12 @@
           assign ch_type = ''
           assign ch_img = 'collection-bag-bordeaux.webp'
           assign ch_pick = section.settings.bags_image
-          assign ch_film_handle = section.settings.bags_film_product.handle | default: 'elara-leather-bag'
-          assign ch_own_film = 'home-bags'
-          if section.settings.bags_film_product != blank
-            assign ch_own_film = ''
+          # Bags: no film and no photo beside the words, unless a piece or a
+          # photo is chosen in the theme editor.
+          assign ch_film_handle = section.settings.bags_film_product.handle
+          assign ch_own_film = ''
+          if section.settings.bags_film_product == blank and ch_pick == blank
+            assign ch_bare = true
           endif
           assign ch_img_w = 1023
           assign ch_img_h = 1537
@@ -110,9 +113,9 @@
           assign ch_type = ''
           assign ch_img = 'women-leather-wallet-model.webp'
           assign ch_pick = section.settings.wallets_image
-          # The wallets chapter shows the stitching film: no single piece in it.
+          # Wallets: the making of a piece, from the first cut to the street.
           assign ch_film_handle = section.settings.wallets_film_product.handle | default: ''
-          assign ch_own_film = 'film-atelier'
+          assign ch_own_film = 'home-wallets'
           if section.settings.wallets_film_product != blank
             assign ch_own_film = ''
           endif
@@ -170,7 +173,8 @@
         endif
       -%}
       <section class="ms-chapter ms-chapter--{{ ch_tone }}{% if i == 2 %} ms-chapter--flip{% endif %}" id="{{ ch_id }}" aria-labelledby="{{ ch_id }}-title" data-chapter="{{ ch_tone }}">
-        <div class="ms-wrap ms-feature{% if ch_film != blank %} ms-feature--film{% endif %}">
+        <div class="ms-wrap ms-feature{% if ch_film != blank %} ms-feature--film{% elsif ch_bare %} ms-feature--bare{% endif %}">
+          {%- unless ch_bare and ch_film == blank -%}
           <div class="ms-feature__media">
             {%- if ch_film != blank -%}
               {% render 'film', name: ch_film, label: ch_alt, product: ch_film_product %}
@@ -184,6 +188,7 @@
               </a>
             {%- endif -%}
           </div>
+          {%- endunless -%}
           <header class="ms-feature__head">
             <div class="ms-feature__title">
               <p class="ms-chapter__num" aria-hidden="true">{{ ch_num }}</p>
@@ -262,12 +267,12 @@
     { "type": "header", "content": "Films" },
     { "type": "checkbox", "id": "chapter_films", "label": "Play a short film in each chapter", "default": true, "info": "Off, or when a chapter photo is chosen below: the photo is shown instead." },
     { "type": "header", "content": "Chapter I — Bags" },
-    { "type": "product", "id": "bags_film_product", "label": "Piece whose film plays", "info": "Leave empty for the theme's own film of the Elara Leather Bag. Only pieces that have a film can be used." },
+    { "type": "product", "id": "bags_film_product", "label": "Piece whose film plays", "info": "Leave empty to show no film in this chapter. Only pieces that have a film can be used." },
     { "type": "image_picker", "id": "bags_image", "label": "Photo", "info": "Optional. Upload the original photo for the sharpest result." },
     { "type": "text", "id": "bags_title", "label": "Headline", "default": "Crafted to Be Remembered." },
     { "type": "textarea", "id": "bags_text", "label": "Text", "default": "Totes, shoulder bags and briefcases, built to carry weight and to soften where your hands rest." },
     { "type": "header", "content": "Chapter II — Wallets" },
-    { "type": "product", "id": "wallets_film_product", "label": "Piece whose film plays", "info": "Leave empty for the theme's own stitching film." },
+    { "type": "product", "id": "wallets_film_product", "label": "Piece whose film plays", "info": "Leave empty for the theme's own making-of film." },
     { "type": "image_picker", "id": "wallets_image", "label": "Photo", "info": "Optional. Upload the original photo for the sharpest result." },
     { "type": "text", "id": "wallets_title", "label": "Headline", "default": "Everyday Essentials. Thoughtfully Crafted." },
     { "type": "textarea", "id": "wallets_text", "label": "Text", "default": "Slim profiles, sized card slots and edges finished so they stay smooth in a pocket." },

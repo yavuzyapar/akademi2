@@ -4198,6 +4198,12 @@ body { background-color: var(--tone-bg) !important; }
   .ms-feature--film .ms-feature__media .ms-film video { position: absolute; inset: 0; object-position: center 30%; }
 }
 
+/* Chapter with nothing beside the words: words, then the pieces, full width */
+@media (min-width: 700px) {
+  .ms-feature--bare,
+  .ms-chapter--flip .ms-feature--bare { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "grid"; grid-template-rows: auto auto; }
+}
+
 /* ── 14 Motion & print safety ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .ms-hero__slide,

@@ -94,10 +94,11 @@ geçişle bağlıdır.
   ikinci görseli).
 - **Açılış videosu:** `hero-alicia` (dikey; Alicia çantayla çeşme önünde ve şehirde yürüyüş). Geniş ekranda
   sağda dikey pencere, solda yazılar; tablette ortada; telefonda ekranı doldurur.
-- **Ana sayfa bölümleri:** Çantalar `home-bags` (Elara, akşam Paris'te yürüyüş), Cüzdanlar `film-atelier`
-  (deri dikiş), Kartlıklar `home-cards` (Valeria kutu açılışı). Geniş ekranda video bölüm numarasından ürün
-  kartlarının altına kadar uzanır; telefonda ekran yüksekliğini aşmaz. Tema düzenleyici → **Home: chapters →
-  Films** altında başka bir ürün seçilirse o ürünün videosu oynar.
+- **Ana sayfa bölümleri:** Çantalar bölümünde video ya da fotoğraf yok; başlık ve ürünler tam genişlikte.
+  Cüzdanlar `home-wallets` (Margaux'nun yapılışı: deri kesimi, dikiş, kutu, sokakta), Kartlıklar `home-cards`
+  (Valeria kutu açılışı). Geniş ekranda video bölüm numarasından ürün kartlarının altına kadar uzanır;
+  telefonda ekran yüksekliğini aşmaz. Tema düzenleyici → **Home: chapters → Films** altında bir ürün seçilirse
+  o ürünün videosu oynar.
 - **Videolar kendiliğinden başlar,** durdurma düğmesi yoktur (sessiz oynarlar; telefon pil tasarrufu
   modunda bekletirse ilk dokunuşta başlar).
 - **Valeria ürün sayfası:** `film-valeria` kutu açılışıyla başlar.
