@@ -1390,6 +1390,24 @@
     sync();
   });
 
+  /* Personalize page: live preview of the visitor's text on a leather
+     swatch, in the colour they pick. */
+  $$('[data-pz-try]').forEach(function (box) {
+    var input = $('[data-pz-input]', box);
+    var text = $('[data-pz-text]', box);
+    var plate = $('[data-pz-plate]', box);
+    if (!input || !text || !plate) return;
+    var sample = text.textContent;
+    input.addEventListener('input', function () {
+      var value = input.value.replace(/[^A-Za-z0-9 .&\-\u00C0-\u024F]/g, '').slice(0, 12);
+      if (value !== input.value) input.value = value;
+      text.textContent = value.trim() || sample;
+    });
+    $$('[data-pz-tone]', box).forEach(function (radio) {
+      radio.addEventListener('change', function () { if (radio.checked) plate.setAttribute('data-tone', radio.value); });
+    });
+  });
+
   /* Personalization: the "special request" mail carries the product and the
      text typed so far. */
   $$('[data-pers-mail]').forEach(function (link) {

@@ -476,7 +476,14 @@
     "mail_title": "Have a style in mind?",
     "mail_text": "Email {{ email }} with the lettering, placement or sketch you would like. We reply within 24 hours.",
     "mail_subject": "Personalization: {{ title }}",
-    "mail_body": "Hello Mavelania, I would like to personalize the {{ title }}."
+    "mail_body": "Hello Mavelania, I would like to personalize the {{ title }}.",
+    "hero_cta": "Choose your piece",
+    "try_cta": "Try your initials",
+    "badge_all": "On every Mavelania piece",
+    "film_label": "Mavelania pieces carried through an ordinary day",
+    "try_eyebrow": "Try it here",
+    "try_title": "See your initials in leather.",
+    "try_input": "Your initials or a short name"
   },
   "ribbon": {
     "personal": "Personalization on every piece",

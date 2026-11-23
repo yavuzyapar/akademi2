@@ -36,33 +36,60 @@
   </nav>
 
   <header class="ms-pz__hero ms-wrap">
-    <p class="ms-eyebrow">{{ 'personalize.eyebrow' | t }}</p>
-    <h1 class="ms-heading">{{ 'personalize.title' | t }}</h1>
-    <p class="ms-pz__lede">{{ 'personalize.lede' | t }}</p>
-    <p class="ms-pz__line">{{ 'home.personal_line' | t }}</p>
+    <div class="ms-pz__intro">
+      <p class="ms-eyebrow">{{ 'personalize.eyebrow' | t }}</p>
+      <h1 class="ms-heading">{{ 'personalize.title' | t }}</h1>
+      <p class="ms-pz__lede">{{ 'personalize.lede' | t }}</p>
+      <p class="ms-pz__line">{{ 'home.personal_line' | t }}</p>
+      <div class="ms-pz__actions">
+        <a class="ms-button ms-button--primary" href="#PzProductsTitle">{{ 'personalize.hero_cta' | t }} {% render 'icon', name: 'arrow-right' %}</a>
+        <a class="ms-button ms-button--outline" href="#PzTryTitle">{% render 'icon', name: 'pen' %} {{ 'personalize.try_cta' | t }}</a>
+      </div>
+      <ul class="ms-pz__badges" role="list">
+        <li>{% render 'icon', name: 'pen' %}{{ 'personalize.what_value' | t }}</li>
+        {%- if pz_methods.size > 0 -%}<li>{% render 'icon', name: 'needle' %}{{ pz_methods | join: ' · ' }}</li>{%- endif -%}
+        <li>{% render 'icon', name: 'leather' %}{{ 'personalize.badge_all' | t }}</li>
+      </ul>
+    </div>
+    <div class="ms-pz__film">
+      {% render 'film', name: 'film-personalize', label: 'personalize.film_label' | t %}
+    </div>
   </header>
 
   <section class="ms-section ms-wrap" aria-labelledby="PzStepsTitle">
-    <h2 id="PzStepsTitle" class="mv-visually-hidden">{{ 'personalize.steps_title' | t }}</h2>
+    <h2 id="PzStepsTitle" class="ms-pz__subhead">{{ 'personalize.steps_title' | t }}</h2>
     <ol class="ms-pz__steps">
-      <li><span>01</span><h3>{{ 'personalize.step1_title' | t }}</h3><p>{{ 'personalize.step1_text' | t }}</p></li>
-      <li><span>02</span><h3>{{ 'personalize.step2_title' | t }}</h3><p>{{ 'personalize.step2_text' | t }}</p></li>
-      <li><span>03</span><h3>{{ 'personalize.step3_title' | t }}</h3><p>{{ 'personalize.step3_text' | t }}</p></li>
+      <li><span class="ms-pz__icon">{% render 'icon', name: 'bag' %}</span><b>01</b><h3>{{ 'personalize.step1_title' | t }}</h3><p>{{ 'personalize.step1_text' | t }}</p></li>
+      <li><span class="ms-pz__icon">{% render 'icon', name: 'pen' %}</span><b>02</b><h3>{{ 'personalize.step2_title' | t }}</h3><p>{{ 'personalize.step2_text' | t }}</p></li>
+      <li><span class="ms-pz__icon">{% render 'icon', name: 'needle' %}</span><b>03</b><h3>{{ 'personalize.step3_title' | t }}</h3><p>{{ 'personalize.step3_text' | t }}</p></li>
     </ol>
+  </section>
 
-    <dl class="ms-personal__facts ms-pz__facts">
-      <div><dt>{{ 'personalize.what_label' | t }}</dt><dd>{{ 'personalize.what_value' | t }}</dd></div>
-      {%- if pz_methods.size > 0 -%}<div><dt>{{ 'personalize.method_label' | t }}</dt><dd>{{ pz_methods | join: ' · ' }}</dd></div>{%- endif -%}
-      {%- if pz_colors.size > 0 -%}
-        <div>
-          <dt>{{ 'personalize.color_label' | t }}</dt>
-          <dd class="ms-personal__colors">
-            {%- for color in pz_colors -%}<span class="ms-personal__color">{%- assign color_key = color | downcase -%}<span class="ms-pers__dot ms-pers__dot--{{ color_key }}" aria-hidden="true"></span>{{ color }}</span>{%- endfor -%}
-          </dd>
-        </div>
-      {%- endif -%}
-      <div><dt>{{ 'personalize.which_label' | t }}</dt><dd>{{ 'personalize.which_value' | t }}</dd></div>
-    </dl>
+  <section class="ms-pz__try" aria-labelledby="PzTryTitle" data-pz-try>
+    <div class="ms-wrap"><div class="ms-pz__try-grid">
+      <div class="ms-pz__swatch">
+        <span class="ms-pz__plate ms-pers__plate" data-pz-plate data-tone="{{ pz_colors.first | downcase | default: 'gold' }}"><span data-pz-text>{{ 'personalize.preview_sample' | t }}</span></span>
+        <span class="ms-pz__stitch" aria-hidden="true"></span>
+      </div>
+      <div class="ms-pz__try-copy">
+        <p class="ms-eyebrow">{{ 'personalize.try_eyebrow' | t }}</p>
+        <h2 id="PzTryTitle" class="ms-heading">{{ 'personalize.try_title' | t }}</h2>
+        <label class="ms-pz__field">
+          <span>{{ 'personalize.try_input' | t }}</span>
+          <input type="text" maxlength="12" autocomplete="off" spellcheck="false" placeholder="{{ 'personalize.preview_sample' | t | escape }}" data-pz-input>
+        </label>
+        {%- if pz_colors.size > 0 -%}
+          <fieldset class="ms-pz__colors">
+            <legend>{{ 'personalize.color_label' | t }}</legend>
+            {%- for color in pz_colors -%}
+              {%- assign color_key = color | downcase -%}
+              <label class="ms-pz__chip"><input type="radio" name="pz-tone" value="{{ color_key }}"{% if forloop.first %} checked{% endif %} data-pz-tone><span><span class="ms-pers__dot ms-pers__dot--{{ color_key }}" aria-hidden="true"></span>{{ color }}</span></label>
+            {%- endfor -%}
+          </fieldset>
+        {%- endif -%}
+        <p class="ms-pz__note">{{ 'personalize.demo_caption' | t }}</p>
+      </div>
+    </div></div>
   </section>
 
   {% render 'bespoke' %}
@@ -71,7 +98,7 @@
     <div class="ms-wrap">
       <header class="ms-section__head ms-section__head--center">
         <p class="ms-eyebrow">{{ 'personalize.label' | t }}</p>
-        <h2 id="PzProductsTitle" class="ms-heading">{{ 'personalize.products_title' | t }}</h2>
+        <h2 id="PzProductsTitle" class="ms-heading" tabindex="-1">{{ 'personalize.products_title' | t }}</h2>
       </header>
       {%- if pz_count > 0 -%}
         <div class="ms-grid">{{ pz_cards }}</div>

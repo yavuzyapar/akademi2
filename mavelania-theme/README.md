@@ -133,6 +133,14 @@ bu bölüm görünmez; Margaux, Everett, Soren ve Heart'ta yalnızca doğru foto
 - **Ürün kartları:** telefonlar, kartın üzerine gelince açılan ikinci fotoğrafı indirmez.
 - **Kapalı çekmeceler** (favoriler) ekran dışındayken çizilmez.
 
+## Kişiselleştirme sayfası
+
+`sections/personalize.liquid` (Personalize Your Piece): üstte yazılar ve yanında `film-personalize` videosu (günlük
+hayatta taşınan çantalar; kart, para ya da yazı yok), ikonlu üç adım, ve **canlı önizleme**: ziyaretçi baş harflerini
+yazar, renk seçer (gümüş, altın, şeffaf, siyah, kırmızı; mağazadaki gerçek seçenekler) ve metni deri bir yüzeyde görür.
+Önizlemenin altında, deride sonucun farklı görüneceği açıkça yazar. Sonra e-posta ile özel istek bölümü ve
+kişiselleştirilebilen ürünler gelir.
+
 ## İletişim formu
 
 Ana sayfanın sonunda ve İletişim sayfasında aynı "Write to us" kartı vardır (`snippets/contact-card.liquid`):
