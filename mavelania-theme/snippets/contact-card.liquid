@@ -8,23 +8,27 @@
   Params:
     id       unique id for the form on the page (default 'ContactForm')
     heading  'h1' on the Contact page, 'h2' elsewhere
+    compact  true on the home page: a short heading and the address on the
+             left; name, email and message on the right
 {%- endcomment -%}
 {%- liquid
   assign cc_id = id | default: 'ContactForm'
   assign cc_h = heading | default: 'h2'
   assign cc_mail = settings.contact_email | default: 'info@mavelania.com'
 -%}
-<section class="ms-contact" aria-labelledby="{{ cc_id }}Title" data-chapter="cream">
+<section class="ms-contact{% if compact %} ms-contact--compact{% endif %}" aria-labelledby="{{ cc_id }}Title" data-chapter="cream">
   <div class="ms-wrap"><div class="ms-contact__card">
     <div class="ms-contact__intro">
       <p class="ms-eyebrow">{{ 'contact_card.eyebrow' | t }}</p>
-      <{{ cc_h }} id="{{ cc_id }}Title" class="ms-contact__title">{{ 'contact_card.title_html' | t }}</{{ cc_h }}>
-      <p class="ms-contact__lede">{{ 'contact_card.lede' | t }}</p>
+      <{{ cc_h }} id="{{ cc_id }}Title" class="ms-contact__title">{% if compact %}{{ 'contact_card.compact_title_html' | t }}{% else %}{{ 'contact_card.title_html' | t }}{% endif %}</{{ cc_h }}>
+      <p class="ms-contact__lede">{% if compact %}{{ 'contact_card.compact_lede' | t }}{% else %}{{ 'contact_card.lede' | t }}{% endif %}</p>
+      {%- unless compact -%}
       <ul class="ms-contact__promises" role="list">
         <li>{% render 'icon', name: 'mail' %}<span><strong>{{ 'contact_card.p1_title' | t }}</strong>{{ 'contact_card.p1_text' | t }}</span></li>
         <li>{% render 'icon', name: 'clock' %}<span><strong>{{ 'contact_card.p2_title' | t }}</strong>{{ 'contact_card.p2_text' | t }}</span></li>
         <li>{% render 'icon', name: 'lock' %}<span><strong>{{ 'contact_card.p3_title' | t }}</strong>{{ 'contact_card.p3_text' | t }}</span></li>
       </ul>
+      {%- endunless -%}
       <a class="ms-contact__mail" href="mailto:{{ cc_mail | escape }}" data-no-veil>{% render 'icon', name: 'mail' %} {{ cc_mail }}</a>
     </div>
 
@@ -40,6 +44,7 @@
             <ul>{%- for field in form.errors -%}<li>{{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}</li>{%- endfor -%}</ul>
           </div>
         {%- endif -%}
+        {%- unless compact -%}
         <fieldset class="ms-contact__topics">
           <legend>{{ 'contact_card.topic' | t }}</legend>
           {%- assign topics = 'contact_card.topic_order,contact_card.topic_product,contact_card.topic_personal,contact_card.topic_other' | split: ',' -%}
@@ -47,6 +52,7 @@
             <label class="ms-contact__chip"><input type="radio" name="contact[topic]" value="{{ topic | t | escape }}"{% if forloop.first %} checked{% endif %}><span>{{ topic | t }}</span></label>
           {%- endfor -%}
         </fieldset>
+        {%- endunless -%}
         <div class="ms-contact__pair">
           <div class="ms-contact__field">
             <label for="{{ cc_id }}Name">{{ 'contact.form_name' | t }}</label>
@@ -57,17 +63,19 @@
             <input id="{{ cc_id }}Email" type="email" name="contact[email]" autocomplete="email" value="{{ form.email }}" placeholder="{{ 'contact_card.ph_email' | t | escape }}" required>
           </div>
         </div>
+        {%- unless compact -%}
         <div class="ms-contact__field">
           <label for="{{ cc_id }}Order">{{ 'contact.form_order' | t }}</label>
           <input id="{{ cc_id }}Order" type="text" name="contact[order number]" placeholder="{{ 'contact_card.ph_order' | t | escape }}">
         </div>
+        {%- endunless -%}
         <div class="ms-contact__field">
           <label for="{{ cc_id }}Message">{{ 'contact.form_message' | t }}</label>
-          <textarea id="{{ cc_id }}Message" name="contact[body]" rows="5" placeholder="{{ 'contact_card.ph_message' | t | escape }}" required>{{ form.body }}</textarea>
+          <textarea id="{{ cc_id }}Message" name="contact[body]" rows="{% if compact %}3{% else %}5{% endif %}" placeholder="{{ 'contact_card.ph_message' | t | escape }}" required>{{ form.body }}</textarea>
         </div>
         <div class="ms-contact__send">
           <button class="ms-button ms-button--primary" type="submit">{{ 'contact.form_submit' | t }} {% render 'icon', name: 'arrow-right' %}</button>
-          <p>{{ 'contact_card.send_note' | t: email: cc_mail }}</p>
+          {%- unless compact -%}<p>{{ 'contact_card.send_note' | t: email: cc_mail }}</p>{%- endunless -%}
         </div>
       {%- endif -%}
     {%- endform -%}

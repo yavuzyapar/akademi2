@@ -200,10 +200,12 @@
             </div>
             <div class="ms-feature__lede">
               <p class="ms-chapter__text">{{ ch_text }}</p>
-              <a class="ms-button ms-button--primary" href="{{ ch_url }}">{{ 'home.view_all_in' | t: title: ch_title }} {% render 'icon', name: 'arrow-right' %}</a>
             </div>
           </header>
           <div class="ms-grid ms-grid--chapter ms-feature__grid">{{ ch_cards }}</div>
+          <div class="ms-feature__foot">
+            <a class="ms-button ms-button--primary" href="{{ ch_url }}">{{ 'home.view_all_in' | t: title: ch_title }} {% render 'icon', name: 'arrow-right' %}</a>
+          </div>
         </div>
       </section>
     {%- endif -%}

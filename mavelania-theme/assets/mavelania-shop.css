@@ -4307,6 +4307,84 @@ body { background-color: var(--tone-bg) !important; }
   .ms-about .ms-belief__copy { max-width: 56ch; }
 }
 
+/* ── 35 Opening film never cropped ──────────────────────────────────────
+   Wide screens: the frame is exactly 16:9 (the film's own shape), so the
+   model is always seen whole. It is as wide as the page, but no taller
+   than the screen leaves under the header; on very wide, short screens it
+   narrows and sits centred. The words scale with the frame. */
+@media (min-width: 1100px) {
+  .ms-open.ms-open--film { container-type: inline-size; width: min(calc(100% - 2 * var(--ms-gutter, 46px)), calc((100svh - 150px) * 16 / 9)); max-width: none; margin-inline: auto; }
+  .ms-open--film .ms-open__media { width: 100%; height: auto; max-height: none; aspect-ratio: 16 / 9; }
+  .ms-open--film .ms-open__film .ms-open__video { object-fit: cover; object-position: center; }
+  .ms-open--film .ms-open__copy { width: 42%; padding-left: 5.5cqi; gap: 1.1cqi; }
+  .ms-open--film .ms-open__title { font-size: clamp(1.9rem, 4.4cqi, 4.4rem); }
+  .ms-open--film .ms-open__text { font-size: clamp(13.5px, 1.25cqi, 17px); }
+  .ms-open--film .ms-eyebrow { font-size: clamp(10px, .8cqi, 12px); }
+}
+
+/* ── 36 Chapters: words, pieces, then one button below ───────────────────
+   The number, eyebrow, heading and lede stay above the pieces. The
+   "View all" button sits under the pieces, bottom left, in every chapter.
+   On wide screens the film runs from the words to the button. */
+.ms-feature__foot { display: flex; justify-content: flex-start; }
+.ms-feature__foot .ms-button { min-height: 50px; padding-inline: 28px; }
+@media (min-width: 700px) {
+  .ms-feature,
+  .ms-feature--bare,
+  .ms-chapter--flip .ms-feature,
+  .ms-chapter--flip .ms-feature--bare { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "grid" "foot"; grid-template-rows: auto auto auto; align-items: start; row-gap: clamp(20px, 2.4vw, 30px); }
+  .ms-feature--film { grid-template-columns: clamp(220px, 30vw, 300px) minmax(0, 1fr); grid-template-areas: "media head" "media grid" "media foot"; }
+  .ms-chapter--flip .ms-feature--film { grid-template-columns: minmax(0, 1fr) clamp(220px, 30vw, 300px); grid-template-areas: "head media" "grid media" "foot media"; }
+  .ms-feature__head { grid-area: head; }
+  .ms-feature__grid { grid-area: grid; }
+  .ms-feature__foot { grid-area: foot; }
+  .ms-feature--film .ms-feature__media { align-self: stretch; display: flex; min-height: 0; }
+  .ms-feature--film .ms-feature__media .ms-film { flex: 1; aspect-ratio: auto; height: auto; min-height: 380px; }
+  .ms-feature--film .ms-feature__media .ms-film video { position: absolute; inset: 0; }
+}
+@media (min-width: 700px) and (max-width: 1179px) {
+  .ms-feature--film .ms-feature__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1180px) {
+  .ms-feature--film { grid-template-columns: clamp(290px, 25vw, 372px) minmax(0, 1fr); }
+  .ms-chapter--flip .ms-feature--film { grid-template-columns: minmax(0, 1fr) clamp(290px, 25vw, 372px); }
+  .ms-feature__head { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: end; }
+}
+@media (max-width: 699px) {
+  .ms-feature__foot .ms-button { width: 100%; justify-content: center; }
+}
+
+/* The opening film lines up with the chapters' content edges */
+@media (min-width: 1100px) {
+  .ms-open.ms-open--film { width: min(calc(100% - 2 * var(--ms-gutter, 46px)), calc(var(--ms-max, 1480px) - 2 * var(--ms-gutter, 46px))); }
+}
+
+/* ── 37 About block: photograph as tall as the words ─────────────────── */
+@media (min-width: 901px) {
+  .ms-house__grid { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: stretch; }
+  .ms-house__media { position: relative; align-self: stretch; width: 100%; max-width: none; min-height: 420px; aspect-ratio: auto; margin: 0; }
+  .ms-house__media img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; object-position: center 22%; }
+}
+
+/* ── 38 Home contact: compact and quiet ───────────────────────────────── */
+.ms-contact--compact { padding-block: clamp(36px, 5vw, 72px); }
+.ms-contact--compact .ms-contact__card { box-shadow: none; border: 1px solid rgba(61, 40, 28, .12); }
+.ms-contact--compact .ms-contact__intro { gap: 12px; padding: clamp(24px, 3vw, 40px); background: #4a3122; }
+.ms-contact--compact .ms-contact__intro::after { display: none; }
+.ms-contact--compact .ms-contact__title { font-size: clamp(1.8rem, 2.6vw, 2.4rem); }
+.ms-contact--compact .ms-contact__lede { font-size: 15px; }
+.ms-contact--compact .ms-contact__mail { margin-top: 4px; padding: 10px 16px; font-size: 14px; }
+.ms-contact--compact .ms-contact__form { gap: 14px; padding: clamp(24px, 3vw, 40px); }
+.ms-contact--compact .ms-contact__field label { font-size: 13px; }
+.ms-contact--compact .ms-contact__field input,
+.ms-contact--compact .ms-contact__field textarea { padding: 11px 14px; font-size: 15px; }
+.ms-contact--compact .ms-contact__field textarea { min-height: 96px; }
+.ms-contact--compact .ms-contact__send .ms-button { min-height: 46px; }
+@media (min-width: 900px) {
+  .ms-contact--compact .ms-contact__card { grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); }
+  .ms-contact--compact .ms-contact__intro { align-content: center; }
+}
+
 /* ── 14 Motion & print safety ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .ms-hero__slide,

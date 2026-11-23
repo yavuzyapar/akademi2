@@ -587,6 +587,8 @@
     "ph_order": "e.g. #1024",
     "ph_message": "Tell us how we can help.",
     "send_note": "Or write to {{ email }} from your own mail.",
-    "done_title": "Message sent."
+    "done_title": "Message sent.",
+    "compact_title_html": "Questions? <em>Write to us.</em>",
+    "compact_lede": "A person at Mavelania reads every message and replies within two business days."
   }
 }
