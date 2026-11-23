@@ -36,9 +36,12 @@
           {%- if section.settings.open_video != blank -%}
             {{ section.settings.open_video | video_tag: autoplay: true, muted: true, loop: true, playsinline: true, preload: 'none', class: 'ms-open__video', image_size: '1600x', data-hero-video: '' }}
           {%- else -%}
-            {%- comment -%} A portrait film. Wide screens: a tall window on the right, words on the left. Tablets: a tall window in the middle, words below. Phones: it fills the frame. {%- endcomment -%}
-            <video class="ms-open__video ms-open__video--portrait" autoplay muted loop playsinline preload="none" poster="{{ 'hero-alicia-poster.webp' | asset_url }}" width="720" height="1280" aria-label="{{ 'home.film_alt' | t | escape }}" data-hero-video>
-              <source src="{{ 'hero-alicia.mp4' | asset_url }}" type="video/mp4">
+            {%- comment -%} Tablets and computers play the wide film (assets/hero-alicia-wide.mp4, 16:9), phones the portrait one. Only the film on screen downloads. {%- endcomment -%}
+            <video class="ms-open__video ms-open__video--wide" muted loop playsinline preload="none" poster="{{ 'hero-alicia-wide-poster.webp' | asset_url }}" width="1920" height="1080" aria-label="{{ 'home.film_alt' | t | escape }}" data-hero-video>
+              <source data-src="{{ 'hero-alicia-wide.mp4' | asset_url }}" type="video/mp4">
+            </video>
+            <video class="ms-open__video ms-open__video--portrait" muted loop playsinline preload="none" poster="{{ 'hero-alicia-poster.webp' | asset_url }}" width="720" height="1280" aria-label="{{ 'home.film_alt' | t | escape }}" data-hero-video>
+              <source data-src="{{ 'hero-alicia.mp4' | asset_url }}" type="video/mp4">
             </video>
           {%- endif -%}
         </div>

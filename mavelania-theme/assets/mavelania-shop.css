@@ -4179,19 +4179,16 @@ body { background-color: var(--tone-bg) !important; }
 }
 .mv-favorites-drawer:not(.is-open) { visibility: hidden; transition: transform .36s var(--e), visibility 0s linear .36s; }
 
-/* ── 31 Portrait opening film, films that fit the phone ───────────────────
-   The opening film is portrait. Wide screens: a tall window on the right
-   of a warm leather-brown frame, words on the left. Tablets: the window
-   in the middle, words below. Phones: it fills the frame. Chapter films
-   on phones never grow taller than the screen under the header. */
+/* ── 31 Opening film, films that fit the phone ───────────────────────────
+   Tablets and computers: the wide film fills the frame, words over its
+   left side on a soft shade. Phones: the portrait film fills the frame.
+   Chapter films on phones never grow taller than the screen. */
 .ms-open__film .ms-open__video--portrait { object-position: center 30%; }
-@media (min-width: 761px) {
-  .ms-open--film .ms-open__media { background: linear-gradient(115deg, #2b1f18 0%, #47332a 52%, #6e4d36 100%); }
-  .ms-open__film .ms-open__video--portrait { position: absolute; top: 0; right: clamp(20px, 6vw, 110px); bottom: 0; width: auto; height: 100%; aspect-ratio: 9 / 16; border-radius: 0; box-shadow: 0 24px 60px rgba(0, 0, 0, .35); object-position: center; }
-}
+.ms-open__film .ms-open__video--wide { object-position: center; }
+@media (min-width: 761px) { .ms-open__film .ms-open__video--portrait { display: none; } }
+@media (max-width: 760px) { .ms-open__film .ms-open__video--wide { display: none; } }
 @media (min-width: 761px) and (max-width: 1099px) {
-  .ms-open--film .ms-open__media { aspect-ratio: auto; height: clamp(460px, 64vw, 660px); }
-  .ms-open__film .ms-open__video--portrait { right: auto; left: 50%; transform: translateX(-50%); }
+  .ms-open--film .ms-open__media { aspect-ratio: 16 / 9; height: auto; }
 }
 @media (max-width: 699px) {
   .ms-feature--film .ms-feature__media .ms-film { aspect-ratio: auto; height: min(calc((100vw - 32px) * 16 / 9), calc(100svh - 150px)); }

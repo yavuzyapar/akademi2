@@ -65,12 +65,14 @@ Sitede tek iletişim adresi vardır: `contact_email` ayarı (info@mavelania.com)
 
 ## Ana ekran videosu (banner)
 
-Açılışta sessiz, döngülü, dikey bir video oynar: `assets/hero-alicia.mp4` (720×1280; Alicia çantayla çeşme
-önünde ve şehirde). Kapak görseli `hero-alicia-poster.webp`, video yüklenene kadar görünür.
+Açılışta sessiz, döngülü bir video oynar; her ekran yalnızca kendi videosunu indirir:
 
-- **Masaüstü:** video sağda dikey bir pencerede; yazılar solda, kahverengi zeminde.
-- **Tablet:** video ortada, yazılar altında.
-- **Telefon:** video ekranı doldurur (başlığın altında), yazılar ve düğmeler videonun alt kısmında.
+- **Bilgisayar ve tablet:** `assets/hero-alicia-wide.mp4` (1920×1080, 12,4 sn). Dikey Alicia videosunun
+  Higgsfield'da yatay (16:9) yeniden çerçevelenmiş hali; logo kartı çıkarıldı, kenarları yapay zekâ ile
+  doldurulan pazar sahnesi kare kare kontrolde tezgâhlar değiştiği için çıkarıldı. Yazılar videonun sol
+  tarafında, hafif bir gölgenin üzerinde.
+- **Telefon:** `assets/hero-alicia.mp4` (720×1280, dikey); video ekranı doldurur, yazılar altta.
+- Kapak görselleri `hero-alicia-wide-poster.webp` ve `hero-alicia-poster.webp`, video yüklenene kadar görünür.
 - Video kendiliğinden başlar, durdurma düğmesi yoktur.
 - Videoyu değiştirmek için: Tema düzenleyici → **Home: chapters → Film (optional)** alanına yeni videoyu yükleyin.
   Fotoğrafa dönmek için **Play the film in the opening** ayarını kapatın.
