@@ -7,10 +7,15 @@
     "trust": {
       "type": "home-trust",
       "settings": {}
+    },
+    "contact": {
+      "type": "contact-us",
+      "settings": {}
     }
   },
   "order": [
     "main",
-    "trust"
+    "trust",
+    "contact"
   ]
 }

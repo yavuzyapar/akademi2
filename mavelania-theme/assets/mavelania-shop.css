@@ -4204,6 +4204,112 @@ body { background-color: var(--tone-bg) !important; }
   .ms-chapter--flip .ms-feature--bare { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "grid"; grid-template-rows: auto auto; }
 }
 
+/* ── 32 Loading screen: logo in a ring, plain ground, quick fade ─────── */
+.page-transition { background: #f4efe6; transition: opacity .16s ease, visibility .16s ease; }
+.page-transition.on { -webkit-backdrop-filter: none; backdrop-filter: none; transition-duration: .12s; }
+.page-transition-ring { width: clamp(120px, 14vw, 170px); height: clamp(120px, 14vw, 170px); }
+.page-transition img { width: 78%; height: 78%; object-fit: contain; }
+
+/* ── 33 Product story on wide screens: film and photographs, one height ──
+   The film stands on the left and runs from the heading to the foot of
+   the photographs. Two photographs show at a time beside it; the rest
+   scroll sideways. */
+.ms-pstory__rail { position: relative; min-width: 0; }
+@media (max-width: 759px) { .ms-pstory__rail { order: 3; } }
+.ms-pstory__arrow { display: none; }
+@media (min-width: 760px) {
+  .ms-pstory:not(.ms-pstory--photos) { grid-template-columns: clamp(240px, 24vw, 340px) minmax(0, 1fr); align-items: stretch; }
+  .ms-pstory:not(.ms-pstory--photos) .ms-pstory__film { display: flex; min-height: 0; }
+  .ms-pstory:not(.ms-pstory--photos) .ms-pstory__film .ms-film { flex: 1; aspect-ratio: auto; min-height: 420px; }
+  .ms-pstory:not(.ms-pstory--photos) .ms-pstory__film .ms-film video { position: absolute; inset: 0; }
+  .ms-pstory:not(.ms-pstory--photos) .ms-pstory__body { align-content: stretch; grid-template-rows: auto 1fr; }
+  .ms-pstory:not(.ms-pstory--photos) .ms-pstory__looks,
+  .ms-pstory:not(.ms-pstory--photos) .ms-pstory__looks--1,
+  .ms-pstory:not(.ms-pstory--photos) .ms-pstory__looks--3 { display: grid; grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: calc((100% - 12px) / 2); gap: 12px; max-width: none; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; scrollbar-width: none; }
+  .ms-pstory:not(.ms-pstory--photos) .ms-pstory__looks::-webkit-scrollbar { display: none; }
+  .ms-pstory:not(.ms-pstory--photos) .ms-pstory__look,
+  .ms-pstory:not(.ms-pstory--photos) .ms-pstory__looks--3 .ms-pstory__look:first-child { grid-column: auto; aspect-ratio: auto; height: 100%; min-height: 300px; scroll-snap-align: start; }
+  .ms-pstory:not(.ms-pstory--photos) .ms-pstory__rail { height: 100%; }
+  .ms-pstory__rail.is-scrollable .ms-pstory__arrow { position: absolute; z-index: 2; top: 50%; display: grid; place-items: center; width: 44px; height: 44px; margin-top: -22px; border: 0; border-radius: 50%; background: rgba(252, 250, 246, .92); color: var(--tone-ink, #2a211b); box-shadow: 0 6px 18px rgba(20, 14, 10, .18); cursor: pointer; transition: opacity .2s ease; }
+  .ms-pstory__arrow .ms-icon { width: 18px; height: 18px; }
+  .ms-pstory__arrow--prev { left: 12px; }
+  .ms-pstory__arrow--prev .ms-icon { transform: scaleX(-1); }
+  .ms-pstory__arrow--next { right: 12px; }
+  .ms-pstory__arrow:disabled { opacity: 0; pointer-events: none; }
+}
+
+/* The seal's wordmark always fits its card, whatever the screen */
+.ms-seal__mark { container-type: inline-size; min-width: 0; }
+.ms-seal__lockup { max-width: 100%; }
+.ms-seal__script { font-size: min(clamp(3rem, 5.4vw, 4.8rem), 20cqi); white-space: nowrap; }
+
+/* ── 34 Contact card: home page and Contact page ──────────────────────────
+   Left, a leather-brown panel that says who answers and how; right, a
+   light form with large, friendly fields. */
+.ms-contact { padding-block: clamp(48px, 7vw, 104px); }
+.ms-contact__card { display: grid; grid-template-columns: minmax(0, 1fr); overflow: hidden; border-radius: var(--ms-radius, 14px); background: #fbf8f2; box-shadow: 0 24px 60px rgba(42, 33, 27, .10); }
+.ms-contact__intro { position: relative; display: grid; align-content: start; gap: 18px; padding: clamp(28px, 4vw, 56px); background: linear-gradient(150deg, #5a3a26 0%, #3d281c 100%); color: #f6efe4; }
+.ms-contact__intro::after { position: absolute; inset: 12px; border: 1px dashed rgba(240, 217, 168, .38); border-radius: calc(var(--ms-radius, 14px) - 6px); content: ""; pointer-events: none; }
+.ms-contact__intro .ms-eyebrow { color: #f0d9a8; }
+.ms-contact__title { margin: 0; color: #fff; font: 400 clamp(2.2rem, 4vw, 3.4rem)/1.04 var(--ms-serif); letter-spacing: -.015em; }
+.ms-contact__title em { color: #f0d9a8; font-style: italic; }
+.ms-contact__lede { max-width: 44ch; margin: 0; color: rgba(246, 239, 228, .86); font: 400 16px/1.65 var(--ms-sans); }
+.ms-contact__promises { display: grid; gap: 14px; margin: 6px 0 0; padding: 0; list-style: none; }
+.ms-contact__promises li { display: grid; grid-template-columns: 40px minmax(0, 1fr); align-items: start; gap: 12px; }
+.ms-contact__promises .ms-icon { width: 40px; height: 40px; padding: 10px; border-radius: 50%; background: rgba(240, 217, 168, .14); color: #f0d9a8; }
+.ms-contact__promises span { display: grid; gap: 2px; color: rgba(246, 239, 228, .78); font: 400 14px/1.5 var(--ms-sans); }
+.ms-contact__promises strong { color: #fff; font-weight: 500; font-size: 15px; }
+.ms-contact__mail { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 10px; justify-self: start; margin-top: 8px; padding: 12px 18px; border-radius: 999px; background: #f6efe4; color: #3d281c; font: 500 15px/1 var(--ms-sans); }
+.ms-contact__mail .ms-icon { width: 18px; height: 18px; }
+.ms-contact__mail:hover { background: #fff; }
+.ms-contact__form { display: grid; align-content: start; gap: 18px; padding: clamp(28px, 4vw, 56px); }
+.ms-contact__topics { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; border: 0; }
+.ms-contact__topics legend { width: 100%; margin-bottom: 10px; color: #3d281c; font: 500 15px/1.3 var(--ms-sans); }
+.ms-contact__chip input { position: absolute; opacity: 0; pointer-events: none; }
+.ms-contact__chip span { display: inline-block; padding: 9px 16px; border: 1px solid rgba(61, 40, 28, .22); border-radius: 999px; background: #fff; color: #3d281c; font: 400 14px/1 var(--ms-sans); cursor: pointer; transition: background .15s ease, color .15s ease, border-color .15s ease; }
+.ms-contact__chip input:checked + span { border-color: #7a4a2a; background: #7a4a2a; color: #fff; }
+.ms-contact__chip input:focus-visible + span { outline: 2px solid #7a4a2a; outline-offset: 2px; }
+.ms-contact__pair { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
+.ms-contact__field { display: grid; gap: 7px; }
+.ms-contact__field label { color: #3d281c; font: 500 14px/1.3 var(--ms-sans); }
+.ms-contact__field input,
+.ms-contact__field textarea { width: 100%; padding: 14px 16px; border: 1px solid rgba(61, 40, 28, .18); border-radius: 12px; background: #fff; color: #2a211b; font: 400 16px/1.5 var(--ms-sans); transition: border-color .15s ease, box-shadow .15s ease; }
+.ms-contact__field textarea { min-height: 140px; resize: vertical; }
+.ms-contact__field input::placeholder,
+.ms-contact__field textarea::placeholder { color: #a8998b; }
+.ms-contact__field input:focus,
+.ms-contact__field textarea:focus { border-color: #7a4a2a; outline: none; box-shadow: 0 0 0 4px rgba(122, 74, 42, .14); }
+.ms-contact__send { display: grid; justify-items: start; gap: 10px; margin-top: 4px; }
+.ms-contact__send .ms-button { min-height: 52px; padding-inline: 30px; }
+.ms-contact__send p { margin: 0; color: #7a6a5e; font: 400 13.5px/1.5 var(--ms-sans); }
+.ms-contact__done { display: grid; grid-template-columns: 44px minmax(0, 1fr); align-items: start; gap: 14px; padding: 22px; border-radius: 14px; background: rgba(79, 107, 87, .1); color: #2f4a37; }
+.ms-contact__done .ms-icon { width: 44px; height: 44px; padding: 11px; border-radius: 50%; background: #4f6b57; color: #fff; }
+.ms-contact__done p { display: grid; gap: 4px; margin: 0; font: 400 15px/1.55 var(--ms-sans); }
+.ms-contact__errors { padding: 14px 18px; border-radius: 12px; background: rgba(158, 43, 43, .08); color: #7a2323; font: 400 14px/1.5 var(--ms-sans); }
+.ms-contact__errors ul { margin: 0; padding-left: 18px; }
+@media (min-width: 900px) {
+  .ms-contact__card { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+  .ms-contact__pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.ms-contact-page .ms-contact { padding-top: clamp(28px, 4vw, 56px); }
+.ms-contact-more { display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; gap: 18px 40px; padding-bottom: clamp(48px, 6vw, 90px); }
+.ms-contact-more h2 { margin: 0 0 6px; font: 400 clamp(1.6rem, 2.4vw, 2.1rem)/1.1 var(--ms-serif); }
+.ms-contact-more p { max-width: 60ch; margin: 0; color: var(--tone-soft, #5e5148); font: 400 15px/1.6 var(--ms-sans); }
+.ms-contact-more__links { display: flex; flex-wrap: wrap; gap: 10px; }
+.ms-contact-more__links a { padding: 10px 18px; border: 1px solid rgba(61, 40, 28, .22); border-radius: 999px; color: #3d281c; font: 500 13px/1 var(--ms-sans); letter-spacing: .04em; }
+.ms-contact-more__links a:hover { border-color: #7a4a2a; background: #7a4a2a; color: #fff; }
+@media (min-width: 900px) { .ms-contact-more { grid-template-columns: minmax(0, 1fr) auto; } }
+.ms-contact-extra { padding-bottom: 60px; }
+
+/* About: the beliefs line up with the page heading above them */
+.ms-about .ms-belief { max-width: none; }
+@media (min-width: 900px) {
+  .ms-about .ms-belief { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .ms-about .ms-belief__film { justify-self: start; }
+  .ms-about .ms-belief--flip .ms-belief__film { justify-self: end; }
+  .ms-about .ms-belief__copy { max-width: 56ch; }
+}
+
 /* ── 14 Motion & print safety ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .ms-hero__slide,

@@ -118,18 +118,41 @@
  
   var transition = document.getElementById('pageTransition');
   if (transition) {
-    /* The veil is kept only for the country switcher, which reloads every
-       price. Ordinary links navigate untouched: the next page is fetched
-       ahead (speculation rules in layout/theme.liquid) and cross-fades in
-       with a view transition (mavelania-shop.css, block 30). */
+    /* Loading screen: the Mavelania logo in a turning ring, on a plain
+       cream ground (no blur, so it costs nothing to paint). It appears the
+       moment a link to another page of the shop is followed and leaves as
+       soon as the next page shows. Pages are fetched ahead (speculation
+       rules in layout/theme.liquid), so it is usually seen only briefly. */
+    var transitionTimer = 0;
     var hideTransition = function () {
       transition.classList.remove('on');
       transition.setAttribute('aria-hidden', 'true');
+      if (transitionTimer) window.clearTimeout(transitionTimer);
+      transitionTimer = 0;
+    };
+    var showTransition = function () {
+      transition.classList.add('on');
+      transition.setAttribute('aria-hidden', 'false');
+      if (transitionTimer) window.clearTimeout(transitionTimer);
+      /* Never left on screen if the navigation does not happen. */
+      transitionTimer = window.setTimeout(hideTransition, 4000);
     };
     transition.addEventListener('click', hideTransition);
-    window.addEventListener('pageshow', function () { window.setTimeout(hideTransition, 80); });
+    document.addEventListener('click', function (event) {
+      if (event.defaultPrevented || event.button > 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      var link = event.target.closest('a[href]');
+      if (!link || link.hasAttribute('download') || link.target === '_blank' || link.hasAttribute('data-no-veil')) return;
+      var href = link.getAttribute('href');
+      if (!href || href.charAt(0) === '#' || /^(mailto:|tel:|javascript:)/i.test(href)) return;
+      var destination;
+      try { destination = new URL(link.href, window.location.href); } catch (error) { return; }
+      if (destination.origin !== window.location.origin) return;
+      if (destination.pathname === window.location.pathname && destination.search === window.location.search) return;
+      showTransition();
+    });
+    window.addEventListener('pageshow', hideTransition);
   }
- 
+
   document.querySelectorAll('[data-product-root]').forEach(function (root) {
     var mainImage = root.querySelector('.mv-product-main-media img');
     var mediaButtons = Array.prototype.slice.call(root.querySelectorAll('[data-media-src]'));

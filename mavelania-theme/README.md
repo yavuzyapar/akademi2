@@ -85,7 +85,8 @@ F360'ın ürünle uyuşmayan videoları/fotoğrafları kaldırıldı. Bennett, R
 bu bölüm görünmez; Margaux, Everett, Soren ve Heart'ta yalnızca doğru fotoğraflar kalır.
 
 - **Ürün sayfası, "See it carried" bölümü:** her ürün sayfasında ürün bilgilerinin hemen üstünde.
-  Bilgisayarda solda ürünün videosu, sağda dört fotoğraf; telefonda önce yazı, sonra video, sonra
+  Bilgisayarda solda ürünün videosu başlıktan fotoğrafların altına kadar aynı hizada; sağda aynı anda iki
+  fotoğraf, diğerleri oklarla ya da kaydırarak; telefonda önce yazı, sonra video, sonra
   kaydırılabilir fotoğraf şeridi. Videosu olmayan üründe yalnızca fotoğraflar, ikisi de olmayan üründe
   bölüm hiç görünmez. Shopify'da ürüne video yüklerseniz bölüm önce onu gösterir.
 - **Koleksiyon kartları:** imleç karta gelince ürünün ilk günlük yaşam fotoğrafı açılır (yoksa ürünün
@@ -116,16 +117,26 @@ bu bölüm görünmez; Margaux, Everett, Soren ve Heart'ta yalnızca doğru foto
 
 ## Hız
 
-- **Açılış videosu** sayfa yüklendikten sonra inmeye başlar; o ana kadar ilk karesi (kapak görseli) görünür.
-  Böylece video, sayfanın kendi görselleri ve stilleriyle yarışmaz. Telefonda ilk 6 saniyede inen veri
-  6 MB'tan yaklaşık 2,7 MB'a indi. Veri tasarrufu açıksa ya da bağlantı çok yavaşsa (2G) video düğmeyle başlar.
-- **Sayfa geçişleri:** her tıklamada ekranı kaplayan beyaz, bulanık yükleme perdesi kaldırıldı. Ziyaretçinin
-  açmak üzere olduğu sayfa önceden getirilir (bilgisayarda imleç linkin üzerinde durunca, telefonda parmak
-  değince; `layout/theme.liquid` içindeki speculation rules). Sayfalar tarayıcının kendi yumuşak geçişiyle
-  açılır. Sepet, ödeme, hesap ve arama önceden getirilmez. Perde yalnızca ülke/para birimi değişiminde görünür.
-- **Ürün kartları:** telefonlar, kartın üzerine gelince açılan ikinci fotoğrafı hiç indirmez (dokunmatik
-  ekranda gösterilemez). Koleksiyon sayfasında telefonda inen veri yaklaşık %40 azaldı.
-- **Kapalı çekmeceler** (favoriler) ekran dışındayken çizilmez; kaydırma sırasında boşuna işlemci harcamaz.
+- **Yazı tipleri temanın içinde** (`assets/font-*.woff2`, `snippets/fonts.liquid`). Google Fonts'a istek gitmez;
+  yazılar daha erken ve hep doğru yazı tipiyle görünür. Ana iki yazı tipi önceden yüklenir. "Mavelania" el
+  yazısı, yazı tipi gelmeden başka bir yazı tipiyle gösterilmez (taşma olmaz).
+- **Açılış videosu** sayfa yüklendikten sonra başlar; o ana kadar ilk karesi görünür. Video kalitesi gözle
+  ayırt edilmeyecek şekilde sıkıştırıldı (5,2 MB → 3,2 MB).
+- **Yükleme ekranı:** başka bir sayfaya geçerken ekranda dönen halka içinde Mavelania logosu görünür. Bulanıklık
+  efekti yoktur (çizimi ucuzdur), hızlı açılıp kapanır.
+- **Sayfa geçişleri:** ziyaretçinin açmak üzere olduğu sayfa önceden getirilir (bilgisayarda imleç linkin üzerinde
+  durunca); tıklama anında sayfa arka planda hazırlanmaya başlar (prerender), böylece çoğu geçiş anında olur.
+  Sayfalar yumuşak bir geçişle açılır. Sepet, ödeme, hesap ve arama önceden getirilmez.
+- **Ürün kartları:** telefonlar, kartın üzerine gelince açılan ikinci fotoğrafı indirmez.
+- **Kapalı çekmeceler** (favoriler) ekran dışındayken çizilmez.
+
+## İletişim formu
+
+Ana sayfanın sonunda ve İletişim sayfasında aynı "Write to us" kartı vardır (`snippets/contact-card.liquid`):
+solda kimin, ne zaman cevap verdiği; sağda konu seçimi, ad, e-posta, sipariş numarası ve mesaj. Form Shopify'ın
+kendi iletişim formudur; mesajlar mağazanın **iletişim e-postasına** gider. Mesajların info@mavelania.com'a
+gelmesi için: Shopify yönetim paneli → **Ayarlar → Mağaza ayrıntıları → İletişim bilgileri** altında e-posta
+adresinin info@mavelania.com olduğundan emin olun.
 
 ## Güvenlik
 

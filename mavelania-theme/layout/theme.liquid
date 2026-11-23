@@ -43,33 +43,9 @@
       >
     {%- endif -%}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@200;300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
-    >
-
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@200;300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
-    >
-
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Allura&display=swap"
-      media="print"
-      onload="this.media='all'"
-    >
-
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Allura&display=swap"
-      >
-    </noscript>
+    <link rel="preload" as="font" type="font/woff2" href="{{ 'font-jost-v-l.woff2' | asset_url }}" crossorigin>
+    <link rel="preload" as="font" type="font/woff2" href="{{ 'font-cormorant-garamond-v-l.woff2' | asset_url }}" crossorigin>
+    {% render 'fonts' %}
 
     <title>{{ page_title }}{% if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} &ndash; {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
 
@@ -282,6 +258,15 @@
             { "not": { "selector_matches": "[target=_blank], [download], [data-no-prefetch]" } }
           ] },
           "eagerness": "moderate"
+        }],
+        "prerender": [{
+          "source": "document",
+          "where": { "and": [
+            { "href_matches": "/*" },
+            { "not": { "href_matches": ["/cart*", "/checkout*", "/account*", "/search*", "/apps/*", "/services/*", "/localization*", "/*/cart*", "/*/checkout*", "/*/account*", "/*/search*"] } },
+            { "not": { "selector_matches": "[target=_blank], [download], [data-no-prefetch]" } }
+          ] },
+          "eagerness": "conservative"
         }]
       }
     </script>
@@ -295,7 +280,7 @@
     >
       <div class="page-transition-ring">
         <img
-          src="{{ 'mavelania-logo-original-transparent.png' | asset_url }}"
+          src="{{ 'mavelania-logo-original-transparent.png' | asset_url }}" fetchpriority="low" decoding="async"
           alt="Mavelania"
           width="240"
           height="240"

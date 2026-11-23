@@ -563,6 +563,30 @@
     "product_title": "See it carried",
     "product_text": "The {{ title }} in natural light: how it sits, opens and moves through an ordinary day.",
     "look_label": "Photograph {{ n }} of the {{ title }} in use",
-    "look_hint": "Swipe for more"
+    "look_hint": "Swipe for more",
+    "look_prev": "Previous photograph",
+    "look_next": "Next photograph"
+  },
+  "contact_card": {
+    "eyebrow": "Contact us",
+    "title_html": "Write to us.<br><em>A person answers.</em>",
+    "lede": "A question about a piece, an order, leather care or a personalization idea: send it here and it reaches the Mavelania team directly.",
+    "p1_title": "Straight to our inbox",
+    "p1_text": "Every message arrives at info@mavelania.com.",
+    "p2_title": "A reply within two business days",
+    "p2_text": "Orders already in preparation come first.",
+    "p3_title": "Your details stay with us",
+    "p3_text": "Used only to answer you, never shared.",
+    "topic": "What is it about?",
+    "topic_order": "An order",
+    "topic_product": "A product",
+    "topic_personal": "Personalization",
+    "topic_other": "Something else",
+    "ph_name": "Your name",
+    "ph_email": "you@example.com",
+    "ph_order": "e.g. #1024",
+    "ph_message": "Tell us how we can help.",
+    "send_note": "Or write to {{ email }} from your own mail.",
+    "done_title": "Message sent."
   }
 }

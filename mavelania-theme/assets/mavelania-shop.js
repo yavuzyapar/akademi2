@@ -1364,6 +1364,27 @@
     });
   })();
 
+  /* Photograph rails: arrows scroll one photograph at a time and fade out
+     at either end. */
+  $$('[data-rail]').forEach(function (rail) {
+    var track = $('[data-rail-track]', rail);
+    var prev = $('[data-rail-prev]', rail);
+    var next = $('[data-rail-next]', rail);
+    if (!track || !prev || !next) return;
+    function step() { var item = track.firstElementChild; return item ? item.getBoundingClientRect().width + 12 : track.clientWidth / 2; }
+    function sync() {
+      var max = track.scrollWidth - track.clientWidth - 2;
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= max;
+      rail.classList.toggle('is-scrollable', max > 2);
+    }
+    prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
+    next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+    track.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+  });
+
   /* Personalization: the "special request" mail carries the product and the
      text typed so far. */
   $$('[data-pers-mail]').forEach(function (link) {

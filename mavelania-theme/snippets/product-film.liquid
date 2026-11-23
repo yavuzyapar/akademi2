@@ -4,7 +4,9 @@
   to four lookbook photographs from the theme. Both come from
   snippets/film-name.liquid. Renders nothing for a product with neither.
 
-  Desktop: film on the left, words and a 2×2 photo grid on the right.
+  Desktop: the film on the left runs the full height of the words and a
+  row of photographs on the right; two photographs show at a time and the
+  row scrolls sideways (arrows, trackpad or drag).
   Phones: words, the film in a 4:5 window, then the photos in a swipe row.
 
   Params: product
@@ -44,7 +46,8 @@
         <p>{{ 'film.product_text' | t: title: product.title }}</p>
       </header>
       {%- if ps_looks > 0 -%}
-        <ul class="ms-pstory__looks ms-pstory__looks--{{ ps_looks }}" role="list">
+        <div class="ms-pstory__rail" data-rail>
+        <ul class="ms-pstory__looks ms-pstory__looks--{{ ps_looks }}" role="list" data-rail-track>
           {%- for n in (1..ps_looks) -%}
             {%- assign ps_file = 'look-' | append: ps_short | append: '-' | append: n | append: '.webp' -%}
             <li class="ms-pstory__look">
@@ -52,6 +55,11 @@
             </li>
           {%- endfor -%}
         </ul>
+        {%- if ps_looks > 2 -%}
+          <button class="ms-pstory__arrow ms-pstory__arrow--prev" type="button" data-rail-prev aria-label="{{ 'film.look_prev' | t | escape }}" disabled>{% render 'icon', name: 'arrow-right' %}</button>
+          <button class="ms-pstory__arrow ms-pstory__arrow--next" type="button" data-rail-next aria-label="{{ 'film.look_next' | t | escape }}">{% render 'icon', name: 'arrow-right' %}</button>
+        {%- endif -%}
+        </div>
       {%- endif -%}
     </div>
   </section>
