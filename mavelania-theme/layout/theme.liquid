@@ -99,6 +99,8 @@
         LCP: the opening film's first frame (sections/mavelania-home.liquid).
       {%- endcomment -%}
       <link rel="preload" as="image" href="{{ 'hero-alicia-wide-poster.webp' | asset_url }}" media="(min-width: 761px)" fetchpriority="high">
+      <link rel="preload" as="video" href="{{ 'hero-alicia-wide.mp4' | asset_url }}" type="video/mp4" media="(min-width: 761px)">
+      <link rel="preload" as="video" href="{{ 'hero-alicia.mp4' | asset_url }}" type="video/mp4" media="(max-width: 760px)">
       <link rel="preload" as="image" href="{{ 'hero-alicia-poster.webp' | asset_url }}" media="(max-width: 760px)" fetchpriority="high">
     {%- elsif request.page_type == 'product' and product.featured_media != blank -%}
       <link

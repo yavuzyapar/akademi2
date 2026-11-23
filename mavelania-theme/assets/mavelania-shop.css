@@ -4386,6 +4386,17 @@ body { background-color: var(--tone-bg) !important; }
   .ms-contact--compact .ms-contact__intro { align-content: center; }
 }
 
+/* ── 39 Opening film: one autoplaying video over its first frame ──────── */
+.ms-open__film .ms-open__poster,
+.ms-open__film .ms-open__poster img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.ms-open__film .ms-open__poster img { object-fit: cover; object-position: center; }
+.ms-open__film .ms-open__video { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; object-position: center; background: transparent; }
+.ms-open__film .ms-open__video[poster] { background: transparent; }
+@media (max-width: 760px) {
+  .ms-open__film .ms-open__poster img,
+  .ms-open__film .ms-open__video { object-position: center 30%; }
+}
+
 /* ── 14 Motion & print safety ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .ms-hero__slide,

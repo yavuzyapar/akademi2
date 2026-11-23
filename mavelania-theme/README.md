@@ -73,7 +73,8 @@ Açılışta sessiz, döngülü bir video oynar; her ekran yalnızca kendi video
   tarafında, hafif bir gölgenin üzerinde.
 - **Telefon:** `assets/hero-alicia.mp4` (720×1280, dikey); video ekranı doldurur, yazılar altta.
 - Kapak görselleri `hero-alicia-wide-poster.webp` ve `hero-alicia-poster.webp`, video yüklenene kadar görünür.
-- Video kendiliğinden başlar, durdurma düğmesi yoktur.
+- Video sayfa açılır açılmaz tarayıcının kendi otomatik oynatmasıyla başlar (dokunmayı ya da sayfanın tamamen
+  yüklenmesini beklemez); hangi videonun oynayacağını tarayıcı ekran genişliğine göre seçer. Durdurma düğmesi yoktur.
 - Videoyu değiştirmek için: Tema düzenleyici → **Home: chapters → Film (optional)** alanına yeni videoyu yükleyin.
   Fotoğrafa dönmek için **Play the film in the opening** ayarını kapatın.
 
@@ -97,7 +98,7 @@ bu bölüm görünmez; Margaux, Everett, Soren ve Heart'ta yalnızca doğru foto
   sağda dikey pencere, solda yazılar; tablette ortada; telefonda ekranı doldurur.
 - **Ana sayfa bölümleri:** Çantalar bölümünde video ya da fotoğraf yok; başlık ve ürünler tam genişlikte.
   Cüzdanlar `home-wallets` (Margaux'nun yapılışı: deri kesimi, dikiş, kutu, sokakta), Kartlıklar `film-valeria`
-  (Valeria kutu açılışı). Geniş ekranda video bölüm numarasından ürün kartlarının altına kadar uzanır;
+  (Valeria kutu açılışı; kitapçı sahnesi çıkarıldı). Geniş ekranda video bölüm numarasından ürün kartlarının altına kadar uzanır;
   telefonda ekran yüksekliğini aşmaz. Tema düzenleyici → **Home: chapters → Films** altında bir ürün seçilirse
   o ürünün videosu oynar.
 - **Videolar kendiliğinden başlar,** durdurma düğmesi yoktur (sessiz oynarlar; telefon pil tasarrufu

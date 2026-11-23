@@ -1323,38 +1323,21 @@
   });
 
   /* ── Opening film ─────────────────────────────────────────────────
-     Two films: wide for tablets and computers, portrait for phones. Only
-     the one on screen is downloaded, once the page has loaded; until then
-     its first frame shows. Plays muted on a loop. */
+     The film carries the browser's own autoplay, so it starts as soon as
+     it can. This only makes sure: it is muted (required for autoplay) and
+     is asked to play right away. A phone that still holds it back (for
+     example in a battery saving mode) starts it at the first touch. */
   (function () {
     var box = $('[data-hero-film]');
     if (!box) return;
-    var videos = $$('video', box);
-    videos.forEach(function (video) {
+    $$('video', box).forEach(function (video) {
       video.muted = true;
+      video.defaultMuted = true;
       video.setAttribute('muted', '');
-      video.addEventListener('play', function () { box.classList.add('is-playing'); });
+      video.addEventListener('playing', function () { box.classList.add('is-playing'); });
+      if (video.paused) tryPlay(video);
+      video.addEventListener('canplay', function () { if (video.paused) tryPlay(video); }, { once: true });
     });
-    function start() {
-      videos.forEach(function (video) {
-        if (video.offsetParent === null) { if (!video.paused) video.pause(); return; }
-        var pending = $$('source[data-src]', video);
-        pending.forEach(function (source) {
-          source.src = source.dataset.src;
-          delete source.dataset.src;
-        });
-        if (pending.length) video.load();
-        if (video.paused) tryPlay(video);
-      });
-    }
-    if (document.readyState === 'complete') start();
-    else window.addEventListener('load', start, { once: true });
-    if (window.matchMedia) {
-      var mq = window.matchMedia('(min-width: 761px)');
-      var onChange = function () { if (document.readyState === 'complete') start(); };
-      if (mq.addEventListener) mq.addEventListener('change', onChange);
-      else if (mq.addListener) mq.addListener(onChange);
-    }
   })();
 
   /* ── Films ─────────────────────────────────────────────────────────
