@@ -104,7 +104,7 @@ bu bölüm görünmez; Margaux, Everett, Soren ve Heart'ta yalnızca doğru foto
 - **Videolar kendiliğinden başlar,** durdurma düğmesi yoktur (sessiz oynarlar; telefon pil tasarrufu
   modunda bekletirse ilk dokunuşta başlar).
 - **Valeria ürün sayfası:** `film-valeria` kutu açılışıyla başlar.
-- **Hakkımızda:** I `film-atelier` (dikiş yakın çekimi), II `film-isadora`, III `film-amelie`.
+- **Hakkımızda:** I `film-atelier` (dikiş yakın çekimi; parmakla deriye dokunma sahnesi çıkarıldı), II `film-isadora`, III `film-amelie`.
 - **Tek liste:** hangi ürünün hangi video ve fotoğrafları gösterdiği `snippets/film-name.liquid`
   dosyasındadır (`video|kısa ad|fotoğraf sayısı`). Yeni medya eklemek için dosyayı `assets/` içine
   koyup bu listeye satır eklemek yeterlidir.
