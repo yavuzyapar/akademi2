@@ -121,7 +121,11 @@
       header.classList.toggle('is-stuck', y > 8);
       var locked = searchOpen() || body.classList.contains('mv-mobile-menu-open') || header.contains(document.activeElement);
       if (compact.matches) locked = true;
-      if (y > 220 && y > lastY + 6 && !locked) setHidden(true);
+      // Home page: never lay the header over the opening film.
+      var hero = document.querySelector('.ms-open');
+      var overHero = hero && y > 8 && y < hero.getBoundingClientRect().bottom + y - 40;
+      if (overHero && !locked) setHidden(true);
+      else if (y > 220 && y > lastY + 6 && !locked) setHidden(true);
       else if (y < lastY - 6 || y <= 220) setHidden(false);
       lastY = y;
     }

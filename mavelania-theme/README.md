@@ -67,8 +67,8 @@ Sitede tek iletişim adresi vardır: `contact_email` ayarı (info@mavelania.com)
 
 Açılışta sessiz, döngülü bir video oynar; her ekran yalnızca kendi videosunu indirir:
 
-- **Bilgisayar ve tablet:** `assets/hero-alicia-wide.mp4` (1920×1080, 12,4 sn). Dikey Alicia videosunun
-  Higgsfield'da yatay (16:9) yeniden çerçevelenmiş hali; logo kartı çıkarıldı, kenarları yapay zekâ ile
+- **Bilgisayar ve tablet:** `assets/hero-alicia-wide.mp4` (1920×1080, 10,5 sn). Dikey Alicia videosunun
+  Higgsfield'da yatay (16:9) yeniden çerçevelenmiş hali; logo kartı ve başı kadraj dışında kalan köprü sahnesi çıkarıldı (video çeşme sahnesiyle başlar), kenarları yapay zekâ ile
   doldurulan pazar sahnesi kare kare kontrolde tezgâhlar değiştiği için çıkarıldı. Yazılar videonun sol
   tarafında, hafif bir gölgenin üzerinde.
 - **Telefon:** `assets/hero-alicia.mp4` (720×1280, dikey); video ekranı doldurur, yazılar altta.
