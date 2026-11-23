@@ -31,7 +31,7 @@
     {%- if ps_has_film -%}
       <div class="ms-pstory__film">
         {%- if ps_native != blank -%}
-          <div class="ms-film ms-film--native">{{ ps_native | video_tag: controls: true, muted: true, loop: true, playsinline: true, preload: 'none', image_size: '900x' }}</div>
+          <div class="ms-film ms-film--native">{{ ps_native | video_tag: autoplay: true, muted: true, loop: true, playsinline: true, preload: 'metadata', image_size: '900x' }}</div>
         {%- else -%}
           {% render 'film', name: ps_film, label: product.title %}
         {%- endif -%}

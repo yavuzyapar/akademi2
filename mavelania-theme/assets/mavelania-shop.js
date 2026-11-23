@@ -1299,81 +1299,68 @@
     });
   })();
 
+  /* ── Films start by themselves ─────────────────────────────────────
+     Every film is muted, so phones let it start without a tap. If a phone
+     still holds one back (for example in a battery saving mode), the
+     visitor's first touch, scroll or key press starts it. There is no
+     pause button. */
+  var waiting = [];
+  function tryPlay(video) {
+    var promise = video.play();
+    if (promise && promise.catch) promise.catch(function () { if (waiting.indexOf(video) < 0) waiting.push(video); });
+  }
+  function wake() {
+    var list = waiting.slice();
+    waiting.length = 0;
+    list.forEach(function (video) { if (video.paused && video.dataset.inView !== 'no') tryPlay(video); });
+  }
+  ['touchstart', 'pointerdown', 'scroll', 'keydown'].forEach(function (type) {
+    window.addEventListener(type, wake, { passive: true });
+  });
+
   /* ── Opening film ─────────────────────────────────────────────────
      Plays muted on a loop. Its poster (the first frame) paints at once;
-     the film itself starts downloading only after the page has loaded,
-     so it never competes with the page's own images and styles. The
-     button pauses it (motion longer than five seconds must be stoppable).
-     With reduced motion, data saver or a very slow connection it stays
-     on its first frame until the visitor presses play. */
+     the film itself starts as soon as the page has loaded, so it never
+     competes with the page's own images and styles. */
   (function () {
     var box = $('[data-hero-film]');
     if (!box) return;
-    var video = $('video', box);
-    var button = $('[data-hero-toggle]', box);
-    if (!video || !button) return;
-    video.muted = true;
-    var net = navigator.connection;
-    var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-      (net && (net.saveData || /(^|-)2g$/.test(net.effectiveType || '')));
-    function sync() {
-      var playing = !video.paused;
-      box.classList.toggle('is-playing', playing);
-      button.setAttribute('aria-label', playing ? button.dataset.labelPause : button.dataset.labelPlay);
-    }
-    function play() { var promise = video.play(); if (promise && promise.catch) promise.catch(sync); }
-    video.addEventListener('play', sync);
-    video.addEventListener('pause', sync);
-    button.addEventListener('click', function () { if (video.paused) play(); else video.pause(); });
-    function start() { if (!calm && video.paused) play(); }
-    if (document.readyState === 'complete') start();
-    else window.addEventListener('load', start, { once: true });
-    sync();
+    $$('video', box).forEach(function (video) {
+      video.muted = true;
+      video.setAttribute('muted', '');
+      video.addEventListener('play', function () { box.classList.add('is-playing'); });
+      function start() { if (video.paused && video.offsetParent !== null) tryPlay(video); }
+      if (document.readyState === 'complete') start();
+      else window.addEventListener('load', start, { once: true });
+    });
   })();
 
   /* ── Films ─────────────────────────────────────────────────────────
      Short silent films. Nothing is downloaded until a film scrolls into
-     view; it then plays muted on a loop and pauses when it leaves the
-     screen, so only the film being looked at is running. The button
-     pauses and resumes. With reduced motion, or when the visitor asked to
-     save data, films wait for the button. */
+     view; it then plays muted on a loop, and rests while it is off the
+     screen so only the film being looked at is running. */
   (function () {
-    var films = $$('[data-film]');
-    if (!films.length) return;
-    var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-      (navigator.connection && navigator.connection.saveData);
-
-    films.forEach(function (film) {
+    $$('[data-film]').forEach(function (film) {
       var video = $('[data-film-video]', film);
-      var button = $('[data-film-toggle]', film);
-      if (!video || !button) return;
-      var paused = !!calm; // paused by the visitor (or by preference)
+      if (!video) return;
       video.muted = true;
-
-      function sync() {
-        var playing = !video.paused;
-        film.classList.toggle('is-playing', playing);
-        button.setAttribute('aria-label', playing ? button.dataset.labelPause : button.dataset.labelPlay);
-      }
-      function play() {
-        var promise = video.play();
-        if (promise && promise.catch) promise.catch(function () { sync(); });
-      }
-      video.addEventListener('play', sync);
-      video.addEventListener('pause', sync);
-      button.addEventListener('click', function () {
-        if (video.paused) { paused = false; play(); } else { paused = true; video.pause(); }
-      });
-
+      video.setAttribute('muted', '');
+      video.addEventListener('play', function () { film.classList.add('is-playing'); });
       if ('IntersectionObserver' in window) {
         new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
-            if (entry.isIntersecting && entry.intersectionRatio >= 0.4) { if (!paused) play(); }
-            else if (!video.paused) video.pause();
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
+              video.dataset.inView = 'yes';
+              if (video.paused) tryPlay(video);
+            } else {
+              video.dataset.inView = 'no';
+              if (!video.paused) video.pause();
+            }
           });
-        }, { threshold: [0, 0.4, 0.75] }).observe(film);
+        }, { threshold: [0, 0.25, 0.6] }).observe(film);
+      } else {
+        tryPlay(video);
       }
-      sync();
     });
   })();
 

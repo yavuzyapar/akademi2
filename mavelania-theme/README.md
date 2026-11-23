@@ -92,10 +92,14 @@ geçişle bağlıdır.
   bölüm hiç görünmez. Shopify'da ürüne video yüklerseniz bölüm önce onu gösterir.
 - **Koleksiyon kartları:** imleç karta gelince ürünün ilk günlük yaşam fotoğrafı açılır (yoksa ürünün
   ikinci görseli).
-- **Ana sayfa bölümleri:** Çantalar `home-bags` (Alicia, çeşme önünde ve şehirde yürüyüş), Cüzdanlar
-  `home-wallets` (Conrad, güneşli masada), Kartlıklar `home-cards` (Soren, cepten avuca, sonra kahvenin
-  yanına). Videolar 9:16; geniş ekranda bölüm numarasından ürün kartlarının altına kadar uzanır. Tema
-  düzenleyici → **Home: chapters → Films** altında başka bir ürün seçilirse o ürünün videosu oynar.
+- **Açılış videosu:** `hero-alicia` (dikey; Alicia çantayla çeşme önünde ve şehirde yürüyüş). Geniş ekranda
+  sağda dikey pencere, solda yazılar; tablette ortada; telefonda ekranı doldurur.
+- **Ana sayfa bölümleri:** Çantalar `home-bags` (Elara, akşam Paris'te yürüyüş), Cüzdanlar `film-atelier`
+  (deri dikiş), Kartlıklar `home-cards` (Valeria kutu açılışı). Geniş ekranda video bölüm numarasından ürün
+  kartlarının altına kadar uzanır; telefonda ekran yüksekliğini aşmaz. Tema düzenleyici → **Home: chapters →
+  Films** altında başka bir ürün seçilirse o ürünün videosu oynar.
+- **Videolar kendiliğinden başlar,** durdurma düğmesi yoktur (sessiz oynarlar; telefon pil tasarrufu
+  modunda bekletirse ilk dokunuşta başlar).
 - **Valeria ürün sayfası:** `film-valeria` kutu açılışıyla başlar.
 - **Hakkımızda:** I `film-atelier` (dikiş yakın çekimi), II `film-isadora`, III `film-amelie`.
 - **Tek liste:** hangi ürünün hangi video ve fotoğrafları gösterdiği `snippets/film-name.liquid`

@@ -34,18 +34,13 @@
       {%- if open_film -%}
         <div class="ms-open__film" data-hero-film>
           {%- if section.settings.open_video != blank -%}
-            {{ section.settings.open_video | video_tag: muted: true, loop: true, playsinline: true, preload: 'none', class: 'ms-open__video', image_size: '1600x', data-hero-video: '' }}
+            {{ section.settings.open_video | video_tag: autoplay: true, muted: true, loop: true, playsinline: true, preload: 'none', class: 'ms-open__video', image_size: '1600x', data-hero-video: '' }}
           {%- else -%}
-            {%- comment -%} Wide screens get the 1080p film, phones a portrait film framed on the model. Browsers that ignore media on <source> take the first (wide) film, which the phone layout frames with object-position. {%- endcomment -%}
-            <video class="ms-open__video" muted loop playsinline preload="none" poster="{{ 'hero-film-poster.webp' | asset_url }}" width="1920" height="1080" aria-label="{{ 'home.film_alt' | t | escape }}" data-hero-video>
-              <source src="{{ 'hero-film.mp4' | asset_url }}" type="video/mp4" media="(min-width: 761px)">
-              <source src="{{ 'hero-film-mobile.mp4' | asset_url }}" type="video/mp4">
+            {%- comment -%} A portrait film. Wide screens: a tall window on the right, words on the left. Tablets: a tall window in the middle, words below. Phones: it fills the frame. {%- endcomment -%}
+            <video class="ms-open__video ms-open__video--portrait" autoplay muted loop playsinline preload="none" poster="{{ 'hero-alicia-poster.webp' | asset_url }}" width="720" height="1280" aria-label="{{ 'home.film_alt' | t | escape }}" data-hero-video>
+              <source src="{{ 'hero-alicia.mp4' | asset_url }}" type="video/mp4">
             </video>
           {%- endif -%}
-          <button class="ms-film__toggle ms-open__toggle" type="button" data-hero-toggle data-label-pause="{{ 'film.pause' | t | escape }}" data-label-play="{{ 'film.play' | t | escape }}" aria-label="{{ 'film.pause' | t | escape }}">
-            <span class="ms-film__icon ms-film__icon--play">{% render 'icon', name: 'play' %}</span>
-            <span class="ms-film__icon ms-film__icon--pause">{% render 'icon', name: 'pause' %}</span>
-          </button>
         </div>
       {%- else -%}
       {%- liquid
@@ -95,7 +90,7 @@
           assign ch_type = ''
           assign ch_img = 'collection-bag-bordeaux.webp'
           assign ch_pick = section.settings.bags_image
-          assign ch_film_handle = section.settings.bags_film_product.handle | default: 'alicia-leather-handbag'
+          assign ch_film_handle = section.settings.bags_film_product.handle | default: 'elara-leather-bag'
           assign ch_own_film = 'home-bags'
           if section.settings.bags_film_product != blank
             assign ch_own_film = ''
@@ -115,8 +110,9 @@
           assign ch_type = ''
           assign ch_img = 'women-leather-wallet-model.webp'
           assign ch_pick = section.settings.wallets_image
-          assign ch_film_handle = section.settings.wallets_film_product.handle | default: 'conrad-leather-wallet'
-          assign ch_own_film = 'home-wallets'
+          # The wallets chapter shows the stitching film: no single piece in it.
+          assign ch_film_handle = section.settings.wallets_film_product.handle | default: ''
+          assign ch_own_film = 'film-atelier'
           if section.settings.wallets_film_product != blank
             assign ch_own_film = ''
           endif
@@ -135,7 +131,7 @@
           assign ch_type = 'Card Holder'
           assign ch_img = 'collection-hero-cardholders.webp'
           assign ch_pick = section.settings.cards_image
-          assign ch_film_handle = section.settings.cards_film_product.handle | default: 'soren-leather-card-holde'
+          assign ch_film_handle = section.settings.cards_film_product.handle | default: 'valeria-leather-shoulder-bag'
           assign ch_own_film = 'home-cards'
           if section.settings.cards_film_product != blank
             assign ch_own_film = ''
@@ -266,17 +262,17 @@
     { "type": "header", "content": "Films" },
     { "type": "checkbox", "id": "chapter_films", "label": "Play a short film in each chapter", "default": true, "info": "Off, or when a chapter photo is chosen below: the photo is shown instead." },
     { "type": "header", "content": "Chapter I — Bags" },
-    { "type": "product", "id": "bags_film_product", "label": "Piece whose film plays", "info": "Leave empty for the theme's own film of the Alicia Leather Handbag. Only pieces that have a film can be used." },
+    { "type": "product", "id": "bags_film_product", "label": "Piece whose film plays", "info": "Leave empty for the theme's own film of the Elara Leather Bag. Only pieces that have a film can be used." },
     { "type": "image_picker", "id": "bags_image", "label": "Photo", "info": "Optional. Upload the original photo for the sharpest result." },
     { "type": "text", "id": "bags_title", "label": "Headline", "default": "Crafted to Be Remembered." },
     { "type": "textarea", "id": "bags_text", "label": "Text", "default": "Totes, shoulder bags and briefcases, built to carry weight and to soften where your hands rest." },
     { "type": "header", "content": "Chapter II — Wallets" },
-    { "type": "product", "id": "wallets_film_product", "label": "Piece whose film plays", "info": "Leave empty for the theme's own film of the Conrad Leather Wallet." },
+    { "type": "product", "id": "wallets_film_product", "label": "Piece whose film plays", "info": "Leave empty for the theme's own stitching film." },
     { "type": "image_picker", "id": "wallets_image", "label": "Photo", "info": "Optional. Upload the original photo for the sharpest result." },
     { "type": "text", "id": "wallets_title", "label": "Headline", "default": "Everyday Essentials. Thoughtfully Crafted." },
     { "type": "textarea", "id": "wallets_text", "label": "Text", "default": "Slim profiles, sized card slots and edges finished so they stay smooth in a pocket." },
     { "type": "header", "content": "Chapter III — Card holders" },
-    { "type": "product", "id": "cards_film_product", "label": "Piece whose film plays", "info": "Leave empty for the theme's own film of the Soren Leather Card Holder." },
+    { "type": "product", "id": "cards_film_product", "label": "Piece whose film plays", "info": "Leave empty for the theme's own unboxing film of the Valeria Leather Shoulder Bag." },
     { "type": "image_picker", "id": "cards_image", "label": "Photo", "info": "Optional. Upload the original photo for the sharpest result." },
     { "type": "text", "id": "cards_title", "label": "Headline", "default": "Your Initials. Your Identity." },
     { "type": "textarea", "id": "cards_text", "label": "Text", "default": "The smallest piece in the range, and the one most often made personal." },

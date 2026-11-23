@@ -3771,7 +3771,7 @@ body { background-color: var(--tone-bg) !important; }
 .ms-film__icon .ms-icon { width: 16px; height: 16px; }
 
 /* ── 24 Opening film (v17) ────────────────────────────────────────────────
-   The opening plays a short film (assets/hero-film.mp4, 16:9, muted,
+   The opening plays a short film (assets/hero-alicia.mp4, 9:16, muted,
    seamless loop). The model walks on the right of the frame, so on wide
    screens the words sit on the field to the left. Phones get a portrait
    window on the film that follows her side of the frame, with the words
@@ -4178,6 +4178,25 @@ body { background-color: var(--tone-bg) !important; }
   .ms-card__img--hover { display: none; }
 }
 .mv-favorites-drawer:not(.is-open) { visibility: hidden; transition: transform .36s var(--e), visibility 0s linear .36s; }
+
+/* ── 31 Portrait opening film, films that fit the phone ───────────────────
+   The opening film is portrait. Wide screens: a tall window on the right
+   of a warm leather-brown frame, words on the left. Tablets: the window
+   in the middle, words below. Phones: it fills the frame. Chapter films
+   on phones never grow taller than the screen under the header. */
+.ms-open__film .ms-open__video--portrait { object-position: center 30%; }
+@media (min-width: 761px) {
+  .ms-open--film .ms-open__media { background: linear-gradient(115deg, #2b1f18 0%, #47332a 52%, #6e4d36 100%); }
+  .ms-open__film .ms-open__video--portrait { position: absolute; top: 0; right: clamp(20px, 6vw, 110px); bottom: 0; width: auto; height: 100%; aspect-ratio: 9 / 16; border-radius: 0; box-shadow: 0 24px 60px rgba(0, 0, 0, .35); object-position: center; }
+}
+@media (min-width: 761px) and (max-width: 1099px) {
+  .ms-open--film .ms-open__media { aspect-ratio: auto; height: clamp(460px, 64vw, 660px); }
+  .ms-open__film .ms-open__video--portrait { right: auto; left: 50%; transform: translateX(-50%); }
+}
+@media (max-width: 699px) {
+  .ms-feature--film .ms-feature__media .ms-film { aspect-ratio: auto; height: min(calc((100vw - 32px) * 16 / 9), calc(100svh - 150px)); }
+  .ms-feature--film .ms-feature__media .ms-film video { position: absolute; inset: 0; object-position: center 30%; }
+}
 
 /* ── 14 Motion & print safety ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
