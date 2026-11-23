@@ -96,7 +96,7 @@ bu bölüm görünmez; Margaux, Everett, Soren ve Heart'ta yalnızca doğru foto
 - **Açılış videosu:** `hero-alicia` (dikey; Alicia çantayla çeşme önünde ve şehirde yürüyüş). Geniş ekranda
   sağda dikey pencere, solda yazılar; tablette ortada; telefonda ekranı doldurur.
 - **Ana sayfa bölümleri:** Çantalar bölümünde video ya da fotoğraf yok; başlık ve ürünler tam genişlikte.
-  Cüzdanlar `home-wallets` (Margaux'nun yapılışı: deri kesimi, dikiş, kutu, sokakta), Kartlıklar `home-cards`
+  Cüzdanlar `home-wallets` (Margaux'nun yapılışı: deri kesimi, dikiş, kutu, sokakta), Kartlıklar `film-valeria`
   (Valeria kutu açılışı). Geniş ekranda video bölüm numarasından ürün kartlarının altına kadar uzanır;
   telefonda ekran yüksekliğini aşmaz. Tema düzenleyici → **Home: chapters → Films** altında bir ürün seçilirse
   o ürünün videosu oynar.
