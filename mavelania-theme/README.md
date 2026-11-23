@@ -65,26 +65,24 @@ Sitede tek iletişim adresi vardır: `contact_email` ayarı (info@mavelania.com)
 
 ## Ana ekran videosu (banner)
 
-Açılışta sessiz, döngülü bir video oynar (sonu başına yumuşak bir geçişle bağlanır, kesinti görünmez):
-bilgisayar ve tablette `assets/hero-film.mp4` (1920×1080), telefonda modele odaklı dikey `assets/hero-film-mobile.mp4`
-(864×1080). Kaynak video 480p olduğu için ikisi de gürültü temizleme, yüksek kaliteli büyütme ve keskinleştirme ile
-hazırlandı. Kapak görseli `hero-film-poster.webp`, video yüklenene kadar görünür.
+Açılışta sessiz, döngülü, dikey bir video oynar: `assets/hero-alicia.mp4` (720×1280; Alicia çantayla çeşme
+önünde ve şehirde). Kapak görseli `hero-alicia-poster.webp`, video yüklenene kadar görünür.
 
-- **Masaüstü:** video çerçeveyi doldurur; yazılar soldaki tarlanın üzerinde, model sağda.
-- **Tablet:** videonun tamamı, yazılar altında.
-- **Telefon:** video ekranı doldurur (başlığın altında), yazılar ve düğmeler videonun alt kısmında, hafif bir gölgenin üzerinde.
-- Sağ alttaki düğme videoyu durdurur. "Hareketi azalt" ya da veri tasarrufu açık olan ziyaretçilerde video
-  ilk karede bekler, düğmeyle başlatılır.
+- **Masaüstü:** video sağda dikey bir pencerede; yazılar solda, kahverengi zeminde.
+- **Tablet:** video ortada, yazılar altında.
+- **Telefon:** video ekranı doldurur (başlığın altında), yazılar ve düğmeler videonun alt kısmında.
+- Video kendiliğinden başlar, durdurma düğmesi yoktur.
 - Videoyu değiştirmek için: Tema düzenleyici → **Home: chapters → Film (optional)** alanına yeni videoyu yükleyin.
   Fotoğrafa dönmek için **Play the film in the opening** ayarını kapatın.
 
 ## Ürün videoları ve fotoğrafları
 
-Higgsfield hesabındaki 157 video ve 312 görselin hepsi tek tek incelendi; ürünle birebir eşleşen,
-temiz (kart, para, bozuk logo, garip yüz içermeyen) olanlar temaya alındı: **23 ürün videosu**
-(`assets/film-*.mp4`, her birinin `-poster.webp` kapağı var) ve **85 günlük yaşam fotoğrafı**
-(`assets/look-<ürün>-<n>.webp`, 900×900). Videolar sessiz, dikey, 24 kare/sn; sonları başlarına yumuşak
-geçişle bağlıdır.
+Higgsfield hesabındaki videolar ve görseller tek tek incelendi; yalnızca ürünü gerçekte olduğu gibi
+(aynı biçim, renk, toka, fermuar) gösteren ve temiz olanlar temada: **16 ürün videosu**
+(`assets/film-*.mp4`, her birinin `-poster.webp` kapağı var) ve **günlük yaşam fotoğrafları**
+(`assets/look-<ürün>-<n>.webp`, 900×900). Margaux, Bennett, Everett, Rowan, Varen, Soren, Arden, Heart ve
+F360'ın ürünle uyuşmayan videoları/fotoğrafları kaldırıldı. Bennett, Rowan, Varen, Arden ve F360 sayfalarında
+bu bölüm görünmez; Margaux, Everett, Soren ve Heart'ta yalnızca doğru fotoğraflar kalır.
 
 - **Ürün sayfası, "See it carried" bölümü:** her ürün sayfasında ürün bilgilerinin hemen üstünde.
   Bilgisayarda solda ürünün videosu, sağda dört fotoğraf; telefonda önce yazı, sonra video, sonra

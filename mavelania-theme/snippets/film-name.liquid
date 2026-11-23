@@ -13,6 +13,11 @@
     {%- assign media = media | strip | split: '|' -%}
     media[0] film · media[1] short · media[2] looks
 {%- endcomment -%}
+{%- comment -%}
+  Only media that shows the piece as it really is. Films and photographs
+  that showed another shape, colour or detail were removed (Margaux,
+  Bennett, Everett, Rowan, Varen, Soren, Arden, Heart, F360).
+{%- endcomment -%}
 {%- liquid
   case handle
     when 'valeria-leather-shoulder-bag'
@@ -22,7 +27,7 @@
     when 'amelie-suede-leather-tote-bag'
       echo 'film-amelie|amelie|4'
     when 'margaux-suede-leather-tote-bag'
-      echo 'film-margaux|margaux|4'
+      echo '|margaux|4'
     when 'evelin-leather-bag'
       echo 'film-evelin|evelin|4'
     when 'odette-leather-tote-bag'
@@ -44,23 +49,23 @@
     when 'wellington-leather-business-briefcase'
       echo 'film-wellington|wellington|4'
     when 'bennett-leather-zip-wallet'
-      echo 'film-bennett|bennett|2'
+      echo '|bennett|0'
     when 'everett-leather-zip-wallet'
-      echo 'film-everett|everett|3'
+      echo '|everett|3'
     when 'conrad-leather-wallet'
       echo '|conrad|3'
     when 'products-rowan-leather-wallet'
-      echo '|rowan|3'
+      echo '|rowan|0'
     when 'varen-mechanical-leather-card-holder'
-      echo 'film-varen|varen|0'
+      echo '|varen|0'
     when 'soren-leather-card-holde'
-      echo 'film-soren|soren|1'
+      echo '|soren|1'
     when 'arden-leather-magnetic-card-holder'
-      echo 'film-arden|arden|0'
+      echo '|arden|0'
     when 'lior-leather-card-holder'
       echo '|lior|2'
     when 'heart-leather-bag-charm'
-      echo 'film-heart|heart|3'
+      echo '|heart|3'
     when 'markora-stitched-leather-bookmark'
       echo 'film-markora|markora|2'
     when 'lined-leather-desk-mat-medium-size'
@@ -70,7 +75,7 @@
     when 'sonat-leather-iphone-17-folio-case'
       echo 'film-sonat|sonat|2'
     when 'f360-leather-iphone-18-pro-17-pro-case'
-      echo '|f360|2'
+      echo '|f360|0'
     when 'ultimate-jacket-leather-iphone-18-pro-max-case'
       echo '|ultimate|2'
   endcase
