@@ -4354,9 +4354,10 @@ body { background-color: var(--tone-bg) !important; }
   .ms-feature__foot .ms-button { width: 100%; justify-content: center; }
 }
 
-/* The opening film lines up with the chapters' content edges */
+/* The opening film runs the full width of the page, edge to edge within the
+   page margins, always the whole 16:9 frame (never cropped). */
 @media (min-width: 1100px) {
-  .ms-open.ms-open--film { width: min(calc(100% - 2 * var(--ms-gutter, 46px)), calc(var(--ms-max, 1480px) - 2 * var(--ms-gutter, 46px))); }
+  .ms-open.ms-open--film { width: calc(100% - 2 * var(--ms-gutter, 46px)); }
 }
 
 /* ── 37 About block: photograph as tall as the words ─────────────────── */
